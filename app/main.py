@@ -1,0 +1,419 @@
+#!/usr/bin/env python3
+"""MathDB 시험지 생성기 — Streamlit 웹앱
+
+실행:
+    streamlit run app/main.py
+"""
+
+import io
+import json
+import re
+import sqlite3
+from pathlib import Path
+
+import streamlit as st
+
+# ── 설정 ──────────────────────────────────────────────────────
+DB_PATH = Path(__file__).resolve().parent.parent / "db" / "mathdb.sqlite"
+PAGE_TITLE = "MathDB 시험지 생성기"
+DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
+
+
+# ── DB 연결 ───────────────────────────────────────────────────
+@st.cache_resource
+def get_connection():
+    conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def query(sql, params=()):
+    return get_connection().execute(sql, params).fetchall()
+
+
+# ── 필터 옵션 로드 ───────────────────────────────────────────
+@st.cache_data(ttl=600)
+def load_filter_options():
+    schools = [r[0] for r in query("SELECT DISTINCT school FROM questions ORDER BY school")]
+    chapters = [r[0] for r in query("SELECT DISTINCT chapter FROM questions ORDER BY chapter")]
+    difficulties = [r[0] for r in query(
+        "SELECT DISTINCT difficulty FROM questions ORDER BY difficulty"
+    )]
+    # 난이도 순서 정렬
+    difficulties.sort(key=lambda x: DIFF_ORDER.get(x, 99))
+    regions = [r[0] for r in query("SELECT DISTINCT region FROM questions ORDER BY region")]
+    return schools, chapters, difficulties, regions
+
+
+# ── 문제 검색 ────────────────────────────────────────────────
+def search_questions(schools, chapters, difficulties, regions,
+                     is_subjective=None, keyword=""):
+    conditions = []
+    params = []
+
+    if schools:
+        placeholders = ",".join("?" * len(schools))
+        conditions.append(f"q.school IN ({placeholders})")
+        params.extend(schools)
+    if chapters:
+        placeholders = ",".join("?" * len(chapters))
+        conditions.append(f"q.chapter IN ({placeholders})")
+        params.extend(chapters)
+    if difficulties:
+        placeholders = ",".join("?" * len(difficulties))
+        conditions.append(f"q.difficulty IN ({placeholders})")
+        params.extend(difficulties)
+    if regions:
+        placeholders = ",".join("?" * len(regions))
+        conditions.append(f"q.region IN ({placeholders})")
+        params.extend(regions)
+    if is_subjective is not None:
+        conditions.append("q.is_subjective = ?")
+        params.append(1 if is_subjective else 0)
+    if keyword:
+        conditions.append("q.question_text LIKE ?")
+        params.append(f"%{keyword}%")
+
+    where = " AND ".join(conditions) if conditions else "1=1"
+
+    sql = f"""
+        SELECT q.question_id, q.file_source, q.school, q.region,
+               q.question_number, q.question_text, q.choices,
+               q.answer, q.answer_type, q.points, q.chapter,
+               q.difficulty, q.has_image, q.is_subjective, q.error_note,
+               s.solution_text
+        FROM questions q
+        LEFT JOIN solutions s ON q.question_id = s.question_id
+        WHERE {where}
+        ORDER BY q.school, q.question_number
+    """
+    return query(sql, params)
+
+
+# ── LaTeX 렌더링 헬퍼 ────────────────────────────────────────
+def render_question_text(text: str) -> str:
+    """문제 텍스트를 Streamlit markdown용으로 변환한다.
+
+    인라인 수식 $...$ 은 그대로 두고,
+    <<IMG:imageN>> 플레이스홀더는 [이미지] 표시로 대체한다.
+    """
+    # 이미지 플레이스홀더 → 표시
+    text = re.sub(r"<<IMG:image\d+>>", "🖼️", text)
+    # 빈 줄 정리
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text
+
+
+def format_choices(choices_json: str) -> str:
+    """선택지 JSON을 보기 좋게 포맷한다."""
+    try:
+        choices = json.loads(choices_json)
+    except (json.JSONDecodeError, TypeError):
+        return ""
+    if not choices:
+        return ""
+    circle = {1: "①", 2: "②", 3: "③", 4: "④", 5: "⑤"}
+    parts = []
+    for c in choices:
+        num = c.get("number", 0)
+        txt = c.get("text", "")
+        parts.append(f"{circle.get(num, str(num))} {txt}")
+    return "  ".join(parts)
+
+
+# ── PDF 생성 ──────────────────────────────────────────────────
+def generate_pdf(selected_questions: list, title: str = "시험지") -> bytes:
+    """선택된 문제들로 PDF를 생성한다."""
+    from fpdf import FPDF
+
+    font_path = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
+    has_korean = Path(font_path).exists()
+
+    class ExamPDF(FPDF):
+        def header(self):
+            if has_korean:
+                self.set_font("Korean", size=14)
+            else:
+                self.set_font("Helvetica", "B", 14)
+            self.cell(0, 10, title, align="C", new_x="LMARGIN", new_y="NEXT")
+            self.ln(5)
+
+        def footer(self):
+            self.set_y(-15)
+            self.set_font("Helvetica", "I", 8)
+            self.cell(0, 10, f"{self.page_no()}/{{nb}}", align="C")
+
+    pdf = ExamPDF()
+    pdf.alias_nb_pages()
+    pdf.set_auto_page_break(auto=True, margin=20)
+
+    # 한글 폰트 등록 (한 번만)
+    if has_korean:
+        pdf.add_font("Korean", "", font_path, uni=True)
+        pdf.set_font("Korean", size=10)
+    else:
+        pdf.set_font("Helvetica", size=10)
+
+    pdf.add_page()
+
+    for i, q in enumerate(selected_questions, 1):
+        # 문제 번호 + 배점
+        points_str = f" [{q['points']}점]" if q['points'] else ""
+        header = f"{i}. {points_str}"
+        pdf.set_font("Korean" if has_korean else "Helvetica", size=10)
+        pdf.cell(0, 7, header, new_x="LMARGIN", new_y="NEXT")
+
+        # 문제 텍스트 (LaTeX 수식 기호는 텍스트로 표시)
+        text = q["question_text"]
+        # $...$ 수식 → 텍스트 표현 유지
+        text = re.sub(r"<<IMG:image\d+>>", "[그림]", text)
+        # 줄바꿈 정리
+        text = re.sub(r"\n{3,}", "\n\n", text).strip()
+
+        for line in text.split("\n"):
+            line = line.strip()
+            if not line:
+                pdf.ln(3)
+                continue
+            try:
+                pdf.multi_cell(0, 6, line, new_x="LMARGIN", new_y="NEXT")
+            except Exception:
+                # 인코딩 오류 시 대체 문자 사용
+                safe = line.encode("latin-1", errors="replace").decode("latin-1")
+                pdf.multi_cell(0, 6, safe, new_x="LMARGIN", new_y="NEXT")
+
+        # 선택지
+        choices_text = format_choices(q.get("choices", "[]"))
+        if choices_text:
+            pdf.multi_cell(0, 6, choices_text, new_x="LMARGIN", new_y="NEXT")
+
+        pdf.ln(5)
+
+    # 정답표
+    pdf.add_page()
+    pdf.set_font("Korean" if has_korean else "Helvetica", size=12)
+    pdf.cell(0, 10, "정답표", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(5)
+    pdf.set_font("Korean" if has_korean else "Helvetica", size=10)
+
+    for i, q in enumerate(selected_questions, 1):
+        answer = q["answer"]
+        circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
+        display = circle.get(answer, answer)
+        pdf.cell(0, 7, f"{i}번: {display}", new_x="LMARGIN", new_y="NEXT")
+
+    buf = io.BytesIO()
+    pdf.output(buf)
+    return buf.getvalue()
+
+
+# ── 메인 앱 ──────────────────────────────────────────────────
+def main():
+    st.set_page_config(
+        page_title=PAGE_TITLE,
+        page_icon="📐",
+        layout="wide",
+    )
+
+    st.title("📐 MathDB 시험지 생성기")
+
+    # 세션 상태 초기화
+    if "selected_ids" not in st.session_state:
+        st.session_state.selected_ids = set()
+
+    schools, chapters, difficulties, regions = load_filter_options()
+
+    # ── 사이드바: 필터 ────────────────────────────────────────
+    with st.sidebar:
+        st.header("🔍 문제 필터")
+
+        sel_regions = st.multiselect("지역", regions)
+        sel_schools = st.multiselect("학교", schools)
+        sel_chapters = st.multiselect("단원", chapters)
+        sel_difficulties = st.multiselect("난이도", difficulties)
+
+        question_type = st.radio(
+            "문제 유형", ["전체", "선택형", "서답형"],
+            horizontal=True
+        )
+        is_subjective = None
+        if question_type == "선택형":
+            is_subjective = False
+        elif question_type == "서답형":
+            is_subjective = True
+
+        keyword = st.text_input("키워드 검색", placeholder="문제 텍스트 검색...")
+
+        st.divider()
+        st.subheader(f"📋 시험지 ({len(st.session_state.selected_ids)}문항)")
+
+        if st.button("🗑️ 시험지 초기화", use_container_width=True):
+            st.session_state.selected_ids = set()
+            st.rerun()
+
+    # ── 문제 검색 결과 ────────────────────────────────────────
+    results = search_questions(
+        sel_schools, sel_chapters, sel_difficulties, sel_regions,
+        is_subjective, keyword
+    )
+
+    # 탭 구성
+    tab_list, tab_preview = st.tabs(["📝 문제 목록", "📄 시험지 미리보기"])
+
+    # ── 탭 1: 문제 목록 ──────────────────────────────────────
+    with tab_list:
+        st.caption(f"검색 결과: {len(results)}문항")
+
+        if not results:
+            st.info("필터 조건에 맞는 문제가 없습니다. 사이드바에서 조건을 조정해주세요.")
+        else:
+            for row in results:
+                qid = row["question_id"]
+                is_selected = qid in st.session_state.selected_ids
+
+                with st.container(border=True):
+                    col1, col2 = st.columns([0.85, 0.15])
+
+                    with col1:
+                        # 헤더 정보
+                        diff_emoji = {"하": "🟢", "중": "🟡", "상": "🔴", "킬": "💀"}.get(
+                            row["difficulty"], "⚪"
+                        )
+                        points_str = f"{row['points']}점" if row["points"] else ""
+                        subj_badge = " `서술형`" if row["is_subjective"] else ""
+                        err_badge = " ⚠️오류" if row["error_note"] else ""
+
+                        st.markdown(
+                            f"**{row['school']}** Q{row['question_number']} · "
+                            f"{diff_emoji} {row['difficulty']} · "
+                            f"`{row['chapter']}` · {points_str}"
+                            f"{subj_badge}{err_badge}"
+                        )
+
+                        # 문제 텍스트
+                        text = render_question_text(row["question_text"])
+                        # 너무 길면 잘라서 보여주기
+                        if len(text) > 400:
+                            with st.expander("문제 보기", expanded=False):
+                                st.markdown(text)
+                        else:
+                            st.markdown(text)
+
+                        # 선택지
+                        choices_str = format_choices(row["choices"])
+                        if choices_str:
+                            st.caption(choices_str)
+
+                    with col2:
+                        if is_selected:
+                            if st.button("❌ 제거", key=f"rm_{qid}",
+                                         use_container_width=True):
+                                st.session_state.selected_ids.discard(qid)
+                                st.rerun()
+                        else:
+                            if st.button("➕ 추가", key=f"add_{qid}",
+                                         use_container_width=True):
+                                st.session_state.selected_ids.add(qid)
+                                st.rerun()
+
+                        if is_selected:
+                            st.caption("✅ 선택됨")
+
+    # ── 탭 2: 시험지 미리보기 ────────────────────────────────
+    with tab_preview:
+        selected_ids = st.session_state.selected_ids
+
+        if not selected_ids:
+            st.info("문제 목록에서 ➕ 버튼으로 문제를 추가해주세요.")
+        else:
+            # 선택된 문제 조회
+            placeholders = ",".join("?" * len(selected_ids))
+            selected_rows = query(f"""
+                SELECT q.question_id, q.school, q.question_number,
+                       q.question_text, q.choices, q.answer, q.answer_type,
+                       q.points, q.chapter, q.difficulty, q.is_subjective,
+                       s.solution_text
+                FROM questions q
+                LEFT JOIN solutions s ON q.question_id = s.question_id
+                WHERE q.question_id IN ({placeholders})
+                ORDER BY q.difficulty, q.chapter
+            """, list(selected_ids))
+
+            # 시험지 제목
+            exam_title = st.text_input("시험지 제목", value="수학 시험지")
+
+            col_info, col_download = st.columns([0.7, 0.3])
+            with col_info:
+                st.markdown(f"**{len(selected_rows)}문항** 선택됨")
+                total_pts = sum(r["points"] or 0 for r in selected_rows)
+                if total_pts:
+                    st.caption(f"총 배점: {total_pts:.1f}점")
+
+            with col_download:
+                # PDF 다운로드
+                pdf_data = generate_pdf(
+                    [dict(r) for r in selected_rows],
+                    title=exam_title
+                )
+                st.download_button(
+                    "📥 PDF 다운로드",
+                    data=pdf_data,
+                    file_name="exam.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                )
+
+            st.divider()
+
+            # 미리보기
+            show_answers = st.toggle("정답/해설 표시", value=False)
+
+            for i, row in enumerate(selected_rows, 1):
+                with st.container(border=True):
+                    # 문제 헤더
+                    pts = f" [{row['points']}점]" if row["points"] else ""
+                    st.markdown(f"### {i}번{pts}")
+                    st.caption(
+                        f"{row['school']} · {row['chapter']} · 난이도: {row['difficulty']}"
+                    )
+
+                    # 문제 본문 (LaTeX 렌더링)
+                    text = render_question_text(row["question_text"])
+                    st.markdown(text)
+
+                    # 선택지
+                    choices_str = format_choices(row["choices"])
+                    if choices_str:
+                        st.markdown(choices_str)
+
+                    # 정답/해설
+                    if show_answers:
+                        circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
+                        ans = row["answer"]
+                        display_ans = circle.get(ans, ans)
+                        st.success(f"**정답:** {display_ans}")
+
+                        if row["solution_text"]:
+                            with st.expander("해설 보기"):
+                                sol = render_question_text(row["solution_text"])
+                                st.markdown(sol)
+
+                    # 제거 버튼
+                    if st.button(f"❌ {i}번 제거", key=f"prev_rm_{row['question_id']}"):
+                        st.session_state.selected_ids.discard(row["question_id"])
+                        st.rerun()
+
+            # 정답표
+            if show_answers:
+                st.divider()
+                st.markdown("### 정답표")
+                circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
+                answers = []
+                for i, row in enumerate(selected_rows, 1):
+                    ans = row["answer"]
+                    answers.append(f"{i}번: {circle.get(ans, ans)}")
+                st.code("  ".join(answers))
+
+
+if __name__ == "__main__":
+    main()
