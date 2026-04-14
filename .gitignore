@@ -1,0 +1,29 @@
+# 원본 HWPX 파일 (용량 큼)
+raw/
+
+# 추출된 이미지
+images/
+
+# 임시 압축해제 폴더
+temp_extract/
+
+# 파싱 결과 (재생성 가능)
+parsed/
+
+# SQLite DB
+db/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code local settings
+.claude/settings.local.json
