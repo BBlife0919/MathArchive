@@ -94,15 +94,15 @@ def hwp_eq_to_latex(script: str) -> str:
         return r"\begin{cases}" + converted + r"\end{cases}"
     s = re.sub(r"cases\s*\{([^}]*(?:\{[^}]*\}[^}]*)*)\}", convert_cases, s)
 
-    # 2) LEFT / RIGHT 괄호
-    s = re.sub(r"\bLEFT\s*\(", r"\\left(", s)
-    s = re.sub(r"\bRIGHT\s*\)", r"\\right)", s)
-    s = re.sub(r"\bLEFT\s*\[", r"\\left[", s)
-    s = re.sub(r"\bRIGHT\s*\]", r"\\right]", s)
-    s = re.sub(r"\bLEFT\s*\{", r"\\left\\{", s)
-    s = re.sub(r"\bRIGHT\s*\}", r"\\right\\}", s)
-    s = re.sub(r"\bLEFT\s*\|", r"\\left|", s)
-    s = re.sub(r"\bRIGHT\s*\|", r"\\right|", s)
+    # 2) LEFT / RIGHT 괄호 (대소문자 모두 처리)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\)", r"\\right)", s)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\[", r"\\left[", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\]", r"\\right]", s)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\{", r"\\left\\{", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\}", r"\\right\\}", s)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\|", r"\\left|", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\|", r"\\right|", s)
 
     # 3) 분수: {num} over {den} → \frac{num}{den}
     # 반복 적용 (중첩 분수 처리)
@@ -369,7 +369,7 @@ ERROR_PATTERN = re.compile(
     r"\[문제\s*오류\]\s*(.*?)(?:\n|$)"
 )
 SUBJECTIVE_PATTERN = re.compile(
-    r"\[서답형\s*(\d+)\]"
+    r"\[서[답술]형\s*(\d+)\]"
 )
 POINTS_PATTERN = re.compile(
     r"\[\s*\$?([\d.]+)\$?\s*점\s*\]"
@@ -578,6 +578,9 @@ def split_into_questions(full_text: str, items: list) -> list:
 
         subj_match = SUBJECTIVE_PATTERN.search(block)
         is_subjective = subj_match is not None
+        # "※ 여기서 부터는 서답형" 패턴으로도 서답형 감지
+        if not is_subjective and re.search(r"서[답술]형\s*문제", block):
+            is_subjective = True
         subjective_num = int(subj_match.group(1)) if subj_match else None
 
         points = None
@@ -601,7 +604,8 @@ def split_into_questions(full_text: str, items: list) -> list:
         # [중단원], [난이도], [문제 오류], [서답형] 라인 제거
         meta_pattern = re.compile(
             r"\[중단원\]\s*.+?(?:\n|$)|\[난이도\]\s*.+?(?:\n|$)"
-            r"|\[문제\s*오류\].*?(?:\n|$)|\[서답형\s*\d+\]\s*"
+            r"|\[문제\s*오류\].*?(?:\n|$)|\[서[답술]형\s*\d+\]\s*"
+            r"|※\s*여기서\s*부터는\s*서[답술]형\s*문제입니다\.?\s*"
         )
         text_after_clean = meta_pattern.sub("", text_after_answer).strip()
 
