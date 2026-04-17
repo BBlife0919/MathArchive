@@ -90,17 +90,115 @@ def search_questions(schools, chapters, difficulties, regions,
     return query(sql, params)
 
 
-# ── LaTeX 렌더링 헬퍼 ────────────────────────────────────────
-def render_question_text(text: str) -> str:
-    """문제 텍스트를 Streamlit markdown용으로 변환한다.
+# ── 이미지 경로 ──────────────────────────────────────────────
+IMAGE_DIR = Path(__file__).resolve().parent.parent / "images"
 
-    인라인 수식 $...$ 은 그대로 두고,
-    <<IMG:imageN>> 플레이스홀더는 [이미지] 표시로 대체한다.
+
+# ── LaTeX 렌더링 헬퍼 ────────────────────────────────────────
+def _frac_to_dfrac(text: str) -> str:
+    r"""$...$안의 \frac → \dfrac 변환 (display-style로 분수 크기 키움)."""
+    def _replace_in_math(m):
+        inner = m.group(1)
+        inner = inner.replace(r"\frac", r"\dfrac")
+        return "$" + inner + "$"
+    return re.sub(r"\$([^$]+)\$", _replace_in_math, text)
+
+
+def _ensure_line_breaks(text: str) -> str:
+    """단일 \\n을 markdown 줄바꿈(\\n\\n)으로 변환하여 원본 줄넘김 보존."""
+    # 이미 \n\n인 것은 건드리지 않음
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    # 단일 \n → \n\n (markdown paragraph break)
+    text = re.sub(r"(?<!\n)\n(?!\n)", "\n\n", text)
+    return text
+
+
+def render_question_content(text: str, file_source: str = ""):
+    """문제 텍스트를 Streamlit으로 렌더링한다.
+
+    - <<IMG:imageN>> → st.image()로 실제 이미지 표시
+    - <<BOX_START>>...<<BOX_END>> → 테두리 박스로 표시
+    - 인라인 수식 $...$ 은 markdown이 자동 렌더링
+    - \\frac → \\dfrac 변환 (display-style 분수)
     """
-    # 이미지 플레이스홀더 → 표시
-    text = re.sub(r"<<IMG:image\d+>>", "🖼️", text)
     # 빈 줄 정리
     text = re.sub(r"\n{3,}", "\n\n", text)
+
+    # 파일명 stem (이미지 매칭용)
+    file_stem = Path(file_source).stem if file_source else ""
+
+    # <<BOX_START>>...<<BOX_END>> → 테두리 박스, <<IMG:...>> → 이미지
+    parts = re.split(r"(<<BOX_START>>|<<BOX_END>>|<<IMG:image\d+>>)", text)
+
+    in_box = False
+    box_content = []
+
+    for part in parts:
+        if part == "<<BOX_START>>":
+            in_box = True
+            box_content = []
+            continue
+        elif part == "<<BOX_END>>":
+            in_box = False
+            content = "".join(box_content).strip()
+            if content:
+                content = _frac_to_dfrac(content)
+                content = _ensure_line_breaks(content)
+                with st.container(border=True):
+                    st.markdown(content)
+            continue
+        elif re.match(r"<<IMG:(image\d+)>>", part):
+            ref = re.match(r"<<IMG:(image\d+)>>", part).group(1)
+            _render_image(ref, file_stem)
+            continue
+
+        if in_box:
+            box_content.append(part)
+        else:
+            stripped = part.strip()
+            if stripped:
+                stripped = _frac_to_dfrac(stripped)
+                stripped = _ensure_line_breaks(stripped)
+                st.markdown(stripped)
+
+
+def _render_image(image_ref: str, file_stem: str):
+    """이미지 참조를 실제 파일로 찾아서 표시한다."""
+    if not file_stem:
+        st.caption(f"[이미지: {image_ref}]")
+        return
+
+    # images/ 디렉토리에서 매칭되는 파일 찾기
+    image_path = None
+    if IMAGE_DIR.exists():
+        for f in IMAGE_DIR.iterdir():
+            if image_ref in f.name and file_stem in f.name:
+                image_path = f
+                break
+        # file_stem 매칭 안 되면 image_ref만으로 시도
+        if image_path is None:
+            for f in IMAGE_DIR.iterdir():
+                if f.stem == image_ref or image_ref in f.name:
+                    image_path = f
+                    break
+
+    if image_path and image_path.exists():
+        st.image(str(image_path), width=400)
+    else:
+        st.caption(f"[이미지: {image_ref}]")
+
+
+def render_question_text(text: str) -> str:
+    """문제 텍스트를 Streamlit markdown용 문자열로 변환한다 (하위 호환).
+
+    render_question_content()를 사용하는 것이 권장되지만,
+    단순 문자열 변환이 필요한 곳에서 사용.
+    """
+    text = re.sub(r"<<IMG:image\d+>>", "🖼️", text)
+    text = re.sub(r"<<BOX_START>>", "", text)
+    text = re.sub(r"<<BOX_END>>", "", text)
+    text = _frac_to_dfrac(text)
+    text = _ensure_line_breaks(text)
     return text
 
 
@@ -117,6 +215,7 @@ def format_choices(choices_json: str) -> str:
     for c in choices:
         num = c.get("number", 0)
         txt = c.get("text", "")
+        txt = _frac_to_dfrac(txt)
         parts.append(f"{circle.get(num, str(num))} {txt}")
     return "  ".join(parts)
 
@@ -290,19 +389,33 @@ def main():
                             f"{subj_badge}{err_badge}"
                         )
 
-                        # 문제 텍스트
-                        text = render_question_text(row["question_text"])
-                        # 너무 길면 잘라서 보여주기
-                        if len(text) > 400:
-                            with st.expander("문제 보기", expanded=False):
-                                st.markdown(text)
+                        # 문제 텍스트 (목록에서는 이미지/박스 포함 풀 렌더링)
+                        qtext = row["question_text"]
+                        has_rich = "<<IMG:" in qtext or "<<BOX_START>>" in qtext
+                        if has_rich or len(qtext) > 400:
+                            with st.expander("문제 보기", expanded=not has_rich):
+                                render_question_content(
+                                    qtext, row["file_source"])
                         else:
+                            text = render_question_text(qtext)
                             st.markdown(text)
 
                         # 선택지
                         choices_str = format_choices(row["choices"])
                         if choices_str:
                             st.caption(choices_str)
+
+                        # 정답/해설
+                        circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
+                        ans = row["answer"]
+                        display_ans = circle.get(ans, ans)
+                        with st.expander(f"정답: {display_ans} · 해설 보기"):
+                            if row["solution_text"]:
+                                render_question_content(
+                                    row["solution_text"],
+                                    row["file_source"])
+                            else:
+                                st.caption("해설 없음")
 
                     with col2:
                         if is_selected:
@@ -329,7 +442,7 @@ def main():
             # 선택된 문제 조회
             placeholders = ",".join("?" * len(selected_ids))
             selected_rows = query(f"""
-                SELECT q.question_id, q.school, q.question_number,
+                SELECT q.question_id, q.file_source, q.school, q.question_number,
                        q.question_text, q.choices, q.answer, q.answer_type,
                        q.points, q.chapter, q.difficulty, q.is_subjective,
                        s.solution_text
@@ -377,9 +490,10 @@ def main():
                         f"{row['school']} · {row['chapter']} · 난이도: {row['difficulty']}"
                     )
 
-                    # 문제 본문 (LaTeX 렌더링)
-                    text = render_question_text(row["question_text"])
-                    st.markdown(text)
+                    # 문제 본문 (이미지+박스+LaTeX 렌더링)
+                    render_question_content(
+                        row["question_text"], row.get("file_source", "")
+                    )
 
                     # 선택지
                     choices_str = format_choices(row["choices"])
@@ -395,8 +509,9 @@ def main():
 
                         if row["solution_text"]:
                             with st.expander("해설 보기"):
-                                sol = render_question_text(row["solution_text"])
-                                st.markdown(sol)
+                                render_question_content(
+                                    row["solution_text"],
+                                    row.get("file_source", ""))
 
                     # 제거 버튼
                     if st.button(f"❌ {i}번 제거", key=f"prev_rm_{row['question_id']}"):

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""HWPX 파일 파서 — 수학 기출문제 문항 분리 및 구조화
+"""HWPX 파일 파서 — 수학 기출문제 문항 분리 및 구조화 (v2)
+
+v2 변경사항:
+- 최상위 <p>만 순회 (endNote 내부 중복 순회 제거)
+- endNote = 해설/정답, 나머지 = 문제본문 (XML 구조 기반 분리)
+- tbl(조건박스/보기박스), pic(그림) 등 모든 첨부자료를 문항에 포함
+- 수식 변환 버그 수정 (sqrt-N, cases 중첩, BOX, oversqrt 등)
 
 사용법:
     python scripts/parse_hwpx.py raw/파일명.hwpx              # 단일 파일
@@ -25,7 +31,6 @@ NS_CORE = "{http://www.hancom.co.kr/hwpml/2011/core}"
 
 
 # ── HWP Equation → LaTeX 변환 ────────────────────────────────
-# 그리스 문자 및 기호 매핑
 GREEK_MAP = {
     "alpha": r"\alpha", "beta": r"\beta", "gamma": r"\gamma",
     "delta": r"\delta", "epsilon": r"\epsilon", "zeta": r"\zeta",
@@ -47,9 +52,9 @@ SYMBOL_MAP = {
     "DIV": r"\div",
     "PM": r"\pm", "pm": r"\pm",
     "MP": r"\mp",
-    "LEQ": r"\leq", "leq": r"\leq",
-    "GEQ": r"\geq", "geq": r"\geq",
-    "NEQ": r"\neq", "neq": r"\neq",
+    "LEQ": r"\leq", "leq": r"\leq", "le": r"\leq",
+    "GEQ": r"\geq", "geq": r"\geq", "ge": r"\geq",
+    "NEQ": r"\neq", "neq": r"\neq", "ne": r"\neq",
     "APPROX": r"\approx",
     "EQUIV": r"\equiv",
     "SIM": r"\sim",
@@ -78,190 +83,59 @@ SYMBOL_MAP = {
     "LEFTRIGHTARROW": r"\leftrightarrow",
 }
 
+# LaTeX 명령으로 보존해야 하는 화이트리스트
+_LATEX_KEEP = {
+    "frac", "sqrt", "overline", "underline", "left", "right",
+    "times", "cdot", "div", "pm", "mp", "leq", "geq", "neq",
+    "approx", "equiv", "sim", "therefore", "because",
+    "triangle", "angle", "perp", "parallel", "infty",
+    "alpha", "beta", "gamma", "delta", "epsilon", "zeta",
+    "eta", "theta", "iota", "kappa", "lambda", "mu",
+    "nu", "xi", "pi", "rho", "sigma", "tau",
+    "upsilon", "phi", "chi", "psi", "omega",
+    "Gamma", "Delta", "Theta", "Lambda", "Pi", "Sigma", "Phi", "Omega",
+    "mathrm", "mathbf", "mathit", "mathbb", "begin", "end",
+    "rightarrow", "leftarrow", "leftrightarrow",
+    "cdots", "ldots", "vdots", "ddots", "bullet",
+    "in", "subset", "supset", "cup", "cap", "emptyset",
+    "forall", "exists", "hat", "vec", "dot", "ddot", "tilde",
+    "overrightarrow", "overleftarrow",
+    "circ", "degree", "neq", "ne", "le", "ge", "boxed",
+}
 
-def hwp_eq_to_latex(script: str) -> str:
-    """HWP 수식편집기 스크립트를 LaTeX로 변환한다."""
-    if not script:
-        return ""
 
-    s = script.strip()
-
-    # 0) root → sqrt 별칭 (HWP는 root/sqrt 둘 다 사용; 5root2 처럼 숫자 직후도)
-    #    'root' 앞에 알파벳이 있을 때만 단어경계 (변수명 보호), 숫자 직후는 허용
-    s = re.sub(r"(?<![A-Za-z])root\s*\{", r"sqrt{", s)
-    s = re.sub(
-        r"(?<![A-Za-z])root\s*(-?\s*[A-Za-z0-9]+)",
-        lambda m: r"sqrt{" + m.group(1).replace(" ", "") + r"}",
-        s,
-    )
-    # '5root2' 같은 패턴은 '5\sqrt{2}'로 분리 (숫자와 sqrt 사이 공간)
-    s = re.sub(r"(\d)sqrt\{", r"\1 sqrt{", s)
-
-    # 1) cases 환경: cases{...#...} → \begin{cases}...\\ ...\end{cases}
-    def convert_cases(m):
-        inner = m.group(1)
-        lines = inner.split("#")
-        converted = " \\\\ ".join(lines)
-        return r"\begin{cases}" + converted + r"\end{cases}"
-    s = re.sub(r"cases\s*\{([^}]*(?:\{[^}]*\}[^}]*)*)\}", convert_cases, s)
-
-    # 2) LEFT / RIGHT 괄호 (대소문자 모두 처리)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\)", r"\\right)", s)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\[", r"\\left[", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\]", r"\\right]", s)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\{", r"\\left\\{", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\}", r"\\right\\}", s)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\|", r"\\left|", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\|", r"\\right|", s)
-
-    # 3) 분수: {num} over {den} → \frac{num}{den}
-    # 반복 적용 (중첩 분수 처리)
-    for _ in range(5):
-        new_s = re.sub(
-            r"\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}\s*over\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}",
-            r"\\frac{\1}{\2}", s
-        )
-        if new_s == s:
-            break
-        s = new_s
-
-    # 3-b) 중괄호 없는 over: "<num> over <den>" → \frac{num}{den}
-    #      operand: 부호 옵션 + (수식그룹 {..} | 숫자/식별자/이항)
-    OPERAND = r"(?:[+-]?\s*(?:\{[^{}]*\}|[A-Za-z0-9]+))"
-    over_no_brace = re.compile(
-        rf"({OPERAND})\s*over\s*({OPERAND})"
-    )
-    for _ in range(5):
-        new_s = over_no_brace.sub(
-            lambda m: r"\frac{" + m.group(1).strip().strip("{}") +
-                      r"}{" + m.group(2).strip().strip("{}") + r"}",
-            s,
-        )
-        if new_s == s:
-            break
-        s = new_s
-
-    # 4) sqrt
-    s = re.sub(r"\bsqrt\s*\{", r"\\sqrt{", s)
-
-    # 5) bar → overline (중괄호 형 + 무중괄호 단일 토큰)
-    s = re.sub(r"\bbar\s*\{", r"\\overline{", s)
-    s = re.sub(
-        r"\bbar\s+([A-Za-z]\w*)",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
-    )
-
-    # 6) hat, vec, dot, ddot, tilde
-    for accent in ["hat", "vec", "dot", "ddot", "tilde"]:
-        s = re.sub(rf"\b{accent}\s*\{{", rf"\\{accent}{{", s)
-
-    # 7) rm{...} → \mathrm{...}
-    s = re.sub(r"\brm\s*\{", r"\\mathrm{", s)
-    # rm 뒤에 중괄호 없이 단일 문자/단어가 오는 경우 (rmABC, rm ABC 등)
-    s = re.sub(r"\brm\s*([A-Za-z]\w*)", lambda m: f"\\mathrm{{{m.group(1)}}}", s)
-
-    # 8) it (italic) — LaTeX 수학모드 기본이므로 제거
-    # it 뒤에 공백+내용, 또는 부호가 바로 오는 경우
-    s = re.sub(r"\bit\s+", "", s)
-    s = re.sub(r"\bit(?=[+-])", "", s)
-    # 단독 it (수식 시작 등)
-    s = re.sub(r"\bit\b", "", s)
-
-    # 9) 그리스 문자 (단어 경계로 매칭)
-    for hwp, latex in GREEK_MAP.items():
-        s = re.sub(rf"\b{hwp}\b", lambda m, r=latex: r, s)
-
-    # 10) 기호
-    for hwp, latex in SYMBOL_MAP.items():
-        s = re.sub(rf"\b{hwp}\b", lambda m, r=latex: r, s)
-
-    # 11) ` → \, (thin space)
-    s = s.replace("`", r"\,")
-
-    # 12) ~ → \  (일반 공백, 연속 ~ 제거)
-    s = re.sub(r"~+", " ", s)
-
-    # 13) align/eqnarray 환경의 정렬 마커 '&' 제거 (P(2)&=0 → P(2)=0)
-    s = s.replace("&", "")
-
-    # 13-b) 수식 내부 줄바꿈 마커 '#' → ' \\ '
-    #       (cases 환경은 이미 위에서 처리되었으므로 남은 '#'만 대상)
-    s = re.sub(r"\s*#\s*", r" \\\\ ", s)
-
-    # 14) 끝에 매달린 단독 백슬래시 제거 — HWP 줄바꿈 흔적
-    #     단, \, \; \! 등 LaTeX 명령은 보존
-    s = re.sub(r"\\(?=\s|$)", "", s)
-    s = re.sub(r"\\$", "", s)
-
-    # 15) 괄호 짝 보정: 여는 '{' 보다 '}'가 많으면 잉여 '}' 제거 (오른쪽 우선)
-    def _balance_braces(t: str) -> str:
-        # 왼쪽에서 스캔해 매칭 안되는 '}'의 인덱스 수집
-        bad = []
-        depth = 0
-        for i, ch in enumerate(t):
-            if ch == "{":
-                depth += 1
-            elif ch == "}":
-                if depth == 0:
-                    bad.append(i)
-                else:
-                    depth -= 1
-        # 매칭 안된 '}'를 뒤에서부터 삭제
-        if bad:
-            arr = list(t)
-            for i in reversed(bad):
-                del arr[i]
-            t = "".join(arr)
-        # 매칭 안된 '{'가 남으면 끝에 '}' 추가
-        depth = 0
-        for ch in t:
-            if ch == "{":
-                depth += 1
-            elif ch == "}":
+def _balance_braces(t: str) -> str:
+    """괄호 짝 보정: 매칭 안 되는 '}'를 제거하고 남은 '{'에 '}'를 추가."""
+    bad = []
+    depth = 0
+    for i, ch in enumerate(t):
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            if depth == 0:
+                bad.append(i)
+            else:
                 depth -= 1
-        if depth > 0:
-            t = t + ("}" * depth)
-        return t
-    s = _balance_braces(s)
-
-    # 16) 변환 후에도 남은 HWP 잔여 키워드 강제 정리
-    #     (작성자가 망가진 수식을 입력해 정상 변환이 실패한 경우)
-    #     — over: 가장자리 조사식으로 \frac 변환 시도, 실패 시 '/'로 대체
-    s = re.sub(
-        r"(\{[^{}]*\}|[A-Za-z0-9+\-]+)\s*over\s*(\{[^{}]*\}|[A-Za-z0-9+\-]+)",
-        lambda m: r"\frac{" + m.group(1).strip("{}") + r"}{" + m.group(2).strip("{}") + r"}",
-        s,
-    )
-    s = re.sub(r"\s+over\s+", " / ", s)  # 그래도 남으면 슬래시
-    #     — bar: 남으면 \overline 처리 (단일 토큰만)
-    s = re.sub(
-        r"\bbar\s*([A-Za-z]\w*)",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
-    )
-    #     — root: 남으면 \sqrt
-    s = re.sub(
-        r"\broot\s*(-?[A-Za-z0-9]+)",
-        lambda m: r"\sqrt{" + m.group(1) + r"}",
-        s,
-    )
-    s = re.sub(r"\broot\b", r"\\sqrt", s)
-
-    s = _postprocess_latex(s)
-
-    # 17) 불필요한 다중 공백 정리
-    s = re.sub(r"  +", " ", s)
-
-    return s.strip()
+    if bad:
+        arr = list(t)
+        for i in reversed(bad):
+            del arr[i]
+        t = "".join(arr)
+    depth = 0
+    for ch in t:
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+    if depth > 0:
+        t = t + ("}" * depth)
+    return t
 
 
 def _strip_outer_braces(tok: str) -> str:
-    """operand 토큰의 가장 바깥쪽 {...} 한 겹만 제거. 그 외는 그대로."""
+    """operand 토큰의 가장 바깥쪽 {...} 한 겹만 제거."""
     tok = tok.strip()
     if tok.startswith("{") and tok.endswith("}"):
-        # 전체가 하나의 그룹인지 확인 (중간에 닫히면 안됨)
         depth = 0
         for i, ch in enumerate(tok):
             if ch == "{":
@@ -274,26 +148,208 @@ def _strip_outer_braces(tok: str) -> str:
     return tok
 
 
-def _postprocess_latex(s: str) -> str:
-    """이미 변환된 LaTeX 문자열에 남은 HWP 잔여 키워드를 정리한다.
+def hwp_eq_to_latex(script: str) -> str:
+    """HWP 수식편집기 스크립트를 LaTeX로 변환한다."""
+    if not script:
+        return ""
 
-    hwp_eq_to_latex의 마지막과, 본문/선지의 `$...$` 내부에도 적용해
-    `over`, `bar`, `root`, `RM`, `RIGHT/LEFT`, `ANGLE` 같은 잔여를 정리한다.
-    """
-    # `\(` `\)` 등 LaTeX inline 마커는 KaTeX에서 깨지므로 단순 괄호로
+    s = script.strip()
+
+    # 0) 전처리: 붙어있는 키워드 분리 (oversqrt, overroot 등)
+    s = re.sub(r"([A-Za-z0-9}])over([A-Za-z0-9{\\-])", r"\1 over \2", s)
+
+    # 1) LEFT / RIGHT 괄호 (대소문자 모두)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\)", r"\\right)", s)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\[", r"\\left[", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\]", r"\\right]", s)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\{", r"\\left\\{", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\}", r"\\right\\}", s)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\|", r"\\left|", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\|", r"\\right|", s)
+    # LEFT. / RIGHT. (보이지 않는 delimiter)
+    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\.", r"\\left.", s)
+    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\.", r"\\right.", s)
+
+    # 2) cases 환경: cases{...#...} → \begin{cases}...\\ ...\end{cases}
+    #    중첩 중괄호를 수동 매칭으로 처리
+    def _find_matching_brace(text, start):
+        """start 위치의 '{'에 대응하는 '}' 위치를 반환."""
+        depth = 0
+        for i in range(start, len(text)):
+            if text[i] == "{":
+                depth += 1
+            elif text[i] == "}":
+                depth -= 1
+                if depth == 0:
+                    return i
+        return -1
+
+    # cases 반복 처리
+    for _ in range(5):
+        m = re.search(r"\bcases\s*\{", s)
+        if not m:
+            break
+        brace_start = m.end() - 1
+        brace_end = _find_matching_brace(s, brace_start)
+        if brace_end == -1:
+            break
+        inner = s[brace_start + 1:brace_end]
+        lines = inner.split("#")
+        converted = " \\\\ ".join(lines)
+        s = s[:m.start()] + r"\begin{cases}" + converted + r"\end{cases}" + s[brace_end + 1:]
+
+    # 3) 분수: {num} over {den} → \frac{num}{den} (중첩 허용)
+    for _ in range(5):
+        new_s = re.sub(
+            r"\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}\s*over\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}",
+            r"\\frac{\1}{\2}", s
+        )
+        if new_s == s:
+            break
+        s = new_s
+
+    # 3-b) 중괄호 없는 over: 확장된 OPERAND (sqrt/root 포함)
+    #      +/- 부호는 분수 밖 연산자이므로 OPERAND에 포함하지 않음
+    SQRT_TOK = r"(?:\\?(?:sqrt|root)\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})"
+    SQRT_BARE = r"(?:\\?(?:sqrt|root)-?[A-Za-z0-9]+)"  # root3, root-3 등
+    SUP_SUB = r"(?:[\^_](?:\{[^{}]*\}|[A-Za-z0-9]))*"  # ^2, ^{n+1}, _k 등
+    SIMPLE_TOK = rf"(?:[A-Za-z0-9]+{SUP_SUB})"
+    BRACE_TOK = r"(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})"
+    OPERAND = rf"(?:{SQRT_TOK}|{SQRT_BARE}|{BRACE_TOK}|{SIMPLE_TOK})"
+    over_no_brace = re.compile(rf"({OPERAND})\s*over\s*({OPERAND})")
+    for _ in range(5):
+        new_s = over_no_brace.sub(
+            lambda m: r"\frac{" + _strip_outer_braces(m.group(1).strip()) +
+                      r"}{" + _strip_outer_braces(m.group(2).strip()) + r"}",
+            s,
+        )
+        if new_s == s:
+            break
+        s = new_s
+
+    # 4) root → sqrt 별칭
+    s = re.sub(r"(?<![A-Za-z])root\s*\{", r"sqrt{", s)
+    s = re.sub(
+        r"(?<![A-Za-z])root\s*(-?\s*[A-Za-z0-9]+)",
+        lambda m: r"sqrt{" + m.group(1).replace(" ", "") + r"}",
+        s,
+    )
+    s = re.sub(r"(\d)sqrt\{", r"\1 sqrt{", s)
+
+    # 5) sqrt → \sqrt (중괄호 있는 경우)
+    s = re.sub(r"\bsqrt\s*\{", r"\\sqrt{", s)
+    # sqrt 중괄호 없는 경우: sqrt(expr), sqrt-N, sqrtN
+    s = re.sub(r"\bsqrt\s*\(([^)]+)\)", r"\\sqrt{\1}", s)
+    s = re.sub(r"\bsqrt\s*(-[A-Za-z0-9]+)", r"\\sqrt{\1}", s)
+    s = re.sub(r"\bsqrt\s+([A-Za-z0-9])", r"\\sqrt{\1}", s)
+    # sqrtN (붙어있는 경우)
+    s = re.sub(r"\bsqrt([0-9])", r"\\sqrt{\1}", s)
+
+    # 6) bar → overline
+    s = re.sub(r"\bbar\s*\{", r"\\overline{", s)
+    s = re.sub(
+        r"\bbar\s+([A-Za-z]\w*)",
+        lambda m: r"\overline{" + m.group(1) + r"}",
+        s,
+    )
+
+    # 7) hat, vec, dot, ddot, tilde
+    for accent in ["hat", "vec", "dot", "ddot", "tilde"]:
+        s = re.sub(rf"\b{accent}\s*\{{", rf"\\{accent}{{", s)
+
+    # 8) rm{...} → \mathrm{...}
+    s = re.sub(r"\brm\s*\{", r"\\mathrm{", s)
+    s = re.sub(r"\brm\s*([A-Za-z]\w*)", lambda m: f"\\mathrm{{{m.group(1)}}}", s)
+
+    # 9) BOX{...} → \boxed{...}
+    s = re.sub(r"\bBOX\s*\{", r"\\boxed{", s)
+    s = re.sub(r"\bbox\s*\{", r"\\boxed{", s)
+
+    # 10) prime → '
+    s = re.sub(r"\bprime\b", "'", s)
+
+    # 11) it (italic) — LaTeX 수학모드 기본이므로 제거
+    s = re.sub(r"\bit\s+", "", s)
+    s = re.sub(r"\bit(?=[+-])", "", s)
+    s = re.sub(r"\bit\b", "", s)
+
+    # 12) 그리스 문자
+    # 전처리: 붙어있는 그리스문자명 분리 (alphabeta → alpha beta)
+    _greek_names = sorted(GREEK_MAP.keys(), key=len, reverse=True)
+    _greek_pat = "|".join(_greek_names)
+    for _ in range(3):  # 3개 이상 연속 대비
+        s_new = re.sub(rf"({_greek_pat})({_greek_pat})", r"\1 \2", s)
+        if s_new == s:
+            break
+        s = s_new
+    for hwp, latex in GREEK_MAP.items():
+        s = re.sub(rf"\b{hwp}\b", lambda m, r=latex: r, s)
+
+    # 13) 기호
+    for hwp, latex in SYMBOL_MAP.items():
+        s = re.sub(rf"\b{hwp}\b", lambda m, r=latex: r, s)
+
+    # 14) ` → \, (thin space), ~ → 일반 공백
+    s = s.replace("`", r"\,")
+    s = re.sub(r"~+", " ", s)
+
+    # 15) & 제거, # → \\
+    s = s.replace("&", "")
+    s = re.sub(r"\s*#\s*", r" \\\\ ", s)
+
+    # 16) 끝에 매달린 단독 백슬래시 제거
+    s = re.sub(r"\\(?=\s|$)", "", s)
+    s = re.sub(r"\\$", "", s)
+
+    # 17) 괄호 짝 보정
+    s = _balance_braces(s)
+
+    # 18) 후처리
+    s = _postprocess_latex(s)
+
+    # 19) 남은 over 강제 처리
+    s = re.sub(
+        r"(\{[^{}]*\}|[A-Za-z0-9+\-]+)\s*over\s*(\{[^{}]*\}|[A-Za-z0-9+\-]+)",
+        lambda m: r"\frac{" + _strip_outer_braces(m.group(1)) + r"}{" + _strip_outer_braces(m.group(2)) + r"}",
+        s,
+    )
+    s = re.sub(r"\s+over\s+", " / ", s)
+
+    # 20) 남은 bar, root
+    s = re.sub(
+        r"\bbar\s*([A-Za-z]\w*)",
+        lambda m: r"\overline{" + m.group(1) + r"}",
+        s,
+    )
+    s = re.sub(
+        r"\broot\s*(-?[A-Za-z0-9]+)",
+        lambda m: r"\sqrt{" + m.group(1) + r"}",
+        s,
+    )
+    s = re.sub(r"\broot\b", r"\\sqrt", s)
+
+    # 21) 불필요한 다중 공백 정리
+    s = re.sub(r"  +", " ", s)
+
+    return s.strip()
+
+
+def _postprocess_latex(s: str) -> str:
+    """변환된 LaTeX 문자열의 잔여 HWP 키워드를 정리한다."""
     s = s.replace(r"\(", "(").replace(r"\)", ")")
     s = s.replace(r"\{", "{").replace(r"\}", "}")
 
-    # `tri angle` / `tri \angle` (공백 분리)도 삼각형 기호로
+    # tri angle → \triangle
     s = re.sub(r"\btri\s+angle\b", lambda m: r"\triangle", s)
     s = re.sub(r"\bTRI\s+ANGLE\b", lambda m: r"\triangle", s)
     s = re.sub(r"\btri\s*\\angle", lambda m: r"\triangle", s)
 
-    # 소문자 right/left 결합 잔여: `3right)` → `3)` (키워드만 제거, 괄호는 유지)
+    # 소문자 right/left 잔여
     s = re.sub(r"(?<![A-Za-z\\])right(?=\s*[\)\]\|\}])", "", s)
     s = re.sub(r"(?<![A-Za-z\\])left(?=\s*[\(\[\|\{])", "", s)
 
-    # 긴 키워드 우선 변환 — 결합 케이스(triangleABC, cdotsA)도 처리
+    # 긴 키워드 우선 변환
     for kw, latex in (
         ("TRIANGLE", r"\triangle "), ("triangle", r"\triangle "),
         ("CDOTS", r"\cdots "), ("cdots", r"\cdots "),
@@ -301,17 +357,17 @@ def _postprocess_latex(s: str) -> str:
     ):
         s = re.sub(rf"(?<![A-Za-z\\]){kw}", lambda m, r=latex: r, s)
 
-    # 결합 키워드 분리 (대소문자 모두) — 앞에 백슬래시가 있으면 LaTeX 명령이니 제외
+    # 결합 키워드 분리
     for kw in ("ANGLE", "TIMES", "CDOT", "RIGHT", "LEFT", "BAR", "RM", "DEG",
                "angle", "times", "cdot", "perp", "infty", "circ"):
         s = re.sub(rf"(?<=[A-Za-z0-9])(?<!\\){kw}", r" " + kw, s)
         s = re.sub(rf"(?<!\\){kw}(?=[A-Za-z0-9])", kw + r" ", s)
 
-    # `it x`, `itc` 등 이탤릭 지정자 제거
+    # it 잔여
     s = re.sub(r"\bit(?=[A-Za-z])", "", s)
     s = re.sub(r"\bit\s+", "", s)
 
-    # 자주 쓰이는 HWP 기호 키워드 → LaTeX (대소문자 모두)
+    # HWP 기호 키워드 → LaTeX
     KEYWORD_MAP = {
         "ANGLE": r"\angle ", "angle": r"\angle ",
         "TIMES": r"\times ", "times": r"\times ",
@@ -327,13 +383,13 @@ def _postprocess_latex(s: str) -> str:
     for kw, latex in KEYWORD_MAP.items():
         s = re.sub(rf"\b{kw}\b", lambda m, r=latex: r, s)
 
-    # KEYWORD_MAP 후 한번 더 tri \angle 결합 회수
+    # tri \angle 결합 회수
     s = re.sub(r"\btri\s*\\angle", lambda m: r"\triangle", s)
 
-    # over: 두 토큰 사이에 있으면 \frac (한 단계 중첩 허용)
+    # over 잔여
     NESTED = r"\{(?:[^{}]|\{[^{}]*\})*\}"
     SQRT_TOK = r"\\?sqrt\{[^{}]*\}"
-    OPERAND = rf"(?:{SQRT_TOK}|{NESTED}|[A-Za-z0-9+\-]+)"
+    OPERAND = rf"(?:{SQRT_TOK}|{NESTED}|[A-Za-z0-9]+)"
     s = re.sub(
         rf"({OPERAND})\s*over\s*({OPERAND})",
         lambda m: r"\frac{" + _strip_outer_braces(m.group(1)) +
@@ -342,14 +398,12 @@ def _postprocess_latex(s: str) -> str:
     )
     s = re.sub(r"\s+over\s+", " / ", s)
 
-    # bar(BARABC)/bar abc → \overline{...}, 대소문자 무관
+    # bar/root 잔여
     s = re.sub(
         r"(?i)\bbar(?:\s+|(?=[A-Za-z]))([A-Za-z]\w*)",
         lambda m: r"\overline{" + m.group(1) + "}",
         s,
     )
-
-    # root 잔여
     s = re.sub(
         r"(?<![A-Za-z])root\s*(-?[A-Za-z0-9]+)",
         lambda m: r"\sqrt{" + m.group(1) + "}",
@@ -357,15 +411,15 @@ def _postprocess_latex(s: str) -> str:
     )
     s = re.sub(r"(?<![A-Za-z])root\b", r"\\sqrt", s)
 
-    # times 결합: timesABC → \times ABC
+    # times 결합
     s = re.sub(r"(?i)\btimes(?=[A-Za-z])", r"\\times ", s)
 
-    # rm/RM 잔여 (대소문자 무관) — 본문에서는 폰트 지정이라 제거
+    # rm 잔여
     s = re.sub(r"(?i)\brm(?=[A-Za-z])", "", s)
     s = re.sub(r"(?i)\brm\s+(?=\\)", "", s)
     s = re.sub(r"(?i)\brm\b\s*", "", s)
 
-    # RIGHT/LEFT 잔여 (괄호 못 잡은 결합형: betaRIGHT 등)
+    # RIGHT/LEFT 잔여
     s = re.sub(r"(?i)RIGHT\s*\|", r"\\right|", s)
     s = re.sub(r"(?i)LEFT\s*\|", r"\\left|", s)
     s = re.sub(r"(?i)\bRIGHT\b", "", s)
@@ -380,7 +434,7 @@ def _postprocess_latex(s: str) -> str:
         return m.group(0) if name in _LATEX_KEEP else name
     s = re.sub(r"\\([A-Za-z]+)", _strip_unknown, s)
 
-    # 중첩 백슬래시 정리: 2개 이상 + 알파벳 → 1개 (``\\'' 단독 줄바꿈은 보존)
+    # 중첩 백슬래시 정리
     s = re.sub(r"\\{2,}(?=[A-Za-z])", r"\\", s)
 
     return s
@@ -388,25 +442,20 @@ def _postprocess_latex(s: str) -> str:
 
 # ── 파일명 메타데이터 파싱 ────────────────────────────────────
 def parse_filename_metadata(filename: str) -> dict:
-    """파일명에서 메타데이터를 추출한다.
-    예: [고][2025][1-1-a][인천][계양고][공수1][비상][다항식의연산-이차함수][...]
-    """
+    """파일명에서 메타데이터를 추출한다."""
     meta = {}
     brackets = re.findall(r"\[([^\]]+)\]", filename)
     if len(brackets) >= 6:
-        meta["school_level"] = brackets[0]  # 고
-        meta["year"] = brackets[1]          # 2025
-        # 학년-학기-시험유형
+        meta["school_level"] = brackets[0]
+        meta["year"] = brackets[1]
         grade_parts = brackets[2].split("-")
         if len(grade_parts) >= 3:
             meta["grade"] = grade_parts[0]
             meta["semester"] = grade_parts[1]
-            meta["exam_type"] = grade_parts[2]  # a=중간, b=기말
-        meta["region"] = brackets[3]        # 인천
-        meta["school"] = brackets[4]        # 계양고
-        meta["subject"] = brackets[5]       # 공수1
-        # 출판사 (있을 수도 없을 수도)
-        # 단원 범위를 찾는다 — "~"나 "-"가 포함된 한글 항목
+            meta["exam_type"] = grade_parts[2]
+        meta["region"] = brackets[3]
+        meta["school"] = brackets[4]
+        meta["subject"] = brackets[5]
         for b in brackets[6:]:
             if re.search(r"[가-힣].*[-~].*[가-힣]", b):
                 meta["chapter_range"] = b
@@ -414,13 +463,13 @@ def parse_filename_metadata(filename: str) -> dict:
     return meta
 
 
-# ── XML 파싱: 단락을 순회하며 콘텐츠 스트림 구축 ──────────────
+# ── XML 파싱: ContentItem ─────────────────────────────────────
 class ContentItem:
     """단락 내 하나의 콘텐츠 요소."""
     __slots__ = ("kind", "text", "image_ref", "hwp_eq", "latex")
 
     def __init__(self, kind, text="", image_ref="", hwp_eq="", latex=""):
-        self.kind = kind        # "text", "equation", "image"
+        self.kind = kind
         self.text = text
         self.image_ref = image_ref
         self.hwp_eq = hwp_eq
@@ -455,179 +504,98 @@ def _is_watermark_pic(pic_elem) -> bool:
     return False
 
 
-# LaTeX 명령으로 보존해야 하는 화이트리스트 (자주 쓰이는 것)
-_LATEX_KEEP = {
-    "frac", "sqrt", "overline", "underline", "left", "right",
-    "times", "cdot", "div", "pm", "mp", "leq", "geq", "neq",
-    "approx", "equiv", "sim", "therefore", "because",
-    "triangle", "angle", "perp", "parallel", "infty",
-    "alpha", "beta", "gamma", "delta", "epsilon", "zeta",
-    "eta", "theta", "iota", "kappa", "lambda", "mu",
-    "nu", "xi", "pi", "rho", "sigma", "tau",
-    "upsilon", "phi", "chi", "psi", "omega",
-    "Gamma", "Delta", "Theta", "Lambda", "Pi", "Sigma", "Phi", "Omega",
-    "mathrm", "mathbf", "mathit", "mathbb", "begin", "end",
-    "rightarrow", "leftarrow", "leftrightarrow",
-    "cdots", "ldots", "vdots", "ddots", "bullet",
-    "in", "subset", "supset", "cup", "cap", "emptyset",
-    "forall", "exists", "hat", "vec", "dot", "ddot", "tilde",
-    "overrightarrow", "overleftarrow",
-    "circ", "degree", "neq", "ne", "le", "ge",
-}
+def _process_equation(eq_elem, items):
+    """수식 요소를 처리하여 items에 추가한다."""
+    if _is_watermark_equation(eq_elem):
+        return
+    script_el = eq_elem.find(NS_PAR + "script")
+    if script_el is None or not script_el.text:
+        return
+    raw = script_el.text
+    raw = re.split(r"\n\s*\n", raw)[0].strip()
+    clean = re.sub(r"\s+", "", raw)
+    if not clean or re.fullmatch(r"To\d+", clean):
+        return
+    latex = hwp_eq_to_latex(raw)
+    items.append(ContentItem("equation", hwp_eq=raw, latex=latex))
 
 
-def sanitize_outside_math(text: str) -> str:
-    """수식($...$) 바깥은 백슬래시 명령 정리, 안쪽은 LaTeX 잔여 정리 + 괄호 보정."""
-    parts = re.split(r"(\$[^$]*\$)", text)
-    for i, p in enumerate(parts):
-        if i % 2 == 0:
-            parts[i] = _sanitize_text_node(p)
-        else:
-            inner = p[1:-1]
-            inner = _postprocess_latex(inner)
-            # 괄호 짝 보정 ({-1+i}over{\sqrt{2} 같은 경우)
-            open_b = inner.count("{")
-            close_b = inner.count("}")
-            if open_b > close_b:
-                inner = inner + ("}" * (open_b - close_b))
-            elif close_b > open_b:
-                # 뒤에서부터 매칭 안된 } 제거
-                extra = close_b - open_b
-                inner = re.sub(r"\}(?=[^{}]*$)", "", inner, count=extra)
-            parts[i] = "$" + inner + "$"
-    return "".join(parts)
+def _process_pic(pic_elem, items):
+    """이미지 요소를 처리하여 items에 추가한다."""
+    if _is_watermark_pic(pic_elem):
+        return
+    img_el = pic_elem.find(".//" + NS_CORE + "img")
+    if img_el is not None:
+        ref = img_el.attrib.get("binaryItemIDRef", "")
+        if ref:
+            items.append(ContentItem("image", image_ref=ref))
 
 
-def _sanitize_text_node(text: str) -> str:
-    """본문 텍스트(<t> 노드)에 섞인 KaTeX 미지원 명령/잔여를 정리한다."""
-    def fix(m):
-        name = m.group(1)
-        if name in _LATEX_KEEP:
-            return m.group(0)
-        return name  # 백슬래시 제거
-    text = re.sub(r"\\([A-Za-z]+)", fix, text)
-    # raw 키워드 잔여 (작성자가 텍스트에 직접 입력한 경우, 결합 케이스 포함)
-    text = re.sub(r"(RIGHT|LEFT)\s*[\)\]\|\}]?", "", text)
-    text = re.sub(r"\b(RM|BAR|ANGLE|DEG)\b", "", text)
-    text = text.replace(r"\(", "(").replace(r"\)", ")")
-    text = text.replace(r"\{", "{").replace(r"\}", "}")
-    return text
+def _process_tbl(tbl_elem, items):
+    """테이블 요소 내부의 모든 셀을 처리하여 items에 추가한다.
+    <<BOX_START>>와 <<BOX_END>> 마커로 감싸서 UI에서 테두리 표현 가능."""
+    items.append(ContentItem("text", text="\n<<BOX_START>>\n"))
+    for tc in tbl_elem.iter(NS_PAR + "tc"):
+        for p in tc.findall(".//" + NS_PAR + "p"):
+            for run in p.findall(NS_PAR + "run"):
+                _process_run_no_endnote(run, items)
+            items.append(ContentItem("text", text="\n"))
+    items.append(ContentItem("text", text="<<BOX_END>>\n"))
 
 
-def _process_run(run_elem, items):
-    """<run> 요소의 자식들을 순서대로 처리하여 items에 추가한다.
-
-    <run>은 <t>(텍스트), <equation>(수식), <ctrl>(<pic>, <endNote> 등) 등을
-    자식으로 가질 수 있다.  endNote/subList 내부의 <p>는 root.iter()가
-    별도 순회하므로 여기서는 건너뛴다.
-    """
+def _process_run_no_endnote(run_elem, items):
+    """<run> 요소를 처리하되, endNote는 건너뛴다."""
     for child in run_elem:
         tag = child.tag.split("}")[-1]
 
         if tag == "t":
             if child.text:
-                txt = _sanitize_text_node(child.text)
-                items.append(ContentItem("text", text=txt))
+                items.append(ContentItem("text", text=child.text))
 
         elif tag == "equation":
-            if _is_watermark_equation(child):
-                continue
-            script_el = child.find(NS_PAR + "script")
-            if script_el is None or not script_el.text:
-                continue
-            raw = script_el.text
-            # 줄바꿈 이후 가비지 제거 (예: "0\n\n...To\n20006")
-            raw = re.split(r"\n\s*\n", raw)[0].strip()
-            # 가비지 데이터 필터링
-            clean = re.sub(r"\s+", "", raw)
-            if not clean or re.fullmatch(r"To\d+", clean):
-                continue
-            latex = hwp_eq_to_latex(raw)
-            items.append(ContentItem("equation", hwp_eq=raw, latex=latex))
+            _process_equation(child, items)
 
         elif tag == "pic":
-            if _is_watermark_pic(child):
-                continue
-            img_el = child.find(".//" + NS_CORE + "img")
-            if img_el is not None:
-                ref = img_el.attrib.get("binaryItemIDRef", "")
-                if ref:
-                    items.append(ContentItem("image", image_ref=ref))
+            _process_pic(child, items)
 
         elif tag == "rect":
-            # drawText 안의 텍스트 (보기 박스 등)
             for dt in child.iter(NS_PAR + "drawText"):
                 for sl in dt.iter(NS_PAR + "subList"):
                     for p in sl.findall(NS_PAR + "p"):
-                        _process_paragraph_direct(p, items)
+                        for run in p.findall(NS_PAR + "run"):
+                            _process_run_no_endnote(run, items)
                     items.append(ContentItem("text", text="\n"))
 
+        elif tag == "tbl":
+            _process_tbl(child, items)
+
         elif tag == "ctrl":
-            # <ctrl> 안에 <pic>, <equation> 등이 있을 수 있음
             for sub in child:
                 stag = sub.tag.split("}")[-1]
-                if stag == "pic":
-                    if _is_watermark_pic(sub):
-                        continue
-                    img_el = sub.find(".//" + NS_CORE + "img")
-                    if img_el is not None:
-                        ref = img_el.attrib.get("binaryItemIDRef", "")
-                        if ref:
-                            items.append(ContentItem("image", image_ref=ref))
+                if stag == "endNote":
+                    continue  # endNote는 별도 처리
+                elif stag == "pic":
+                    _process_pic(sub, items)
                 elif stag == "equation":
-                    if _is_watermark_equation(sub):
-                        continue
-                    script_el = sub.find(NS_PAR + "script")
-                    if script_el is not None and script_el.text:
-                        raw = re.split(r"\n\s*\n", script_el.text)[0].strip()
-                        clean = re.sub(r"\s+", "", raw)
-                        if clean and not re.fullmatch(r"To\d+", clean):
-                            latex = hwp_eq_to_latex(raw)
-                            items.append(ContentItem(
-                                "equation", hwp_eq=raw, latex=latex
-                            ))
-                # endNote, header, footer → 내부 <p>는 root.iter()가 순회하므로 무시
-
-        elif tag == "tbl":
-            # 테이블은 root.iter()가 내부 <p>를 순회하지만,
-            # 간단한 인라인 테이블은 직접 처리
-            pass
+                    _process_equation(sub, items)
+                elif stag == "tbl":
+                    _process_tbl(sub, items)
 
 
-def _process_paragraph_direct(p_elem, items):
-    """<p> 요소를 직접 처리한다 (drawText 등 서브구조에서 호출)."""
-    for child in p_elem:
-        tag = child.tag.split("}")[-1]
-        if tag == "run":
-            _process_run(child, items)
+def _process_endnote(endnote_elem, answer_items, solution_items):
+    """endNote 내부를 처리: 첫 번째 p → 정답, 나머지 → 해설."""
+    # subList 직속 <p>만 가져옴 (테이블 셀 내부 <p> 중복 순회 방지)
+    inner_ps = list(endnote_elem.findall(NS_PAR + "subList/" + NS_PAR + "p"))
+    for idx, p in enumerate(inner_ps):
+        target = answer_items if idx == 0 else solution_items
+        for run in p.findall(NS_PAR + "run"):
+            _process_run_no_endnote(run, target)
+        target.append(ContentItem("text", text="\n"))
 
 
-def walk_paragraphs(section_root):
-    """section0.xml의 모든 <p> 요소를 깊이우선 순회하며 ContentItem 리스트를 반환한다.
-
-    root.iter()를 사용하므로 endNote, subList, tbl 내부의 <p>도 자동 순회된다.
-    각 단락의 <run> 자식에서 텍스트, 수식, 이미지를 순서대로 추출한다.
-    """
-    items = []
-
-    for p_elem in section_root.iter(NS_PAR + "p"):
-        # <p>의 직접 자식 <run>만 처리 (findall은 직접 자식만 반환)
-        for run_elem in p_elem.findall(NS_PAR + "run"):
-            _process_run(run_elem, items)
-        # 단락 구분 줄바꿈
-        items.append(ContentItem("text", text="\n"))
-
-    return items
-
-
-# ── 콘텐츠 스트림 → 텍스트 직렬화 ────────────────────────────
-def serialize_content(items: list, eq_format="latex") -> str:
-    """ContentItem 리스트를 하나의 문자열로 합친다.
-    수식은 $...$ 또는 원본 형태로 삽입된다.
-    이미지는 <<IMG:imageN>> 플레이스홀더로 삽입된다.
-    인접한 수식($..$ 끝나고 바로 $..$ 시작)은 공백을 삽입해
-    마크다운이 '$$ display math'로 오해하지 않게 한다.
-    """
+# ── 콘텐츠 직렬화 ────────────────────────────────────────────
+def serialize_items(items: list) -> str:
+    """ContentItem 리스트를 문자열로 합친다."""
     parts = []
     last_was_eq = False
     for item in items:
@@ -636,12 +604,9 @@ def serialize_content(items: list, eq_format="latex") -> str:
             if item.text.strip():
                 last_was_eq = False
         elif item.kind == "equation":
-            if eq_format == "latex":
-                rendered = f"${item.latex}$"
-            else:
-                rendered = f"$${item.hwp_eq}$$"
+            rendered = f"${item.latex}$"
             if last_was_eq:
-                parts.append(" ")  # $$ 충돌 방지
+                parts.append(" ")
             parts.append(rendered)
             last_was_eq = True
         elif item.kind == "image":
@@ -650,35 +615,48 @@ def serialize_content(items: list, eq_format="latex") -> str:
     return "".join(parts)
 
 
-# ── 문항 분리 및 구조화 ──────────────────────────────────────
-ANSWER_PATTERN = re.compile(
-    r"\[정답\]\s*(.+?)(?:\n|$)", re.DOTALL
-)
-# 서답형 정답: [정답] 다음에 수식($...$)이나 숫자가 올 수 있음
-ANSWER_SUBJECTIVE = re.compile(
-    r"\[정답\]\s*(\$[^$]+\$|[\d/.\-]+)"
-)
-CHAPTER_PATTERN = re.compile(
-    r"\[중단원\]\s*(.+?)(?:\n|$)"
-)
-DIFFICULTY_PATTERN = re.compile(
-    r"\[난이도\]\s*(.+?)(?:\n|$)"
-)
-ERROR_PATTERN = re.compile(
-    r"\[문제\s*오류\]\s*(.*?)(?:\n|$)"
-)
-SUBJECTIVE_PATTERN = re.compile(
-    r"\[서[답술]형\s*(\d+)\]"
-)
-POINTS_PATTERN = re.compile(
-    r"\[\s*\$?([\d.]+)\$?\s*점\s*\]"
-)
+def sanitize_outside_math(text: str) -> str:
+    """수식($...$) 바깥은 백슬래시 정리, 안쪽은 LaTeX 잔여 정리."""
+    parts = re.split(r"(\$[^$]*\$)", text)
+    for i, p in enumerate(parts):
+        if i % 2 == 0:
+            parts[i] = _sanitize_text_node(p)
+        else:
+            inner = p[1:-1]
+            inner = _postprocess_latex(inner)
+            open_b = inner.count("{")
+            close_b = inner.count("}")
+            if open_b > close_b:
+                inner = inner + ("}" * (open_b - close_b))
+            elif close_b > open_b:
+                extra = close_b - open_b
+                inner = re.sub(r"\}(?=[^{}]*$)", "", inner, count=extra)
+            parts[i] = "$" + inner + "$"
+    return "".join(parts)
+
+
+def _sanitize_text_node(text: str) -> str:
+    """본문 텍스트의 HWP 잔여 키워드를 정리한다."""
+    def fix(m):
+        name = m.group(1)
+        if name in _LATEX_KEEP:
+            return m.group(0)
+        return name
+    text = re.sub(r"\\([A-Za-z]+)", fix, text)
+    text = re.sub(r"(RIGHT|LEFT)\s*[\)\]\|\}]?", "", text)
+    text = re.sub(r"\b(RM|BAR|ANGLE|DEG)\b", "", text)
+    text = text.replace(r"\(", "(").replace(r"\)", ")")
+    text = text.replace(r"\{", "{").replace(r"\}", "}")
+    return text
+
+
+# ── 문항 구조화: XML 구조 기반 (v2 핵심) ─────────────────────
 
 # 원 번호 → 숫자
 CIRCLE_NUM = {"①": 1, "②": 2, "③": 3, "④": 4, "⑤": 5}
 CIRCLES = ["①", "②", "③", "④", "⑤"]
 
-# 중단원명 정규화 — 공동작업자 표기 변형 통합
+# 중단원명 정규화
 CHAPTER_NORMALIZE = {
     "다항함수": "이차함수",
     "항등식과 나머니정리": "항등식과 나머지정리",
@@ -687,18 +665,18 @@ CHAPTER_NORMALIZE = {
     "나머지 정리": "항등식과 나머지정리",
 }
 
+POINTS_PATTERN = re.compile(r"\[\s*\$?([\d.]+)\$?\s*점\s*\]")
+
 
 def parse_answer_value(raw: str) -> dict:
-    """정답 문자열을 파싱한다. 예: '⑤' → {"answer": 5, "answer_type": "choice"}"""
+    """정답 문자열을 파싱한다."""
     raw = raw.strip()
     for circle, num in CIRCLE_NUM.items():
         if circle in raw:
             return {"answer": str(num), "answer_type": "choice"}
-    # 수식으로 감싸진 숫자 정답: $209$
     m = re.search(r"\$\s*([\d/.\-]+)\s*\$", raw)
     if m:
         return {"answer": m.group(1), "answer_type": "short_answer"}
-    # 일반 숫자 정답 (서답형)
     m = re.search(r"([\d/.\-]+)", raw)
     if m:
         return {"answer": m.group(1), "answer_type": "short_answer"}
@@ -706,28 +684,19 @@ def parse_answer_value(raw: str) -> dict:
 
 
 def _split_compressed_values(block: str) -> list:
-    """한 ⃝번호 뒤에 '$v1$$v2$' 또는 '$v1$$$v2$' 처럼 압축된 값들을 분리한다."""
+    """압축된 선택지 값을 분리한다."""
     block = block.strip()
     if not block:
         return []
-    # 1) $...$ 토큰을 모두 추출 (압축형 핵심)
     vals = re.findall(r"\$([^$]+)\$", block)
     if vals:
         return [f"${v.strip()}$" for v in vals if v.strip()]
-    # 2) 일반 텍스트: 공백/탭/$$ 구분자
     parts = [p.strip() for p in re.split(r"\$\$+|\s{2,}|\t", block) if p.strip()]
     return parts
 
 
 def extract_choices(text: str) -> list:
-    """선택지를 추출한다.
-
-    포맷:
-    1) 명시적: ① v1  ② v2 ... ⑤ v5
-    2) 압축형: ① $v1$$v2$$v3$  ④ $v4$$v5$  (②③⑤ 누락)
-       또는    ① $v1$$v2$  ③ $v3$$v4$  ⑤ $v5$  등 임의 부분집합
-    """
-    # 텍스트에 등장하는 ⃝번호 위치를 모두 수집
+    """선택지를 추출한다."""
     found = []
     for c in CIRCLES:
         for m in re.finditer(re.escape(c), text):
@@ -736,204 +705,263 @@ def extract_choices(text: str) -> list:
         return []
     found.sort()
 
-    # 각 ⃝번호 뒤 ~ 다음 ⃝번호 또는 줄바꿈까지의 블록 추출
     choices = []
     for i, (pos, num) in enumerate(found):
-        start = pos + 1  # ⃝문자 1글자
-        # 다음 ⃝ 위치 또는 줄 끝
+        start = pos + 1
         end = found[i + 1][0] if i + 1 < len(found) else len(text)
         block = text[start:end]
-        # 줄바꿈으로 끝나면 잘라낸다 (다음 문항 혼입 방지) — 단,
-        # 압축형에서는 줄바꿈 후 다음 ⃝가 이어지므로 end 이전에 처리됨
         if i + 1 >= len(found):
             block = block.split("\n")[0]
         vals = _split_compressed_values(block)
         if not vals:
             continue
-        # 첫 값은 현재 번호에, 나머지는 다음 번호들에 순서대로 배정
         next_num = found[i + 1][1] if i + 1 < len(found) else None
         for j, v in enumerate(vals):
             target = num + j
-            # 이미 다른 ⃝가 차지한 번호와 충돌하면 해당 위치까지만
             if next_num is not None and target >= next_num:
                 break
             choices.append({"number": target, "text": v})
 
-    # 같은 번호 중복 시 첫 번째만 유지, 번호순 정렬
     seen = {}
     for c in choices:
         seen.setdefault(c["number"], c)
     return [seen[k] for k in sorted(seen)]
 
 
-def strip_choices_from_text(text: str) -> str:
-    """문제본문에서 선택지 부분(첫 ⃝번호 이후)을 제거한다."""
-    m = re.search(r"[①②③④⑤]", text)
-    if not m:
-        return text.strip()
-    return text[:m.start()].rstrip()
+def _extract_questions_from_xml(section_root, watermark_images, debug=False):
+    """section0.xml의 최상위 <p>를 순회하여 문항 리스트를 반환한다.
 
-
-def split_solution_and_question(text: str) -> tuple:
-    """해설과 문제본문을 분리한다.
-
-    문제본문은 선택지(①) 또는 '?' 또는 '구하시오'를 포함하며,
-    일반적으로 블록의 뒷부분에 위치한다.
-
-    반환: (solution_text, question_text)
+    각 문항 = endNote P(정답+해설) + 이후 P들(본문, 조건박스, 그림, 선택지)
+    → [중단원]/[난이도]까지 한 세트.
     """
-    lines = text.split("\n")
+    top_ps = list(section_root.findall(NS_PAR + "p"))
 
-    # [중단원], [난이도] 이전까지의 본문에서 분리
-    body_lines = []
-    for line in lines:
-        if re.match(r"\[중단원\]", line) or re.match(r"\[난이도\]", line):
-            break
-        if re.match(r"\[문제\s*오류\]", line):
-            break
-        body_lines.append(line)
+    if debug:
+        print(f"[DEBUG] Total top-level <p>: {len(top_ps)}", file=sys.stderr)
 
-    body = "\n".join(body_lines)
+    # 1단계: 각 P를 분류하고 콘텐츠 추출
+    paragraphs = []  # list of dicts with role, items, etc.
 
-    # 선택지 시작점 찾기: 첫 번째 ① 위치
-    choice_match = re.search(r"①", body)
+    for p_idx, p_elem in enumerate(top_ps):
+        # endNote 존재 여부 확인
+        endnote_elem = None
+        for run in p_elem.findall(NS_PAR + "run"):
+            for child in run:
+                tag = child.tag.split("}")[-1]
+                if tag == "ctrl":
+                    for sub in child:
+                        if sub.tag.split("}")[-1] == "endNote":
+                            endnote_elem = sub
+                            break
 
-    # 문제본문 시작 휴리스틱:
-    # - "?" 가 포함된 문장
-    # - "구하시오", "구하여라" 등
-    # - 선택지 바로 위 블록
-    # 해설에서 문제로 전환되는 지점을 찾는다.
+        if endnote_elem is not None:
+            # endNote가 있는 P: 정답+해설(endNote 내부) + 문제시작(외부)
+            answer_items = []
+            solution_items = []
+            question_items = []
 
-    # 선택지가 있으면 그 위의 문단 블록이 문제
-    if choice_match:
-        before_choices = body[:choice_match.start()]
-        # 빈 줄로 구분된 마지막 블록이 문제
-        blocks = re.split(r"\n\s*\n", before_choices)
-        if len(blocks) >= 2:
-            solution = "\n\n".join(blocks[:-1]).strip()
-            question = blocks[-1].strip() + "\n" + body[choice_match.start():].strip()
+            _process_endnote(endnote_elem, answer_items, solution_items)
+
+            # endNote 외부의 콘텐츠 = 문제 본문 시작
+            for run in p_elem.findall(NS_PAR + "run"):
+                _process_run_no_endnote(run, question_items)
+
+            # 같은 P 안의 tbl (endNote 안이 아닌 것)
+            for run in p_elem.findall(NS_PAR + "run"):
+                for child in run:
+                    tag = child.tag.split("}")[-1]
+                    if tag == "tbl":
+                        _process_tbl(child, question_items)
+                    elif tag == "ctrl":
+                        for sub in child:
+                            stag = sub.tag.split("}")[-1]
+                            if stag == "tbl":
+                                _process_tbl(sub, question_items)
+
+            paragraphs.append({
+                "index": p_idx,
+                "role": "endnote",
+                "answer_items": answer_items,
+                "solution_items": solution_items,
+                "question_items": question_items,
+            })
         else:
-            # 블록 구분이 안 되면 전체를 문제로
-            solution = ""
-            question = body.strip()
-    else:
-        # 선택지 없음 (서답형) — 빈 줄 기준 마지막 블록이 문제
-        blocks = re.split(r"\n\s*\n", body)
-        if len(blocks) >= 2:
-            solution = "\n\n".join(blocks[:-1]).strip()
-            question = blocks[-1].strip()
-        else:
-            solution = ""
-            question = body.strip()
+            # endNote 없는 일반 P
+            items = []
+            has_tbl = False
+            has_pic = False
 
-    return solution, question
+            for run in p_elem.findall(NS_PAR + "run"):
+                _process_run_no_endnote(run, items)
 
+            # 직접 자식으로 tbl/pic이 있는 경우도 처리
+            for child in p_elem:
+                tag = child.tag.split("}")[-1]
+                if tag == "tbl":
+                    has_tbl = True
+                    _process_tbl(child, items)
+                elif tag == "run":
+                    for sub in child:
+                        stag = sub.tag.split("}")[-1]
+                        if stag == "tbl":
+                            has_tbl = True
+                        elif stag == "pic":
+                            has_pic = True
+                        elif stag == "ctrl":
+                            for ss in sub:
+                                if ss.tag.split("}")[-1] == "tbl":
+                                    has_tbl = True
+                                elif ss.tag.split("}")[-1] == "pic":
+                                    has_pic = True
 
-def split_into_questions(full_text: str, items: list) -> list:
-    """[난이도]를 문항 종료 마커로, [정답]을 정답 마커로 사용하여 문항을 분리한다.
+            items.append(ContentItem("text", text="\n"))
 
-    HWPX 구조상 각 문항의 텍스트 흐름:
-        [이전 문항 끝 [난이도]]
-        (문제 텍스트 일부)          ← endNote 앞의 본문
-        [정답] ⑤                    ← endNote 시작
-        해설 텍스트...              ← endNote 내용
-        (문제 텍스트 나머지 + 선택지) ← endNote 뒤의 본문
-        [중단원] ...
-        [난이도] ...                ← 현재 문항 끝
-    """
-    # 1) [난이도] 위치를 찾아 문항 블록 경계 설정
-    diff_positions = [m.end() for m in re.finditer(r"\[난이도\]\s*\S+", full_text)]
+            text = serialize_items(items).strip()
 
-    # 문항 블록: 이전 [난이도] 끝 ~ 현재 [난이도] 끝
-    blocks = []
-    prev = 0
-    for pos in diff_positions:
-        blocks.append(full_text[prev:pos])
-        prev = pos
-    # 마지막 [난이도] 뒤에 남은 텍스트가 있으면 추가
-    if prev < len(full_text):
-        remainder = full_text[prev:].strip()
-        if remainder and "[정답]" in remainder:
-            blocks.append(remainder)
+            role = "body"
+            if re.match(r"\[중단원\]", text):
+                role = "chapter"
+            elif re.match(r"\[난이도\]", text):
+                role = "difficulty"
+            elif re.match(r"\[문제\s*오류\]", text):
+                role = "error"
+            elif not text:
+                role = "empty"
 
+            paragraphs.append({
+                "index": p_idx,
+                "role": role,
+                "items": items,
+                "text": text,
+                "has_tbl": has_tbl,
+                "has_pic": has_pic,
+            })
+
+    # 2단계: endNote P를 기준으로 문항 블록 구성
     questions = []
-    for block in blocks:
-        # [정답]이 없으면 문항이 아님 (프리앰블 등)
-        ans_match = ANSWER_PATTERN.search(block)
-        if not ans_match:
-            continue
+    endnote_indices = [i for i, p in enumerate(paragraphs) if p["role"] == "endnote"]
 
-        answer_info = parse_answer_value(ans_match.group(1))
+    for en_pos, en_idx in enumerate(endnote_indices):
+        en_para = paragraphs[en_idx]
 
-        # 메타데이터 추출
+        # 정답 파싱
+        answer_text = serialize_items(en_para["answer_items"]).strip()
+        # [정답] 제거
+        answer_raw = re.sub(r"\[정답\]\s*", "", answer_text).strip()
+        answer_info = parse_answer_value(answer_raw)
+
+        # 해설
+        solution_items = en_para["solution_items"]
+        solution_text = serialize_items(solution_items).strip()
+
+        # 문제 본문: endNote P의 외부 콘텐츠 + 이후 P들 (다음 endNote 전까지)
+        question_items = list(en_para["question_items"])
+
+        # 다음 endNote 위치 (또는 끝)
+        next_en_idx = endnote_indices[en_pos + 1] if en_pos + 1 < len(endnote_indices) else len(paragraphs)
+
         chapter = ""
-        ch_match = CHAPTER_PATTERN.search(block)
-        if ch_match:
-            chapter = ch_match.group(1).strip()
-            chapter = CHAPTER_NORMALIZE.get(chapter, chapter)
-
         difficulty = ""
-        diff_match = DIFFICULTY_PATTERN.search(block)
-        if diff_match:
-            difficulty = diff_match.group(1).strip()
-
         error_note = ""
-        err_match = ERROR_PATTERN.search(block)
-        if err_match:
-            error_note = err_match.group(1).strip()
-
-        subj_match = SUBJECTIVE_PATTERN.search(block)
-        is_subjective = subj_match is not None
-        # "※ 여기서 부터는 서답형" 패턴으로도 서답형 감지
-        if not is_subjective and re.search(r"서[답술]형\s*문제", block):
-            is_subjective = True
-        subjective_num = int(subj_match.group(1)) if subj_match else None
-
+        is_subjective = False
+        subjective_num = None
         points = None
-        pts_match = POINTS_PATTERN.search(block)
-        if pts_match:
-            points = float(pts_match.group(1))
 
-        # 이미지 참조 추출
-        image_refs = re.findall(r"<<IMG:(image\d+)>>", block)
+        # 이후 P들 순회
+        for p_idx in range(en_idx + 1, next_en_idx):
+            para = paragraphs[p_idx]
+            text = para.get("text", "")
 
-        # 2) [정답] 위치를 기준으로 해설과 문제본문 분리
-        ans_start = ans_match.start()
-        ans_line_end = ans_match.end()
+            if para["role"] == "chapter":
+                if not chapter:  # 첫 번째 [중단원]만 사용 (편집메모 방지)
+                    ch_match = re.search(r"\[중단원\]\s*(.+?)(?:\n|$)", text)
+                    if ch_match:
+                        chapter = ch_match.group(1).strip()
+                        chapter = CHAPTER_NORMALIZE.get(chapter, chapter)
+                continue
 
-        # [정답] 앞: 문제 텍스트의 앞부분 (endNote 앞의 본문)
-        text_before_answer = block[:ans_start].strip()
+            if para["role"] == "difficulty":
+                diff_match = re.search(r"\[난이도\]\s*(.+?)(?:\n|$)", text)
+                if diff_match:
+                    difficulty = diff_match.group(1).strip()
+                continue
 
-        # [정답] 뒤 ~ [중단원] 앞: 해설 + 문제 텍스트 뒷부분
-        text_after_answer = block[ans_line_end:].strip()
+            if para["role"] == "error":
+                err_match = re.search(r"\[문제\s*오류\]\s*(.*?)(?:\n|$)", text)
+                if err_match:
+                    error_note = err_match.group(1).strip()
+                continue
 
-        # [중단원], [난이도], [문제 오류], [서답형] 라인 제거
-        meta_pattern = re.compile(
+            if para["role"] == "empty":
+                continue
+
+            # 서답형 감지
+            subj_match = re.search(r"\[서[답술]형\s*(\d+)\]", text)
+            if subj_match:
+                is_subjective = True
+                subjective_num = int(subj_match.group(1))
+            if re.search(r"서[답술]형\s*문제", text):
+                is_subjective = True
+
+            # 본문 P → 문제에 추가
+            question_items.extend(para.get("items", []))
+
+        # 문제 텍스트 직렬화
+        question_text = serialize_items(question_items).strip()
+
+        # 메타 패턴 제거
+        meta_clean = re.compile(
             r"\[중단원\]\s*.+?(?:\n|$)|\[난이도\]\s*.+?(?:\n|$)"
             r"|\[문제\s*오류\].*?(?:\n|$)|\[서[답술]형\s*\d+\]\s*"
             r"|※\s*여기서\s*부터는\s*서[답술]형\s*문제입니다\.?\s*"
         )
-        text_after_clean = meta_pattern.sub("", text_after_answer).strip()
+        question_text = meta_clean.sub("", question_text).strip()
 
-        # 해설/문제 분리: [정답] 뒤의 내용에서 선택지(①) 또는 질문("?", "구하")를 찾음
-        solution, question_body = split_solution_and_question(text_after_clean)
+        # 저작권/프리앰블/편집메모 필터
+        junk_pattern = re.compile(
+            r"콘텐츠산업|NGD|무단.*복제|제작연월일|네이버카페|공동 저작"
+            r"|<편집팀|편집팀\s*오검|오검내역|파일명의\s*단원|해\d+\.\s*-\s*부호"
+        )
+        if junk_pattern.search(question_text):
+            lines = question_text.split("\n")
+            filtered = [l for l in lines if not junk_pattern.search(l)]
+            question_text = "\n".join(filtered).strip()
 
-        # [정답] 앞의 텍스트를 문제본문 앞에 합침
-        if text_before_answer:
-            # 프리앰블/저작권 텍스트 필터링
-            if not re.search(r"콘텐츠산업|NGD|무단.*복제|제작연월일", text_before_answer):
-                question_body = text_before_answer + "\n" + question_body
+        # 배점 추출
+        pts_match = POINTS_PATTERN.search(question_text)
+        if pts_match:
+            points = float(pts_match.group(1))
 
         # 선택지 추출
-        choices = extract_choices(question_body)
+        choices = extract_choices(question_text)
 
-        # 본문에서 선택지 라인 제거 (UI 중복 표시 방지)
-        question_body_clean = strip_choices_from_text(question_body) if choices else question_body
-        # 본문/해설/선지 모두 수식 외 영역의 미지원 백슬래시 명령 정리
-        question_body_clean = sanitize_outside_math(question_body_clean)
-        solution = sanitize_outside_math(solution)
+        # 본문에서 선택지 제거
+        if choices:
+            question_text = _strip_choices_from_text(question_text)
+
+        # 이미지 참조 추출
+        image_refs = re.findall(r"<<IMG:(image\d+)>>", question_text)
+        # 해설에서도 이미지 참조 추출 (해설에 그림이 있을 수 있음)
+        sol_image_refs = re.findall(r"<<IMG:(image\d+)>>", solution_text)
+
+        # 워터마크 이미지 제거
+        image_refs = [r for r in image_refs if r not in watermark_images]
+        sol_image_refs = [r for r in sol_image_refs if r not in watermark_images]
+
+        # 수식 외 영역 정리
+        question_text = sanitize_outside_math(question_text)
+        solution_text = sanitize_outside_math(solution_text)
         for c in choices:
             c["text"] = sanitize_outside_math(c["text"])
+
+        # 빈 줄 정리
+        question_text = re.sub(r"\n{3,}", "\n\n", question_text).strip()
+        solution_text = re.sub(r"\n{3,}", "\n\n", solution_text).strip()
+
+        if debug:
+            print(f"  Q{len(questions)+1}: answer={answer_info['answer']}, "
+                  f"chapter={chapter}, diff={difficulty}, "
+                  f"imgs={image_refs}, choices={len(choices)}", file=sys.stderr)
 
         questions.append({
             "question_number": len(questions) + 1,
@@ -944,10 +972,10 @@ def split_into_questions(full_text: str, items: list) -> list:
             "points": points,
             "chapter": chapter,
             "difficulty": difficulty,
-            "question_text": question_body_clean.strip(),
-            "solution_text": solution.strip(),
+            "question_text": question_text,
+            "solution_text": solution_text,
             "choices": choices,
-            "image_refs": image_refs,
+            "image_refs": image_refs + sol_image_refs,
             "has_image": len(image_refs) > 0,
             "error_note": error_note,
         })
@@ -955,14 +983,21 @@ def split_into_questions(full_text: str, items: list) -> list:
     return questions
 
 
+def _strip_choices_from_text(text: str) -> str:
+    """문제본문에서 선택지 부분(첫 ⃝번호 이후)을 제거한다."""
+    m = re.search(r"[①②③④⑤]", text)
+    if not m:
+        return text.strip()
+    return text[:m.start()].rstrip()
+
+
 # ── 이미지 추출 ──────────────────────────────────────────────
 def extract_images(hwpx_path: str, image_refs: set, output_dir: str,
                    file_stem: str) -> dict:
-    """HWPX에서 문제용 이미지만 추출한다. 반환: {imageN: 저장경로}"""
+    """HWPX에서 문제용 이미지만 추출한다."""
     mapping = {}
     with zipfile.ZipFile(hwpx_path, "r") as zf:
         for ref in image_refs:
-            # BinData/imageN.* 패턴으로 찾기
             for name in zf.namelist():
                 fname = os.path.basename(name)
                 name_stem = os.path.splitext(fname)[0]
@@ -977,7 +1012,6 @@ def extract_images(hwpx_path: str, image_refs: set, output_dir: str,
     return mapping
 
 
-# ── masterpage 이미지 목록 (워터마크 후보) ─────────────────────
 def get_masterpage_images(extract_dir: str) -> set:
     """masterpage0.xml에서 참조되는 이미지 ID를 반환한다."""
     refs = set()
@@ -997,19 +1031,15 @@ def parse_hwpx(hwpx_path: str, image_output_dir: str = None,
     hwpx_path = os.path.abspath(hwpx_path)
     file_stem = Path(hwpx_path).stem
 
-    # 파일명 메타데이터
     file_meta = parse_filename_metadata(file_stem)
 
-    # 임시 디렉토리에 압축 해제
     tmp_dir = tempfile.mkdtemp(prefix="hwpx_")
     try:
         with zipfile.ZipFile(hwpx_path, "r") as zf:
             zf.extractall(tmp_dir)
 
-        # masterpage 이미지 (워터마크) 목록
         watermark_images = get_masterpage_images(tmp_dir)
 
-        # section0.xml 파싱
         section_path = os.path.join(tmp_dir, "Contents", "section0.xml")
         if not os.path.exists(section_path):
             raise FileNotFoundError(f"section0.xml not found in {hwpx_path}")
@@ -1017,29 +1047,15 @@ def parse_hwpx(hwpx_path: str, image_output_dir: str = None,
         tree = ET.parse(section_path)
         root = tree.getroot()
 
-        # 단락 순회 → 콘텐츠 아이템 리스트
-        items = walk_paragraphs(root)
-
-        if debug:
-            print(f"[DEBUG] Total content items: {len(items)}", file=sys.stderr)
-            for i, item in enumerate(items[:100]):
-                print(f"  [{i}] {item}", file=sys.stderr)
-
-        # 직렬화
-        full_text = serialize_content(items, eq_format="latex")
-
-        if debug:
-            print(f"\n[DEBUG] Full text (first 2000 chars):\n{full_text[:2000]}", file=sys.stderr)
-
-        # 문항 분리
-        questions = split_into_questions(full_text, items)
+        # XML 구조 기반 문항 추출 (v2)
+        questions = _extract_questions_from_xml(
+            root, watermark_images, debug=debug
+        )
 
         # 모든 문항에서 참조하는 이미지 수집
         all_image_refs = set()
         for q in questions:
             all_image_refs.update(q["image_refs"])
-
-        # 워터마크 이미지 제거
         all_image_refs -= watermark_images
 
         # 이미지 추출
@@ -1050,7 +1066,7 @@ def parse_hwpx(hwpx_path: str, image_output_dir: str = None,
                 hwpx_path, all_image_refs, image_output_dir, file_stem
             )
 
-        # 각 문항의 image_refs를 실제 경로로 업데이트
+        # 이미지 경로 매핑
         for q in questions:
             q["image_paths"] = [
                 image_mapping.get(ref, ref)
@@ -1089,7 +1105,6 @@ def main():
     result = parse_hwpx(args.hwpx_file, image_output_dir=img_dir,
                         debug=args.debug)
 
-    # 출력
     output_json = json.dumps(result, ensure_ascii=False, indent=2)
 
     if args.output:
