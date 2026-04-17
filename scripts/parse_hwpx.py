@@ -308,6 +308,9 @@ def hwp_eq_to_latex(script: str) -> str:
     s = re.sub(r"\bsqrt\s+([A-Za-z0-9])", r"\\sqrt{\1}", s)
     # sqrtN (붙어있는 경우)
     s = re.sub(r"\bsqrt([0-9])", r"\\sqrt{\1}", s)
+    # sqrt 뒤 \frac 직접 접합 또는 공백 (sqrt\frac·sqrt \frac → \sqrt\frac)
+    # KaTeX에서 \sqrt\frac{..}{..}는 \sqrt{\frac{..}{..}}와 동일 렌더.
+    s = re.sub(r"(?<![A-Za-z\\])sqrt\s*(?=\\frac)", r"\\sqrt", s)
 
     # 6) bar → overline
     s = re.sub(r"\bbar\s*\{", r"\\overline{", s)
@@ -503,6 +506,13 @@ def _postprocess_latex(s: str) -> str:
     s = re.sub(
         r"\{bar\}\s*([A-Za-z0-9]+)",
         lambda m: r"{\overline{" + m.group(1) + "}}",
+        s,
+    )
+    # {sqrt} 고립 케이스: `{bar}`와 동일 원인 (over 분수 분모 쪼갬).
+    #   `\frac{8}{sqrt} { -2}`  →  `\frac{8}{\sqrt{-2}}`
+    s = re.sub(
+        r"\{sqrt\}\s*\{\s*(-?[A-Za-z0-9]+)\s*\}",
+        lambda m: r"{\sqrt{" + m.group(1) + "}}",
         s,
     )
     # bar 뒤 숫자 접합 (postprocess 잔여분)
