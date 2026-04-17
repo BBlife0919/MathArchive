@@ -254,9 +254,24 @@ def hwp_eq_to_latex(script: str) -> str:
         if brace_end == -1:
             break
         inner = s[brace_start + 1:brace_end]
-        lines = inner.split("#")
-        converted = " \\\\ ".join(lines)
-        s = s[:m.start()] + r"\begin{cases}" + converted + r"\end{cases}" + s[brace_end + 1:]
+        # HWP cases의 행 구분자는 `#` 이 기본이지만 일부 강사가 `\\`(실제 두
+        # 백슬래시)를 사용. 두 형식 모두 LaTeX `\\`로 변환.
+        lines = re.split(r"#|\\\\", inner)
+        converted = " \\\\ ".join(p.strip() for p in lines)
+        # `{cases{...}}`처럼 바깥 grouping 중괄호가 있는 경우 제거
+        # (KaTeX에서 `{\begin{cases}...\end{cases}}`는 blank 그룹으로 인식돼 렌더 깨짐).
+        # 단, pre의 `{`와 post의 `}`가 모두 있을 때만 짝 맞춰 제거.
+        left_end = m.start()
+        right_start = brace_end + 1
+        pre = s[:left_end]
+        post = s[right_start:]
+        pre_rs = pre.rstrip()
+        post_ls = post.lstrip()
+        if pre_rs.endswith("{") and post_ls.startswith("}"):
+            pre = pre[:len(pre_rs) - 1] + pre[len(pre_rs):]
+            ws_len = len(post) - len(post_ls)
+            post = post[:ws_len] + post_ls[1:]
+        s = pre + r"\begin{cases}" + converted + r"\end{cases}" + post
 
     # 3) 분수: {num} over {den} → \frac{num}{den} (중첩 허용)
     for _ in range(5):
@@ -424,13 +439,28 @@ def hwp_eq_to_latex(script: str) -> str:
     # 21) 불필요한 다중 공백 정리
     s = re.sub(r"  +", " ", s)
 
+    # 22) cases body의 행 구분자 방어적 복구
+    #     일부 HWP 원본에서 행구분이 `\\`로 쓰였지만 전처리 중 `\ `(backslash+공백)로
+    #     축소돼 cases 변환기의 split을 통과할 수 있음. body 안에서만 `\ ` → `\\\\`.
+    def _fix_cases_body(m):
+        body = m.group(1)
+        body = re.sub(r"(?<!\\)\\ ", r" \\\\ ", body)
+        return r"\begin{cases}" + body + r"\end{cases}"
+    s = re.sub(
+        r"\\begin\{cases\}(.*?)\\end\{cases\}",
+        _fix_cases_body, s, flags=re.DOTALL
+    )
+
     return s.strip()
 
 
 def _postprocess_latex(s: str) -> str:
     """변환된 LaTeX 문자열의 잔여 HWP 키워드를 정리한다."""
     s = s.replace(r"\(", "(").replace(r"\)", ")")
-    s = s.replace(r"\{", "{").replace(r"\}", "}")
+    # `\{`, `\}` 이스케이프는 `\left\{` / `\right\}` delimiter의 일부일 때만 유지.
+    # (blanket replace로 벗기면 `\left\{` → `\left{`가 돼 KaTeX에서 delimiter 오류.)
+    s = re.sub(r"(?<!\\left)\\\{", "{", s)
+    s = re.sub(r"(?<!\\right)\\\}", "}", s)
 
     # tri angle → \triangle
     s = re.sub(r"\btri\s+angle\b", lambda m: r"\triangle", s)
