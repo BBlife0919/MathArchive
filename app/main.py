@@ -272,16 +272,25 @@ def generate_pdf(
     """
     from fpdf import FPDF
 
-    font_path = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
-    has_korean = Path(font_path).exists()
+    # 한글 폰트 후보 (macOS 로컬 + Streamlit Cloud Linux)
+    font_candidates = [
+        "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",        # Streamlit Cloud (fonts-nanum)
+        "/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf",   # 대체
+        "/System/Library/Fonts/AppleSDGothicNeo.ttc",             # macOS
+    ]
+    font_path = next((p for p in font_candidates if Path(p).exists()), None)
+    has_korean = font_path is not None
 
     class ExamPDF(FPDF):
         def header(self):
             if has_korean:
                 self.set_font("Korean", size=14)
+                safe_title = title
             else:
                 self.set_font("Helvetica", "B", 14)
-            self.cell(0, 10, title, align="C", new_x="LMARGIN", new_y="NEXT")
+                # 한글 폰트 없을 때 latin-1로 인코딩 실패하는 문자 치환
+                safe_title = title.encode("latin-1", errors="replace").decode("latin-1")
+            self.cell(0, 10, safe_title, align="C", new_x="LMARGIN", new_y="NEXT")
             self.ln(5)
 
         def footer(self):
