@@ -149,7 +149,9 @@ def render_question_content(text: str, file_source: str = ""):
                 lines = [ln.lstrip() for ln in content.split("\n")]
                 content = "\n".join(lines)
                 with st.container(border=True):
-                    st.markdown(content)
+                    # 셀 내 <br> 태그를 렌더링하기 위해 HTML 허용.
+                    # 입력은 내부 DB(원본 HWPX 파생)라 XSS 위험 없음.
+                    st.markdown(content, unsafe_allow_html=True)
             continue
         elif re.match(r"<<IMG:(image\d+)>>", part):
             ref = re.match(r"<<IMG:(image\d+)>>", part).group(1)
@@ -207,7 +209,8 @@ def render_question_text(text: str) -> str:
 
 
 def format_choices(choices_json: str) -> str:
-    """선택지 JSON을 보기 좋게 포맷한다."""
+    """선택지 JSON을 보기 좋게 포맷한다.
+    첫 줄에 ①②③, 둘째 줄에 ④⑤가 위치하도록 선지 3개/2개로 끊어 배치."""
     try:
         choices = json.loads(choices_json)
     except (json.JSONDecodeError, TypeError):
@@ -215,13 +218,18 @@ def format_choices(choices_json: str) -> str:
     if not choices:
         return ""
     circle = {1: "①", 2: "②", 3: "③", 4: "④", 5: "⑤"}
+    # 번호 순 보장
+    choices = sorted(choices, key=lambda c: c.get("number", 0))
     parts = []
     for c in choices:
         num = c.get("number", 0)
         txt = c.get("text", "")
         txt = _frac_to_dfrac(txt)
         parts.append(f"{circle.get(num, str(num))} {txt}")
-    return "  ".join(parts)
+    # 첫 줄 3개 + 둘째 줄 나머지 (Markdown 단락 분리 \n\n)
+    if len(parts) > 3:
+        return "    ".join(parts[:3]) + "\n\n" + "    ".join(parts[3:])
+    return "    ".join(parts)
 
 
 # ── PDF 생성 ──────────────────────────────────────────────────

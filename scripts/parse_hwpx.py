@@ -586,12 +586,20 @@ def _process_tbl(tbl_elem, items):
         cells = tr.findall(NS_PAR + "tc")
         row_cells = []
         for tc in cells:
-            cell_items = []
-            for p in tc.findall(NS_PAR + "subList/" + NS_PAR + "p"):
-                for run in p.findall(NS_PAR + "run"):
-                    _process_run_no_endnote(run, cell_items)
-            cell_str = serialize_items(cell_items).strip()
-            # 테이블 셀 안전 변환: | 이스케이프, 개행 → 공백
+            cell_paras = tc.findall(NS_PAR + "subList/" + NS_PAR + "p")
+            # 셀 내 각 <p>를 개별 직렬화한 뒤 <br>로 이어 붙인다.
+            # (한 셀에 ㄱ./ㄴ./ㄷ. 같은 여러 항목이 별도 p로 들어올 때
+            # MD 테이블 셀 내에서 시각적 줄바꿈을 보존하기 위함.)
+            para_strs = []
+            for pe in cell_paras:
+                para_items = []
+                for run in pe.findall(NS_PAR + "run"):
+                    _process_run_no_endnote(run, para_items)
+                s = serialize_items(para_items).strip()
+                if s:
+                    para_strs.append(s)
+            cell_str = "<br>".join(para_strs) if para_strs else ""
+            # 테이블 셀 안전 변환: | 이스케이프, 잔여 개행 → 공백
             cell_str = cell_str.replace("|", r"\|").replace("\n", " ")
             row_cells.append(cell_str)
         table_rows.append(row_cells)
@@ -1076,14 +1084,31 @@ def _strip_choices_from_text(text: str) -> str:
 
 
 _BULLET_CHARS = r"⦁●■◆◇▪▫•"
+# 한글 자음 항목 기호 (ㄱ./ㄴ./ㄷ./ㄹ./ㅁ./ㅂ./ㅅ./ㅇ./ㅈ./ㅊ./ㅋ./ㅌ./ㅍ./ㅎ.)
+_HANGUL_ITEM = r"[ㄱ-ㅎ]\."
 
 
 def _break_before_bullets(text: str) -> str:
-    """글머리 기호 앞에 줄바꿈 삽입. 첫 등장은 제외(문장 시작일 수 있음)."""
+    """글머리 기호 또는 ㄱ./ㄴ./ㄷ. 한글 자음 항목 앞에 줄바꿈 삽입.
+    첫 등장은 문장 시작일 수 있으므로 제외.
+    BOX 영역(<<BOX_START>>..<<BOX_END>>) 내부는 이미 Markdown 테이블 구조라
+    줄바꿈 삽입 시 테이블이 깨지므로 건드리지 않는다 (셀 내 <br>은 파서가 삽입)."""
     if not text:
         return text
-    pattern = re.compile(rf"(?<=\S)[ \t]*([{_BULLET_CHARS}])")
-    return pattern.sub(r"\n\1", text)
+
+    # BOX 블록을 통째로 보존하기 위해 분리 처리
+    parts = re.split(r"(<<BOX_START>>.*?<<BOX_END>>)", text, flags=re.S)
+    bullet_pat = re.compile(rf"(?<=\S)[ \t]*([{_BULLET_CHARS}])")
+    hangul_pat = re.compile(rf"(?<=\S)[ \t]+({_HANGUL_ITEM})")
+    out = []
+    for seg in parts:
+        if seg.startswith("<<BOX_START>>"):
+            out.append(seg)
+        else:
+            seg = bullet_pat.sub(r"\n\1", seg)
+            seg = hangul_pat.sub(r"\n\1", seg)
+            out.append(seg)
+    return "".join(out)
 
 
 # ── 이미지 추출 ──────────────────────────────────────────────
