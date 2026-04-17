@@ -373,12 +373,48 @@ def main():
 
     # ── 탭 1: 문제 목록 ──────────────────────────────────────
     with tab_list:
-        st.caption(f"검색 결과: {len(results)}문항")
+        total = len(results)
+        PAGE_SIZE = 30
+
+        # 페이지네이션 상태
+        if "page_num" not in st.session_state:
+            st.session_state.page_num = 0
+        # 결과가 줄어들면 현재 페이지가 범위 밖일 수 있음 → 리셋
+        max_page = max(0, (total - 1) // PAGE_SIZE) if total else 0
+        if st.session_state.page_num > max_page:
+            st.session_state.page_num = 0
+
+        start = st.session_state.page_num * PAGE_SIZE
+        end = min(start + PAGE_SIZE, total)
+        page_results = results[start:end]
+
+        st.caption(
+            f"검색 결과: {total}문항 · {start + 1 if total else 0}–{end}번 표시"
+        )
 
         if not results:
             st.info("필터 조건에 맞는 문제가 없습니다. 사이드바에서 조건을 조정해주세요.")
         else:
-            for row in results:
+            # 페이지 네비게이션 (상단)
+            if total > PAGE_SIZE:
+                nav_col1, nav_col2, nav_col3 = st.columns([1, 2, 1])
+                with nav_col1:
+                    if st.button("◀ 이전", disabled=st.session_state.page_num == 0,
+                                 key="prev_top", use_container_width=True):
+                        st.session_state.page_num -= 1
+                        st.rerun()
+                with nav_col2:
+                    st.markdown(
+                        f"<div style='text-align:center;padding-top:6px;'>"
+                        f"페이지 {st.session_state.page_num + 1} / {max_page + 1}"
+                        f"</div>", unsafe_allow_html=True)
+                with nav_col3:
+                    if st.button("다음 ▶", disabled=st.session_state.page_num >= max_page,
+                                 key="next_top", use_container_width=True):
+                        st.session_state.page_num += 1
+                        st.rerun()
+
+            for row in page_results:
                 qid = row["question_id"]
                 is_selected = qid in st.session_state.selected_ids
 
