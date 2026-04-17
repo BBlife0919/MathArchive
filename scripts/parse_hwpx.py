@@ -536,7 +536,7 @@ def _process_tbl(tbl_elem, items):
     <<BOX_START>>와 <<BOX_END>> 마커로 감싸서 UI에서 테두리 표현 가능."""
     items.append(ContentItem("text", text="\n<<BOX_START>>\n"))
     for tc in tbl_elem.iter(NS_PAR + "tc"):
-        for p in tc.findall(".//" + NS_PAR + "p"):
+        for p in tc.findall(NS_PAR + "subList/" + NS_PAR + "p"):
             for run in p.findall(NS_PAR + "run"):
                 _process_run_no_endnote(run, items)
             items.append(ContentItem("text", text="\n"))
