@@ -17,6 +17,33 @@ import streamlit as st
 DB_PATH = Path(__file__).resolve().parent.parent / "db" / "mathdb.sqlite"
 PAGE_TITLE = "MathArchive by 이영우"
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
+EXAM_TYPE_KO = {"a": "중간", "b": "기말"}
+
+
+# ── 메타 포맷팅 ─────────────────────────────────────────────
+def format_meta(row, *, short=False) -> str:
+    """문제 row에서 출처 메타데이터를 사람이 읽을 수 있는 문자열로.
+
+    short=False: `[가림고] 2025년 1학기 중간 · 26번`
+    short=True : `[가림고] 26번` (스페이스 절약용)
+    """
+    school = row["school"] or "?"
+    qn = row["question_number"]
+    if short:
+        return f"[{school}] {qn}번"
+    try:
+        year = row["year"]
+        sem = row["semester"]
+        exam = EXAM_TYPE_KO.get(row["exam_type"], row["exam_type"] or "")
+    except (KeyError, IndexError):
+        year = sem = exam = None
+    parts = [f"[{school}]"]
+    if year and sem:
+        parts.append(f"{year}년 {sem}학기")
+    if exam:
+        parts.append(exam)
+    parts.append(f"{qn}번")
+    return " ".join(parts)
 
 
 # ── DB 연결 ───────────────────────────────────────────────────
@@ -78,6 +105,7 @@ def search_questions(schools, chapters, difficulties, regions,
 
     sql = f"""
         SELECT q.question_id, q.file_source, q.school, q.region,
+               q.year, q.semester, q.exam_type,
                q.question_number, q.question_text, q.choices,
                q.answer, q.answer_type, q.points, q.chapter,
                q.difficulty, q.has_image, q.is_subjective, q.error_note,
@@ -233,8 +261,15 @@ def format_choices(choices_json: str) -> str:
 
 
 # ── PDF 생성 ──────────────────────────────────────────────────
-def generate_pdf(selected_questions: list, title: str = "시험지") -> bytes:
-    """선택된 문제들로 PDF를 생성한다."""
+def generate_pdf(
+    selected_questions: list,
+    title: str = "시험지",
+    include_source: bool = True,
+) -> bytes:
+    """선택된 문제들로 PDF를 생성한다.
+
+    include_source: True면 문제 상단에 `[학교] YYYY년 N학기 중/기말` 출처 표시.
+    """
     from fpdf import FPDF
 
     font_path = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
@@ -268,11 +303,26 @@ def generate_pdf(selected_questions: list, title: str = "시험지") -> bytes:
     pdf.add_page()
 
     for i, q in enumerate(selected_questions, 1):
-        # 문제 번호 + 배점
+        # 문제 번호 + 배점 + (선택) 출처
         points_str = f" [{q['points']}점]" if q['points'] else ""
         header = f"{i}. {points_str}"
         pdf.set_font("Korean" if has_korean else "Helvetica", size=10)
         pdf.cell(0, 7, header, new_x="LMARGIN", new_y="NEXT")
+        if include_source:
+            try:
+                exam = EXAM_TYPE_KO.get(q.get("exam_type"), q.get("exam_type") or "")
+                src_parts = [f"[{q.get('school', '?')}]"]
+                if q.get("year") and q.get("semester"):
+                    src_parts.append(f"{q['year']}년 {q['semester']}학기")
+                if exam:
+                    src_parts.append(exam)
+                src_parts.append(f"{q.get('question_number', '')}번")
+                src_line = " ".join(src_parts)
+                pdf.set_font("Korean" if has_korean else "Helvetica", size=8)
+                pdf.cell(0, 5, src_line, new_x="LMARGIN", new_y="NEXT")
+                pdf.set_font("Korean" if has_korean else "Helvetica", size=10)
+            except Exception:
+                pass
 
         # 문제 텍스트 (LaTeX 수식 기호는 텍스트로 표시)
         text = q["question_text"]
@@ -431,7 +481,7 @@ def main():
                         err_badge = " ⚠️오류" if row["error_note"] else ""
 
                         st.markdown(
-                            f"**{row['school']}** Q{row['question_number']} · "
+                            f"**{format_meta(row)}** · "
                             f"{diff_emoji} {row['difficulty']} · "
                             f"`{row['chapter']}` · {points_str}"
                             f"{subj_badge}{err_badge}"
@@ -491,6 +541,7 @@ def main():
             placeholders = ",".join("?" * len(selected_ids))
             selected_rows = query(f"""
                 SELECT q.question_id, q.file_source, q.school, q.question_number,
+                       q.year, q.semester, q.exam_type,
                        q.question_text, q.choices, q.answer, q.answer_type,
                        q.points, q.chapter, q.difficulty, q.is_subjective,
                        s.solution_text
@@ -500,8 +551,39 @@ def main():
                 ORDER BY q.difficulty, q.chapter
             """, list(selected_ids))
 
-            # 시험지 제목
-            exam_title = st.text_input("시험지 제목", value="수학 시험지")
+            # 생성 모드 선택 (시험지 or 교재) — 두 버튼이 각각 "제작 단계" 진입 트리거
+            mode = st.session_state.get("build_mode")  # "exam" | "book" | None
+
+            if mode is None:
+                st.markdown(f"**{len(selected_rows)}문항** 선택됨")
+                total_pts = sum(r["points"] or 0 for r in selected_rows)
+                if total_pts:
+                    st.caption(f"총 배점: {total_pts:.1f}점")
+                st.divider()
+                b1, b2 = st.columns(2)
+                with b1:
+                    if st.button("📝 시험지 만들기", use_container_width=True,
+                                 type="primary"):
+                        st.session_state.build_mode = "exam"
+                        st.rerun()
+                with b2:
+                    if st.button("📚 교재 생성", use_container_width=True,
+                                 help="준비 중 — Phase 3에서 지원 예정"):
+                        st.session_state.build_mode = "book"
+                        st.rerun()
+                st.stop()
+
+            # 뒤로가기
+            if st.button("⬅ 선택으로 돌아가기", key="back_to_select"):
+                st.session_state.build_mode = None
+                st.rerun()
+
+            default_title = "수학 시험지" if mode == "exam" else "수학 교재"
+            exam_title = st.text_input("제목", value=default_title)
+            include_source = st.toggle(
+                "출처 삽입 (학교·연도·학기 표시)", value=True,
+                help="꺼두면 문제 번호만 표시됩니다."
+            )
 
             col_info, col_download = st.columns([0.7, 0.3])
             with col_info:
@@ -511,18 +593,21 @@ def main():
                     st.caption(f"총 배점: {total_pts:.1f}점")
 
             with col_download:
-                # PDF 다운로드
-                pdf_data = generate_pdf(
-                    [dict(r) for r in selected_rows],
-                    title=exam_title
-                )
-                st.download_button(
-                    "📥 PDF 다운로드",
-                    data=pdf_data,
-                    file_name="exam.pdf",
-                    mime="application/pdf",
-                    use_container_width=True,
-                )
+                if mode == "exam":
+                    pdf_data = generate_pdf(
+                        [dict(r) for r in selected_rows],
+                        title=exam_title,
+                        include_source=include_source,
+                    )
+                    st.download_button(
+                        "📥 PDF 다운로드",
+                        data=pdf_data,
+                        file_name="exam.pdf",
+                        mime="application/pdf",
+                        use_container_width=True,
+                    )
+                else:
+                    st.caption("교재 PDF는 Phase 3에서 제공 예정")
 
             st.divider()
 
@@ -534,9 +619,13 @@ def main():
                     # 문제 헤더
                     pts = f" [{row['points']}점]" if row["points"] else ""
                     st.markdown(f"### {i}번{pts}")
-                    st.caption(
-                        f"{row['school']} · {row['chapter']} · 난이도: {row['difficulty']}"
-                    )
+                    meta_line = format_meta(row) if include_source else None
+                    caption_parts = []
+                    if meta_line:
+                        caption_parts.append(meta_line)
+                    caption_parts.append(f"`{row['chapter']}`")
+                    caption_parts.append(f"난이도: {row['difficulty']}")
+                    st.caption(" · ".join(caption_parts))
 
                     # 문제 본문 (이미지+박스+LaTeX 렌더링)
                     render_question_content(
