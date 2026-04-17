@@ -155,8 +155,15 @@ def hwp_eq_to_latex(script: str) -> str:
 
     s = script.strip()
 
-    # 0) 전처리: 붙어있는 키워드 분리 (oversqrt, overroot 등)
-    s = re.sub(r"([A-Za-z0-9}])over([A-Za-z0-9{\\-])", r"\1 over \2", s)
+    # 0) 전처리: 붙어있는 키워드 분리 (}over{, 2overX, overY 등)
+    #    LaTeX 명령(overline, overrightarrow, overleftarrow)은 보존.
+    #    좌우 양쪽이 붙어있는 경우: 양쪽에 공백 삽입
+    _OVER_KEEP = r"(?!line|right|left)"
+    s = re.sub(rf"([A-Za-z0-9}}\)\]])over{_OVER_KEEP}(\{{|\(|\[|\\|-|\d)", r"\1 over \2", s)
+    s = re.sub(rf"([A-Za-z0-9}}\)\]])over{_OVER_KEEP}([A-Za-z])(?![A-Za-z])", r"\1 over \2", s)
+    #    우측만 붙어있는 경우 (예: `2 overa` → `2 over a`)
+    s = re.sub(rf"(?<![A-Za-z])over{_OVER_KEEP}([0-9\(\[])", r"over \1", s)
+    s = re.sub(rf"(?<![A-Za-z])over{_OVER_KEEP}([A-Za-z])(?![A-Za-z])", r"over \1", s)
 
     # 1) LEFT / RIGHT 괄호 (대소문자 모두)
     s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
@@ -214,9 +221,13 @@ def hwp_eq_to_latex(script: str) -> str:
     SQRT_TOK = r"(?:\\?(?:sqrt|root)\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})"
     SQRT_BARE = r"(?:\\?(?:sqrt|root)-?[A-Za-z0-9]+)"  # root3, root-3 등
     SUP_SUB = r"(?:[\^_](?:\{[^{}]*\}|[A-Za-z0-9]))*"  # ^2, ^{n+1}, _k 등
-    SIMPLE_TOK = rf"(?:[A-Za-z0-9]+{SUP_SUB})"
+    # over 기반 분수 분자/분모 후보 토큰. LaTeX 명령의 꼬리(line/right/left)를
+    # 제외해 `x overline{y}` 같은 입력에서 line이 분모로 잡히는 사고 방지.
+    SIMPLE_TOK = rf"(?:(?!(?:line|right|left)\b)[A-Za-z0-9]+{SUP_SUB})"
     BRACE_TOK = r"(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})"
-    OPERAND = rf"(?:{SQRT_TOK}|{SQRT_BARE}|{BRACE_TOK}|{SIMPLE_TOK})"
+    # 소괄호 그룹 (지수/첨자 후속 허용): (b+c), (b+c)^2 등
+    PAREN_TOK = rf"(?:\([^()]*(?:\([^()]*\)[^()]*)*\){SUP_SUB})"
+    OPERAND = rf"(?:{SQRT_TOK}|{SQRT_BARE}|{BRACE_TOK}|{PAREN_TOK}|{SIMPLE_TOK})"
     over_no_brace = re.compile(rf"({OPERAND})\s*over\s*({OPERAND})")
     for _ in range(5):
         new_s = over_no_brace.sub(
@@ -314,7 +325,10 @@ def hwp_eq_to_latex(script: str) -> str:
         lambda m: r"\frac{" + _strip_outer_braces(m.group(1)) + r"}{" + _strip_outer_braces(m.group(2)) + r"}",
         s,
     )
-    s = re.sub(r"\s+over\s+", " / ", s)
+    # 최종 방어선: 남은 단독 over 키워드(양옆이 영문자 아님)는 '/'로 변환
+    # (중괄호 짝 불균형·다토큰 분모 등 원본이 비정상인 케이스 대비).
+    # overline/overrightarrow 등 LaTeX 명령은 영문자 연속이라 매치 안 됨.
+    s = re.sub(r"(?<![A-Za-z\\])over(?![A-Za-z])", " / ", s)
 
     # 20) 남은 bar, root
     s = re.sub(
@@ -396,7 +410,10 @@ def _postprocess_latex(s: str) -> str:
                    r"}{" + _strip_outer_braces(m.group(2)) + r"}",
         s,
     )
-    s = re.sub(r"\s+over\s+", " / ", s)
+    # 최종 방어선: 남은 단독 over 키워드(양옆이 영문자 아님)는 '/'로 변환
+    # (중괄호 짝 불균형·다토큰 분모 등 원본이 비정상인 케이스 대비).
+    # overline/overrightarrow 등 LaTeX 명령은 영문자 연속이라 매치 안 됨.
+    s = re.sub(r"(?<![A-Za-z\\])over(?![A-Za-z])", " / ", s)
 
     # bar/root 잔여
     s = re.sub(
@@ -532,14 +549,34 @@ def _process_pic(pic_elem, items):
 
 
 def _process_tbl(tbl_elem, items):
-    """테이블 요소 내부의 모든 셀을 처리하여 items에 추가한다.
-    <<BOX_START>>와 <<BOX_END>> 마커로 감싸서 UI에서 테두리 표현 가능."""
+    """테이블 요소를 <tr>/<tc> 구조 그대로 직렬화한다.
+    - 행(<tr>) 내 셀(<tc>)은 공백으로 구분하고, 행 끝에만 줄바꿈을 붙여
+      조립제법 같은 가로 배치 표가 세로로 무너지는 것을 막는다.
+    - <<BOX_START>>/<<BOX_END>> 마커로 감싸 UI에서 박스 표현에 활용."""
     items.append(ContentItem("text", text="\n<<BOX_START>>\n"))
-    for tc in tbl_elem.iter(NS_PAR + "tc"):
-        for p in tc.findall(NS_PAR + "subList/" + NS_PAR + "p"):
-            for run in p.findall(NS_PAR + "run"):
-                _process_run_no_endnote(run, items)
-            items.append(ContentItem("text", text="\n"))
+    rows = tbl_elem.findall(NS_PAR + "tr")
+    if not rows:
+        # 비정상 구조 방어: tr이 없으면 평탄화 처리
+        rows_fallback = [tbl_elem]
+        use_tr = False
+    else:
+        rows_fallback = rows
+        use_tr = True
+
+    for tr in rows_fallback:
+        cells = tr.findall(NS_PAR + "tc") if use_tr else list(tr.iter(NS_PAR + "tc"))
+        first_cell = True
+        for tc in cells:
+            if not first_cell:
+                items.append(ContentItem("text", text="  "))
+            first_cell = False
+            cell_paras = tc.findall(NS_PAR + "subList/" + NS_PAR + "p")
+            for pi, p in enumerate(cell_paras):
+                if pi > 0:
+                    items.append(ContentItem("text", text=" "))
+                for run in p.findall(NS_PAR + "run"):
+                    _process_run_no_endnote(run, items)
+        items.append(ContentItem("text", text="\n"))
     items.append(ContentItem("text", text="<<BOX_END>>\n"))
 
 
