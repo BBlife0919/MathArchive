@@ -1134,6 +1134,12 @@ def _extract_questions_from_xml(section_root, watermark_images, debug=False):
         )
         question_text = meta_clean.sub("", question_text).strip()
 
+        # 인라인 워터마크 수식 제거 (본문 끝에 붙은 `$bold{\mathrm{NGD}}$` 등).
+        # junk_pattern이 줄 단위로 걸러 본문 전체가 날아가는 것을 차단.
+        inline_watermark = re.compile(r"\$\s*bold\s*\{\s*\\?mathrm\s*\{\s*NGD\s*\}\s*\}?\s*\}?\s*\$")
+        question_text = inline_watermark.sub("", question_text)
+        solution_text = inline_watermark.sub("", solution_text)
+
         # 저작권/프리앰블/편집메모 필터
         junk_pattern = re.compile(
             r"콘텐츠산업|NGD|무단.*복제|제작연월일|네이버카페|공동 저작"
