@@ -231,6 +231,19 @@ def hwp_eq_to_latex(script: str) -> str:
                     return i
         return -1
 
+    # 2-a) eqalign{...} 래퍼 제거 (HWP 수식의 정렬 그룹, LaTeX에선 불필요).
+    #      cases 내부에 섞여 나오므로 cases 변환 전에 미리 벗겨둔다.
+    while True:
+        m = re.search(r"(?<![A-Za-z\\])eqalign\s*\{", s)
+        if not m:
+            break
+        brace_start = m.end() - 1
+        brace_end = _find_matching_brace(s, brace_start)
+        if brace_end == -1:
+            break
+        inner = s[brace_start + 1:brace_end]
+        s = s[:m.start()] + inner + s[brace_end + 1:]
+
     # cases 반복 처리
     for _ in range(5):
         m = re.search(r"\bcases\s*\{", s)
@@ -303,6 +316,12 @@ def hwp_eq_to_latex(script: str) -> str:
         lambda m: r"\overline{" + m.group(1) + r"}",
         s,
     )
+    # bar 뒤 영숫자 직접 접합 (bar2z → \overline{2z})
+    s = re.sub(
+        r"(?<![A-Za-z\\])bar(?=[0-9])([0-9A-Za-z]+)",
+        lambda m: r"\overline{" + m.group(1) + r"}",
+        s,
+    )
 
     # 7) hat, vec, dot, ddot, tilde
     for accent in ["hat", "vec", "dot", "ddot", "tilde"]:
@@ -311,6 +330,8 @@ def hwp_eq_to_latex(script: str) -> str:
     # 8) rm{...} → \mathrm{...}
     s = re.sub(r"\brm\s*\{", r"\\mathrm{", s)
     s = re.sub(r"\brm\s*([A-Za-z]\w*)", lambda m: f"\\mathrm{{{m.group(1)}}}", s)
+    # rm 뒤 숫자 직접 접합 (rm200 → 200, 수학모드에서 숫자는 기본 로만체)
+    s = re.sub(r"(?<![A-Za-z])rm(?=[0-9])", "", s)
 
     # 9) BOX{...} → \boxed{...}
     s = re.sub(r"\bBOX\s*\{", r"\\boxed{", s)
@@ -474,6 +495,19 @@ def _postprocess_latex(s: str) -> str:
     # bar/root 잔여
     s = re.sub(
         r"(?i)\bbar(?:\s+|(?=[A-Za-z]))([A-Za-z]\w*)",
+        lambda m: r"\overline{" + m.group(1) + "}",
+        s,
+    )
+    # {bar} 고립 케이스: over 분수 파싱이 분모를 잘못 쪼갠 잔재를 복구.
+    #   `\frac{1}{bar} z`  →  `\frac{1}{\overline{z}}`
+    s = re.sub(
+        r"\{bar\}\s*([A-Za-z0-9]+)",
+        lambda m: r"{\overline{" + m.group(1) + "}}",
+        s,
+    )
+    # bar 뒤 숫자 접합 (postprocess 잔여분)
+    s = re.sub(
+        r"(?<![A-Za-z\\])bar(?=[0-9])([0-9A-Za-z]+)",
         lambda m: r"\overline{" + m.group(1) + "}",
         s,
     )
