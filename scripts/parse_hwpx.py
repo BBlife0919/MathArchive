@@ -193,9 +193,16 @@ def hwp_eq_to_latex(script: str) -> str:
 
     # 0-c) 비교 연산자 le/ge/ne 접합 분리 (mle3, lekle1, 2ge5 등)
     #      HWP 수식에서는 이들이 비교기호로만 쓰이므로 영숫자와 붙으면 분리.
-    for kw in ("leq", "geq", "neq", "le", "ge", "ne"):
-        s = re.sub(rf"(?<=[A-Za-z0-9]){kw}(?![A-Za-z])", rf" {kw}", s)
-        s = re.sub(rf"(?<![A-Za-z]){kw}(?=[A-Za-z0-9])", rf"{kw} ", s)
+    #      단 left/leftarrow/leq/geq/neq 같은 LaTeX·HWP 키워드의 일부는 보호:
+    #      - le 뒤 ft/q: left·leftarrow·leftrightarrow·leq 보호
+    #      - ge 뒤 q:   geq 보호
+    #      - ne 뒤 q/g: neq·neg 보호
+    for kw, keep in (("leq", ""), ("geq", ""), ("neq", ""),
+                      ("le",  "(?!ft|q)"),
+                      ("ge",  "(?!q)"),
+                      ("ne",  "(?!q|g)")):
+        s = re.sub(rf"(?<=[A-Za-z0-9]){kw}{keep}(?![A-Za-z])", rf" {kw}", s)
+        s = re.sub(rf"(?<![A-Za-z\\]){kw}{keep}(?=[A-Za-z0-9])", rf"{kw} ", s)
 
     # 1) LEFT / RIGHT 괄호 (대소문자 모두)
     s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
@@ -485,11 +492,11 @@ def _postprocess_latex(s: str) -> str:
     s = re.sub(r"(?i)\brm\s+(?=\\)", "", s)
     s = re.sub(r"(?i)\brm\b\s*", "", s)
 
-    # RIGHT/LEFT 잔여
-    s = re.sub(r"(?i)RIGHT\s*\|", r"\\right|", s)
-    s = re.sub(r"(?i)LEFT\s*\|", r"\\left|", s)
-    s = re.sub(r"(?i)\bRIGHT\b", "", s)
-    s = re.sub(r"(?i)\bLEFT\b", "", s)
+    # RIGHT/LEFT 잔여 — 이미 \left/\right로 변환된 LaTeX 명령은 보존
+    s = re.sub(r"(?i)(?<!\\)RIGHT\s*\|", r"\\right|", s)
+    s = re.sub(r"(?i)(?<!\\)LEFT\s*\|", r"\\left|", s)
+    s = re.sub(r"(?i)(?<!\\)\bRIGHT\b", "", s)
+    s = re.sub(r"(?i)(?<!\\)\bLEFT\b", "", s)
 
     # 비교 연산자
     s = s.replace("!=", r"\neq ")
@@ -669,8 +676,20 @@ def _process_run_no_endnote(run_elem, items):
         tag = child.tag.split("}")[-1]
 
         if tag == "t":
+            # <hp:t>는 내부에 <hp:tab> 등 자식을 포함할 수 있고, 탭 뒤 텍스트는
+            # 자식의 .tail에 저장된다. .text만 읽으면 `① ㄱ<tab>② ㄴ<tab>③ ㄷ`
+            # 같은 한 줄 압축 선지에서 ②③가 손실된다.
+            parts = []
             if child.text:
-                items.append(ContentItem("text", text=child.text))
+                parts.append(child.text)
+            for sub in child:
+                if sub.tag.split("}")[-1] == "tab":
+                    parts.append("\t")
+                if sub.tail:
+                    parts.append(sub.tail)
+            merged = "".join(parts)
+            if merged:
+                items.append(ContentItem("text", text=merged))
 
         elif tag == "equation":
             _process_equation(child, items)
