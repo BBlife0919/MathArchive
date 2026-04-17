@@ -143,7 +143,11 @@ def render_question_content(text: str, file_source: str = ""):
             content = "".join(box_content).strip()
             if content:
                 content = _frac_to_dfrac(content)
-                content = _ensure_line_breaks(content)
+                # BOX 내부는 파서가 이미 Markdown 테이블 또는 줄단위로 직렬화함.
+                # 여기서 \n → \n\n 변환하면 MD 테이블이 깨지고, 들여쓰기가
+                # 코드블록으로 오인되므로 각 행의 선행 공백만 제거한다.
+                lines = [ln.lstrip() for ln in content.split("\n")]
+                content = "\n".join(lines)
                 with st.container(border=True):
                     st.markdown(content)
             continue

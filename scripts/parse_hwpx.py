@@ -101,6 +101,7 @@ _LATEX_KEEP = {
     "forall", "exists", "hat", "vec", "dot", "ddot", "tilde",
     "overrightarrow", "overleftarrow",
     "circ", "degree", "neq", "ne", "le", "ge", "boxed",
+    "square", "Box", "phantom",
 }
 
 
@@ -276,6 +277,10 @@ def hwp_eq_to_latex(script: str) -> str:
     # 9) BOX{...} → \boxed{...}
     s = re.sub(r"\bBOX\s*\{", r"\\boxed{", s)
     s = re.sub(r"\bbox\s*\{", r"\\boxed{", s)
+    # BOX/box 단독(뒤에 { 없음) → \square (빈 네모 기호)
+    s = re.sub(r"\b[Bb][Oo][Xx](?![A-Za-z{])", r"\\square ", s)
+    # 빈 \boxed{}는 KaTeX에서 거의 안 보일 정도로 작으므로 \square로 교체
+    s = re.sub(r"\\boxed\{\s*\}", r"\\square ", s)
 
     # 10) prime → '
     s = re.sub(r"\bprime\b", "'", s)
@@ -283,7 +288,14 @@ def hwp_eq_to_latex(script: str) -> str:
     # 11) it (italic) — LaTeX 수학모드 기본이므로 제거
     s = re.sub(r"\bit\s+", "", s)
     s = re.sub(r"\bit(?=[+-])", "", s)
+    # 숫자/기호 뒤 + 영문자 앞에 끼어있는 it도 제거 (예: 3ita → 3a, 8ita → 8a)
+    s = re.sub(r"(?<![A-Za-z])it(?=[A-Za-z])", "", s)
     s = re.sub(r"\bit\b", "", s)
+
+    # 11-b) ^/_ 뒤 연속 영숫자 2자 이상은 {..}로 묶어 KaTeX가 다자 지수/첨자로 인식
+    #       (HWP 관례: z^97 = z의 97제곱. LaTeX는 z^9 7로 해석하므로 래핑 필요)
+    s = re.sub(r"\^([A-Za-z0-9]{2,})(?![A-Za-z0-9])", r"^{\1}", s)
+    s = re.sub(r"_([A-Za-z0-9]{2,})(?![A-Za-z0-9])", r"_{\1}", s)
 
     # 12) 그리스 문자
     # 전처리: 붙어있는 그리스문자명 분리 (alphabeta → alpha beta)
@@ -549,34 +561,60 @@ def _process_pic(pic_elem, items):
 
 
 def _process_tbl(tbl_elem, items):
-    """테이블 요소를 <tr>/<tc> 구조 그대로 직렬화한다.
-    - 행(<tr>) 내 셀(<tc>)은 공백으로 구분하고, 행 끝에만 줄바꿈을 붙여
-      조립제법 같은 가로 배치 표가 세로로 무너지는 것을 막는다.
-    - <<BOX_START>>/<<BOX_END>> 마커로 감싸 UI에서 박스 표현에 활용."""
+    """테이블 요소를 <tr>/<tc> 구조를 보존해 직렬화한다.
+    - 다열 표(조립제법/행렬)는 Markdown 파이프 테이블로 변환해 UI에서 격자
+      렌더링 + 셀 내 KaTeX 수식 정상 동작을 동시에 보장한다.
+    - 1열 표(조건박스/보기박스)는 기존처럼 줄바꿈으로 나열.
+    - <<BOX_START>>/<<BOX_END>> 마커로 감싸 UI에서 테두리 표시.
+    """
     items.append(ContentItem("text", text="\n<<BOX_START>>\n"))
     rows = tbl_elem.findall(NS_PAR + "tr")
     if not rows:
         # 비정상 구조 방어: tr이 없으면 평탄화 처리
-        rows_fallback = [tbl_elem]
-        use_tr = False
-    else:
-        rows_fallback = rows
-        use_tr = True
-
-    for tr in rows_fallback:
-        cells = tr.findall(NS_PAR + "tc") if use_tr else list(tr.iter(NS_PAR + "tc"))
-        first_cell = True
-        for tc in cells:
-            if not first_cell:
-                items.append(ContentItem("text", text="  "))
-            first_cell = False
-            cell_paras = tc.findall(NS_PAR + "subList/" + NS_PAR + "p")
-            for pi, p in enumerate(cell_paras):
-                if pi > 0:
-                    items.append(ContentItem("text", text=" "))
+        for tc in tbl_elem.iter(NS_PAR + "tc"):
+            for p in tc.findall(NS_PAR + "subList/" + NS_PAR + "p"):
                 for run in p.findall(NS_PAR + "run"):
                     _process_run_no_endnote(run, items)
-        items.append(ContentItem("text", text="\n"))
+                items.append(ContentItem("text", text="\n"))
+        items.append(ContentItem("text", text="<<BOX_END>>\n"))
+        return
+
+    # 각 셀 콘텐츠를 미리 문자열로 직렬화
+    table_rows = []
+    max_cols = 0
+    for tr in rows:
+        cells = tr.findall(NS_PAR + "tc")
+        row_cells = []
+        for tc in cells:
+            cell_items = []
+            for p in tc.findall(NS_PAR + "subList/" + NS_PAR + "p"):
+                for run in p.findall(NS_PAR + "run"):
+                    _process_run_no_endnote(run, cell_items)
+            cell_str = serialize_items(cell_items).strip()
+            # 테이블 셀 안전 변환: | 이스케이프, 개행 → 공백
+            cell_str = cell_str.replace("|", r"\|").replace("\n", " ")
+            row_cells.append(cell_str)
+        table_rows.append(row_cells)
+        if len(row_cells) > max_cols:
+            max_cols = len(row_cells)
+
+    if max_cols <= 1:
+        # 1열 — 기존처럼 줄 단위 나열 (조건박스/보기박스)
+        for row in table_rows:
+            for cell in row:
+                items.append(ContentItem("text", text=(cell or "") + "\n"))
+    else:
+        # 다열 — Markdown 파이프 테이블로 출력 (첫 행은 빈 헤더)
+        header = "|" + "|".join(["   "] * max_cols) + "|"
+        sep = "|" + "|".join(["---"] * max_cols) + "|"
+        items.append(ContentItem("text", text=header + "\n"))
+        items.append(ContentItem("text", text=sep + "\n"))
+        for row in table_rows:
+            padded = list(row) + [""] * (max_cols - len(row))
+            # 빈 셀은 공백 하나로 채워 렌더링 유지
+            padded = [c if c else " " for c in padded]
+            items.append(ContentItem("text", text="| " + " | ".join(padded) + " |\n"))
+
     items.append(ContentItem("text", text="<<BOX_END>>\n"))
 
 
@@ -596,12 +634,16 @@ def _process_run_no_endnote(run_elem, items):
             _process_pic(child, items)
 
         elif tag == "rect":
+            # 조건 박스(rect)는 본문에서 분리되어 보여야 하므로 시작 전에도 줄바꿈.
+            items.append(ContentItem("text", text="\n"))
             for dt in child.iter(NS_PAR + "drawText"):
                 for sl in dt.iter(NS_PAR + "subList"):
                     for p in sl.findall(NS_PAR + "p"):
                         for run in p.findall(NS_PAR + "run"):
                             _process_run_no_endnote(run, items)
-                    items.append(ContentItem("text", text="\n"))
+                        # (가)/(나)/(다) 조건 박스처럼 rect 내부 p들이 한 줄로
+                        # 붙지 않도록 각 p 끝에 줄바꿈을 삽입.
+                        items.append(ContentItem("text", text="\n"))
 
         elif tag == "tbl":
             _process_tbl(child, items)
@@ -991,6 +1033,11 @@ def _extract_questions_from_xml(section_root, watermark_images, debug=False):
         for c in choices:
             c["text"] = sanitize_outside_math(c["text"])
 
+        # 글머리 기호(⦁·●·■) 앞에 줄바꿈을 강제해 한 줄로 붙는 것을 방지.
+        # 같은 <p> 안에 여러 항목을 나열한 원본의 시각 구조를 복원.
+        question_text = _break_before_bullets(question_text)
+        solution_text = _break_before_bullets(solution_text)
+
         # 빈 줄 정리
         question_text = re.sub(r"\n{3,}", "\n\n", question_text).strip()
         solution_text = re.sub(r"\n{3,}", "\n\n", solution_text).strip()
@@ -1026,6 +1073,17 @@ def _strip_choices_from_text(text: str) -> str:
     if not m:
         return text.strip()
     return text[:m.start()].rstrip()
+
+
+_BULLET_CHARS = r"⦁●■◆◇▪▫•"
+
+
+def _break_before_bullets(text: str) -> str:
+    """글머리 기호 앞에 줄바꿈 삽입. 첫 등장은 제외(문장 시작일 수 있음)."""
+    if not text:
+        return text
+    pattern = re.compile(rf"(?<=\S)[ \t]*([{_BULLET_CHARS}])")
+    return pattern.sub(r"\n\1", text)
 
 
 # ── 이미지 추출 ──────────────────────────────────────────────
