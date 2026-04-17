@@ -1,8 +1,5 @@
-# 원본 HWPX 파일 (용량 큼)
+# 원본 HWPX 파일 (용량 큼 + 저작권 민감)
 raw/
-
-# 추출된 이미지
-images/
 
 # 임시 압축해제 폴더
 temp_extract/
@@ -10,8 +7,14 @@ temp_extract/
 # 파싱 결과 (재생성 가능)
 parsed/
 
-# SQLite DB
-db/
+# 이미지와 DB는 Streamlit Cloud 배포를 위해 포함
+# (필요하면 주석 해제하여 제외)
+# images/
+# db/
+
+# SQLite WAL 임시 파일
+*.sqlite-shm
+*.sqlite-wal
 
 # Python
 __pycache__/

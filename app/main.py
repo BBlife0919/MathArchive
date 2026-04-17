@@ -15,7 +15,7 @@ import streamlit as st
 
 # ── 설정 ──────────────────────────────────────────────────────
 DB_PATH = Path(__file__).resolve().parent.parent / "db" / "mathdb.sqlite"
-PAGE_TITLE = "MathDB 시험지 생성기"
+PAGE_TITLE = "MathArchive by 이영우"
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
 
 
@@ -326,7 +326,7 @@ def main():
         layout="wide",
     )
 
-    st.title("📐 MathDB 시험지 생성기")
+    st.title("📐 MathArchive by 이영우")
 
     # 세션 상태 초기화
     if "selected_ids" not in st.session_state:
