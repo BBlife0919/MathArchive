@@ -166,6 +166,37 @@ def hwp_eq_to_latex(script: str) -> str:
     s = re.sub(rf"(?<![A-Za-z])over{_OVER_KEEP}([0-9\(\[])", r"over \1", s)
     s = re.sub(rf"(?<![A-Za-z])over{_OVER_KEEP}([A-Za-z])(?![A-Za-z])", r"over \1", s)
 
+    # 0-b) 붙어있는 HWP 키워드 분리 (alphabar → alpha bar, 3alpha → 3 alpha 등)
+    #      영숫자·키워드 경계는 Python \b가 검출 못하므로 명시 분리.
+    _all_hwp_kw = (
+        sorted(GREEK_MAP.keys(), key=len, reverse=True)
+        + ["bar", "rm", "sqrt", "root", "leq", "geq", "neq",
+           "le", "ge", "ne", "cdot", "cdots", "ldots", "vdots",
+           "times", "pm", "mp", "infty", "angle", "triangle",
+           "perp", "parallel", "therefore", "because",
+           "LEFT", "RIGHT", "left", "right",
+           "TIMES", "CDOT", "ANGLE", "PERP", "INFTY"]
+    )
+    _kw_pat = "|".join(_all_hwp_kw)
+    # 키워드끼리 연속 (alphabar, gammadelta 등) — 여러 번 반복해 3개 이상 대비
+    for _ in range(5):
+        new = re.sub(rf"({_kw_pat})({_kw_pat})(?![A-Za-z])", r"\1 \2", s)
+        if new == s:
+            break
+        s = new
+    # 숫자 + 키워드 (3alpha, 2alphabeta 등) — 숫자 뒤 공백 삽입
+    for _ in range(3):
+        new = re.sub(rf"(\d)({_kw_pat})(?![A-Za-z])", r"\1 \2", s)
+        if new == s:
+            break
+        s = new
+
+    # 0-c) 비교 연산자 le/ge/ne 접합 분리 (mle3, lekle1, 2ge5 등)
+    #      HWP 수식에서는 이들이 비교기호로만 쓰이므로 영숫자와 붙으면 분리.
+    for kw in ("leq", "geq", "neq", "le", "ge", "ne"):
+        s = re.sub(rf"(?<=[A-Za-z0-9]){kw}(?![A-Za-z])", rf" {kw}", s)
+        s = re.sub(rf"(?<![A-Za-z]){kw}(?=[A-Za-z0-9])", rf"{kw} ", s)
+
     # 1) LEFT / RIGHT 괄호 (대소문자 모두)
     s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
     s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\)", r"\\right)", s)
@@ -288,8 +319,8 @@ def hwp_eq_to_latex(script: str) -> str:
     # 11) it (italic) — LaTeX 수학모드 기본이므로 제거
     s = re.sub(r"\bit\s+", "", s)
     s = re.sub(r"\bit(?=[+-])", "", s)
-    # 숫자/기호 뒤 + 영문자 앞에 끼어있는 it도 제거 (예: 3ita → 3a, 8ita → 8a)
-    s = re.sub(r"(?<![A-Za-z])it(?=[A-Za-z])", "", s)
+    # it 뒤에 영문자·숫자 둘 다 제거 대상 (3ita → 3a, it2x → 2x, it3 → 3)
+    s = re.sub(r"(?<![A-Za-z])it(?=[A-Za-z0-9])", "", s)
     s = re.sub(r"\bit\b", "", s)
 
     # 11-b) ^/_ 뒤 연속 영숫자 2자 이상은 {..}로 묶어 KaTeX가 다자 지수/첨자로 인식
@@ -306,12 +337,16 @@ def hwp_eq_to_latex(script: str) -> str:
         if s_new == s:
             break
         s = s_new
+    # Python \b는 한글(\w 포함)과 영문자 사이 경계를 인식 못해 `beta이` 같은
+    # 경우 매치에 실패한다. 영문자 경계만 직접 검사하도록 lookaround로 교체.
     for hwp, latex in GREEK_MAP.items():
-        s = re.sub(rf"\b{hwp}\b", lambda m, r=latex: r, s)
+        s = re.sub(rf"(?<![A-Za-z\\]){hwp}(?![A-Za-z])",
+                   lambda m, r=latex: r, s)
 
     # 13) 기호
     for hwp, latex in SYMBOL_MAP.items():
-        s = re.sub(rf"\b{hwp}\b", lambda m, r=latex: r, s)
+        s = re.sub(rf"(?<![A-Za-z\\]){hwp}(?![A-Za-z])",
+                   lambda m, r=latex: r, s)
 
     # 14) ` → \, (thin space), ~ → 일반 공백
     s = s.replace("`", r"\,")
@@ -331,9 +366,9 @@ def hwp_eq_to_latex(script: str) -> str:
     # 18) 후처리
     s = _postprocess_latex(s)
 
-    # 19) 남은 over 강제 처리
+    # 19) 남은 over 강제 처리 — 이미 변환된 LaTeX 명령(\alpha 등)도 OPERAND로 인식
     s = re.sub(
-        r"(\{[^{}]*\}|[A-Za-z0-9+\-]+)\s*over\s*(\{[^{}]*\}|[A-Za-z0-9+\-]+)",
+        r"(\{[^{}]*\}|\\[A-Za-z]+|[A-Za-z0-9+\-]+)\s*over\s*(\{[^{}]*\}|\\[A-Za-z]+|[A-Za-z0-9+\-]+)",
         lambda m: r"\frac{" + _strip_outer_braces(m.group(1)) + r"}{" + _strip_outer_braces(m.group(2)) + r"}",
         s,
     )
@@ -406,16 +441,18 @@ def _postprocess_latex(s: str) -> str:
         "THEREFORE": r"\therefore ", "therefore": r"\therefore ",
         "BECAUSE": r"\because ", "because": r"\because ",
     }
+    # \b 대신 영문자 경계만 검사 (한글 인접 시에도 동작)
     for kw, latex in KEYWORD_MAP.items():
-        s = re.sub(rf"\b{kw}\b", lambda m, r=latex: r, s)
+        s = re.sub(rf"(?<![A-Za-z\\]){kw}(?![A-Za-z])",
+                   lambda m, r=latex: r, s)
 
     # tri \angle 결합 회수
     s = re.sub(r"\btri\s*\\angle", lambda m: r"\triangle", s)
 
-    # over 잔여
+    # over 잔여 — LaTeX 명령(\alpha)을 포함한 OPERAND
     NESTED = r"\{(?:[^{}]|\{[^{}]*\})*\}"
     SQRT_TOK = r"\\?sqrt\{[^{}]*\}"
-    OPERAND = rf"(?:{SQRT_TOK}|{NESTED}|[A-Za-z0-9]+)"
+    OPERAND = rf"(?:{SQRT_TOK}|{NESTED}|\\[A-Za-z]+|[A-Za-z0-9]+)"
     s = re.sub(
         rf"({OPERAND})\s*over\s*({OPERAND})",
         lambda m: r"\frac{" + _strip_outer_braces(m.group(1)) +
