@@ -308,6 +308,71 @@ h2.exam-subtitle {
 .cond-box p:last-child { margin-bottom: 0; }
 .katex { font-size: 1.02em !important; }
 .katex-display { margin: 0.4em 0 !important; }
+
+/* ── 교재 전용 스타일 ─────────────────────── */
+.section-title {
+    font-size: 22pt;
+    font-weight: 800;
+    margin: 0 0 6mm 0;
+    padding-bottom: 3mm;
+    border-bottom: 2px solid #222;
+}
+.qa-page { display: block; }  /* 빠른정답 페이지는 flex 해제 */
+.sol-page { display: block; }
+.quick-answers {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11pt;
+    margin: 0 auto;
+}
+.quick-answers td {
+    border: 1px solid #888;
+    padding: 3.5mm 2mm;
+    text-align: center;
+}
+.quick-answers td.qa-num {
+    background: #f3f3f3;
+    font-weight: 700;
+    width: 6%;
+    color: #555;
+}
+.quick-answers td.qa-ans {
+    width: 14%;
+    font-weight: 600;
+}
+.solutions-flow {
+    column-count: 2;
+    column-gap: 7mm;
+    column-rule: 1px dashed #d5d5d5;
+}
+.sol-item {
+    break-inside: avoid;
+    margin: 0 0 7mm 0;
+    padding: 3mm 3mm 3mm 4mm;
+    border-left: 3px solid #888;
+    background: #fcfcfc;
+}
+.sol-header {
+    font-weight: 700;
+    font-size: 10.5pt;
+    margin-bottom: 2mm;
+}
+.sol-question {
+    font-size: 9.5pt;
+    color: #444;
+    margin-bottom: 3mm;
+    padding-bottom: 2mm;
+    border-bottom: 1px dashed #ccc;
+}
+.sol-answer {
+    background: #eef5ff;
+    padding: 1.5mm 3mm;
+    margin-bottom: 3mm;
+    border-radius: 1mm;
+    font-size: 10pt;
+}
+.sol-body { font-size: 10pt; }
+.no-sol { color: #aaa; font-style: italic; }
 """
 
 _HTML_WRAP = """<!doctype html>
@@ -384,36 +449,134 @@ def _render_header(title: str, subtitle: str | None, logo_uri: str | None) -> st
     )
 
 
+def _problem_pages_html(questions: list[dict], include_source: bool,
+                         overrides: dict | None,
+                         header_html: str,
+                         include_difficulty: bool = False) -> str:
+    """문제 섹션(2단 레이아웃)의 HTML — header_html은 첫 page에만 삽입."""
+    pages = paginate(questions, overrides=overrides)
+    parts: list[str] = []
+    slot_num = 1
+    for idx, page in enumerate(pages):
+        parts.append('<section class="page">')
+        if idx == 0 and header_html:
+            parts.append(header_html)
+        parts.append('<div class="page-body">')
+        cols = list(page)
+        while len(cols) < 2:
+            cols.append([])
+        for col in cols:
+            parts.append('<div class="col">')
+            for (q, layout) in col:
+                parts.append(_render_slot(
+                    slot_num, q, layout, include_source, include_difficulty
+                ))
+                slot_num += 1
+            parts.append('</div>')
+        parts.append('</div>')  # page-body
+        parts.append('</section>')
+    return "\n".join(parts)
+
+
 def build_exam_html(questions: list[dict], title: str, include_source: bool,
                      overrides: dict | None = None,
                      subtitle: str | None = None,
                      logo_path: str | Path | None = None,
                      include_difficulty: bool = False) -> str:
-    pages = paginate(questions, overrides=overrides)
     logo_uri = _logo_data_uri(logo_path)
-    body_parts: list[str] = []
-    slot_num = 1
-    for idx, page in enumerate(pages):
-        body_parts.append('<section class="page">')
-        if idx == 0:
-            body_parts.append(_render_header(title, subtitle, logo_uri))
-        body_parts.append('<div class="page-body">')
-        # 모든 페이지는 2단 유지 — col 수가 부족하면 빈 col placeholder로 채움
-        # (마지막 페이지에 문제가 적어서 단이 하나만 그려지는 버그 방지)
-        cols = list(page)
-        while len(cols) < 2:
-            cols.append([])
-        for col in cols:
-            body_parts.append('<div class="col">')
-            for (q, layout) in col:
-                body_parts.append(_render_slot(
-                    slot_num, q, layout, include_source, include_difficulty
-                ))
-                slot_num += 1
-            body_parts.append('</div>')
-        body_parts.append('</div>')  # page-body
-        body_parts.append('</section>')
-    return _HTML_WRAP.format(title=_html.escape(title), css=_CSS, body="\n".join(body_parts))
+    header = _render_header(title, subtitle, logo_uri)
+    body = _problem_pages_html(
+        questions, include_source, overrides, header, include_difficulty
+    )
+    return _HTML_WRAP.format(title=_html.escape(title), css=_CSS, body=body)
+
+
+# ── 교재 전용 섹션 ─────────────────────────────────────────
+_CIRCLE_ANS = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
+
+
+def _render_quick_answer_table(questions: list[dict], cols: int = 5) -> str:
+    """빠른 정답 표: 5열, 문항 번호 + 정답을 순서대로.
+
+    각 셀 쌍은 `번호 | 답`. 예) 1행 = [1|②, 2|①, 3|③, 4|⑤, 5|④].
+    행 수는 문항 수에 따라 자동 (34문항 → 7행, 46문항 → 10행).
+    """
+    rows: list[str] = []
+    n = len(questions)
+    for r in range(0, n, cols):
+        cells: list[str] = []
+        for c in range(cols):
+            idx = r + c
+            if idx < n:
+                q = questions[idx]
+                raw = q.get("answer")
+                ans = _CIRCLE_ANS.get(str(raw), raw if raw is not None else "-")
+                cells.append(
+                    f'<td class="qa-num">{idx + 1}</td>'
+                    f'<td class="qa-ans">{_html.escape(str(ans))}</td>'
+                )
+            else:
+                cells.append('<td class="qa-num"></td><td class="qa-ans"></td>')
+        rows.append(f'<tr>{"".join(cells)}</tr>')
+    return (
+        '<table class="quick-answers">'
+        f'{"".join(rows)}'
+        '</table>'
+    )
+
+
+def _render_solution_items(questions: list[dict], include_source: bool,
+                            include_difficulty: bool = True) -> str:
+    """해설 섹션 아이템들. 각 아이템은 CSS column flow에서 개별 박스."""
+    items: list[str] = []
+    for i, q in enumerate(questions, 1):
+        meta = (
+            f'<span class="q-meta">{format_source(q, include_difficulty)}</span>'
+            if include_source else ""
+        )
+        q_body = render_question_body(q.get("question_text") or "")
+        sol_raw = q.get("solution_text") or ""
+        sol_body = (
+            render_question_body(sol_raw) if sol_raw
+            else '<p class="no-sol">해설 없음</p>'
+        )
+        raw_ans = q.get("answer")
+        ans = _CIRCLE_ANS.get(str(raw_ans), raw_ans if raw_ans is not None else "-")
+        items.append(
+            f'<div class="sol-item">'
+            f'<div class="sol-header">{i}번{meta}</div>'
+            f'<div class="sol-question">{q_body}</div>'
+            f'<div class="sol-answer">정답 &nbsp;<b>{_html.escape(str(ans))}</b></div>'
+            f'<div class="sol-body">{sol_body}</div>'
+            f'</div>'
+        )
+    return f'<div class="solutions-flow">{"".join(items)}</div>'
+
+
+def build_book_html(questions: list[dict], title: str, include_source: bool = True,
+                     overrides: dict | None = None,
+                     subtitle: str | None = None,
+                     logo_path: str | Path | None = None) -> str:
+    """교재 HTML: 문제(2단, 난이도 prefix 포함) + 빠른정답 표 + 해설(2단 column-flow)."""
+    logo_uri = _logo_data_uri(logo_path)
+    header = _render_header(title, subtitle, logo_uri)
+    problem_html = _problem_pages_html(
+        questions, include_source, overrides, header, include_difficulty=True
+    )
+    qa_html = (
+        '<section class="page qa-page">'
+        '<h2 class="section-title">빠른 정답</h2>'
+        f'{_render_quick_answer_table(questions)}'
+        '</section>'
+    )
+    sol_html = (
+        '<section class="page sol-page">'
+        '<h2 class="section-title">해설</h2>'
+        f'{_render_solution_items(questions, include_source, include_difficulty=True)}'
+        '</section>'
+    )
+    body = "\n".join([problem_html, qa_html, sol_html])
+    return _HTML_WRAP.format(title=_html.escape(title), css=_CSS, body=body)
 
 
 # ── Playwright 실행 ──────────────────────────────────────
@@ -474,5 +637,18 @@ def generate_exam_pdf(questions: list[dict], title: str = "수학 시험지",
         questions, title, include_source, overrides=overrides,
         subtitle=subtitle, logo_path=logo_path,
         include_difficulty=include_difficulty,
+    )
+    return html_to_pdf_bytes(html)
+
+
+def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
+                      include_source: bool = True,
+                      overrides: dict | None = None,
+                      subtitle: str | None = None,
+                      logo_path: str | Path | None = None) -> bytes:
+    """교재 PDF 생성. 문제 → 빠른정답 표 → 해설 순."""
+    html = build_book_html(
+        questions, title, include_source=include_source, overrides=overrides,
+        subtitle=subtitle, logo_path=logo_path,
     )
     return html_to_pdf_bytes(html)
