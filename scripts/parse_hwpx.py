@@ -772,16 +772,17 @@ def _process_run_no_endnote(run_elem, items):
             _process_pic(child, items)
 
         elif tag == "rect":
-            # 조건 박스(rect)는 본문에서 분리되어 보여야 하므로 시작 전에도 줄바꿈.
-            items.append(ContentItem("text", text="\n"))
+            # rect = HWP의 조건 박스 (예: (가)(나)(다)). <<BOX_START>>/<<BOX_END>>
+            # 마커로 감싸 Streamlit·PDF 양쪽이 박스 UI로 렌더하도록 한다.
+            items.append(ContentItem("text", text="\n<<BOX_START>>\n"))
             for dt in child.iter(NS_PAR + "drawText"):
                 for sl in dt.iter(NS_PAR + "subList"):
                     for p in sl.findall(NS_PAR + "p"):
                         for run in p.findall(NS_PAR + "run"):
                             _process_run_no_endnote(run, items)
-                        # (가)/(나)/(다) 조건 박스처럼 rect 내부 p들이 한 줄로
-                        # 붙지 않도록 각 p 끝에 줄바꿈을 삽입.
+                        # (가)/(나)/(다) 줄이 한 줄로 붙지 않도록 각 p 끝에 줄바꿈.
                         items.append(ContentItem("text", text="\n"))
+            items.append(ContentItem("text", text="<<BOX_END>>\n"))
 
         elif tag == "tbl":
             _process_tbl(child, items)
