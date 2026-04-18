@@ -553,9 +553,10 @@ def main():
             overrides = st.session_state.layout_overrides
 
             with col_download:
-                if mode == "exam":
-                    try:
-                        pdf_data = generate_pdf(
+                try:
+                    if mode == "exam":
+                        from pdf_engine import generate_exam_pdf
+                        pdf_data = generate_exam_pdf(
                             [dict(r) for r in selected_rows],
                             title=exam_title,
                             include_source=include_source,
@@ -563,18 +564,28 @@ def main():
                             subtitle=effective_subtitle,
                             logo_path=effective_logo,
                         )
-                        st.download_button(
-                            "📥 PDF 다운로드",
-                            data=pdf_data,
-                            file_name="exam.pdf",
-                            mime="application/pdf",
-                            use_container_width=True,
+                        fname = "exam.pdf"
+                    else:  # book
+                        from pdf_engine import generate_book_pdf
+                        pdf_data = generate_book_pdf(
+                            [dict(r) for r in selected_rows],
+                            title=exam_title,
+                            include_source=include_source,
+                            overrides=overrides,
+                            subtitle=effective_subtitle,
+                            logo_path=effective_logo,
                         )
-                    except Exception as e:
-                        st.error(f"PDF 생성 실패: {type(e).__name__}")
-                        st.caption(str(e)[:200])
-                else:
-                    st.caption("교재 PDF는 Phase 3에서 제공 예정")
+                        fname = "book.pdf"
+                    st.download_button(
+                        "📥 PDF 다운로드",
+                        data=pdf_data,
+                        file_name=fname,
+                        mime="application/pdf",
+                        use_container_width=True,
+                    )
+                except Exception as e:
+                    st.error(f"PDF 생성 실패: {type(e).__name__}")
+                    st.caption(str(e)[:200])
 
             st.divider()
 
