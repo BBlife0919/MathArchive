@@ -265,116 +265,20 @@ def generate_pdf(
     selected_questions: list,
     title: str = "시험지",
     include_source: bool = True,
+    overrides: dict | None = None,
 ) -> bytes:
-    """선택된 문제들로 PDF를 생성한다.
+    """Playwright + KaTeX 기반 2단 PDF. 길이 짧은 문제는 단의 절반씩 2문제,
+    긴 문제/상 난이도는 단 하나를 통째로 차지.
 
-    include_source: True면 문제 상단에 `[학교] YYYY년 N학기 중/기말` 출처 표시.
+    overrides: {question_id: 'half'|'full'} 수동 지정.
     """
-    from fpdf import FPDF
-
-    # 한글 폰트 후보 (macOS 로컬 + Streamlit Cloud Linux)
-    font_candidates = [
-        "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",        # Streamlit Cloud (fonts-nanum)
-        "/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf",   # 대체
-        "/System/Library/Fonts/AppleSDGothicNeo.ttc",             # macOS
-    ]
-    font_path = next((p for p in font_candidates if Path(p).exists()), None)
-    has_korean = font_path is not None
-
-    class ExamPDF(FPDF):
-        def header(self):
-            if has_korean:
-                self.set_font("Korean", size=14)
-                safe_title = title
-            else:
-                self.set_font("Helvetica", "B", 14)
-                # 한글 폰트 없을 때 latin-1로 인코딩 실패하는 문자 치환
-                safe_title = title.encode("latin-1", errors="replace").decode("latin-1")
-            self.cell(0, 10, safe_title, align="C", new_x="LMARGIN", new_y="NEXT")
-            self.ln(5)
-
-        def footer(self):
-            self.set_y(-15)
-            self.set_font("Helvetica", "I", 8)
-            self.cell(0, 10, f"{self.page_no()}/{{nb}}", align="C")
-
-    pdf = ExamPDF()
-    pdf.alias_nb_pages()
-    pdf.set_auto_page_break(auto=True, margin=20)
-
-    # 한글 폰트 등록 (한 번만)
-    if has_korean:
-        pdf.add_font("Korean", "", font_path, uni=True)
-        pdf.set_font("Korean", size=10)
-    else:
-        pdf.set_font("Helvetica", size=10)
-
-    pdf.add_page()
-
-    for i, q in enumerate(selected_questions, 1):
-        # 문제 번호 + 배점 + (선택) 출처
-        points_str = f" [{q['points']}점]" if q['points'] else ""
-        header = f"{i}. {points_str}"
-        pdf.set_font("Korean" if has_korean else "Helvetica", size=10)
-        pdf.cell(0, 7, header, new_x="LMARGIN", new_y="NEXT")
-        if include_source:
-            try:
-                exam = EXAM_TYPE_KO.get(q.get("exam_type"), q.get("exam_type") or "")
-                src_parts = [f"[{q.get('school', '?')}]"]
-                if q.get("year") and q.get("semester"):
-                    src_parts.append(f"{q['year']}년 {q['semester']}학기")
-                if exam:
-                    src_parts.append(exam)
-                src_parts.append(f"{q.get('question_number', '')}번")
-                src_line = " ".join(src_parts)
-                pdf.set_font("Korean" if has_korean else "Helvetica", size=8)
-                pdf.cell(0, 5, src_line, new_x="LMARGIN", new_y="NEXT")
-                pdf.set_font("Korean" if has_korean else "Helvetica", size=10)
-            except Exception:
-                pass
-
-        # 문제 텍스트 (LaTeX 수식 기호는 텍스트로 표시)
-        text = q["question_text"]
-        # $...$ 수식 → 텍스트 표현 유지
-        text = re.sub(r"<<IMG:image\d+>>", "[그림]", text)
-        # 줄바꿈 정리
-        text = re.sub(r"\n{3,}", "\n\n", text).strip()
-
-        for line in text.split("\n"):
-            line = line.strip()
-            if not line:
-                pdf.ln(3)
-                continue
-            try:
-                pdf.multi_cell(0, 6, line, new_x="LMARGIN", new_y="NEXT")
-            except Exception:
-                # 인코딩 오류 시 대체 문자 사용
-                safe = line.encode("latin-1", errors="replace").decode("latin-1")
-                pdf.multi_cell(0, 6, safe, new_x="LMARGIN", new_y="NEXT")
-
-        # 선택지
-        choices_text = format_choices(q.get("choices", "[]"))
-        if choices_text:
-            pdf.multi_cell(0, 6, choices_text, new_x="LMARGIN", new_y="NEXT")
-
-        pdf.ln(5)
-
-    # 정답표
-    pdf.add_page()
-    pdf.set_font("Korean" if has_korean else "Helvetica", size=12)
-    pdf.cell(0, 10, "정답표", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(5)
-    pdf.set_font("Korean" if has_korean else "Helvetica", size=10)
-
-    for i, q in enumerate(selected_questions, 1):
-        answer = q["answer"]
-        circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
-        display = circle.get(answer, answer)
-        pdf.cell(0, 7, f"{i}번: {display}", new_x="LMARGIN", new_y="NEXT")
-
-    buf = io.BytesIO()
-    pdf.output(buf)
-    return buf.getvalue()
+    from pdf_engine import generate_exam_pdf
+    return generate_exam_pdf(
+        selected_questions,
+        title=title,
+        include_source=include_source,
+        overrides=overrides or {},
+    )
 
 
 # ── 메인 앱 ──────────────────────────────────────────────────
@@ -601,20 +505,30 @@ def main():
                 if total_pts:
                     st.caption(f"총 배점: {total_pts:.1f}점")
 
+            # 레이아웃 override (수동 1단/2단 전환)
+            if "layout_overrides" not in st.session_state:
+                st.session_state.layout_overrides = {}
+            overrides = st.session_state.layout_overrides
+
             with col_download:
                 if mode == "exam":
-                    pdf_data = generate_pdf(
-                        [dict(r) for r in selected_rows],
-                        title=exam_title,
-                        include_source=include_source,
-                    )
-                    st.download_button(
-                        "📥 PDF 다운로드",
-                        data=pdf_data,
-                        file_name="exam.pdf",
-                        mime="application/pdf",
-                        use_container_width=True,
-                    )
+                    try:
+                        pdf_data = generate_pdf(
+                            [dict(r) for r in selected_rows],
+                            title=exam_title,
+                            include_source=include_source,
+                            overrides=overrides,
+                        )
+                        st.download_button(
+                            "📥 PDF 다운로드",
+                            data=pdf_data,
+                            file_name="exam.pdf",
+                            mime="application/pdf",
+                            use_container_width=True,
+                        )
+                    except Exception as e:
+                        st.error(f"PDF 생성 실패: {type(e).__name__}")
+                        st.caption(str(e)[:200])
                 else:
                     st.caption("교재 PDF는 Phase 3에서 제공 예정")
 
@@ -623,18 +537,46 @@ def main():
             # 미리보기
             show_answers = st.toggle("정답/해설 표시", value=False)
 
+            from pdf_engine import estimate_layout
+
             for i, row in enumerate(selected_rows, 1):
+                qid = row["question_id"]
+                # 자동 판정 + 수동 override
+                auto_layout = estimate_layout(dict(row))
+                current = overrides.get(qid, auto_layout)
+
                 with st.container(border=True):
-                    # 문제 헤더
-                    pts = f" [{row['points']}점]" if row["points"] else ""
-                    st.markdown(f"### {i}번{pts}")
-                    meta_line = format_meta(row) if include_source else None
-                    caption_parts = []
-                    if meta_line:
-                        caption_parts.append(meta_line)
-                    caption_parts.append(f"`{row['chapter']}`")
-                    caption_parts.append(f"난이도: {row['difficulty']}")
-                    st.caption(" · ".join(caption_parts))
+                    h_col1, h_col2 = st.columns([0.75, 0.25])
+                    with h_col1:
+                        pts = f" [{row['points']}점]" if row["points"] else ""
+                        st.markdown(f"### {i}번{pts}")
+                        meta_line = format_meta(row) if include_source else None
+                        caption_parts = []
+                        if meta_line:
+                            caption_parts.append(meta_line)
+                        caption_parts.append(f"`{row['chapter']}`")
+                        caption_parts.append(f"난이도: {row['difficulty']}")
+                        st.caption(" · ".join(caption_parts))
+                    with h_col2:
+                        layout_label = "📄 단 전체" if current == "full" else "📐 반 단"
+                        help_txt = (
+                            "이 문제가 단의 절반(2문제 공존) vs 단 하나 통째로(1문제 전용)"
+                        )
+                        new_layout = st.selectbox(
+                            "배치",
+                            options=["half", "full"],
+                            format_func=lambda x: "반 단 (2문제/단)" if x == "half" else "단 전체 (1문제/단)",
+                            index=0 if current == "half" else 1,
+                            key=f"layout_{qid}",
+                            help=help_txt,
+                            label_visibility="collapsed",
+                        )
+                        if new_layout != auto_layout:
+                            overrides[qid] = new_layout
+                        elif qid in overrides:
+                            del overrides[qid]
+                        if new_layout != current:
+                            st.rerun()
 
                     # 문제 본문 (이미지+박스+LaTeX 렌더링)
                     render_question_content(
