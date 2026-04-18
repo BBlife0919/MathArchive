@@ -237,9 +237,6 @@ body {
 }
 .exam-header .title-block {
     flex: 1;
-    text-align: center;
-}
-.exam-header.has-logo .title-block {
     text-align: left;
 }
 h1.exam-title {
@@ -367,18 +364,20 @@ def _logo_data_uri(logo_path: str | Path | None) -> str | None:
 
 
 def _render_header(title: str, subtitle: str | None, logo_uri: str | None) -> str:
-    has_logo = bool(logo_uri)
-    cls = "exam-header has-logo" if has_logo else "exam-header"
+    """헤더: 제목/부제는 항상 좌측 정렬, 로고는 우측 정렬(있을 때만).
+
+    제목·부제·로고는 서로 독립적으로 on/off — 로고 없어도 부제 표시 가능.
+    """
     title_html = f'<h1 class="exam-title">{_html.escape(title)}</h1>'
     sub_html = (
         f'<h2 class="exam-subtitle">{_html.escape(subtitle)}</h2>'
         if subtitle else ""
     )
     logo_html = (
-        f'<img class="exam-logo" src="{logo_uri}" alt="logo">' if has_logo else ""
+        f'<img class="exam-logo" src="{logo_uri}" alt="logo">' if logo_uri else ""
     )
     return (
-        f'<header class="{cls}">'
+        f'<header class="exam-header">'
         f'<div class="title-block">{title_html}{sub_html}</div>'
         f'{logo_html}'
         f'</header>'
