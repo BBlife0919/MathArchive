@@ -261,16 +261,24 @@ def format_choices(choices_json: str) -> str:
 
 
 # ── PDF 생성 ──────────────────────────────────────────────────
+ASSETS_DIR = Path(__file__).resolve().parent / "assets"
+DEFAULT_LOGO_PATH = ASSETS_DIR / "eum_logo.png"
+
+
 def generate_pdf(
     selected_questions: list,
     title: str = "시험지",
     include_source: bool = True,
     overrides: dict | None = None,
+    subtitle: str | None = None,
+    logo_path: str | None = None,
+    include_difficulty: bool = False,
 ) -> bytes:
     """Playwright + KaTeX 기반 2단 PDF. 길이 짧은 문제는 단의 절반씩 2문제,
     긴 문제/상 난이도는 단 하나를 통째로 차지.
 
     overrides: {question_id: 'half'|'full'} 수동 지정.
+    include_difficulty=True: 교재 모드. 출처에 난이도 prefix `[상]`.
     """
     from pdf_engine import generate_exam_pdf
     return generate_exam_pdf(
@@ -278,6 +286,9 @@ def generate_pdf(
         title=title,
         include_source=include_source,
         overrides=overrides or {},
+        subtitle=subtitle,
+        logo_path=logo_path,
+        include_difficulty=include_difficulty,
     )
 
 
@@ -493,9 +504,40 @@ def main():
 
             default_title = "수학 시험지" if mode == "exam" else "수학 교재"
             exam_title = st.text_input("제목", value=default_title)
+
+            head_c1, head_c2 = st.columns(2)
+            with head_c1:
+                show_subtitle = st.toggle("부제 표시", value=False,
+                                          help="제목 아래에 작은 글씨로 표시됩니다.")
+                subtitle_text = ""
+                if show_subtitle:
+                    subtitle_text = st.text_input(
+                        "부제", value="", placeholder="예: 2026학년도 1학기 중간대비",
+                        label_visibility="collapsed",
+                    )
+            with head_c2:
+                show_logo = st.toggle("로고 표시", value=False,
+                                      help="우측 상단에 로고 이미지 표시.")
+                logo_override = None
+                if show_logo:
+                    uploaded_logo = st.file_uploader(
+                        "로고 업로드 (기본: 이음학원 로고)", type=["png", "jpg", "jpeg"],
+                        label_visibility="collapsed",
+                    )
+                    if uploaded_logo is not None:
+                        tmp = Path("/tmp") / f"logo_upload_{uploaded_logo.name}"
+                        tmp.write_bytes(uploaded_logo.getvalue())
+                        logo_override = str(tmp)
+
             include_source = st.toggle(
                 "출처 삽입 (학교·연도·학기 표시)", value=True,
                 help="꺼두면 문제 번호만 표시됩니다."
+            )
+
+            effective_subtitle = subtitle_text.strip() if show_subtitle else None
+            effective_logo = (
+                logo_override if show_logo and logo_override
+                else (str(DEFAULT_LOGO_PATH) if show_logo and DEFAULT_LOGO_PATH.exists() else None)
             )
 
             col_info, col_download = st.columns([0.7, 0.3])
@@ -518,6 +560,8 @@ def main():
                             title=exam_title,
                             include_source=include_source,
                             overrides=overrides,
+                            subtitle=effective_subtitle,
+                            logo_path=effective_logo,
                         )
                         st.download_button(
                             "📥 PDF 다운로드",

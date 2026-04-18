@@ -7,8 +7,10 @@
 """
 from __future__ import annotations
 
+import base64
 import io
 import json
+import mimetypes
 import re
 import html as _html
 from pathlib import Path
@@ -22,9 +24,17 @@ EXAM_TYPE_KO = {"a": "중간", "b": "기말"}
 
 
 # ── 출처 포맷 ───────────────────────────────────────────────
-def format_source(q: dict) -> str:
+def format_source(q: dict, include_difficulty: bool = False) -> str:
+    """출처 메타 문자열.
+
+    include_difficulty=True → 교재 모드. `[상] [가림고] 2025년 1학기 중간 1번`
+    False → 시험지 모드. 난이도 prefix 없음.
+    """
     exam = EXAM_TYPE_KO.get(q.get("exam_type"), q.get("exam_type") or "")
-    parts = [f"[{q.get('school', '?')}]"]
+    parts: list[str] = []
+    if include_difficulty and q.get("difficulty"):
+        parts.append(f"[{q['difficulty']}]")
+    parts.append(f"[{q.get('school', '?')}]")
     if q.get("year") and q.get("semester"):
         parts.append(f"{q['year']}년 {q['semester']}학기")
     if exam:
@@ -209,21 +219,54 @@ body {
     line-height: 1.5;
     color: #111;
 }
-h1.exam-title {
-    text-align: center;
-    font-size: 18pt;
-    font-weight: 700;
-    margin: 0 0 10mm 0;
-    padding-bottom: 6mm;
-    border-bottom: 2px solid #333;
-}
 .page {
-    height: 267mm;
+    min-height: 267mm;
     display: flex;
-    gap: 6mm;
+    flex-direction: column;
     page-break-after: always;
 }
 .page:last-child { page-break-after: auto; }
+.exam-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 7mm 0;
+    padding: 0 0 4mm 0;
+    border-bottom: 2.5px solid #222;
+    gap: 6mm;
+}
+.exam-header .title-block {
+    flex: 1;
+    text-align: center;
+}
+.exam-header.has-logo .title-block {
+    text-align: left;
+}
+h1.exam-title {
+    font-size: 28pt;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+}
+h2.exam-subtitle {
+    font-size: 13pt;
+    font-weight: 500;
+    color: #666;
+    margin: 2mm 0 0 0;
+    line-height: 1.2;
+}
+.exam-logo {
+    max-height: 20mm;
+    max-width: 45mm;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+.page-body {
+    flex: 1;
+    display: flex;
+    gap: 6mm;
+}
 .col {
     flex: 1;
     min-width: 0;
@@ -238,7 +281,7 @@ h1.exam-title {
     border-right: 1px dashed #e0e0e0;
 }
 .col:last-child .slot { border-right: none; padding-right: 0; }
-.slot.full { flex: 2; }  /* full takes both halves */
+.slot.full { flex: 1 1 100%; }
 .q-header {
     font-weight: 700;
     margin: 0 0 2mm 0;
@@ -251,7 +294,11 @@ h1.exam-title {
     margin-left: 4pt;
 }
 .q-body { margin: 0 0 2mm 0; }
-.q-choices { margin-top: 2mm; color: #222; font-size: 10pt; }
+.q-choices {
+    margin-top: 6mm;  /* 본문과 선지 사이 한 줄 띄운 느낌 */
+    color: #222;
+    font-size: 10pt;
+}
 .cond-box {
     border: 1px solid #ccc;
     background: #fbfbfb;
@@ -281,33 +328,91 @@ _HTML_WRAP = """<!doctype html>
 """
 
 
-def _render_slot(i: int, q: dict, layout: str, include_source: bool) -> str:
-    pts = f" [{q['points']}점]" if q.get("points") else ""
-    meta = f'<span class="q-meta">{format_source(q)}</span>' if include_source else ""
+def _render_slot(i: int, q: dict, layout: str, include_source: bool,
+                  include_difficulty: bool = False) -> str:
+    """문항 슬롯 HTML.
+
+    배점은 파서가 본문 꼬리에 이미 `[N점]` 형태로 삽입하므로
+    헤더에서는 중복 제거 (`N번 [출처]`만).
+    """
+    meta = (
+        f'<span class="q-meta">{format_source(q, include_difficulty)}</span>'
+        if include_source else ""
+    )
     body_html = render_question_body(q.get("question_text") or "")
     choices_html = format_choices(q.get("choices"))
     return (
         f'<div class="slot {layout}">'
-        f'<div class="q-header">{i}번{pts}{meta}</div>'
+        f'<div class="q-header">{i}번{meta}</div>'
         f'<div class="q-body">{body_html}</div>'
         + (f'<div class="q-choices">{choices_html}</div>' if choices_html else "")
         + '</div>'
     )
 
 
+def _logo_data_uri(logo_path: str | Path | None) -> str | None:
+    """로고 파일을 base64 data URI로 인코딩.
+
+    Playwright는 `page.set_content()`으로 HTML을 inline 주입하므로,
+    상대경로/파일경로 이미지를 안정적으로 참조하려면 data URI가 가장 확실.
+    """
+    if not logo_path:
+        return None
+    p = Path(logo_path)
+    if not p.exists():
+        return None
+    mime = mimetypes.guess_type(str(p))[0] or "image/png"
+    b64 = base64.b64encode(p.read_bytes()).decode("ascii")
+    return f"data:{mime};base64,{b64}"
+
+
+def _render_header(title: str, subtitle: str | None, logo_uri: str | None) -> str:
+    has_logo = bool(logo_uri)
+    cls = "exam-header has-logo" if has_logo else "exam-header"
+    title_html = f'<h1 class="exam-title">{_html.escape(title)}</h1>'
+    sub_html = (
+        f'<h2 class="exam-subtitle">{_html.escape(subtitle)}</h2>'
+        if subtitle else ""
+    )
+    logo_html = (
+        f'<img class="exam-logo" src="{logo_uri}" alt="logo">' if has_logo else ""
+    )
+    return (
+        f'<header class="{cls}">'
+        f'<div class="title-block">{title_html}{sub_html}</div>'
+        f'{logo_html}'
+        f'</header>'
+    )
+
+
 def build_exam_html(questions: list[dict], title: str, include_source: bool,
-                     overrides: dict | None = None) -> str:
+                     overrides: dict | None = None,
+                     subtitle: str | None = None,
+                     logo_path: str | Path | None = None,
+                     include_difficulty: bool = False) -> str:
     pages = paginate(questions, overrides=overrides)
-    body_parts = [f'<h1 class="exam-title">{_html.escape(title)}</h1>']
+    logo_uri = _logo_data_uri(logo_path)
+    body_parts: list[str] = []
     slot_num = 1
-    for page in pages:
+    for idx, page in enumerate(pages):
         body_parts.append('<section class="page">')
-        for col in page:
+        if idx == 0:
+            body_parts.append(_render_header(title, subtitle, logo_uri))
+        body_parts.append('<div class="page-body">')
+        # 모든 페이지는 2단 유지 — col 수가 부족하면 빈 col placeholder로 채움
+        # (마지막 페이지에 문제가 적어서 단이 하나만 그려지는 버그 방지)
+        cols = list(page)
+        while len(cols) < 2:
+            cols.append([])
+        for col in cols:
             body_parts.append('<div class="col">')
             for (q, layout) in col:
-                body_parts.append(_render_slot(slot_num, q, layout, include_source))
+                body_parts.append(_render_slot(
+                    slot_num, q, layout, include_source, include_difficulty
+                ))
                 slot_num += 1
             body_parts.append('</div>')
+        body_parts.append('</div>')  # page-body
         body_parts.append('</section>')
     return _HTML_WRAP.format(title=_html.escape(title), css=_CSS, body="\n".join(body_parts))
 
@@ -362,6 +467,13 @@ def html_to_pdf_bytes(html: str) -> bytes:
 
 def generate_exam_pdf(questions: list[dict], title: str = "수학 시험지",
                       include_source: bool = True,
-                      overrides: dict | None = None) -> bytes:
-    html = build_exam_html(questions, title, include_source, overrides=overrides)
+                      overrides: dict | None = None,
+                      subtitle: str | None = None,
+                      logo_path: str | Path | None = None,
+                      include_difficulty: bool = False) -> bytes:
+    html = build_exam_html(
+        questions, title, include_source, overrides=overrides,
+        subtitle=subtitle, logo_path=logo_path,
+        include_difficulty=include_difficulty,
+    )
     return html_to_pdf_bytes(html)
