@@ -60,6 +60,35 @@ def scan_text(text: str) -> list:
     if not text:
         return issues
 
+    # 0. 구조 무결성 — 수식 검사 전 선행
+    # 0-a) <<BOX_START>> / <<BOX_END>> 짝
+    n_bs = text.count("<<BOX_START>>")
+    n_be = text.count("<<BOX_END>>")
+    if n_bs != n_be:
+        issues.append((
+            "box_mismatch",
+            f"start={n_bs}, end={n_be}",
+            text[:120],
+        ))
+
+    # 0-b) Markdown 파이프 테이블 잔재 (렌더 실패 표시자)
+    #      `|---|---|` 같은 구분자가 최종 텍스트에 남아있다는 건
+    #      md 렌더링 단계에서 테이블이 HTML로 변환 안 됐거나,
+    #      파서가 선지 그리드를 일반 표로 출력했다는 뜻.
+    if re.search(r"\|[-]{3,}\|", text):
+        issues.append((
+            "table_leak",
+            "pipe-table separator remaining",
+            text[:120],
+        ))
+    # 빈 헤더 행만 덩그러니 남은 경우 (`|   |   |   |`)
+    if re.search(r"^\|(?:\s+\|){2,}\s*$", text, re.MULTILINE):
+        issues.append((
+            "table_leak",
+            "empty header row",
+            text[:120],
+        ))
+
     for m in MATH_SPAN.finditer(text):
         span = m.group(1)
 
@@ -104,11 +133,29 @@ def scan_text(text: str) -> list:
     # 4. 수식 바깥에 백슬래시 LaTeX 명령 노출 (KaTeX가 렌더 못 하고 raw 표시)
     outside = MATH_SPAN.sub("", text)
     raw_cmds = re.findall(
-        r"\\(frac|sqrt|overline|left|right|neq|leq|geq|alpha|beta|emptyset|cap|cup|vert)\b",
+        r"\\(frac|dfrac|sqrt|overline|left|right|neq|leq|geq|alpha|beta|emptyset|cap|cup|vert)\b",
         outside,
     )
     for cmd in set(raw_cmds):
         issues.append(("latex_outside_math", f"\\{cmd}", outside[:100]))
+
+    # 5. 수식 내부에 backslash 없는 LaTeX 명령어 잔존
+    #    (예: `$dfrac{a}{b}$` — backslash 빠져서 KaTeX에서 raw 텍스트로 렌더)
+    BARE_LATEX_CMDS = [
+        "dfrac", "tfrac", "cfrac", "frac",
+        "sqrt", "overline", "underline",
+        "mathrm", "mathbf", "mathit", "mathbb",
+        "overrightarrow", "overleftarrow",
+        "hat", "vec", "tilde", "bar",
+        "boxed", "left", "right",
+    ]
+    for m in MATH_SPAN.finditer(text):
+        span = m.group(1)
+        for cmd in BARE_LATEX_CMDS:
+            # 앞에 `\` 없고 알파벳도 아님 (단어 경계 흉내)
+            if re.search(rf"(?<![A-Za-z\\]){cmd}\{{", span):
+                issues.append(("bare_latex_cmd", cmd, span[:100]))
+                break  # 스팬당 1회만 보고
 
     return issues
 
