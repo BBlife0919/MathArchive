@@ -88,7 +88,8 @@ SYMBOL_MAP = {
 
 # LaTeX 명령으로 보존해야 하는 화이트리스트
 _LATEX_KEEP = {
-    "frac", "sqrt", "overline", "underline", "left", "right",
+    "frac", "dfrac", "tfrac", "cfrac",
+    "sqrt", "overline", "underline", "left", "right",
     "times", "cdot", "div", "pm", "mp", "leq", "geq", "neq",
     "approx", "equiv", "sim", "therefore", "because",
     "triangle", "angle", "perp", "parallel", "infty",
@@ -678,6 +679,20 @@ def hwp_eq_to_latex(script: str) -> str:
     # 21) 불필요한 다중 공백 정리
     s = re.sub(r"  +", " ", s)
 
+    # 21-b) \frac → \dfrac — inline $...$ 안에서도 분수를 크게 (displaystyle) 표시.
+    #       교재·시험지 가독성을 위해 DB 전역에 적용.
+    s = re.sub(r"\\frac(?=\{)", r"\\dfrac", s)
+
+    # 21-c) backslash 빠진 LaTeX 명령 복원
+    #       `overline{...}`, `mathrm{...}`, `sqrt{...}` 같이 `{` 직전인데
+    #       앞에 `\` 없는 경우 자동으로 붙임 (KaTeX가 raw 텍스트로 렌더하는 것 방지).
+    _BARE_CMDS = ("overline", "underline", "mathrm", "mathbf", "mathit",
+                  "mathbb", "overrightarrow", "overleftarrow",
+                  "hat", "vec", "tilde", "boxed", "sqrt", "dfrac",
+                  "tfrac", "cfrac")
+    for cmd in _BARE_CMDS:
+        s = re.sub(rf"(?<![A-Za-z\\]){cmd}(?=\{{)", rf"\\{cmd}", s)
+
     # 22) cases body의 행 구분자 방어적 복구
     #     일부 HWP 원본에서 행구분이 `\\`로 쓰였지만 전처리 중 `\ `(backslash+공백)로
     #     축소돼 cases 변환기의 split을 통과할 수 있음. body 안에서만 `\ ` → `\\\\`.
@@ -1001,6 +1016,65 @@ def _process_tbl(tbl_elem, items):
         table_rows.append(row_cells)
         if len(row_cells) > max_cols:
             max_cols = len(row_cells)
+
+    # 선지용 이미지 표 감지:
+    #   셀들이 ①②③④⑤ 라벨과 이미지/그래프만 담고 있는 경우 파이프 테이블
+    #   대신 inline 선지 나열로 출력. 안 그러면 ①등이 choice 추출기에 의해
+    #   파이프 문법까지 선지 텍스트로 흡수됨.
+    _all_cells = [c.strip() for row in table_rows for c in row if c.strip()]
+    _circ_chars = set("①②③④⑤⑥⑦⑧⑨")
+    # 셀 타입 분류
+    _cell_is_circle = lambda c: c in _circ_chars
+    _cell_is_img = lambda c: bool(
+        re.match(r"^(?:&lt;&lt;IMG:[^>]+&gt;&gt;|<<IMG:[^>]+>>)$", c)
+    )
+    _cell_is_combined = lambda c: bool(re.match(
+        r"^[①②③④⑤⑥⑦⑧⑨]\s*(?:<br>)?\s*(?:&lt;&lt;IMG:[^>]+&gt;&gt;|<<IMG:[^>]+>>)$",
+        c
+    ))
+    # 모든 셀이 "원문자 라벨 | 이미지 | 조합" 중 하나, 그리고 원문자가 최소 3개
+    n_circles = sum(
+        1 for c in _all_cells
+        if _cell_is_circle(c) or _cell_is_combined(c)
+    )
+    _is_choice_grid = (
+        bool(_all_cells)
+        and n_circles >= 3
+        and all(
+            _cell_is_circle(c) or _cell_is_img(c) or _cell_is_combined(c)
+            for c in _all_cells
+        )
+    )
+
+    if _is_choice_grid:
+        # BOX_START 되돌리기 — 선지 grid는 박스로 감싸지 않음
+        if items and items[-1].kind == "text" and items[-1].text.strip() == "<<BOX_START>>":
+            items.pop()
+        # 원문자 + 인접 이미지 셀을 한 짝으로 묶어 출력
+        parts = []
+        i = 0
+        while i < len(_all_cells):
+            c = _all_cells[i]
+            if _cell_is_combined(c):
+                parts.append(c)
+                i += 1
+            elif _cell_is_circle(c):
+                # 다음 셀이 이미지면 같이 묶음
+                if i + 1 < len(_all_cells) and _cell_is_img(_all_cells[i + 1]):
+                    parts.append(f"{c} {_all_cells[i + 1]}")
+                    i += 2
+                else:
+                    parts.append(c)
+                    i += 1
+            else:
+                # 고아 이미지 — 이전 원문자에 합치기
+                if parts and not parts[-1].endswith(">>"):
+                    parts[-1] = f"{parts[-1]} {c}"
+                else:
+                    parts.append(c)
+                i += 1
+        items.append(ContentItem("text", text="\n" + "  ".join(parts) + "\n"))
+        return
 
     if max_cols <= 1:
         # 1열 — 기존처럼 줄 단위 나열 (조건박스/보기박스)

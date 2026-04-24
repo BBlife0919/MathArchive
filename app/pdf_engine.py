@@ -43,7 +43,7 @@ def format_source(q: dict, include_difficulty: bool = False) -> str:
     return " ".join(parts)
 
 
-def format_choices(choices_json) -> str:
+def format_choices(choices_json, book_mode: bool = False) -> str:
     if not choices_json:
         return ""
     if isinstance(choices_json, str):
@@ -56,6 +56,15 @@ def format_choices(choices_json) -> str:
     if not choices:
         return ""
     circle = {1: "①", 2: "②", 3: "③", 4: "④", 5: "⑤"}
+    if book_mode:
+        # 가로 flex — .q-choices 의 gap으로 간격 조정
+        return "".join(
+            f'<span class="choice">'
+            f'<span class="circ">{circle.get(c.get("number"), c.get("number"))}</span>'
+            f'{c.get("text", "")}'
+            f'</span>'
+            for c in choices
+        )
     return "&nbsp;&nbsp;&nbsp;".join(
         f"{circle.get(c.get('number'), c.get('number'))} {c.get('text', '')}"
         for c in choices
@@ -210,66 +219,96 @@ def paginate(questions: list[dict], overrides: dict[int, str] | None = None) -> 
 
 # ── HTML 템플릿 ─────────────────────────────────────────────
 _CSS = r"""
-@page { size: A4; margin: 15mm 12mm; }
+@page { size: A4; margin: 10mm 10mm; }
 * { box-sizing: border-box; }
 body {
     margin: 0;
-    font-family: -apple-system, 'Apple SD Gothic Neo', 'Nanum Gothic', 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', 'Pretendard Variable', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
     font-size: 10.5pt;
     line-height: 1.5;
     color: #111;
+    -webkit-font-smoothing: antialiased;
 }
 .page {
-    min-height: 267mm;
+    min-height: 275mm;
     display: flex;
     flex-direction: column;
     page-break-after: always;
 }
 .page:last-child { page-break-after: auto; }
 .exam-header {
+    position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    margin: 0 0 7mm 0;
-    padding: 0 0 4mm 0;
-    border-bottom: 2.5px solid #222;
+    margin: 3mm 0 12mm 0;
+    padding: 0 0 7mm 0;
     gap: 6mm;
+    min-height: 34mm;
+}
+/* 굵은 포인트 바 (Toss/당근 감성) */
+.exam-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 16mm;
+    height: 5px;
+    background: #ff6b35;
+    border-radius: 100px;
 }
 .exam-header .title-block {
     flex: 1;
     text-align: left;
 }
-h1.exam-title {
-    font-size: 28pt;
+.exam-header .kicker {
+    font-size: 9pt;
+    color: #999;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    margin: 0 0 4.5mm 0;
+    display: block;
+}
+.exam-header .kicker .mark {
+    color: #ff6b35;
     font-weight: 800;
+    margin-right: 2.5mm;
+    letter-spacing: 0;
+}
+h1.exam-title {
+    font-size: 30pt;
+    font-weight: 700;
     margin: 0;
-    letter-spacing: -0.5px;
-    line-height: 1.15;
+    letter-spacing: -1.2px;
+    line-height: 1.08;
+    color: #0a0a0a;
 }
 h2.exam-subtitle {
-    font-size: 13pt;
+    font-size: 12pt;
     font-weight: 500;
     color: #666;
-    margin: 2mm 0 0 0;
-    line-height: 1.2;
+    margin: 3.5mm 0 0 0;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
 }
 .exam-logo {
-    max-height: 20mm;
-    max-width: 45mm;
+    max-height: 22mm;
+    max-width: 48mm;
     object-fit: contain;
     flex-shrink: 0;
+    align-self: flex-start;
 }
 .page-body {
     flex: 1;
     display: flex;
-    gap: 6mm;
+    gap: 4mm;
 }
 .col {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 5mm;
+    gap: 3mm;
 }
 .slot {
     flex: 1;
@@ -315,7 +354,79 @@ h2.exam-subtitle {
     font-weight: 800;
     margin: 0 0 6mm 0;
     padding-bottom: 3mm;
-    border-bottom: 2px solid #222;
+    border-bottom: 2px solid #103a63;
+    color: #103a63;
+    letter-spacing: -0.5px;
+}
+/* 교재 모드 문항 카드 — CC 스타일 차용 */
+.slot.book-card {
+    border-top: 2px solid #103a63;
+    padding-top: 2mm;
+}
+.slot.book-card .book-header {
+    padding-bottom: 1.5mm;
+    margin-bottom: 2mm;
+    border-bottom: 1px solid #e5e5e5;
+}
+.slot.book-card .q-number {
+    font-size: 15pt;
+    font-weight: 900;
+    color: #103a63;
+    letter-spacing: -0.5px;
+    display: inline-block;
+    margin-right: 3mm;
+    vertical-align: baseline;
+}
+.slot.book-card .q-kicker {
+    font-size: 7.5pt;
+    color: #1d6fb7;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.5mm;
+    display: block;
+}
+.slot.book-card .q-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5mm;
+    margin-top: 1.8mm;
+    font-size: 8pt;
+}
+.slot.book-card .q-tag {
+    background: #eef3fa;
+    color: #103a63;
+    padding: 0.8mm 2.2mm;
+    border-radius: 2mm;
+    font-weight: 600;
+    font-size: 8pt;
+    white-space: nowrap;
+}
+.slot.book-card .q-tag.diff-킬 { background: #ffebe6; color: #a30000; }
+.slot.book-card .q-tag.diff-상 { background: #fff5e6; color: #c06000; }
+.slot.book-card .q-tag.diff-중 { background: #fff8d6; color: #8a6d00; }
+.slot.book-card .q-tag.diff-하 { background: #eaf7ea; color: #2d7a2d; }
+.slot.book-card .q-body {
+    font-size: 10.5pt;
+    line-height: 1.7;
+    margin-bottom: 2mm;
+}
+.slot.book-card .q-choices {
+    margin-top: 3mm;
+    font-size: 10pt;
+    line-height: 1.75;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 6mm;
+    row-gap: 2mm;
+}
+.slot.book-card .q-choices .choice {
+    white-space: nowrap;
+}
+.slot.book-card .q-choices .choice .circ {
+    color: #1d6fb7;
+    font-weight: 700;
+    margin-right: 1.5mm;
 }
 .qa-page { display: block; }  /* 빠른정답 페이지는 flex 해제 */
 .sol-page { display: block; }
@@ -326,19 +437,21 @@ h2.exam-subtitle {
     margin: 0 auto;
 }
 .quick-answers td {
-    border: 1px solid #888;
+    border: 1px solid #c7d3e6;
     padding: 3.5mm 2mm;
     text-align: center;
 }
 .quick-answers td.qa-num {
-    background: #f3f3f3;
+    background: #eef3fa;
     font-weight: 700;
     width: 6%;
-    color: #555;
+    color: #103a63;
+    letter-spacing: -0.3px;
 }
 .quick-answers td.qa-ans {
     width: 14%;
     font-weight: 600;
+    color: #1a1a1a;
 }
 .solutions-flow {
     column-count: 2;
@@ -347,31 +460,61 @@ h2.exam-subtitle {
 }
 .sol-item {
     break-inside: avoid;
-    margin: 0 0 7mm 0;
-    padding: 3mm 3mm 3mm 4mm;
-    border-left: 3px solid #888;
-    background: #fcfcfc;
+    margin: 0 0 8mm 0;
+    padding: 4mm 4mm 4mm 5mm;
+    border-left: 4px solid #1d6fb7;
+    background: #fafcff;
+    border-radius: 0 1.5mm 1.5mm 0;
 }
 .sol-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2mm;
+    margin-bottom: 3mm;
+    padding-bottom: 2.5mm;
+    border-bottom: 1px solid #dee6f0;
+}
+.sol-num {
+    font-size: 14pt;
+    font-weight: 900;
+    color: #103a63;
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+.sol-num-label {
+    font-size: 10pt;
     font-weight: 700;
-    font-size: 10.5pt;
-    margin-bottom: 2mm;
+    color: #103a63;
+    margin-right: 2mm;
+}
+.sol-answer-inline {
+    background: #1d6fb7;
+    color: #fff;
+    padding: 0.5mm 2mm;
+    border-radius: 1mm;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-left: 2mm;
+}
+.sol-answer-inline b {
+    font-weight: 900;
+    margin-left: 0.5mm;
 }
 .sol-question {
-    font-size: 9.5pt;
-    color: #444;
-    margin-bottom: 3mm;
-    padding-bottom: 2mm;
-    border-bottom: 1px dashed #ccc;
-}
-.sol-answer {
-    background: #eef5ff;
-    padding: 1.5mm 3mm;
-    margin-bottom: 3mm;
-    border-radius: 1mm;
     font-size: 10pt;
+    color: #333;
+    line-height: 1.65;
+    margin-bottom: 3mm;
+    padding-bottom: 2.5mm;
+    border-bottom: 1px dashed #c7d3e6;
 }
-.sol-body { font-size: 10pt; }
+.sol-body {
+    font-size: 10pt;
+    line-height: 1.75;
+    color: #1a1a1a;
+}
 .no-sol { color: #aaa; font-style: italic; }
 """
 
@@ -379,6 +522,7 @@ _HTML_WRAP = """<!doctype html>
 <html lang="ko"><head>
 <meta charset="utf-8">
 <title>{title}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
@@ -395,14 +539,54 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
     """문항 슬롯 HTML.
 
     배점은 파서가 본문 꼬리에 이미 `[N점]` 형태로 삽입하므로
-    헤더에서는 중복 제거 (`N번 [출처]`만).
+    헤더에서는 중복 제거.
+    - 시험지 모드: 기존 `N번 [출처]` 한 줄 헤더
+    - 교재 모드(include_difficulty=True): 큰 Q번호 + pill 태그
     """
+    body_html = render_question_body(q.get("question_text") or "")
+    choices_html = format_choices(q.get("choices"), book_mode=include_difficulty)
+
+    if include_difficulty:
+        # 교재 카드 — CC 텍스트북 스타일
+        tags: list[str] = []
+        if q.get("chapter"):
+            tags.append(f'<span class="q-tag">{_html.escape(str(q["chapter"]))}</span>')
+        diff = q.get("difficulty")
+        if diff:
+            tags.append(
+                f'<span class="q-tag diff-{_html.escape(str(diff))}">'
+                f'{_html.escape(str(diff))}난이도</span>'
+            )
+        src_parts = []
+        if q.get("school"):
+            src_parts.append(str(q["school"]))
+        if q.get("year") and q.get("semester"):
+            exam = EXAM_TYPE_KO.get(q.get("exam_type"), "")
+            src_parts.append(f'{q["year"]}년 {q["semester"]}학기 {exam}'.strip())
+        if src_parts and include_source:
+            tags.append(
+                f'<span class="q-tag">{_html.escape(" · ".join(src_parts))}</span>'
+            )
+        tags_html = (
+            '<div class="q-tags">' + "".join(tags) + '</div>' if tags else ""
+        )
+        return (
+            f'<div class="slot book-card {layout}">'
+            f'<div class="book-header">'
+            f'<span class="q-kicker">PROBLEM</span>'
+            f'<span class="q-number">Q{i}</span>'
+            f'{tags_html}'
+            f'</div>'
+            f'<div class="q-body">{body_html}</div>'
+            + (f'<div class="q-choices">{choices_html}</div>' if choices_html else "")
+            + '</div>'
+        )
+
+    # 시험지 모드 (기존 그대로)
     meta = (
         f'<span class="q-meta">{format_source(q, include_difficulty)}</span>'
         if include_source else ""
     )
-    body_html = render_question_body(q.get("question_text") or "")
-    choices_html = format_choices(q.get("choices"))
     return (
         f'<div class="slot {layout}">'
         f'<div class="q-header">{i}번{meta}</div>'
@@ -428,11 +612,25 @@ def _logo_data_uri(logo_path: str | Path | None) -> str | None:
     return f"data:{mime};base64,{b64}"
 
 
-def _render_header(title: str, subtitle: str | None, logo_uri: str | None) -> str:
+def _render_header(title: str, subtitle: str | None, logo_uri: str | None,
+                    kicker_mark: str | None = None,
+                    kicker_text: str | None = None) -> str:
     """헤더: 제목/부제는 항상 좌측 정렬, 로고는 우측 정렬(있을 때만).
 
     제목·부제·로고는 서로 독립적으로 on/off — 로고 없어도 부제 표시 가능.
+    kicker_mark: 상단 왼쪽 포인트 텍스트 (예: '#01', 'VOL.01', '2026').
+    kicker_text: kicker_mark 오른쪽 본문 텍스트 (예: 'MATH ARCHIVE').
+    둘 다 None/빈문자열이면 kicker 라인 전체 생략.
     """
+    mark_html = (
+        f'<span class="mark">{_html.escape(kicker_mark)}</span>'
+        if kicker_mark else ""
+    )
+    text_html = _html.escape(kicker_text) if kicker_text else ""
+    kicker_html = (
+        f'<span class="kicker">{mark_html}{text_html}</span>'
+        if (kicker_mark or kicker_text) else ""
+    )
     title_html = f'<h1 class="exam-title">{_html.escape(title)}</h1>'
     sub_html = (
         f'<h2 class="exam-subtitle">{_html.escape(subtitle)}</h2>'
@@ -443,7 +641,7 @@ def _render_header(title: str, subtitle: str | None, logo_uri: str | None) -> st
     )
     return (
         f'<header class="exam-header">'
-        f'<div class="title-block">{title_html}{sub_html}</div>'
+        f'<div class="title-block">{kicker_html}{title_html}{sub_html}</div>'
         f'{logo_html}'
         f'</header>'
     )
@@ -527,14 +725,12 @@ def _render_quick_answer_table(questions: list[dict], cols: int = 5) -> str:
 
 def _render_solution_items(questions: list[dict], include_source: bool,
                             include_difficulty: bool = True) -> str:
-    """해설 섹션 아이템들. 각 아이템은 CSS column flow에서 개별 박스."""
+    """해설 섹션 아이템들. 각 아이템은 CSS column flow에서 개별 박스.
+
+    헤더: `N번  정답 ②` (한 줄).  메타/난이도 태그 제거 — 출처는 교재 본문에만 노출.
+    """
     items: list[str] = []
     for i, q in enumerate(questions, 1):
-        meta = (
-            f'<span class="q-meta">{format_source(q, include_difficulty)}</span>'
-            if include_source else ""
-        )
-        q_body = render_question_body(q.get("question_text") or "")
         sol_raw = q.get("solution_text") or ""
         sol_body = (
             render_question_body(sol_raw) if sol_raw
@@ -544,9 +740,11 @@ def _render_solution_items(questions: list[dict], include_source: bool,
         ans = _CIRCLE_ANS.get(str(raw_ans), raw_ans if raw_ans is not None else "-")
         items.append(
             f'<div class="sol-item">'
-            f'<div class="sol-header">{i}번{meta}</div>'
-            f'<div class="sol-question">{q_body}</div>'
-            f'<div class="sol-answer">정답 &nbsp;<b>{_html.escape(str(ans))}</b></div>'
+            f'<div class="sol-header">'
+            f'<span class="sol-num">{i}</span>'
+            f'<span class="sol-num-label">번</span>'
+            f'<span class="sol-answer-inline">정답 <b>{_html.escape(str(ans))}</b></span>'
+            f'</div>'
             f'<div class="sol-body">{sol_body}</div>'
             f'</div>'
         )
@@ -556,10 +754,14 @@ def _render_solution_items(questions: list[dict], include_source: bool,
 def build_book_html(questions: list[dict], title: str, include_source: bool = True,
                      overrides: dict | None = None,
                      subtitle: str | None = None,
-                     logo_path: str | Path | None = None) -> str:
+                     logo_path: str | Path | None = None,
+                     kicker_mark: str | None = None,
+                     kicker_text: str | None = None) -> str:
     """교재 HTML: 문제(2단, 난이도 prefix 포함) + 빠른정답 표 + 해설(2단 column-flow)."""
     logo_uri = _logo_data_uri(logo_path)
-    header = _render_header(title, subtitle, logo_uri)
+    header = _render_header(title, subtitle, logo_uri,
+                             kicker_mark=kicker_mark,
+                             kicker_text=kicker_text)
     problem_html = _problem_pages_html(
         questions, include_source, overrides, header, include_difficulty=True
     )
@@ -571,7 +773,7 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
     )
     sol_html = (
         '<section class="page sol-page">'
-        '<h2 class="section-title">해설</h2>'
+        '<h2 class="section-title">Solutions</h2>'
         f'{_render_solution_items(questions, include_source, include_difficulty=True)}'
         '</section>'
     )
@@ -620,7 +822,7 @@ def html_to_pdf_bytes(html: str) -> bytes:
         pdf_bytes = page.pdf(
             format="A4",
             print_background=True,
-            margin={"top": "15mm", "bottom": "15mm", "left": "12mm", "right": "12mm"},
+            margin={"top": "10mm", "bottom": "10mm", "left": "10mm", "right": "10mm"},
             prefer_css_page_size=True,
         )
         browser.close()
@@ -645,10 +847,13 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       include_source: bool = True,
                       overrides: dict | None = None,
                       subtitle: str | None = None,
-                      logo_path: str | Path | None = None) -> bytes:
+                      logo_path: str | Path | None = None,
+                      kicker_mark: str | None = None,
+                      kicker_text: str | None = None) -> bytes:
     """교재 PDF 생성. 문제 → 빠른정답 표 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
         subtitle=subtitle, logo_path=logo_path,
+        kicker_mark=kicker_mark, kicker_text=kicker_text,
     )
     return html_to_pdf_bytes(html)

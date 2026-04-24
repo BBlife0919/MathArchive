@@ -534,6 +534,29 @@ def main():
                 help="꺼두면 문제 번호만 표시됩니다."
             )
 
+            # 교재 모드 전용: 제목 위 kicker (디자인 요소)
+            kicker_mark = None
+            kicker_text = None
+            if mode == "book":
+                show_kicker = st.toggle(
+                    "상단 라벨 표시", value=True,
+                    help="제목 위에 작은 포인트 텍스트 (예: '#01 MATH ARCHIVE')"
+                )
+                if show_kicker:
+                    kc1, kc2 = st.columns([0.35, 0.65])
+                    with kc1:
+                        kicker_mark = st.text_input(
+                            "포인트 (주황)", value="#01",
+                            placeholder="예: #01, VOL.1, 2026",
+                        )
+                    with kc2:
+                        kicker_text = st.text_input(
+                            "브랜드", value="MATH ARCHIVE",
+                            placeholder="예: MATH ARCHIVE, EUM ACADEMY",
+                        )
+                    kicker_mark = kicker_mark.strip() or None
+                    kicker_text = kicker_text.strip() or None
+
             effective_subtitle = subtitle_text.strip() if show_subtitle else None
             effective_logo = (
                 logo_override if show_logo and logo_override
@@ -574,6 +597,8 @@ def main():
                             overrides=overrides,
                             subtitle=effective_subtitle,
                             logo_path=effective_logo,
+                            kicker_mark=kicker_mark,
+                            kicker_text=kicker_text,
                         )
                         fname = "book.pdf"
                     st.download_button(
