@@ -1,0 +1,1622 @@
+[
+  {
+    "tid": "P1",
+    "label": "다항식 덧셈·뺄셈·스칼라배",
+    "chapter": "다항식의 연산",
+    "cue": "A, B 다항식 주어지고 2A-B 같은 계산",
+    "ngd_count": 18,
+    "stars": 3,
+    "candidates": [
+      {
+        "question_id": 2087,
+        "question_text": "두 다항식 $A = 3x^3 +2x+7 , B\\, = 3x - 5$에 대하여 $2A+5B\\, = A+X\\,\\,$를 만족시키는 다항식 $X\\,\\,$는? [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$3x^3 +17x+18$\"}, {\"number\": 2, \"text\": \"$-3x^3 - 17x+18$\"}, {\"number\": 3, \"text\": \"$3x^3 - 17x-18$\"}, {\"number\": 4, \"text\": \"$-3x^3 +17x-18$\"}, {\"number\": 5, \"text\": \"$3x^3 +17x-18$\"}]",
+        "answer": "5",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2107,
+        "question_text": "두 다항식 $A=2x ^{2} +3x+1$, $B=x ^{2} -x+2$에 대하여 $A+B=ax ^{2} +bx+c$일 때, $a+b+c$의 값은?(단, $a, b, c$는 상수이다.) [$3.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$5$\"}, {\"number\": 2, \"text\": \"$6$\"}, {\"number\": 3, \"text\": \"$7$\"}, {\"number\": 4, \"text\": \"$8$\"}, {\"number\": 5, \"text\": \"$9$\"}]",
+        "answer": "4",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2173,
+        "question_text": "두 다항식\t$A=2x ^{3} +x ^{2} -1$, $B=-x ^{3} +x-3$\n에 대하여 $\\left( A-2B \\right) + \\left( A+3B \\right)$를 간단히 하면? [$2.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x ^{2} +2x-7$\"}, {\"number\": 2, \"text\": \"$x ^{3} +x ^{2} +x-4$\"}, {\"number\": 3, \"text\": \"$x ^{3} +2x ^{2} -4$\"}, {\"number\": 4, \"text\": \"$3x ^{3} +x ^{2} -x+2$\"}, {\"number\": 5, \"text\": \"$3x ^{3} +2x ^{2} +x-5$\"}]",
+        "answer": "5",
+        "school": "계양고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2195,
+        "question_text": "두 다항식 \t$A=x ^{2} -2xy-y ^{2}$, $B=x ^{2} +xy+y ^{2}$\n에 대하여 $A+B$를 간단히 하면? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2x ^{2}$\"}, {\"number\": 2, \"text\": \"$2y ^{2}$\"}, {\"number\": 3, \"text\": \"$x ^{2} +xy$\"}, {\"number\": 4, \"text\": \"$x ^{2} -xy$\"}, {\"number\": 5, \"text\": \"$2x ^{2} -xy$\"}]",
+        "answer": "5",
+        "school": "고잔고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "H1",
+    "label": "항등식 미정계수 (계수비교)",
+    "chapter": "항등식과 나머지정리",
+    "cue": "양변 전개해서 계수 비교",
+    "ngd_count": 12,
+    "stars": 3,
+    "candidates": [
+      {
+        "question_id": 2093,
+        "question_text": "다항식 $P\\, \\left(x \\right)$에 대하여 등식$\\left(x^2 - 1 \\right) P\\, \\left(x \\right)+ax+b = x^3 - 2x^2 +6x-4$가 $x\\,$에 대한 항등식이 되도록 하는 상수 $a, b\\,$에 대하여 $a+2b\\,$의 값은? [$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-11$\"}, {\"number\": 2, \"text\": \"$-9$\"}, {\"number\": 3, \"text\": \"$-7$\"}, {\"number\": 4, \"text\": \"$-5$\"}, {\"number\": 5, \"text\": \"$-3$\"}]",
+        "answer": "4",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2109,
+        "question_text": "상수 $a _{0} , a _{1} , a _{2} ,\\, \\cdots \\,, a _{10}$에 대하여 등식$(x ^{2} +x-3) ^{5} =a _{0} +a _{1} x+a _{2} x ^{2} + \\cdots +a _{10} x ^{10}$이 $x$에 대한 항등식일 때, $a _{0} +a _{1} +a _{2} + \\cdots +a _{10}$의 값은? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-243$\"}, {\"number\": 2, \"text\": \"$-32$\"}, {\"number\": 3, \"text\": \"$-1$\"}, {\"number\": 4, \"text\": \"$32$\"}, {\"number\": 5, \"text\": \"$243$\"}]",
+        "answer": "3",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2328,
+        "question_text": "등식 $ax^2 -3x+c=2x^2 +bx-1$가 $x$에 대한 항등식일 때, 세 상수 $a, b, c$에 대하여 $a+b+c$의 값은? [$3.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-3$\"}, {\"number\": 2, \"text\": \"$-2$\"}, {\"number\": 3, \"text\": \"$-1$\"}, {\"number\": 4, \"text\": \"$0$\"}, {\"number\": 5, \"text\": \"$1$\"}]",
+        "answer": "2",
+        "school": "박문여고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2423,
+        "question_text": "등식 $\\left( 2x ^{2} -2x+1 \\right) ^{3}$ $=a _{0} +a _{1} x+a _{2} x ^{2} +\\,\\cdots\\,+a _{8} x ^{8}$이 $x$에 대한 항등식일 때, $a _{0} +a _{2} +a _{4} +a _{6} +a _{8}$의 값은? [$3.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$61$\"}, {\"number\": 2, \"text\": \"$62$\"}, {\"number\": 3, \"text\": \"$63$\"}, {\"number\": 4, \"text\": \"$64$\"}, {\"number\": 5, \"text\": \"$65$\"}]",
+        "answer": "3",
+        "school": "송림고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "C4",
+    "label": "복소수 상등 (실·허수부 비교)",
+    "chapter": "복소수",
+    "cue": "좌우변 실수부=실수부, 허수부=허수부",
+    "ngd_count": 9,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 2330,
+        "question_text": "복소수 $(2+i)+\\overline{(3+4i)} - \\frac{3-i}{1-2i}$의 실수부분을 $a$, 허수부분을 $b$라 할 때, $a-b$의 값은? (단, $i=\\sqrt{-1}$) [$3.8$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$5$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$7$\"}, {\"number\": 5, \"text\": \"$8$\"}]",
+        "answer": "5",
+        "school": "박문여고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 14585,
+        "question_text": "복소수 $\\frac{a+3i}{2-i}$의 실수부분과 허수부분의 합이 $6$일 때, 실수 $a$의 값은? (단, $i= \\sqrt{-1}$) [$4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$8$\"}, {\"number\": 2, \"text\": \"$9$\"}, {\"number\": 3, \"text\": \"$10$\"}, {\"number\": 4, \"text\": \"$11$\"}, {\"number\": 5, \"text\": \"$12$\"}]",
+        "answer": "2",
+        "school": "달서고",
+        "year": 2024,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 17569,
+        "question_text": "복소수 $z= \\left( 3+i \\right) a ^{2} - \\left( 1+2i \\right) a-i-4$의 실수부분과 허수부분이 같을 때, 양수 $a$의 값은? [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$3$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$5$\"}]",
+        "answer": "1",
+        "school": "서원고",
+        "year": 2024,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 21820,
+        "question_text": "복소수 $2 \\left( 1+i \\right) - \\left( 2+i \\right) ^{2}$의 실수부분을 $a$, 허수부분을 $b$라 할 때, $ab$의 값은? [$3.8$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$3$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$5$\"}]",
+        "answer": "2",
+        "school": "배명고",
+        "year": 2024,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "C3",
+    "label": "복소수 사칙연산·유리화",
+    "chapter": "복소수",
+    "cue": "분수형 복소수 a+bi로 정리",
+    "ngd_count": 9,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 2088,
+        "question_text": "복소수 $\\frac{5+i}{1-i}$를 $a+bi$ 꼴로 나타내었을 때 $a+b\\,$의 값은?(단, $a, b\\,$는 실수) [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$3$\"}, {\"number\": 2, \"text\": \"$4$\"}, {\"number\": 3, \"text\": \"$5$\"}, {\"number\": 4, \"text\": \"$6$\"}, {\"number\": 5, \"text\": \"$7$\"}]",
+        "answer": "3",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2090,
+        "question_text": "등식 $\\left(3+2i \\right) \\overline{z} + \\left(\\overline{1- 2i} \\right)z = 8-2i\\,$를 만족시키는 복소수 $z\\,$의 값은?(단, $\\overline{z} , \\overline{1-2i}$는 각각 $z, 1-2i\\,$의 켤레복소수) [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1-i$\"}, {\"number\": 2, \"text\": \"$1+i$\"}, {\"number\": 3, \"text\": \"$2-5i$\"}, {\"number\": 4, \"text\": \"$2+5i$\"}, {\"number\": 5, \"text\": \"$3+2i$\"}]",
+        "answer": "4",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2091,
+        "question_text": "$\\sqrt{-2} \\sqrt{-4} +{ \\frac{\\sqrt{-27}}{\\sqrt{3}} + \\frac{\\sqrt{27}}{\\sqrt{-3}}}$의 값은? [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-2 \\\\sqrt{2}$\"}, {\"number\": 2, \"text\": \"$-2 \\\\sqrt{2}-6i$\"}, {\"number\": 3, \"text\": \"$-2 \\\\sqrt{2}+6i$\"}, {\"number\": 4, \"text\": \"$2 \\\\sqrt{2}$\"}, {\"number\": 5, \"text\": \"$2 \\\\sqrt{2}+6i$\"}]",
+        "answer": "1",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2108,
+        "question_text": "등식 $2a+3bi=8+9i$를 만족시키는 실수 $a$와 $b$에 대하여 $a+b$의 값은? [$3.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$6$\"}, {\"number\": 2, \"text\": \"$7$\"}, {\"number\": 3, \"text\": \"$8$\"}, {\"number\": 4, \"text\": \"$9$\"}, {\"number\": 5, \"text\": \"$10$\"}]",
+        "answer": "2",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "H3",
+    "label": "나머지정리 (1차식으로 나눈 나머지)",
+    "chapter": "항등식과 나머지정리",
+    "cue": "x-α로 나누면 P(α)",
+    "ngd_count": 9,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 2176,
+        "question_text": "다항식 $2x ^{3} -7x-2$를 $x ^{2} +3x+1$로 나누었을 때의 몫을 $Q \\left( x \\right)$, 나머지를 $R \\left( x \\right)$라 할 때, $Q \\left( 2 \\right) +R \\left( 1 \\right)$의 값은? [$3.3$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$7$\"}, {\"number\": 2, \"text\": \"$8$\"}, {\"number\": 3, \"text\": \"$9$\"}, {\"number\": 4, \"text\": \"$10$\"}, {\"number\": 5, \"text\": \"$11$\"}]",
+        "answer": "5",
+        "school": "계양고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2800,
+        "question_text": "다항식 $x^3 +x-1$을 $x^2 -x+1$로 나누었을 때의 몫 $Q(x)$와 나머지 $R(x)$에 대하여 $Q(3)+R(5)$의 값은? [$3.7$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$5$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$7$\"}, {\"number\": 5, \"text\": \"$8$\"}]",
+        "answer": "4",
+        "school": "제일고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2848,
+        "question_text": "다항식 $P \\left( x \\right) =x ^{3} +x ^{2} -3x+1$를 $x-2$로 나누었을 때의 나머지는? [$3.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$7$\"}, {\"number\": 2, \"text\": \"$8$\"}, {\"number\": 3, \"text\": \"$9$\"}, {\"number\": 4, \"text\": \"$10$\"}, {\"number\": 5, \"text\": \"$11$\"}]",
+        "answer": "1",
+        "school": "중앙여고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2873,
+        "question_text": "다항식 $P \\left( x \\right) =x ^{3} -2x ^{2} -3x+1$을 $x-2$로 나누었을 때, 나머지를 구하면? [$4.3$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-9$\"}, {\"number\": 2, \"text\": \"$-5$\"}, {\"number\": 3, \"text\": \"$-3$\"}, {\"number\": 4, \"text\": \"$1$\"}, {\"number\": 5, \"text\": \"$3$\"}]",
+        "answer": "2",
+        "school": "서천고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "P3",
+    "label": "곱셈공식 변형 (합·곱→제곱합)",
+    "chapter": "다항식의 연산",
+    "cue": "a+b, ab → a²+b², (a-b)² 값",
+    "ngd_count": 8,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 15889,
+        "question_text": "$a+b+c =8$, $ab +bc +ca =18$일 때, $a^2 +b^2 +c^2$의 값은? [$3.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$26$\"}, {\"number\": 2, \"text\": \"$27$\"}, {\"number\": 3, \"text\": \"$28$\"}, {\"number\": 4, \"text\": \"$29$\"}, {\"number\": 5, \"text\": \"$30$\"}]",
+        "answer": "3",
+        "school": "원묵고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 16125,
+        "question_text": "세 실수 $a, b, c\\,$에 대하여\t$a+b+c=4,$  $ab+bc+ca= 5$\n일 때, $a^2 +b^2 +c^2\\,$의 값은? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$6$\"}, {\"number\": 3, \"text\": \"$8$\"}, {\"number\": 4, \"text\": \"$10$\"}, {\"number\": 5, \"text\": \"$12$\"}]",
+        "answer": "2",
+        "school": "울산외고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 31626,
+        "question_text": "$a+b+ c=6$, $a^2 +b^2 +c^2 =12$, $abc=6$일 때, $\\frac{1}{a} + \\frac{1}{b} + \\frac{1}{c}$의 값은? [$3.3$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$3$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$5$\"}]",
+        "answer": "2",
+        "school": "군포고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 34431,
+        "question_text": "$a+b+c = 7, a^2 + b^2 + c^2 =35$일 때, $ab +bc +ca$의 값은? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$7$\"}, {\"number\": 2, \"text\": \"$8$\"}, {\"number\": 3, \"text\": \"$9$\"}, {\"number\": 4, \"text\": \"$10$\"}, {\"number\": 5, \"text\": \"$11$\"}]",
+        "answer": "1",
+        "school": "효명고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Q2",
+    "label": "판별식 - 실근·허근·중근 판정",
+    "chapter": "이차방정식",
+    "cue": "D>0, D=0, D<0",
+    "ngd_count": 7,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 31820,
+        "question_text": "이차방정식 $ax ^{2} +bx+c=0$의 근이 실근인지 허근인지 판별하는 판별식은 $D=b ^{2} -4ac$이다. $x ^{2} +3x-2=0$에서 판별식 $D$의 값은?(단, $a$, $b$, $c$는 실수이다.) [$3.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$13$\"}, {\"number\": 2, \"text\": \"$15$\"}, {\"number\": 3, \"text\": \"$17$\"}, {\"number\": 4, \"text\": \"$19$\"}, {\"number\": 5, \"text\": \"$21$\"}]",
+        "answer": "3",
+        "school": "운양고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 41555,
+        "question_text": "이차방정식 $x ^{2} +8x+16=0$의 판별식 $D$와 근에 대한 설명으로 옳은 것은? [$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$D=0$\"}, {\"number\": 2, \"text\": \"$D \\\\leq 0$\"}, {\"number\": 3, \"text\": \"$D<0$\"}, {\"number\": 4, \"text\": \"$D \\\\geq 0$\"}, {\"number\": 5, \"text\": \"$D<0$\"}]",
+        "answer": "1",
+        "school": "중산고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2089,
+        "question_text": "$3+ \\sqrt{3}i , 3- \\sqrt{3}i\\,$를 두 근으로 하고 $x^2 \\,$의 계수가 $1$인 이차방정식은? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x^2 - 6x+6=0$\"}, {\"number\": 2, \"text\": \"$x^2 - 6x+12=0$\"}, {\"number\": 3, \"text\": \"$x^2 - 6x+15=0$\"}, {\"number\": 4, \"text\": \"$x^2 +6x+6=0$\"}, {\"number\": 5, \"text\": \"$x^2 +6x+12=0$\"}]",
+        "answer": "2",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2094,
+        "question_text": "$2x^2 - 3x+5=0$의 두 근을 $\\alpha, \\beta\\,$라 할 때, $\\frac{\\beta^2}{\\alpha}+ \\frac{\\alpha^2}{\\beta}$의 값은?[$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$- \\\\frac{117}{20}$\"}, {\"number\": 2, \"text\": \"$- \\\\frac{63}{20}$\"}, {\"number\": 3, \"text\": \"$1$\"}, {\"number\": 4, \"text\": \"$\\\\frac{63}{20}$\"}, {\"number\": 5, \"text\": \"$\\\\frac{117}{20}$\"}]",
+        "answer": "2",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "P2",
+    "label": "곱셈공식 전개",
+    "chapter": "다항식의 연산",
+    "cue": "(a+b)², (a+b+c)² 기본 전개",
+    "ngd_count": 7,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 2197,
+        "question_text": "다항식 $\\left( 2x-y-3z \\right) ^{2}$의 전개식에서 $xy$의 계수를 구하면? [$4.3$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-4$\"}, {\"number\": 2, \"text\": \"$-2$\"}, {\"number\": 3, \"text\": \"$0$\"}, {\"number\": 4, \"text\": \"$2$\"}, {\"number\": 5, \"text\": \"$4$\"}]",
+        "answer": "1",
+        "school": "고잔고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2241,
+        "question_text": "다항식 $\\left( 2x-3y \\right) \\left( 3x+2y \\right)$의 전개식에서 $xy$의 계수는? [$3.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-6$\"}, {\"number\": 2, \"text\": \"$-5$\"}, {\"number\": 3, \"text\": \"$-4$\"}, {\"number\": 4, \"text\": \"$-3$\"}, {\"number\": 5, \"text\": \"$-2$\"}]",
+        "answer": "2",
+        "school": "대건고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2253,
+        "question_text": "$\\left( x-3x ^{3} +5x ^{5} -7x ^{7} +\\, \\cdots \\,-2027x ^{2027} \\right) ^{2}$의 전개식에서 $x ^{8}$의 계수는? [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-12$\"}, {\"number\": 2, \"text\": \"$-38$\"}, {\"number\": 3, \"text\": \"$-44$\"}, {\"number\": 4, \"text\": \"$-52$\"}, {\"number\": 5, \"text\": \"$-66$\"}]",
+        "answer": "3",
+        "school": "대건고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2420,
+        "question_text": "다항식 $\\left( 3a-2b \\right) \\left( 9a ^{2} +6ab+4b ^{2} \\right)$의 전개식에서 모든 계수의 합은? (단, $a$, $b$는 상수이다.) [$3.7$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$16$\"}, {\"number\": 2, \"text\": \"$17$\"}, {\"number\": 3, \"text\": \"$18$\"}, {\"number\": 4, \"text\": \"$19$\"}, {\"number\": 5, \"text\": \"$20$\"}]",
+        "answer": "4",
+        "school": "송림고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "P7",
+    "label": "조립제법 - 과정 빈칸",
+    "chapter": "다항식의 연산",
+    "cue": "조립제법 표에서 a, b, c 값 찾기",
+    "ngd_count": 6,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 14105,
+        "question_text": "다항식 $P(x) =2x^3 + 5x^2 +2x + 3$을 일차식 $x+2$로 나눈 몫과 나머지를 조립제법을 이용하여 각각 구하고, 그 과정을 자세히 서술하시오. (단, 조립제법을 이용하지 않은 경우 감점) [$4.0$점]",
+        "choices": "[]",
+        "answer": "3",
+        "school": "안화고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 14449,
+        "question_text": "다항식 $6x^3 +3x^2 -x-1$은 $(2x-1)$로 나누어떨어진다고 한다. 이 때, 그 몫을 조립제법을 이용하여 구하는 과정을 서술하시오. [$6.0$점]",
+        "choices": "[]",
+        "answer": "3",
+        "school": "증산고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 30994,
+        "question_text": "조립제법을 이용하여 다항식 $2x^3 -5x^2 +4$를 일차식 $2x-1$으로 나누었을 때의 몫과 나머지를 구하는 과정을 서술하시오. [$4$점]",
+        "choices": "[]",
+        "answer": "3",
+        "school": "원주고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2087,
+        "question_text": "두 다항식 $A = 3x^3 +2x+7 , B\\, = 3x - 5$에 대하여 $2A+5B\\, = A+X\\,\\,$를 만족시키는 다항식 $X\\,\\,$는? [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$3x^3 +17x+18$\"}, {\"number\": 2, \"text\": \"$-3x^3 - 17x+18$\"}, {\"number\": 3, \"text\": \"$3x^3 - 17x-18$\"}, {\"number\": 4, \"text\": \"$-3x^3 +17x-18$\"}, {\"number\": 5, \"text\": \"$3x^3 +17x-18$\"}]",
+        "answer": "5",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Q3",
+    "label": "판별식 - 실근/허근 조건식 구하기",
+    "chapter": "이차방정식",
+    "cue": "D≥0인 k의 범위",
+    "ngd_count": 6,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 3014,
+        "question_text": "이차방정식 $x ^{2} -6x+a-2=0$이 서로 다른 두 실근을 갖도록 하는 실수 $a$의 값의 범위는? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$a\\\\, \\\\geq 10$\"}, {\"number\": 2, \"text\": \"$a<11$\"}, {\"number\": 3, \"text\": \"$a\\\\, \\\\leq 12$\"}, {\"number\": 4, \"text\": \"$a>13$\"}, {\"number\": 5, \"text\": \"$a\\\\, \\\\geq 14$\"}]",
+        "answer": "2",
+        "school": "아산고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 5056,
+        "question_text": "이차방정식 $x ^{2} +3x+k-4=0$이 서로 다른 두 실근을 가질 때, 실수 $k$의 값의 범위는? [$5.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$k< \\\\frac{17}{4}$\"}, {\"number\": 2, \"text\": \"$k< \\\\frac{25}{4}$\"}, {\"number\": 3, \"text\": \"$k= \\\\frac{25}{4}$\"}, {\"number\": 4, \"text\": \"$k>- \\\\frac{17}{4}$\"}, {\"number\": 5, \"text\": \"$k>-1$\"}]",
+        "answer": "2",
+        "school": "상서고",
+        "year": 2023,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 5057,
+        "question_text": "이차방정식 $x ^{2} -4x+2-2k=0$이 실근을 가질 때, 실수 $k$의 값의 범위는? [$5.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$k \\\\geq - \\\\frac{3}{4}$\"}, {\"number\": 2, \"text\": \"$k \\\\geq -1$\"}, {\"number\": 3, \"text\": \"$k> \\\\frac{1}{2}$\"}, {\"number\": 4, \"text\": \"$k< \\\\frac{3}{4}$\"}, {\"number\": 5, \"text\": \"$k> \\\\frac{3}{4}$\"}]",
+        "answer": "2",
+        "school": "상서고",
+        "year": 2023,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 14383,
+        "question_text": "이차방정식 $x^2 -2x+a-3=0$이 서로 다른 두 실근을 가질 때, 실수 $a$ 값의 범위는 $a < k$이다. $k$의 값은? [$3.7$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$3$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$5$\"}]",
+        "answer": "4",
+        "school": "범어고",
+        "year": 2024,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Y6",
+    "label": "이차함수와 x축 교점 (판별식 조건)",
+    "chapter": "이차함수",
+    "cue": "x축과 만나지 않게/한 점에서/두 점에서",
+    "ngd_count": 6,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 2111,
+        "question_text": "이차함수 $y=x ^{2} +3x+a$의 그래프가 $x$축과 두 점 $(-2, 0)$과 $(b, 0)$에서 만날 때, $a+b$의 값은? (단, $a, b$는 실수이다.) [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-5$\"}, {\"number\": 2, \"text\": \"$-3$\"}, {\"number\": 3, \"text\": \"$-1$\"}, {\"number\": 4, \"text\": \"$1$\"}, {\"number\": 5, \"text\": \"$3$\"}]",
+        "answer": "4",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2117,
+        "question_text": "직선 $y=x+k$가 이차함수 $y=x ^{2} +kx+1$의 그래프와 한 점에서 만나고, 이차함수 $y=-2x ^{2} +5x-2$의 그래프와 만나지 않도록 하는 실수 $k$의 값은? [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-3$\"}, {\"number\": 2, \"text\": \"$-1$\"}, {\"number\": 3, \"text\": \"$1$\"}, {\"number\": 4, \"text\": \"$3$\"}, {\"number\": 5, \"text\": \"$5$\"}]",
+        "answer": "3",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2123,
+        "question_text": "이차함수 $f(x)=x ^{2} +ax+b$의 그래프는 직선 $x=3$에 대하여 대칭이다. $2 \\leq x \\leq 5$에서 함수 $f(x)$의 최댓값이 $3$일 때, $a+b$의 값은? (단, $a, b$는 실수이다.) [$4.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2$\"}, {\"number\": 2, \"text\": \"$3$\"}, {\"number\": 3, \"text\": \"$4$\"}, {\"number\": 4, \"text\": \"$5$\"}, {\"number\": 5, \"text\": \"$6$\"}]",
+        "answer": "1",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2132,
+        "question_text": "이차함수 $y=3x^{2}-2x+m+2$의 그래프와 $x$축이 만나지 않도록 하는 실수 $m$의 값의 범위는? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$m<-\\\\frac{5}{3}$\"}, {\"number\": 2, \"text\": \"$m>-\\\\frac{5}{3}$\"}, {\"number\": 3, \"text\": \"$m<\\\\frac{5}{3}$\"}, {\"number\": 4, \"text\": \"$m>\\\\frac{3}{2}$\"}, {\"number\": 5, \"text\": \"$m>\\\\frac{5}{3}$\"}]",
+        "answer": "2",
+        "school": "계산고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "F4",
+    "label": "삼차·사차 다항식 인수분해 (조립제법)",
+    "chapter": "인수분해",
+    "cue": "P(x) 고차식을 조립제법으로 인수분해",
+    "ngd_count": 5,
+    "stars": 2,
+    "candidates": [
+      {
+        "question_id": 2113,
+        "question_text": "$x ^{4} +ax ^{2} -b$가 $(x+2)(x-3)Q(x)$로 인수분해 될 때, $Q(-3)$의 값은? (단, $a, b$는 실수이다.) [$4.3$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-1$\"}, {\"number\": 2, \"text\": \"$0$\"}, {\"number\": 3, \"text\": \"$1$\"}, {\"number\": 4, \"text\": \"$2$\"}, {\"number\": 5, \"text\": \"$3$\"}]",
+        "answer": "2",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "인수분해",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2118,
+        "question_text": "$\\frac{2027 ^{2} -1}{2025 ^{2} -1} \\times \\frac{2025 ^{3} -1}{2025 \\times 2026+1}$의 값은? [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2024$\"}, {\"number\": 2, \"text\": \"$2025$\"}, {\"number\": 3, \"text\": \"$2026$\"}, {\"number\": 4, \"text\": \"$2027$\"}, {\"number\": 5, \"text\": \"$2028$\"}]",
+        "answer": "5",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "인수분해",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2130,
+        "question_text": "$99 \\times(100^{2}+100+1)$의 값이 $10^{k}-1$일 때, 자연수 $k$의 값은? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$5$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$7$\"}, {\"number\": 5, \"text\": \"$8$\"}]",
+        "answer": "3",
+        "school": "계산고",
+        "year": 2025,
+        "chapter": "인수분해",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2180,
+        "question_text": "$101 \\times \\left( 10000-99 \\right) -99 \\times 10101$의 값은? [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$2 \\\\times 99 ^{3}$\"}, {\"number\": 4, \"text\": \"$2 \\\\times 100 ^{3}$\"}, {\"number\": 5, \"text\": \"$2 \\\\times 101 ^{3}$\"}]",
+        "answer": "2",
+        "school": "계양고",
+        "year": 2025,
+        "chapter": "인수분해",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "H5",
+    "label": "인수정리·1차 인수 찾기",
+    "chapter": "항등식과 나머지정리",
+    "cue": "P(α)=0 이면 x-α 인수",
+    "ngd_count": 4,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 35306,
+        "question_text": "다항식 $P(x)$는 $x-7$을 인수로 가지고, $x+2$로 나누었을 때의 나머지가 $3$이다. $P(x)$를 $(x-7)(x+2)$로 나누었을 때의 나머지는?[$4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$- \\\\frac{1}{3} x + \\\\frac{7}{3}$\"}, {\"number\": 2, \"text\": \"$\\\\frac{1}{3} x - \\\\frac{7}{3}$\"}, {\"number\": 3, \"text\": \"$x-7$\"}, {\"number\": 4, \"text\": \"$-x+2$\"}, {\"number\": 5, \"text\": \"$x-2$\"}]",
+        "answer": "1",
+        "school": "문명고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2092,
+        "question_text": "등식 $x^2 - 7x+11 = \\left(x-2 \\right)^2 +a \\left(x-2 \\right)+b\\,$가 $x\\,$의 값에 관계없이 항상 성립할 때, 상수 $a, b\\,$에 대하여 $a^2 +b^2 \\,$의 값을 구하면? [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$10$\"}, {\"number\": 2, \"text\": \"$11$\"}, {\"number\": 3, \"text\": \"$12$\"}, {\"number\": 4, \"text\": \"$13$\"}, {\"number\": 5, \"text\": \"$14$\"}]",
+        "answer": "1",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2093,
+        "question_text": "다항식 $P\\, \\left(x \\right)$에 대하여 등식$\\left(x^2 - 1 \\right) P\\, \\left(x \\right)+ax+b = x^3 - 2x^2 +6x-4$가 $x\\,$에 대한 항등식이 되도록 하는 상수 $a, b\\,$에 대하여 $a+2b\\,$의 값은? [$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-11$\"}, {\"number\": 2, \"text\": \"$-9$\"}, {\"number\": 3, \"text\": \"$-7$\"}, {\"number\": 4, \"text\": \"$-5$\"}, {\"number\": 5, \"text\": \"$-3$\"}]",
+        "answer": "4",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2109,
+        "question_text": "상수 $a _{0} , a _{1} , a _{2} ,\\, \\cdots \\,, a _{10}$에 대하여 등식$(x ^{2} +x-3) ^{5} =a _{0} +a _{1} x+a _{2} x ^{2} + \\cdots +a _{10} x ^{10}$이 $x$에 대한 항등식일 때, $a _{0} +a _{1} +a _{2} + \\cdots +a _{10}$의 값은? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-243$\"}, {\"number\": 2, \"text\": \"$-32$\"}, {\"number\": 3, \"text\": \"$-1$\"}, {\"number\": 4, \"text\": \"$32$\"}, {\"number\": 5, \"text\": \"$243$\"}]",
+        "answer": "3",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "F1",
+    "label": "공식 기반 기본 인수분해",
+    "chapter": "인수분해",
+    "cue": "a²-b², a³±b³, 완전제곱 1회 적용",
+    "ngd_count": 4,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 3036,
+        "question_text": "다항식 $\\left(x^2 - 4x \\right)^2 - \\left(x^2 - 4x \\right) -20$을 인수분해하면 $(x+a)^2 (x+b)(x+c)$이다. 이때, $a+b+c$의 값을 구하면? [$3.8$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-3$\"}, {\"number\": 2, \"text\": \"$-4$\"}, {\"number\": 3, \"text\": \"$-5$\"}, {\"number\": 4, \"text\": \"$-6$\"}, {\"number\": 5, \"text\": \"$-7$\"}]",
+        "answer": "4",
+        "school": "온양고",
+        "year": 2025,
+        "chapter": "인수분해",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 42118,
+        "question_text": "다항식 $\\left(x^2 - 4x \\right)^2 - \\left(x^2 - 4x \\right) -20$을 인수분해하면 $(x+a)^2 (x+b)(x+c)$이다. 이때, $a+b+c$의 값을 구하면? [$3.8$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-3$\"}, {\"number\": 2, \"text\": \"$-4$\"}, {\"number\": 3, \"text\": \"$-5$\"}, {\"number\": 4, \"text\": \"$-6$\"}, {\"number\": 5, \"text\": \"$-7$\"}]",
+        "answer": "4",
+        "school": "온양고",
+        "year": 2025,
+        "chapter": "인수분해",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 3016,
+        "question_text": "이차식 $x ^{2} +3x+5$를 복소수의 범위에서 인수분해하면 $\\left( x+a+bi \\right) \\left( x+a-bi \\right)$일 때, $a+b ^{2}$의 값은? (단, $a$, $b$는 실수) (단, $i= \\sqrt{-1}$) [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$\\\\frac{5}{4}$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$\\\\frac{11}{4}$\"}, {\"number\": 4, \"text\": \"$\\\\frac{7}{2}$\"}, {\"number\": 5, \"text\": \"$\\\\frac{17}{4}$\"}]",
+        "answer": "5",
+        "school": "아산고",
+        "year": 2025,
+        "chapter": "인수분해",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 14047,
+        "question_text": "다항식 $\\left( x ^{2} +5x+4 \\right) \\left( x ^{2} +5x+6 \\right) -24$를 인수분해하면? [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x ^{2} \\\\left( x+5 \\\\right) ^{2}$\"}, {\"number\": 2, \"text\": \"$x \\\\left( x+4 \\\\right) \\\\left( x ^{2} +5x+3 \\\\right)$\"}, {\"number\": 3, \"text\": \"$x \\\\left( x-2 \\\\right) \\\\left( x+4 \\\\right) \\\\left( x+5 \\\\right)$\"}, {\"number\": 4, \"text\": \"$x \\\\left( x+5 \\\\right) \\\\left( x ^{2} +5x+10 \\\\right)$\"}, {\"number\": 5, \"text\": \"$\\\\left( x+1 \\\\right) \\\\left( x+2 \\\\right) \\\\left( x+3 \\\\right) \\\\left( x+4 \\\\right)$\"}]",
+        "answer": "4",
+        "school": "반월고",
+        "year": 2024,
+        "chapter": "인수분해",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Q4",
+    "label": "근과 계수의 관계 - 기본",
+    "chapter": "이차방정식",
+    "cue": "α+β, αβ 바로 활용",
+    "ngd_count": 4,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2094,
+        "question_text": "$2x^2 - 3x+5=0$의 두 근을 $\\alpha, \\beta\\,$라 할 때, $\\frac{\\beta^2}{\\alpha}+ \\frac{\\alpha^2}{\\beta}$의 값은?[$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$- \\\\frac{117}{20}$\"}, {\"number\": 2, \"text\": \"$- \\\\frac{63}{20}$\"}, {\"number\": 3, \"text\": \"$1$\"}, {\"number\": 4, \"text\": \"$\\\\frac{63}{20}$\"}, {\"number\": 5, \"text\": \"$\\\\frac{117}{20}$\"}]",
+        "answer": "2",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2116,
+        "question_text": "이차방정식 $x ^{2} +5x+a=0$의 두 근이 $\\alpha$와 $\\beta$이고, 이차방정식 $x ^{2} -3x+b=0$의 두 근이 $\\alpha+\\beta$와 $\\alpha \\beta$이다. 이때 실수 $a$와 $b$에 대하여 $a+b$의 값은? [$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-32$\"}, {\"number\": 2, \"text\": \"$-16$\"}, {\"number\": 3, \"text\": \"$0$\"}, {\"number\": 4, \"text\": \"$16$\"}, {\"number\": 5, \"text\": \"$32$\"}]",
+        "answer": "1",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2151,
+        "question_text": "이차방정식 $x ^{2} -4x+1=0$의 서로 다른 두 근이 $\\alpha$, $\\beta$일 때, $\\frac{1}{\\alpha } + \\frac{1}{\\beta }$의 값은? [$3.7$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-4$\"}, {\"number\": 2, \"text\": \"$- \\\\frac{1}{4}$\"}, {\"number\": 3, \"text\": \"$1$\"}, {\"number\": 4, \"text\": \"$\\\\frac{1}{4}$\"}, {\"number\": 5, \"text\": \"$4$\"}]",
+        "answer": "5",
+        "school": "계산여고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2181,
+        "question_text": "이차방정식 $x ^{2} +2x+4=0$의 서로 다른 두 근을 $\\alpha$, $\\beta$라 할 때, $\\frac{\\beta}{\\alpha ^{2} +3 \\alpha+4} + \\frac{\\alpha}{\\beta ^{2} +3 \\beta+4}$의 값은? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-1$\"}, {\"number\": 2, \"text\": \"$0$\"}, {\"number\": 3, \"text\": \"$1$\"}, {\"number\": 4, \"text\": \"$2$\"}, {\"number\": 5, \"text\": \"$3$\"}]",
+        "answer": "1",
+        "school": "계양고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Y4",
+    "label": "제한된 정의역의 최대·최소",
+    "chapter": "이차함수",
+    "cue": "a≤x≤b에서 최댓·최솟값",
+    "ngd_count": 4,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2123,
+        "question_text": "이차함수 $f(x)=x ^{2} +ax+b$의 그래프는 직선 $x=3$에 대하여 대칭이다. $2 \\leq x \\leq 5$에서 함수 $f(x)$의 최댓값이 $3$일 때, $a+b$의 값은? (단, $a, b$는 실수이다.) [$4.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2$\"}, {\"number\": 2, \"text\": \"$3$\"}, {\"number\": 3, \"text\": \"$4$\"}, {\"number\": 4, \"text\": \"$5$\"}, {\"number\": 5, \"text\": \"$6$\"}]",
+        "answer": "1",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2133,
+        "question_text": "$1 \\leq x \\leq 5$에서 이차함수 $y=x^{2}-4x+3$의 최댓값과 최솟값의 합은? [$4.3$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$5$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$7$\"}, {\"number\": 5, \"text\": \"$8$\"}]",
+        "answer": "4",
+        "school": "계산고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2158,
+        "question_text": "$-1 \\leq x \\leq 3$에서 이차함수 $y=-2x ^{2} +8x+k$의 최댓값을 $M$, 최솟값을 $m$이라 할 때, $M+m=10$이다. 실수 $k$의 값은? [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2$\"}, {\"number\": 2, \"text\": \"$4$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$8$\"}, {\"number\": 5, \"text\": \"$10$\"}]",
+        "answer": "3",
+        "school": "계산여고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2353,
+        "question_text": "$1 \\leq x \\leq 4$에서 이차함수 $y=-x ^{2} +6x+a$의 최댓값과 최솟값의 합이 $10$일 때, 상수 $a$의 값은? [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-4$\"}, {\"number\": 2, \"text\": \"$-2$\"}, {\"number\": 3, \"text\": \"$0$\"}, {\"number\": 4, \"text\": \"$2$\"}, {\"number\": 5, \"text\": \"$4$\"}]",
+        "answer": "2",
+        "school": "서운고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Y7",
+    "label": "이차함수와 직선 위치관계",
+    "chapter": "이차함수",
+    "cue": "두 교점의 x좌표, 판별식",
+    "ngd_count": 3,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 16489,
+        "question_text": "이차함수 $y=x ^{2} +2x-5$의 그래프가 $x$축과 만나는 교점의 개수를 $a$, 직선 $y=4x-6$과 만나는 교점의 개수를 $b$라 할 때, $a+b$의 값은?",
+        "choices": "[{\"number\": 1, \"text\": \"$0$\"}, {\"number\": 2, \"text\": \"$1$\"}, {\"number\": 3, \"text\": \"$2$\"}, {\"number\": 4, \"text\": \"$3$\"}, {\"number\": 5, \"text\": \"$4$\"}]",
+        "answer": "4",
+        "school": "대인고",
+        "year": 2024,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 38689,
+        "question_text": "이차함수 $f \\left( x \\right) =2x ^{2} +ax+b$의 그래프와 $x$축의 두 교점의 $x$좌표가 $-3, 0$이다. 이차함수 $y=f \\left( x \\right)$의 그래프와 직선 $y=x+k$이 만나지 않도록 하는 정수 $k$의 최댓값은? (단, $a, b$는 실수이다.) [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-4$\"}, {\"number\": 2, \"text\": \"$-3$\"}, {\"number\": 3, \"text\": \"$-2$\"}, {\"number\": 4, \"text\": \"$1$\"}, {\"number\": 5, \"text\": \"$3$\"}]",
+        "answer": "➀",
+        "school": "상일고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2123,
+        "question_text": "이차함수 $f(x)=x ^{2} +ax+b$의 그래프는 직선 $x=3$에 대하여 대칭이다. $2 \\leq x \\leq 5$에서 함수 $f(x)$의 최댓값이 $3$일 때, $a+b$의 값은? (단, $a, b$는 실수이다.) [$4.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2$\"}, {\"number\": 2, \"text\": \"$3$\"}, {\"number\": 3, \"text\": \"$4$\"}, {\"number\": 4, \"text\": \"$5$\"}, {\"number\": 5, \"text\": \"$6$\"}]",
+        "answer": "1",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2156,
+        "question_text": "이차함수 $y=x ^{2} +2kx+k ^{2} +3$의 그래프와 직선 $y=2x-4$가 서로 다른 두 점에서 만날 때, 정수 $k$의 최댓값은? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-3$\"}, {\"number\": 2, \"text\": \"$-4$\"}, {\"number\": 3, \"text\": \"$-5$\"}, {\"number\": 4, \"text\": \"$-6$\"}, {\"number\": 5, \"text\": \"$-7$\"}]",
+        "answer": "2",
+        "school": "계산여고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "C5",
+    "label": "켤레복소수 연산·성질",
+    "chapter": "복소수",
+    "cue": "ẑ, z·ẑ, z+ẑ",
+    "ngd_count": 3,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2090,
+        "question_text": "등식 $\\left(3+2i \\right) \\overline{z} + \\left(\\overline{1- 2i} \\right)z = 8-2i\\,$를 만족시키는 복소수 $z\\,$의 값은?(단, $\\overline{z} , \\overline{1-2i}$는 각각 $z, 1-2i\\,$의 켤레복소수) [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1-i$\"}, {\"number\": 2, \"text\": \"$1+i$\"}, {\"number\": 3, \"text\": \"$2-5i$\"}, {\"number\": 4, \"text\": \"$2+5i$\"}, {\"number\": 5, \"text\": \"$3+2i$\"}]",
+        "answer": "4",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2220,
+        "question_text": "복소수 $z=a+bi$에 대하여 등식 $(1+2i)z-i \\overline{z} =1-3i$를 만족시키는 $a+b$의 값은? (단, $a$, $b$는 실수, $i=\\sqrt{-1}$이고 $\\overline{z}$는 $z$의 켤레복소수이다.) [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-6$\"}, {\"number\": 2, \"text\": \"$-5$\"}, {\"number\": 3, \"text\": \"$-4$\"}, {\"number\": 4, \"text\": \"$-3$\"}, {\"number\": 5, \"text\": \"$-2$\"}]",
+        "answer": "4",
+        "school": "논현고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2414,
+        "question_text": "$z=-1+3i$일 때, $z+\\overline{z}$의 값은? (단, $i= \\sqrt{-1}$이고, $\\overline{z}$는 $z$의 켤레복소수이다.) [$3.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-2$\"}, {\"number\": 2, \"text\": \"$-1$\"}, {\"number\": 3, \"text\": \"$0$\"}, {\"number\": 4, \"text\": \"$1$\"}, {\"number\": 5, \"text\": \"$2$\"}]",
+        "answer": "1",
+        "school": "송림고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2514,
+        "question_text": "두 실수 $a$, $b$에 대하여 복소수 $z=a+2bi$가 $z^2 +\\left(\\overline{z} \\right)^2 =0$을 만족시킬 때, $12a+8b^2 +13$의 최솟값은?(단, $i=\\sqrt{-1}$이고, $\\overline{z}$는 $z$의 켤레복소수이다.) [$4.7$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-5$\"}, {\"number\": 2, \"text\": \"$-4$\"}, {\"number\": 3, \"text\": \"$-3$\"}, {\"number\": 4, \"text\": \"$-2$\"}, {\"number\": 5, \"text\": \"$-1$\"}]",
+        "answer": "1",
+        "school": "연수고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "H4",
+    "label": "조건부 나머지 (두 나머지→합성 나머지)",
+    "chapter": "항등식과 나머지정리",
+    "cue": "x-1로 나눈 나머지 A, x-2로 나눈 나머지 B 주고 (x-1)(x-2)로 나눈 나머지",
+    "ngd_count": 3,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2110,
+        "question_text": "다항식 $f(x)$를 $2x ^{2} +1$로 나누었을 때의 몫은 $x ^{2} -x+3$이고 나머지는 $x-6$이다. 다항식 $f(x)$를 $x+1$로 나누었을 때의 나머지는? [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$8$\"}, {\"number\": 3, \"text\": \"$12$\"}, {\"number\": 4, \"text\": \"$16$\"}, {\"number\": 5, \"text\": \"$20$\"}]",
+        "answer": "2",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2135,
+        "question_text": "두 다항식 $A(x)$, $B(x)$에 대하여 다항식 $A(x)-B(x)$를 $x-4$로 나누었을 때의 나머지는 $3$이고, 다항식 $\\left\\{A(x)\\right\\}^{3}-\\left\\{B(x)\\right\\}^{3}$을 $x-4$로 나누었을 때의 나머지는 $18$이다. 다항식 $A(x)B(x)$로 $x-4$로 나누었을 때의 나머지의 값은? [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-1$\"}, {\"number\": 2, \"text\": \"$-2$\"}, {\"number\": 3, \"text\": \"$-3$\"}, {\"number\": 4, \"text\": \"$-4$\"}, {\"number\": 5, \"text\": \"$-5$\"}]",
+        "answer": "1",
+        "school": "계산고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2266,
+        "question_text": "다항식 $f(x)$를 $x-3$으로 나누었을 때의 나머지는 $1$이고, $x+1$로 나누었을 때의 나머지는 $-3$이다. $f(x)$를 $(x-3)(x+1)$로 나누었을 때의 나머지는? [$4.3$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x-2$\"}, {\"number\": 2, \"text\": \"$x-1$\"}, {\"number\": 3, \"text\": \"$x+2$\"}, {\"number\": 4, \"text\": \"$2x-2$\"}, {\"number\": 5, \"text\": \"$2x+1$\"}]",
+        "answer": "1",
+        "school": "도림고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2354,
+        "question_text": "두 다항식 $f ( x )$, $g ( x )$에 대하여 $f ( x ) +g ( x )$를 $x -1$로 나누었을 때의 나머지가 $8$이고, $f ( x ) -g ( x )$를 $x -1$로 나누었을 때의 나머지가 $6$일 때, $f ( x ) g ( x )$를 $x -1$로 나누었을 때의 나머지는? [$4.7$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-14$\"}, {\"number\": 2, \"text\": \"$-7$\"}, {\"number\": 3, \"text\": \"$7$\"}, {\"number\": 4, \"text\": \"$14$\"}, {\"number\": 5, \"text\": \"$21$\"}]",
+        "answer": "3",
+        "school": "서운고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Y3",
+    "label": "이차함수 최댓값·최솟값 (전체 실수)",
+    "chapter": "이차함수",
+    "cue": "꼭짓점 y값",
+    "ngd_count": 3,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 42823,
+        "question_text": "$-1\\, \\leq \\,x\\, \\leq \\,4$일 때, 이차함수 $y=-2x ^{2} +8x+a$의 최댓값이 $6$이다. 이때, 이 함수의 최솟값을 구하면? (단, $a$는 상수) [$5.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-2$\"}, {\"number\": 2, \"text\": \"$-4$\"}, {\"number\": 3, \"text\": \"$-8$\"}, {\"number\": 4, \"text\": \"$-10$\"}, {\"number\": 5, \"text\": \"$-12$\"}]",
+        "answer": "5",
+        "school": "주성고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 31025,
+        "question_text": "$2{\\leq}x{\\leq}5$에서 정의된 이차함수 $f \\left( x \\right) =-2x ^{2} +12x+a$의 최댓값이 $35$일 때, 이 함수의 최솟값은? [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$21$\"}, {\"number\": 2, \"text\": \"$23$\"}, {\"number\": 3, \"text\": \"$25$\"}, {\"number\": 4, \"text\": \"$27$\"}, {\"number\": 5, \"text\": \"$29$\"}]",
+        "answer": "4",
+        "school": "고양국제고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 35301,
+        "question_text": "$-1 LEQx \\leq2$일 때, 이차함수 $y= 3x^2 -6x -1$의 최댓값을 $M$, 최솟값을 $m$이라 하자. 이때, $M+m$의 값을 구하시오. [$5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$3$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$5$\"}]",
+        "answer": "➃",
+        "school": "경산제일고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 36129,
+        "question_text": "$a{\\leq}x{\\leq}b$에서 두 이차함수 $f \\left( x \\right) =-2x ^{2} +4ax-3$의 최댓값과 $g \\left( x \\right) =x ^{2} -6bx+2$의 최솟값이 서로 같도록 하는 두 양수 $a$, $b$에 대하여 $a ^{2} +5b ^{2} +2a$의 최댓값은? [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$5$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$7$\"}, {\"number\": 5, \"text\": \"$8$\"}]",
+        "answer": "3",
+        "school": "경원고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "C2",
+    "label": "i 거듭제곱의 합·수열",
+    "chapter": "복소수",
+    "cue": "i+i²+...+i^n 합",
+    "ngd_count": 3,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 42847,
+        "question_text": "자연수 $n$에 대하여 함수 $f ( n )$을 \t$f ( n )$ $=i+i^{2}+i^{3}+\\, \\cdots\\, +i^{n}$\n이라 하자. 예를 들어, $f ( 1 )$ $=i$, $f ( 3 )$ $=i+i^{2}+i^{3}$이다. $f ( n )$의 값이 실수가 되도록 하는 $100$ 이하의 자연수 $n$의 개수는?\n(단, $i$ $=\\sqrt{-1}$) [$5.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$30$\"}, {\"number\": 2, \"text\": \"$35$\"}, {\"number\": 3, \"text\": \"$40$\"}, {\"number\": 4, \"text\": \"$45$\"}, {\"number\": 5, \"text\": \"$50$\"}]",
+        "answer": "5",
+        "school": "중앙여고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 17712,
+        "question_text": "$i+i^2 +i^3 +i^4 +\\,\\cdots\\,+i^{2025}$의 값은? (단, $i=\\sqrt{-1}$이다.) [$4.8$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-i$\"}, {\"number\": 2, \"text\": \"$-1$\"}, {\"number\": 3, \"text\": \"$0$\"}, {\"number\": 4, \"text\": \"$1$\"}, {\"number\": 5, \"text\": \"$i$\"}]",
+        "answer": "5",
+        "school": "주성고",
+        "year": 2024,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 35075,
+        "question_text": "자연수 $n$에 대하여 $f(n)= \\frac{1}{i} + \\frac{1}{i^2} + \\frac{1}{i^3} + \\cdots+ \\frac{1}{i^n}$이라 할 때, $f(n)$의 값이 실수가 되도록 하는 $100$이하의 $n$의 개수는?(단, $i=\\sqrt{-1}$) [$4.7$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$47$\"}, {\"number\": 2, \"text\": \"$48$\"}, {\"number\": 3, \"text\": \"$49$\"}, {\"number\": 4, \"text\": \"$50$\"}, {\"number\": 5, \"text\": \"$51$\"}]",
+        "answer": "4",
+        "school": "남부고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 36890,
+        "question_text": "$i+i^2 +i^3 +\\,\\cdots\\,+i^{99}$의 값은? (단, $i= \\sqrt{-1}$) [$3.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-1$\"}, {\"number\": 2, \"text\": \"$1$\"}, {\"number\": 3, \"text\": \"$-1+i$\"}, {\"number\": 4, \"text\": \"$1+i$\"}, {\"number\": 5, \"text\": \"$-1+2i$\"}]",
+        "answer": "1",
+        "school": "순심여고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Q5",
+    "label": "근과 계수의 관계 - 대칭식",
+    "chapter": "이차방정식",
+    "cue": "α²+β², 1/α+1/β, α³+β³",
+    "ngd_count": 3,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2506,
+        "question_text": "이차방정식 $x^2 -5x-2=0$의 두 근을 $\\alpha$, $\\beta$라고 할 때, $\\alpha^2 +\\beta^2$의 값은? [$3.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$21$\"}, {\"number\": 2, \"text\": \"$24$\"}, {\"number\": 3, \"text\": \"$26$\"}, {\"number\": 4, \"text\": \"$29$\"}, {\"number\": 5, \"text\": \"$31$\"}]",
+        "answer": "4",
+        "school": "연수고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 3123,
+        "question_text": "$x$에 대한 이차방정식 $x^2 - (m-4)x+2m=0$이 서로 다른 두 근 $\\alpha, \\beta$를 가질 때, $\\alpha^2 +\\beta^2 =16$을 만족시키는 자연수 $m$의 값은? [$5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$6$\"}, {\"number\": 3, \"text\": \"$8$\"}, {\"number\": 4, \"text\": \"$10$\"}, {\"number\": 5, \"text\": \"$12$\"}]",
+        "answer": "5",
+        "school": "한국교원대부고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 14892,
+        "question_text": "이차방정식 $x^2 + 4x + 6=0$의 두 근을 $\\alpha , \\beta$라 할 때, $\\alpha^2 + \\beta^2$의 값은? [$3.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$3$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$5$\"}]",
+        "answer": "4",
+        "school": "둔산여고",
+        "year": 2024,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 15545,
+        "question_text": "이차방정식 $x^2 +2x+3=0$의 두 근을 $\\alpha$, $\\beta$라고 할 때, $\\alpha^3\t+\\beta^3$의 값은? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-26$\"}, {\"number\": 2, \"text\": \"$-10$\"}, {\"number\": 3, \"text\": \"$-4$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$10$\"}]",
+        "answer": "5",
+        "school": "오금고",
+        "year": 2024,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Q1",
+    "label": "이차방정식 풀이 (인수분해/근의공식)",
+    "chapter": "이차방정식",
+    "cue": "해를 직접 구함",
+    "ngd_count": 2,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 39469,
+        "question_text": "계수가 실수인 이차방정식 $ax^2 +bx+c=0\\,$의 근을 구하는데 근의 공식을 $x=\\frac{-c+-\\sqrt{c^2 -4ab}}{2a}\\,$로 잘못 적용하여 두 근 $3+\\sqrt{5}\\,, 3-\\sqrt{5}\\,$을 얻었다. 이 이차방정식의 올바른 두 근의 합과 곱을 각각 $p\\,, q\\,$라 할 때, $p^2 +q\\,$의 값은? (단, $p\\,, q\\,$는 상수이다.) [$3.8$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$10$\"}, {\"number\": 2, \"text\": \"$22$\"}, {\"number\": 3, \"text\": \"$32$\"}, {\"number\": 4, \"text\": \"$40$\"}, {\"number\": 5, \"text\": \"$46$\"}]",
+        "answer": "1",
+        "school": "용화여고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 41538,
+        "question_text": "갑, 을 두 학생이 이차방정식 $ax^{2}+bx+c=0$을 푸는데, 갑은 $b$를 잘못 보고 풀어 두 근 $-1$, $6$을 얻었고, 을은 $c$를 잘못 보고 풀어 두 근 $\\frac{5}{2} + \\sqrt{7}$, $\\frac{5}{2} - \\sqrt{7}$을 얻었다. 이 이차방정식의 올바른 두 근 중 양수인 근을 구하면? (단, $a$, $b$, $c$는 실수이다.) [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2$\"}, {\"number\": 2, \"text\": \"$4$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$8$\"}, {\"number\": 5, \"text\": \"$10$\"}]",
+        "answer": "3",
+        "school": "작전여고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2089,
+        "question_text": "$3+ \\sqrt{3}i , 3- \\sqrt{3}i\\,$를 두 근으로 하고 $x^2 \\,$의 계수가 $1$인 이차방정식은? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x^2 - 6x+6=0$\"}, {\"number\": 2, \"text\": \"$x^2 - 6x+12=0$\"}, {\"number\": 3, \"text\": \"$x^2 - 6x+15=0$\"}, {\"number\": 4, \"text\": \"$x^2 +6x+6=0$\"}, {\"number\": 5, \"text\": \"$x^2 +6x+12=0$\"}]",
+        "answer": "2",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2094,
+        "question_text": "$2x^2 - 3x+5=0$의 두 근을 $\\alpha, \\beta\\,$라 할 때, $\\frac{\\beta^2}{\\alpha}+ \\frac{\\alpha^2}{\\beta}$의 값은?[$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$- \\\\frac{117}{20}$\"}, {\"number\": 2, \"text\": \"$- \\\\frac{63}{20}$\"}, {\"number\": 3, \"text\": \"$1$\"}, {\"number\": 4, \"text\": \"$\\\\frac{63}{20}$\"}, {\"number\": 5, \"text\": \"$\\\\frac{117}{20}$\"}]",
+        "answer": "2",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Y9",
+    "label": "이차함수 결정 (조건→식)",
+    "chapter": "이차함수",
+    "cue": "주어진 조건에서 이차함수 f(x) 구하기",
+    "ngd_count": 2,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2111,
+        "question_text": "이차함수 $y=x ^{2} +3x+a$의 그래프가 $x$축과 두 점 $(-2, 0)$과 $(b, 0)$에서 만날 때, $a+b$의 값은? (단, $a, b$는 실수이다.) [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-5$\"}, {\"number\": 2, \"text\": \"$-3$\"}, {\"number\": 3, \"text\": \"$-1$\"}, {\"number\": 4, \"text\": \"$1$\"}, {\"number\": 5, \"text\": \"$3$\"}]",
+        "answer": "4",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2123,
+        "question_text": "이차함수 $f(x)=x ^{2} +ax+b$의 그래프는 직선 $x=3$에 대하여 대칭이다. $2 \\leq x \\leq 5$에서 함수 $f(x)$의 최댓값이 $3$일 때, $a+b$의 값은? (단, $a, b$는 실수이다.) [$4.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2$\"}, {\"number\": 2, \"text\": \"$3$\"}, {\"number\": 3, \"text\": \"$4$\"}, {\"number\": 4, \"text\": \"$5$\"}, {\"number\": 5, \"text\": \"$6$\"}]",
+        "answer": "1",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2132,
+        "question_text": "이차함수 $y=3x^{2}-2x+m+2$의 그래프와 $x$축이 만나지 않도록 하는 실수 $m$의 값의 범위는? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$m<-\\\\frac{5}{3}$\"}, {\"number\": 2, \"text\": \"$m>-\\\\frac{5}{3}$\"}, {\"number\": 3, \"text\": \"$m<\\\\frac{5}{3}$\"}, {\"number\": 4, \"text\": \"$m>\\\\frac{3}{2}$\"}, {\"number\": 5, \"text\": \"$m>\\\\frac{5}{3}$\"}]",
+        "answer": "2",
+        "school": "계산고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2133,
+        "question_text": "$1 \\leq x \\leq 5$에서 이차함수 $y=x^{2}-4x+3$의 최댓값과 최솟값의 합은? [$4.3$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$5$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$7$\"}, {\"number\": 5, \"text\": \"$8$\"}]",
+        "answer": "4",
+        "school": "계산고",
+        "year": 2025,
+        "chapter": "이차함수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "P6",
+    "label": "다항식 나눗셈 (직접 장제법)",
+    "chapter": "다항식의 연산",
+    "cue": "몫·나머지를 직접 구함",
+    "ngd_count": 2,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2114,
+        "question_text": "다항식 $2x ^{3} -3x ^{2} +4x-10$을 $3x+2$로 나누었을 때의 몫을 $Q _{1} (x)$, 나머지를 $R _{1}$이라 하고 $x+ \\frac{2}{3}$로 나누었을 때의 몫을 $Q _{2} (x)$, 나머지를 $R _{2}$라 할 때, $\\frac{Q _{2} (x)}{Q _{1} (x)} + \\frac{R _{2}}{R _{1}}$의 값은? (단, $Q _{1} (x)\\neq 0$이다.) [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$- \\\\frac{1}{2}$\"}, {\"number\": 2, \"text\": \"$\\\\frac{1}{3}$\"}, {\"number\": 3, \"text\": \"$\\\\frac{4}{3}$\"}, {\"number\": 4, \"text\": \"$\\\\frac{5}{2}$\"}, {\"number\": 5, \"text\": \"$4$\"}]",
+        "answer": "5",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2379,
+        "question_text": "다항식 $4x^3 -8x^2 +5x-6$을 다항식 $P(x)$로 나누었을 때의 몫은 $2x-1$이고, 나머지는 $ax-3$이다. 이때 $P(-1)$의 값은? (단, $a$는 실수이다.) [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2$\"}, {\"number\": 2, \"text\": \"$4$\"}, {\"number\": 3, \"text\": \"$8$\"}, {\"number\": 4, \"text\": \"$12$\"}, {\"number\": 5, \"text\": \"$16$\"}]",
+        "answer": "3",
+        "school": "서인천고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2970,
+        "question_text": "다항식 $3x^4 -x^2 +5x+2$를 $x^2 -x-1$로 나누었을 때의 몫을 $Q\\,(x)$, 나머지를 $R\\,(x)$라 하자. $Q\\,(-1) +R\\,(1)$의 값은? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$24$\"}, {\"number\": 2, \"text\": \"$25$\"}, {\"number\": 3, \"text\": \"$26$\"}, {\"number\": 4, \"text\": \"$27$\"}, {\"number\": 5, \"text\": \"$28$\"}]",
+        "answer": "2",
+        "school": "삼성고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 13985,
+        "question_text": "다항식 $2x^3 -11x^2 +20x-15$를 $2x-3$으로 나누었을 때의 몫을 $Q \\left( x \\right)$, 나머지를 $R$이라 할 때, $Q \\left( 3 \\right)+R$의 값은? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-2$\"}, {\"number\": 2, \"text\": \"$-1$\"}, {\"number\": 3, \"text\": \"$0$\"}, {\"number\": 4, \"text\": \"$1$\"}, {\"number\": 5, \"text\": \"$2$\"}]",
+        "answer": "1",
+        "school": "미사고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "P8",
+    "label": "조립제법 몫·나머지",
+    "chapter": "다항식의 연산",
+    "cue": "x-α로 나눈 Q(x), R 계산",
+    "ngd_count": 2,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2114,
+        "question_text": "다항식 $2x ^{3} -3x ^{2} +4x-10$을 $3x+2$로 나누었을 때의 몫을 $Q _{1} (x)$, 나머지를 $R _{1}$이라 하고 $x+ \\frac{2}{3}$로 나누었을 때의 몫을 $Q _{2} (x)$, 나머지를 $R _{2}$라 할 때, $\\frac{Q _{2} (x)}{Q _{1} (x)} + \\frac{R _{2}}{R _{1}}$의 값은? (단, $Q _{1} (x)\\neq 0$이다.) [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$- \\\\frac{1}{2}$\"}, {\"number\": 2, \"text\": \"$\\\\frac{1}{3}$\"}, {\"number\": 3, \"text\": \"$\\\\frac{4}{3}$\"}, {\"number\": 4, \"text\": \"$\\\\frac{5}{2}$\"}, {\"number\": 5, \"text\": \"$4$\"}]",
+        "answer": "5",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2379,
+        "question_text": "다항식 $4x^3 -8x^2 +5x-6$을 다항식 $P(x)$로 나누었을 때의 몫은 $2x-1$이고, 나머지는 $ax-3$이다. 이때 $P(-1)$의 값은? (단, $a$는 실수이다.) [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$2$\"}, {\"number\": 2, \"text\": \"$4$\"}, {\"number\": 3, \"text\": \"$8$\"}, {\"number\": 4, \"text\": \"$12$\"}, {\"number\": 5, \"text\": \"$16$\"}]",
+        "answer": "3",
+        "school": "서인천고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2970,
+        "question_text": "다항식 $3x^4 -x^2 +5x+2$를 $x^2 -x-1$로 나누었을 때의 몫을 $Q\\,(x)$, 나머지를 $R\\,(x)$라 하자. $Q\\,(-1) +R\\,(1)$의 값은? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$24$\"}, {\"number\": 2, \"text\": \"$25$\"}, {\"number\": 3, \"text\": \"$26$\"}, {\"number\": 4, \"text\": \"$27$\"}, {\"number\": 5, \"text\": \"$28$\"}]",
+        "answer": "2",
+        "school": "삼성고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 13985,
+        "question_text": "다항식 $2x^3 -11x^2 +20x-15$를 $2x-3$으로 나누었을 때의 몫을 $Q \\left( x \\right)$, 나머지를 $R$이라 할 때, $Q \\left( 3 \\right)+R$의 값은? [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-2$\"}, {\"number\": 2, \"text\": \"$-1$\"}, {\"number\": 3, \"text\": \"$0$\"}, {\"number\": 4, \"text\": \"$1$\"}, {\"number\": 5, \"text\": \"$2$\"}]",
+        "answer": "1",
+        "school": "미사고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "H2",
+    "label": "항등식 미정계수 (수치대입)",
+    "chapter": "항등식과 나머지정리",
+    "cue": "x=0,1,-1 대입해서 연립",
+    "ngd_count": 2,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2092,
+        "question_text": "등식 $x^2 - 7x+11 = \\left(x-2 \\right)^2 +a \\left(x-2 \\right)+b\\,$가 $x\\,$의 값에 관계없이 항상 성립할 때, 상수 $a, b\\,$에 대하여 $a^2 +b^2 \\,$의 값을 구하면? [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$10$\"}, {\"number\": 2, \"text\": \"$11$\"}, {\"number\": 3, \"text\": \"$12$\"}, {\"number\": 4, \"text\": \"$13$\"}, {\"number\": 5, \"text\": \"$14$\"}]",
+        "answer": "1",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2093,
+        "question_text": "다항식 $P\\, \\left(x \\right)$에 대하여 등식$\\left(x^2 - 1 \\right) P\\, \\left(x \\right)+ax+b = x^3 - 2x^2 +6x-4$가 $x\\,$에 대한 항등식이 되도록 하는 상수 $a, b\\,$에 대하여 $a+2b\\,$의 값은? [$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-11$\"}, {\"number\": 2, \"text\": \"$-9$\"}, {\"number\": 3, \"text\": \"$-7$\"}, {\"number\": 4, \"text\": \"$-5$\"}, {\"number\": 5, \"text\": \"$-3$\"}]",
+        "answer": "4",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2109,
+        "question_text": "상수 $a _{0} , a _{1} , a _{2} ,\\, \\cdots \\,, a _{10}$에 대하여 등식$(x ^{2} +x-3) ^{5} =a _{0} +a _{1} x+a _{2} x ^{2} + \\cdots +a _{10} x ^{10}$이 $x$에 대한 항등식일 때, $a _{0} +a _{1} +a _{2} + \\cdots +a _{10}$의 값은? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-243$\"}, {\"number\": 2, \"text\": \"$-32$\"}, {\"number\": 3, \"text\": \"$-1$\"}, {\"number\": 4, \"text\": \"$32$\"}, {\"number\": 5, \"text\": \"$243$\"}]",
+        "answer": "3",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2110,
+        "question_text": "다항식 $f(x)$를 $2x ^{2} +1$로 나누었을 때의 몫은 $x ^{2} -x+3$이고 나머지는 $x-6$이다. 다항식 $f(x)$를 $x+1$로 나누었을 때의 나머지는? [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$4$\"}, {\"number\": 2, \"text\": \"$8$\"}, {\"number\": 3, \"text\": \"$12$\"}, {\"number\": 4, \"text\": \"$16$\"}, {\"number\": 5, \"text\": \"$20$\"}]",
+        "answer": "2",
+        "school": "가정고",
+        "year": 2025,
+        "chapter": "항등식과 나머지정리",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "C6",
+    "label": "음수 제곱근·√(-a)",
+    "chapter": "복소수",
+    "cue": "√(-8)·√(-2) 등 음수 제곱근 계산",
+    "ngd_count": 2,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2091,
+        "question_text": "$\\sqrt{-2} \\sqrt{-4} +{ \\frac{\\sqrt{-27}}{\\sqrt{3}} + \\frac{\\sqrt{27}}{\\sqrt{-3}}}$의 값은? [$4.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-2 \\\\sqrt{2}$\"}, {\"number\": 2, \"text\": \"$-2 \\\\sqrt{2}-6i$\"}, {\"number\": 3, \"text\": \"$-2 \\\\sqrt{2}+6i$\"}, {\"number\": 4, \"text\": \"$2 \\\\sqrt{2}$\"}, {\"number\": 5, \"text\": \"$2 \\\\sqrt{2}+6i$\"}]",
+        "answer": "1",
+        "school": "가림고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2134,
+        "question_text": "$\\sqrt{-6}\\sqrt{-4}-\\frac{\\sqrt{32}}{\\sqrt{-2}}+\\frac{\\sqrt{-72}}{\\sqrt{-3}}=a+bi$일 때, $a+b$의 값은?(단, $a$, $b$는 실수이다.) [$4.5$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-4 \\\\sqrt{6}+4$\"}, {\"number\": 2, \"text\": \"$-4$\"}, {\"number\": 3, \"text\": \"$4 \\\\sqrt{6}-4$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$4 \\\\sqrt{6}+4$\"}]",
+        "answer": "4",
+        "school": "계산고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2152,
+        "question_text": "등식 $(x-2y)+(3x+y)i=4+5i$를 만족시키는 실수 $x$, $y$에 대하여 $x ^{2} +y ^{2}$의 값은? (단, $i=\\sqrt{-1}$) [$3.8$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$1$\"}, {\"number\": 2, \"text\": \"$2$\"}, {\"number\": 3, \"text\": \"$3$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$5$\"}]",
+        "answer": "5",
+        "school": "계산여고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 2154,
+        "question_text": "$(1+i) ^{2} + \\frac{1-i}{1+i}$의 값은? (단, $i=\\sqrt{-1}$) [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-i$\"}, {\"number\": 2, \"text\": \"$i$\"}, {\"number\": 3, \"text\": \"$-1$\"}, {\"number\": 4, \"text\": \"$1-i$\"}, {\"number\": 5, \"text\": \"$1+i$\"}]",
+        "answer": "2",
+        "school": "계산여고",
+        "year": 2025,
+        "chapter": "복소수",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "P4",
+    "label": "세제곱 공식 (a³±b³, (a±b)³)",
+    "chapter": "다항식의 연산",
+    "cue": "세제곱 합·차",
+    "ngd_count": 2,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 2306,
+        "question_text": "두 실수 $a, b$가 각각\t$a=2-\\sqrt{3}$, $b=2+\\sqrt{3}$\n일 때, $a^3 +b^3$의 값은? [$3.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$50$\"}, {\"number\": 2, \"text\": \"$51$\"}, {\"number\": 3, \"text\": \"$52$\"}, {\"number\": 4, \"text\": \"$53$\"}, {\"number\": 5, \"text\": \"$54$\"}]",
+        "answer": "3",
+        "school": "미추홀외고",
+        "year": 2025,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 14366,
+        "question_text": "$a=2+\\sqrt{3}$, $b= -2 + \\sqrt{3}$일 때, $a^3 -b^3$의 값을 구하면? [$4.0$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$48$\"}, {\"number\": 2, \"text\": \"$50$\"}, {\"number\": 3, \"text\": \"$52$\"}, {\"number\": 4, \"text\": \"$54$\"}, {\"number\": 5, \"text\": \"$56$\"}]",
+        "answer": "3",
+        "school": "남부고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 15603,
+        "question_text": "$a^3 = 6$일 때, $(a-2)(a+2)(a^2 -2a+4)(a^2 + 2a+4)$의 값은? [$3.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$-28$\"}, {\"number\": 2, \"text\": \"$-20$\"}, {\"number\": 3, \"text\": \"$6$\"}, {\"number\": 4, \"text\": \"$16$\"}, {\"number\": 5, \"text\": \"$32$\"}]",
+        "answer": "1",
+        "school": "충암고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 15782,
+        "question_text": "$a= 2+\\sqrt{3}$, $b=2-\\sqrt{3}$일 때, $a+a^2 +a^3 +b+ b^2 +b^3$의 값은?[$2.4$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$50$\"}, {\"number\": 2, \"text\": \"$60$\"}, {\"number\": 3, \"text\": \"$70$\"}, {\"number\": 4, \"text\": \"$80$\"}, {\"number\": 5, \"text\": \"$90$\"}]",
+        "answer": "3",
+        "school": "환일고",
+        "year": 2024,
+        "chapter": "다항식의 연산",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  },
+  {
+    "tid": "Q6",
+    "label": "두 근으로 이차방정식 만들기",
+    "chapter": "이차방정식",
+    "cue": "α+β=s, αβ=p → x²-sx+p=0",
+    "ngd_count": 1,
+    "stars": 1,
+    "candidates": [
+      {
+        "question_id": 15353,
+        "question_text": "이차방정식 $x^2 +ax +b =0$의 두 근이 $1$, $\\alpha$이고, 이차방정식 $x^2 + (a-1)x +b +1=0$의 두 근이 $3$, $\\beta$일 때, 두 실수 $\\alpha$, $\\beta$를 근으로 하고, $x^2$의 계수가 $1$인 이차방정식을 구하면? (단, $a$, $b$는 실수) [$4.2$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x^2 +2x -4 =0$\"}, {\"number\": 2, \"text\": \"$x^2 +3x +2 =0$\"}, {\"number\": 3, \"text\": \"$x^2 -2x -4 =0$\"}, {\"number\": 4, \"text\": \"$x^2 -3x +2 =0$\"}, {\"number\": 5, \"text\": \"$x^2 +x -2 =0$\"}]",
+        "answer": "4",
+        "school": "중앙여고",
+        "year": 2024,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 15835,
+        "question_text": "이차방정식 $x ^{2} +ax+b=0$의 한 근이 $-1+ \\sqrt{3} i$일 때, $a+b, ab$를 두 근으로 하고 $x ^{2}$의 계수가 $1$인 이차방정식을 구하면?(단, $a, b$는 실수) [$4.6$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x ^{2} +14x+48=0$\"}, {\"number\": 2, \"text\": \"$x ^{2} +6x+14=0$\"}, {\"number\": 3, \"text\": \"$x ^{2} +14x-48=0$\"}, {\"number\": 4, \"text\": \"$x ^{2} -6x+14=0$\"}, {\"number\": 5, \"text\": \"$x ^{2} -14x+48=0$\"}]",
+        "answer": "5",
+        "school": "송곡고",
+        "year": 2024,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 15900,
+        "question_text": "$1+2i$, $1-2i$를 두 근으로 하는 $x^2$의 계수가 $1$인 이차방정식을 구하면? [$3.9$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x^2 -5x -2=0$\"}, {\"number\": 2, \"text\": \"$x^2 -5x +2 =0$\"}, {\"number\": 3, \"text\": \"$x^2 +2x -5 =0$\"}, {\"number\": 4, \"text\": \"$x^2 -2x +5 =0$\"}, {\"number\": 5, \"text\": \"$x^2 -2x -5 =0$\"}]",
+        "answer": "4",
+        "school": "원묵고",
+        "year": 2024,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      },
+      {
+        "question_id": 35941,
+        "question_text": "이차방정식 $x^{2}-5x+1 = 0$의 두 근을 $\\alpha,\\,\\beta$라고 할 때, ${\\frac{1}{\\alpha}}, {\\frac{1}{\\beta}}$을 두 근으로 하고 $x^{2}$의 계수가 $1$인 이차방정식을 구한 것은? [$4.1$점]",
+        "choices": "[{\"number\": 1, \"text\": \"$x^{2}-2x-1 = 0$\"}, {\"number\": 2, \"text\": \"$x^{2}-6x+13 = 0$\"}, {\"number\": 3, \"text\": \"$x^{2}-7x+7 = 0$\"}, {\"number\": 4, \"text\": \"$x^{2}-6x+5 = 0$\"}, {\"number\": 5, \"text\": \"$x^{2}-5x+1 = 0$\"}]",
+        "answer": "5",
+        "school": "경명여고",
+        "year": 2025,
+        "chapter": "이차방정식",
+        "difficulty": "하",
+        "has_image": 0
+      }
+    ]
+  }
+]

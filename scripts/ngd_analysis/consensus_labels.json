@@ -1,0 +1,2277 @@
+[
+  {
+    "idx": 0,
+    "type_id": "P7",
+    "confidence": "high",
+    "A": "P7",
+    "B": "P7"
+  },
+  {
+    "idx": 1,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 2,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 3,
+    "type_id": "C4",
+    "confidence": "medium",
+    "A": "C4",
+    "B": "C4"
+  },
+  {
+    "idx": 4,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C4"
+  },
+  {
+    "idx": 5,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q4"
+  },
+  {
+    "idx": 6,
+    "type_id": "Q3",
+    "confidence": "medium",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 7,
+    "type_id": "F5",
+    "confidence": "high",
+    "A": "F5",
+    "B": "F5"
+  },
+  {
+    "idx": 8,
+    "type_id": "H2",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H2"
+  },
+  {
+    "idx": 9,
+    "type_id": "Y5",
+    "confidence": "medium",
+    "A": "Y5",
+    "B": "Y5"
+  },
+  {
+    "idx": 10,
+    "type_id": "Y10",
+    "confidence": "medium",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 11,
+    "type_id": "P7",
+    "confidence": "high",
+    "A": "P7",
+    "B": "P7"
+  },
+  {
+    "idx": 12,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 13,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 14,
+    "type_id": "C4",
+    "confidence": "medium",
+    "A": "C4",
+    "B": "C4"
+  },
+  {
+    "idx": 15,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C4"
+  },
+  {
+    "idx": 16,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q4"
+  },
+  {
+    "idx": 17,
+    "type_id": "Q3",
+    "confidence": "medium",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 18,
+    "type_id": "F5",
+    "confidence": "high",
+    "A": "F5",
+    "B": "F5"
+  },
+  {
+    "idx": 19,
+    "type_id": "H2",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H2"
+  },
+  {
+    "idx": 20,
+    "type_id": "Y5",
+    "confidence": "medium",
+    "A": "Y5",
+    "B": "Y5"
+  },
+  {
+    "idx": 21,
+    "type_id": "Y10",
+    "confidence": "medium",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 22,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 23,
+    "type_id": "H5",
+    "confidence": "medium",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 24,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C4"
+  },
+  {
+    "idx": 25,
+    "type_id": "Q1",
+    "confidence": "medium",
+    "A": "Q1",
+    "B": "Q1"
+  },
+  {
+    "idx": 26,
+    "type_id": "Q2",
+    "confidence": "high",
+    "A": "Q2",
+    "B": "Q2"
+  },
+  {
+    "idx": 27,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 28,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 29,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "F4"
+  },
+  {
+    "idx": 30,
+    "type_id": "F2",
+    "confidence": "medium",
+    "A": "F2",
+    "B": "F1"
+  },
+  {
+    "idx": 31,
+    "type_id": "Q8",
+    "confidence": "high",
+    "A": "Q8",
+    "B": "Q8"
+  },
+  {
+    "idx": 32,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 33,
+    "type_id": "F1",
+    "confidence": "high",
+    "A": "F1",
+    "B": "F1"
+  },
+  {
+    "idx": 34,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 35,
+    "type_id": "Q2",
+    "confidence": "high",
+    "A": "Q2",
+    "B": "Q2"
+  },
+  {
+    "idx": 36,
+    "type_id": "P2",
+    "confidence": "medium",
+    "A": "P2",
+    "B": "P2"
+  },
+  {
+    "idx": 37,
+    "type_id": "C5",
+    "confidence": "high",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 38,
+    "type_id": "H5",
+    "confidence": "medium",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 39,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 40,
+    "type_id": "H3",
+    "confidence": "medium",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 41,
+    "type_id": "Q8",
+    "confidence": "high",
+    "A": "Q8",
+    "B": "Q8"
+  },
+  {
+    "idx": 42,
+    "type_id": "Y10",
+    "confidence": "high",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 43,
+    "type_id": "F1",
+    "confidence": "medium",
+    "A": "F1",
+    "B": "F1"
+  },
+  {
+    "idx": 44,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 45,
+    "type_id": "P7",
+    "confidence": "high",
+    "A": "P7",
+    "B": "P7"
+  },
+  {
+    "idx": 46,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 47,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 48,
+    "type_id": "Y9",
+    "confidence": "high",
+    "A": "Y9",
+    "B": "Y9"
+  },
+  {
+    "idx": 49,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "F2"
+  },
+  {
+    "idx": 50,
+    "type_id": "C5",
+    "confidence": "high",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 51,
+    "type_id": "Q3",
+    "confidence": "high",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 52,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C4"
+  },
+  {
+    "idx": 53,
+    "type_id": "Q5",
+    "confidence": "high",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 54,
+    "type_id": "P2",
+    "confidence": "medium",
+    "A": "P2",
+    "B": "P3"
+  },
+  {
+    "idx": 55,
+    "type_id": "Y5",
+    "confidence": "high",
+    "A": "Y5",
+    "B": "Y4"
+  },
+  {
+    "idx": 56,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 57,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 58,
+    "type_id": "H5",
+    "confidence": "high",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 59,
+    "type_id": "Q2",
+    "confidence": "high",
+    "A": "Q2",
+    "B": "Q2"
+  },
+  {
+    "idx": 60,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 61,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H3"
+  },
+  {
+    "idx": 62,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "F4"
+  },
+  {
+    "idx": 63,
+    "type_id": "Q5",
+    "confidence": "medium",
+    "A": "Q5",
+    "B": "Q4"
+  },
+  {
+    "idx": 64,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q6"
+  },
+  {
+    "idx": 65,
+    "type_id": "F5",
+    "confidence": "high",
+    "A": "F5",
+    "B": "F5"
+  },
+  {
+    "idx": 66,
+    "type_id": "Y10",
+    "confidence": "high",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 67,
+    "type_id": "P2",
+    "confidence": "high",
+    "A": "P2",
+    "B": "P2"
+  },
+  {
+    "idx": 68,
+    "type_id": "P3",
+    "confidence": "medium",
+    "A": "P3",
+    "B": "P3"
+  },
+  {
+    "idx": 69,
+    "type_id": "P7",
+    "confidence": "high",
+    "A": "P7",
+    "B": "P7"
+  },
+  {
+    "idx": 70,
+    "type_id": "C4",
+    "confidence": "medium",
+    "A": "C4",
+    "B": "C4"
+  },
+  {
+    "idx": 71,
+    "type_id": "Q4",
+    "confidence": "medium",
+    "A": "Q4",
+    "B": "Q6"
+  },
+  {
+    "idx": 72,
+    "type_id": "C5",
+    "confidence": "high",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 73,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 74,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 75,
+    "type_id": "Q3",
+    "confidence": "high",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 76,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 77,
+    "type_id": "P2",
+    "confidence": "high",
+    "A": "P2",
+    "B": "P2"
+  },
+  {
+    "idx": 78,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 79,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 80,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 81,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C3"
+  },
+  {
+    "idx": 82,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C3"
+  },
+  {
+    "idx": 83,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q6"
+  },
+  {
+    "idx": 84,
+    "type_id": "F5",
+    "confidence": "high",
+    "A": "F5",
+    "B": "F5"
+  },
+  {
+    "idx": 85,
+    "type_id": "H1",
+    "confidence": "medium",
+    "A": "H1",
+    "B": "Y6"
+  },
+  {
+    "idx": 86,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 87,
+    "type_id": "F4",
+    "confidence": "medium",
+    "A": "F4",
+    "B": "F3"
+  },
+  {
+    "idx": 88,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 89,
+    "type_id": "C4",
+    "confidence": "medium",
+    "A": "C4",
+    "B": "C4"
+  },
+  {
+    "idx": 90,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C3"
+  },
+  {
+    "idx": 91,
+    "type_id": "Y3",
+    "confidence": "high",
+    "A": "Y3",
+    "B": "Y3"
+  },
+  {
+    "idx": 92,
+    "type_id": "P6",
+    "confidence": "medium",
+    "A": "P6",
+    "B": "P8"
+  },
+  {
+    "idx": 93,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 94,
+    "type_id": "Y9",
+    "confidence": "high",
+    "A": "Y9",
+    "B": "Y9"
+  },
+  {
+    "idx": 95,
+    "type_id": "Q3",
+    "confidence": "high",
+    "A": "Q3",
+    "B": "Q2"
+  },
+  {
+    "idx": 96,
+    "type_id": "H3",
+    "confidence": "medium",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 97,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "F4"
+  },
+  {
+    "idx": 98,
+    "type_id": "Q8",
+    "confidence": "high",
+    "A": "Q8",
+    "B": "Q6"
+  },
+  {
+    "idx": 99,
+    "type_id": "H1",
+    "confidence": "medium",
+    "A": "H1",
+    "B": "H4"
+  },
+  {
+    "idx": 100,
+    "type_id": "Y4",
+    "confidence": "medium",
+    "A": "Y4",
+    "B": "Y9"
+  },
+  {
+    "idx": 101,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 102,
+    "type_id": "P3",
+    "confidence": "medium",
+    "A": "P3",
+    "B": "F1"
+  },
+  {
+    "idx": 103,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 104,
+    "type_id": "H5",
+    "confidence": "high",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 105,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 106,
+    "type_id": "Q5",
+    "confidence": "high",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 107,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 108,
+    "type_id": "H5",
+    "confidence": "high",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 109,
+    "type_id": "F1",
+    "confidence": "medium",
+    "A": "F1",
+    "B": "F1"
+  },
+  {
+    "idx": 110,
+    "type_id": "Y2",
+    "confidence": "medium",
+    "A": "Y2",
+    "B": "Y6"
+  },
+  {
+    "idx": 111,
+    "type_id": "C5",
+    "confidence": "medium",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 112,
+    "type_id": "Y10",
+    "confidence": "high",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 113,
+    "type_id": "Q2",
+    "confidence": "medium",
+    "A": "Q2",
+    "B": "Q2"
+  },
+  {
+    "idx": 114,
+    "type_id": "P8",
+    "confidence": "high",
+    "A": "P8",
+    "B": "P8"
+  },
+  {
+    "idx": 115,
+    "type_id": "UNKNOWN",
+    "confidence": "low",
+    "A": "UNKNOWN",
+    "B": "UNKNOWN"
+  },
+  {
+    "idx": 116,
+    "type_id": "Q2",
+    "confidence": "medium",
+    "A": "Q2",
+    "B": "Q2"
+  },
+  {
+    "idx": 117,
+    "type_id": "UNKNOWN",
+    "confidence": "low",
+    "A": "UNKNOWN",
+    "B": "UNKNOWN"
+  },
+  {
+    "idx": 118,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 119,
+    "type_id": "P3",
+    "confidence": "medium",
+    "A": "P3",
+    "B": "F1"
+  },
+  {
+    "idx": 120,
+    "type_id": "Y6",
+    "confidence": "high",
+    "A": "Y6",
+    "B": "Y6"
+  },
+  {
+    "idx": 121,
+    "type_id": "H5",
+    "confidence": "medium",
+    "A": "H5",
+    "B": "F4"
+  },
+  {
+    "idx": 122,
+    "type_id": "Y3",
+    "confidence": "medium",
+    "A": "Y3",
+    "B": "Y3"
+  },
+  {
+    "idx": 123,
+    "type_id": "F1",
+    "confidence": "medium",
+    "A": "F1",
+    "B": "F1"
+  },
+  {
+    "idx": 124,
+    "type_id": "Q5",
+    "confidence": "high",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 125,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 126,
+    "type_id": "Q8",
+    "confidence": "medium",
+    "A": "Q8",
+    "B": "Q6"
+  },
+  {
+    "idx": 127,
+    "type_id": "C5",
+    "confidence": "medium",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 128,
+    "type_id": "Y4",
+    "confidence": "medium",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 129,
+    "type_id": "Q2",
+    "confidence": "medium",
+    "A": "Q2",
+    "B": "Q2"
+  },
+  {
+    "idx": 130,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 131,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C3"
+  },
+  {
+    "idx": 132,
+    "type_id": "C4",
+    "confidence": "medium",
+    "A": "C4",
+    "B": "C4"
+  },
+  {
+    "idx": 133,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 134,
+    "type_id": "H5",
+    "confidence": "high",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 135,
+    "type_id": "Q5",
+    "confidence": "high",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 136,
+    "type_id": "P3",
+    "confidence": "medium",
+    "A": "P3",
+    "B": "P3"
+  },
+  {
+    "idx": 137,
+    "type_id": "P7",
+    "confidence": "high",
+    "A": "P7",
+    "B": "P8"
+  },
+  {
+    "idx": 138,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "F4"
+  },
+  {
+    "idx": 139,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 140,
+    "type_id": "P3",
+    "confidence": "medium",
+    "A": "P3",
+    "B": "F1"
+  },
+  {
+    "idx": 141,
+    "type_id": "Y9",
+    "confidence": "medium",
+    "A": "Y9",
+    "B": "Y9"
+  },
+  {
+    "idx": 142,
+    "type_id": "C5",
+    "confidence": "medium",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 143,
+    "type_id": "C6",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C6"
+  },
+  {
+    "idx": 144,
+    "type_id": "Y10",
+    "confidence": "high",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 145,
+    "type_id": "P3",
+    "confidence": "medium",
+    "A": "P3",
+    "B": "P3"
+  },
+  {
+    "idx": 146,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 147,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q5"
+  },
+  {
+    "idx": 148,
+    "type_id": "P3",
+    "confidence": "medium",
+    "A": "P3",
+    "B": "P3"
+  },
+  {
+    "idx": 149,
+    "type_id": "C3",
+    "confidence": "medium",
+    "A": "C3",
+    "B": "C4"
+  },
+  {
+    "idx": 150,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 151,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "F2"
+  },
+  {
+    "idx": 152,
+    "type_id": "Q8",
+    "confidence": "high",
+    "A": "Q8",
+    "B": "Q8"
+  },
+  {
+    "idx": 153,
+    "type_id": "H3",
+    "confidence": "medium",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 154,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 155,
+    "type_id": "Y10",
+    "confidence": "medium",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 156,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 157,
+    "type_id": "Y7",
+    "confidence": "medium",
+    "A": "Y7",
+    "B": "Y9"
+  },
+  {
+    "idx": 158,
+    "type_id": "H1",
+    "confidence": "medium",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 159,
+    "type_id": "Y10",
+    "confidence": "medium",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 160,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 161,
+    "type_id": "Q6",
+    "confidence": "medium",
+    "A": "Q6",
+    "B": "Q6"
+  },
+  {
+    "idx": 162,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 163,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 164,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 165,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 166,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "F1"
+  },
+  {
+    "idx": 167,
+    "type_id": "C5",
+    "confidence": "high",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 168,
+    "type_id": "Y9",
+    "confidence": "high",
+    "A": "Y9",
+    "B": "Y9"
+  },
+  {
+    "idx": 169,
+    "type_id": "Y3",
+    "confidence": "medium",
+    "A": "Y3",
+    "B": "Y3"
+  },
+  {
+    "idx": 170,
+    "type_id": "P2",
+    "confidence": "medium",
+    "A": "P2",
+    "B": "P1"
+  },
+  {
+    "idx": 171,
+    "type_id": "P2",
+    "confidence": "medium",
+    "A": "P2",
+    "B": "P2"
+  },
+  {
+    "idx": 172,
+    "type_id": "C4",
+    "confidence": "medium",
+    "A": "C4",
+    "B": "C4"
+  },
+  {
+    "idx": 173,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 174,
+    "type_id": "P8",
+    "confidence": "high",
+    "A": "P8",
+    "B": "P8"
+  },
+  {
+    "idx": 175,
+    "type_id": "P3",
+    "confidence": "medium",
+    "A": "P3",
+    "B": "P3"
+  },
+  {
+    "idx": 176,
+    "type_id": "F1",
+    "confidence": "high",
+    "A": "F1",
+    "B": "F1"
+  },
+  {
+    "idx": 177,
+    "type_id": "Y6",
+    "confidence": "high",
+    "A": "Y6",
+    "B": "Y6"
+  },
+  {
+    "idx": 178,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 179,
+    "type_id": "C5",
+    "confidence": "medium",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 180,
+    "type_id": "Q2",
+    "confidence": "high",
+    "A": "Q2",
+    "B": "Q3"
+  },
+  {
+    "idx": 181,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 182,
+    "type_id": "H5",
+    "confidence": "high",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 183,
+    "type_id": "Q8",
+    "confidence": "high",
+    "A": "Q8",
+    "B": "Q8"
+  },
+  {
+    "idx": 184,
+    "type_id": "Y10",
+    "confidence": "medium",
+    "A": "Y10",
+    "B": "P6"
+  },
+  {
+    "idx": 185,
+    "type_id": "H5",
+    "confidence": "high",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 186,
+    "type_id": "H2",
+    "confidence": "high",
+    "A": "H2",
+    "B": "H2"
+  },
+  {
+    "idx": 187,
+    "type_id": "Y3",
+    "confidence": "medium",
+    "A": "Y3",
+    "B": "Y3"
+  },
+  {
+    "idx": 188,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 189,
+    "type_id": "Q1",
+    "confidence": "high",
+    "A": "Q1",
+    "B": "Q5"
+  },
+  {
+    "idx": 190,
+    "type_id": "Q3",
+    "confidence": "high",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 191,
+    "type_id": "P6",
+    "confidence": "high",
+    "A": "P6",
+    "B": "P6"
+  },
+  {
+    "idx": 192,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 193,
+    "type_id": "P2",
+    "confidence": "high",
+    "A": "P2",
+    "B": "P2"
+  },
+  {
+    "idx": 194,
+    "type_id": "C5",
+    "confidence": "high",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 195,
+    "type_id": "F5",
+    "confidence": "high",
+    "A": "F5",
+    "B": "F5"
+  },
+  {
+    "idx": 196,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H5"
+  },
+  {
+    "idx": 197,
+    "type_id": "Y7",
+    "confidence": "medium",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 198,
+    "type_id": "F4",
+    "confidence": "medium",
+    "A": "F4",
+    "B": "F4"
+  },
+  {
+    "idx": 199,
+    "type_id": "Y4",
+    "confidence": "medium",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 200,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 201,
+    "type_id": "Q5",
+    "confidence": "medium",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 202,
+    "type_id": "H2",
+    "confidence": "high",
+    "A": "H2",
+    "B": "H2"
+  },
+  {
+    "idx": 203,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 204,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 205,
+    "type_id": "Y3",
+    "confidence": "high",
+    "A": "Y3",
+    "B": "Y3"
+  },
+  {
+    "idx": 206,
+    "type_id": "P2",
+    "confidence": "high",
+    "A": "P2",
+    "B": "P2"
+  },
+  {
+    "idx": 207,
+    "type_id": "C5",
+    "confidence": "high",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 208,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 209,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "F4"
+  },
+  {
+    "idx": 210,
+    "type_id": "Y6",
+    "confidence": "high",
+    "A": "Y6",
+    "B": "Y6"
+  },
+  {
+    "idx": 211,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q4"
+  },
+  {
+    "idx": 212,
+    "type_id": "P7",
+    "confidence": "high",
+    "A": "P7",
+    "B": "P8"
+  },
+  {
+    "idx": 213,
+    "type_id": "Y9",
+    "confidence": "medium",
+    "A": "Y9",
+    "B": "Y9"
+  },
+  {
+    "idx": 214,
+    "type_id": "C6",
+    "confidence": "medium",
+    "A": "C6",
+    "B": "C4"
+  },
+  {
+    "idx": 215,
+    "type_id": "Y9",
+    "confidence": "medium",
+    "A": "Y9",
+    "B": "Y9"
+  },
+  {
+    "idx": 216,
+    "type_id": "C5",
+    "confidence": "medium",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 217,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 218,
+    "type_id": "P7",
+    "confidence": "high",
+    "A": "P7",
+    "B": "P7"
+  },
+  {
+    "idx": 219,
+    "type_id": "Q2",
+    "confidence": "high",
+    "A": "Q2",
+    "B": "Q2"
+  },
+  {
+    "idx": 220,
+    "type_id": "Y6",
+    "confidence": "high",
+    "A": "Y6",
+    "B": "Y6"
+  },
+  {
+    "idx": 221,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 222,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 223,
+    "type_id": "P3",
+    "confidence": "high",
+    "A": "P3",
+    "B": "P3"
+  },
+  {
+    "idx": 224,
+    "type_id": "C3",
+    "confidence": "high",
+    "A": "C3",
+    "B": "C3"
+  },
+  {
+    "idx": 225,
+    "type_id": "F2",
+    "confidence": "high",
+    "A": "F2",
+    "B": "F2"
+  },
+  {
+    "idx": 226,
+    "type_id": "H5",
+    "confidence": "high",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 227,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 228,
+    "type_id": "Y10",
+    "confidence": "high",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 229,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 230,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 231,
+    "type_id": "C3",
+    "confidence": "high",
+    "A": "C3",
+    "B": "C4"
+  },
+  {
+    "idx": 232,
+    "type_id": "Q3",
+    "confidence": "high",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 233,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 234,
+    "type_id": "Y6",
+    "confidence": "high",
+    "A": "Y6",
+    "B": "Y6"
+  },
+  {
+    "idx": 235,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 236,
+    "type_id": "C6",
+    "confidence": "high",
+    "A": "C6",
+    "B": "C6"
+  },
+  {
+    "idx": 237,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 238,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q6"
+  },
+  {
+    "idx": 239,
+    "type_id": "C5",
+    "confidence": "high",
+    "A": "C5",
+    "B": "C5"
+  },
+  {
+    "idx": 240,
+    "type_id": "Y9",
+    "confidence": "medium",
+    "A": "Y9",
+    "B": "Q5"
+  },
+  {
+    "idx": 241,
+    "type_id": "Y9",
+    "confidence": "high",
+    "A": "Y9",
+    "B": "Y9"
+  },
+  {
+    "idx": 242,
+    "type_id": "Y7",
+    "confidence": "medium",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 243,
+    "type_id": "Y10",
+    "confidence": "high",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 244,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 245,
+    "type_id": "Q8",
+    "confidence": "high",
+    "A": "Q8",
+    "B": "Q8"
+  },
+  {
+    "idx": 246,
+    "type_id": "Y10",
+    "confidence": "high",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 247,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 248,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 249,
+    "type_id": "C4",
+    "confidence": "high",
+    "A": "C4",
+    "B": "C4"
+  },
+  {
+    "idx": 250,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q5"
+  },
+  {
+    "idx": 251,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 252,
+    "type_id": "Q3",
+    "confidence": "high",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 253,
+    "type_id": "H2",
+    "confidence": "medium",
+    "A": "H2",
+    "B": "H2"
+  },
+  {
+    "idx": 254,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 255,
+    "type_id": "Y7",
+    "confidence": "medium",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 256,
+    "type_id": "Q4",
+    "confidence": "medium",
+    "A": "Q4",
+    "B": "Q6"
+  },
+  {
+    "idx": 257,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 258,
+    "type_id": "F2",
+    "confidence": "medium",
+    "A": "F2",
+    "B": "F2"
+  },
+  {
+    "idx": 259,
+    "type_id": "H4",
+    "confidence": "medium",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 260,
+    "type_id": "Q4",
+    "confidence": "high",
+    "A": "Q4",
+    "B": "Q4"
+  },
+  {
+    "idx": 261,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 262,
+    "type_id": "C4",
+    "confidence": "high",
+    "A": "C4",
+    "B": "C4"
+  },
+  {
+    "idx": 263,
+    "type_id": "Y6",
+    "confidence": "high",
+    "A": "Y6",
+    "B": "Y6"
+  },
+  {
+    "idx": 264,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 265,
+    "type_id": "C6",
+    "confidence": "high",
+    "A": "C6",
+    "B": "C6"
+  },
+  {
+    "idx": 266,
+    "type_id": "P4",
+    "confidence": "high",
+    "A": "P4",
+    "B": "P4"
+  },
+  {
+    "idx": 267,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H2"
+  },
+  {
+    "idx": 268,
+    "type_id": "H5",
+    "confidence": "high",
+    "A": "H5",
+    "B": "H5"
+  },
+  {
+    "idx": 269,
+    "type_id": "Q5",
+    "confidence": "high",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 270,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 271,
+    "type_id": "F2",
+    "confidence": "high",
+    "A": "F2",
+    "B": "F1"
+  },
+  {
+    "idx": 272,
+    "type_id": "F5",
+    "confidence": "high",
+    "A": "F5",
+    "B": "F5"
+  },
+  {
+    "idx": 273,
+    "type_id": "Q5",
+    "confidence": "high",
+    "A": "Q5",
+    "B": "Q6"
+  },
+  {
+    "idx": 274,
+    "type_id": "Y5",
+    "confidence": "medium",
+    "A": "Y5",
+    "B": "Y4"
+  },
+  {
+    "idx": 275,
+    "type_id": "Q3",
+    "confidence": "high",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 276,
+    "type_id": "H4",
+    "confidence": "medium",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 277,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 278,
+    "type_id": "P7",
+    "confidence": "high",
+    "A": "P7",
+    "B": "P7"
+  },
+  {
+    "idx": 279,
+    "type_id": "P4",
+    "confidence": "high",
+    "A": "P4",
+    "B": "P4"
+  },
+  {
+    "idx": 280,
+    "type_id": "Q2",
+    "confidence": "high",
+    "A": "Q2",
+    "B": "Q2"
+  },
+  {
+    "idx": 281,
+    "type_id": "P2",
+    "confidence": "high",
+    "A": "P2",
+    "B": "P2"
+  },
+  {
+    "idx": 282,
+    "type_id": "C4",
+    "confidence": "high",
+    "A": "C4",
+    "B": "C5"
+  },
+  {
+    "idx": 283,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 284,
+    "type_id": "Q6",
+    "confidence": "high",
+    "A": "Q6",
+    "B": "Q6"
+  },
+  {
+    "idx": 285,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "F5"
+  },
+  {
+    "idx": 286,
+    "type_id": "Q5",
+    "confidence": "high",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 287,
+    "type_id": "F2",
+    "confidence": "high",
+    "A": "F2",
+    "B": "F2"
+  },
+  {
+    "idx": 288,
+    "type_id": "P4",
+    "confidence": "medium",
+    "A": "P4",
+    "B": "P4"
+  },
+  {
+    "idx": 289,
+    "type_id": "F2",
+    "confidence": "high",
+    "A": "F2",
+    "B": "F2"
+  },
+  {
+    "idx": 290,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 291,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H4"
+  },
+  {
+    "idx": 292,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 293,
+    "type_id": "P2",
+    "confidence": "high",
+    "A": "P2",
+    "B": "P4"
+  },
+  {
+    "idx": 294,
+    "type_id": "H1",
+    "confidence": "high",
+    "A": "H1",
+    "B": "H1"
+  },
+  {
+    "idx": 295,
+    "type_id": "C2",
+    "confidence": "high",
+    "A": "C2",
+    "B": "C2"
+  },
+  {
+    "idx": 296,
+    "type_id": "P8",
+    "confidence": "high",
+    "A": "P8",
+    "B": "P7"
+  },
+  {
+    "idx": 297,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 298,
+    "type_id": "C3",
+    "confidence": "high",
+    "A": "C3",
+    "B": "C5"
+  },
+  {
+    "idx": 299,
+    "type_id": "Y4",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y4"
+  },
+  {
+    "idx": 300,
+    "type_id": "Y10",
+    "confidence": "high",
+    "A": "Y10",
+    "B": "Y10"
+  },
+  {
+    "idx": 301,
+    "type_id": "Q3",
+    "confidence": "high",
+    "A": "Q3",
+    "B": "Q4"
+  },
+  {
+    "idx": 302,
+    "type_id": "F5",
+    "confidence": "high",
+    "A": "F5",
+    "B": "F5"
+  },
+  {
+    "idx": 303,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 304,
+    "type_id": "H3",
+    "confidence": "medium",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 305,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  },
+  {
+    "idx": 306,
+    "type_id": "Q5",
+    "confidence": "medium",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 307,
+    "type_id": "Q4",
+    "confidence": "medium",
+    "A": "Q4",
+    "B": "Q6"
+  },
+  {
+    "idx": 308,
+    "type_id": "F4",
+    "confidence": "high",
+    "A": "F4",
+    "B": "H5"
+  },
+  {
+    "idx": 309,
+    "type_id": "H4",
+    "confidence": "medium",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 310,
+    "type_id": "P1",
+    "confidence": "high",
+    "A": "P1",
+    "B": "P1"
+  },
+  {
+    "idx": 311,
+    "type_id": "C3",
+    "confidence": "high",
+    "A": "C3",
+    "B": "C3"
+  },
+  {
+    "idx": 312,
+    "type_id": "Q2",
+    "confidence": "high",
+    "A": "Q2",
+    "B": "Q9"
+  },
+  {
+    "idx": 313,
+    "type_id": "Q8",
+    "confidence": "high",
+    "A": "Q8",
+    "B": "Q8"
+  },
+  {
+    "idx": 314,
+    "type_id": "C6",
+    "confidence": "high",
+    "A": "C6",
+    "B": "C6"
+  },
+  {
+    "idx": 315,
+    "type_id": "H3",
+    "confidence": "high",
+    "A": "H3",
+    "B": "H3"
+  },
+  {
+    "idx": 316,
+    "type_id": "Q3",
+    "confidence": "medium",
+    "A": "Q3",
+    "B": "Q3"
+  },
+  {
+    "idx": 317,
+    "type_id": "F2",
+    "confidence": "high",
+    "A": "F2",
+    "B": "F2"
+  },
+  {
+    "idx": 318,
+    "type_id": "P8",
+    "confidence": "high",
+    "A": "P8",
+    "B": "H3"
+  },
+  {
+    "idx": 319,
+    "type_id": "Q5",
+    "confidence": "medium",
+    "A": "Q5",
+    "B": "Q5"
+  },
+  {
+    "idx": 320,
+    "type_id": "P3",
+    "confidence": "low",
+    "A": "P3",
+    "B": "P1"
+  },
+  {
+    "idx": 321,
+    "type_id": "Y9",
+    "confidence": "high",
+    "A": "Y4",
+    "B": "Y9"
+  },
+  {
+    "idx": 322,
+    "type_id": "P6",
+    "confidence": "medium",
+    "A": "P6",
+    "B": "P6"
+  },
+  {
+    "idx": 323,
+    "type_id": "H4",
+    "confidence": "high",
+    "A": "H4",
+    "B": "H4"
+  },
+  {
+    "idx": 324,
+    "type_id": "Y7",
+    "confidence": "high",
+    "A": "Y7",
+    "B": "Y7"
+  }
+]
