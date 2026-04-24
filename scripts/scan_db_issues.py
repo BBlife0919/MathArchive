@@ -29,8 +29,9 @@ SUSPECT_KEYWORDS = [
 # cases/matrix/BOX는 \begin{}/\end{} 또는 <<BOX_START>>/<<BOX_END>>에 감싸지
 # 않은 경우에만 경고 (false positive 회피)
 CONTEXTUAL_KEYWORDS = {
-    "cases": re.compile(r"(?<!\\begin\{)(?<!\\end\{)cases"),
-    "matrix": re.compile(r"(?<!\\begin\{)(?<!\\end\{)matrix"),
+    "cases": re.compile(r"(?<![A-Za-z\\])(?<!\\begin\{)(?<!\\end\{)cases"),
+    # pmatrix/bmatrix/vmatrix/Bmatrix 내부의 matrix 서브스트링은 오탐 제외
+    "matrix": re.compile(r"(?<![A-Za-z\\])(?<!\\begin\{)(?<!\\end\{)matrix"),
     "BOX": re.compile(r"(?<![<_])BOX(?![_>])"),
 }
 
@@ -82,15 +83,21 @@ def scan_text(text: str) -> list:
                 span[:100],
             ))
 
-        # 3. 중괄호 짝 불일치
+        # 3. 중괄호 짝 불일치 (\{, \} 이스케이프는 제외)
         depth = 0
-        for ch in span:
+        i = 0
+        while i < len(span):
+            ch = span[i]
+            if ch == "\\" and i + 1 < len(span) and span[i + 1] in ("{", "}"):
+                i += 2
+                continue
             if ch == "{":
                 depth += 1
             elif ch == "}":
                 depth -= 1
                 if depth < 0:
                     break
+            i += 1
         if depth != 0:
             issues.append(("brace_mismatch", f"depth={depth}", span[:100]))
 

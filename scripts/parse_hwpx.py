@@ -141,10 +141,19 @@ def _strip_hwp_revision_history(script: str) -> str:
 
 
 def _balance_braces(t: str) -> str:
-    """괄호 짝 보정: 매칭 안 되는 '}'를 제거하고 남은 '{'에 '}'를 추가."""
+    """괄호 짝 보정: 매칭 안 되는 '}'를 제거하고 남은 '{'에 '}'를 추가.
+
+    `\\{` 과 `\\}` (delimiter 이스케이프)는 일반 중괄호 카운트에서 제외.
+    """
     bad = []
     depth = 0
-    for i, ch in enumerate(t):
+    i = 0
+    while i < len(t):
+        ch = t[i]
+        # 이스케이프된 delimiter는 건너뜀 (\{, \})
+        if ch == "\\" and i + 1 < len(t) and t[i + 1] in ("{", "}"):
+            i += 2
+            continue
         if ch == "{":
             depth += 1
         elif ch == "}":
@@ -152,17 +161,25 @@ def _balance_braces(t: str) -> str:
                 bad.append(i)
             else:
                 depth -= 1
+        i += 1
     if bad:
         arr = list(t)
         for i in reversed(bad):
             del arr[i]
         t = "".join(arr)
+    # 남은 '{' 에 대한 닫기 추가 (이스케이프 제외 재계산)
     depth = 0
-    for ch in t:
+    i = 0
+    while i < len(t):
+        ch = t[i]
+        if ch == "\\" and i + 1 < len(t) and t[i + 1] in ("{", "}"):
+            i += 2
+            continue
         if ch == "{":
             depth += 1
         elif ch == "}":
             depth -= 1
+        i += 1
     if depth > 0:
         t = t + ("}" * depth)
     return t
@@ -242,7 +259,7 @@ def hwp_eq_to_latex(script: str) -> str:
     #      영숫자·키워드 경계는 Python \b가 검출 못하므로 명시 분리.
     _all_hwp_kw = (
         sorted(GREEK_MAP.keys(), key=len, reverse=True)
-        + ["bar", "rm", "sqrt", "root", "leq", "geq", "neq",
+        + ["bar", "rm", "RM", "it", "IT", "sqrt", "root", "leq", "geq", "neq",
            "le", "ge", "ne", "cdot", "cdots", "ldots", "vdots",
            "times", "pm", "mp", "infty", "angle", "triangle",
            "perp", "parallel", "therefore", "because",
@@ -281,16 +298,34 @@ def hwp_eq_to_latex(script: str) -> str:
 
     # 0-c) 비교 연산자 le/ge/ne 접합 분리 (mle3, lekle1, 2ge5 등)
     #      HWP 수식에서는 이들이 비교기호로만 쓰이므로 영숫자와 붙으면 분리.
-    #      단 left/leftarrow/leq/geq/neq 같은 LaTeX·HWP 키워드의 일부는 보호:
+    #      단 left/leftarrow/leq/geq/neq/overline 같은 LaTeX·HWP 키워드 보호:
     #      - le 뒤 ft/q: left·leftarrow·leftrightarrow·leq 보호
     #      - ge 뒤 q:   geq 보호
     #      - ne 뒤 q/g: neq·neg 보호
+    #      - overline·overrightarrow·overleftarrow: 이름 끝의 `ne`·`line` 보호
+    _protected_cmds = [
+        "overline", "overrightarrow", "overleftarrow",
+        "underline", "underrightarrow", "underleftarrow",
+    ]
+    _cmd_stash = []
+    def _stash_cmd(m):
+        _cmd_stash.append(m.group(0))
+        return f"\x01CMD{len(_cmd_stash)-1}\x02"
+    _cmd_pat = re.compile(
+        r"\\?(?:" + "|".join(_protected_cmds) + r")(?![A-Za-z])"
+    )
+    s = _cmd_pat.sub(_stash_cmd, s)
+
     for kw, keep in (("leq", ""), ("geq", ""), ("neq", ""),
                       ("le",  "(?!ft|q)"),
                       ("ge",  "(?!q)"),
                       ("ne",  "(?!q|g)")):
         s = re.sub(rf"(?<=[A-Za-z0-9]){kw}{keep}(?![A-Za-z])", rf" {kw}", s)
         s = re.sub(rf"(?<![A-Za-z\\]){kw}{keep}(?=[A-Za-z0-9])", rf"{kw} ", s)
+
+    # 보호된 명령 복원
+    for i, v in enumerate(_cmd_stash):
+        s = s.replace(f"\x01CMD{i}\x02", v)
 
     # 1) LEFT / RIGHT 괄호 (대소문자 모두)
     s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
@@ -340,12 +375,24 @@ def hwp_eq_to_latex(script: str) -> str:
         brace_start = m.end() - 1
         brace_end = _find_matching_brace(s, brace_start)
         if brace_end == -1:
-            break
-        inner = s[brace_start + 1:brace_end]
+            # HWP 원본이 `}` 누락된 경우: 문자열 끝을 경계로 사용
+            brace_end = len(s)
+            inner = s[brace_start + 1:brace_end]
+        else:
+            inner = s[brace_start + 1:brace_end]
         # HWP cases의 행 구분자는 `#` 이 기본이지만 일부 강사가 `\\`(실제 두
         # 백슬래시)를 사용. 두 형식 모두 LaTeX `\\`로 변환.
+        # 열 구분자는 `&&` — LaTeX에서 `&`로 바꿔 정렬 컬럼 보존.
         lines = re.split(r"#|\\\\", inner)
-        converted = " \\\\ ".join(p.strip() for p in lines)
+        converted_lines = []
+        for p in lines:
+            p = p.strip()
+            if not p:
+                continue
+            # `&&` → ` & ` (열 구분), 잔여 `&` 는 이미 단일이므로 유지
+            p = re.sub(r"&&", " & ", p)
+            converted_lines.append(p)
+        converted = " \\\\ ".join(converted_lines)
         # `{cases{...}}`처럼 바깥 grouping 중괄호가 있는 경우 제거
         # (KaTeX에서 `{\begin{cases}...\end{cases}}`는 blank 그룹으로 인식돼 렌더 깨짐).
         # 단, pre의 `{`와 post의 `}`가 모두 있을 때만 짝 맞춰 제거.
@@ -361,6 +408,48 @@ def hwp_eq_to_latex(script: str) -> str:
             post = post[:ws_len] + post_ls[1:]
         s = pre + r"\begin{cases}" + converted + r"\end{cases}" + post
 
+    # 2-b) matrix/pmatrix/bmatrix/vmatrix/Bmatrix 변환
+    #      HWP의 행렬 문법 `matrix{a&&b#c&&d}` → `\begin{matrix}a&b\\c&d\end{matrix}`
+    #      `\left\{matrix{...}}\right\}` 같은 piecewise는 cases로 변환.
+    for env in ("pmatrix", "bmatrix", "vmatrix", "Bmatrix", "matrix"):
+        pat = re.compile(rf"(?<![A-Za-z\\])(?:\\)?{env}\s*\{{")
+        for _ in range(5):
+            m = pat.search(s)
+            if not m:
+                break
+            brace_start = m.end() - 1
+            brace_end = _find_matching_brace(s, brace_start)
+            if brace_end == -1:
+                brace_end = len(s)
+                inner = s[brace_start + 1:brace_end]
+            else:
+                inner = s[brace_start + 1:brace_end]
+            # 행: # 또는 \\ 구분자
+            rows = re.split(r"#|\\\\", inner)
+            # 열: && 또는 & 구분자 (HWP는 && 일반적)
+            converted_rows = []
+            for row in rows:
+                cols = re.split(r"&&|&", row)
+                converted_rows.append(" & ".join(c.strip() for c in cols if c.strip()))
+            body = " \\\\ ".join(r for r in converted_rows if r)
+            # \left\{matrix{...}}\right\} 케이스 — piecewise cases
+            pre = s[:m.start()]
+            post = s[brace_end + 1:] if brace_end < len(s) else ""
+            # \left\{ 바로 앞 + \right\} 바로 뒤면 cases로 승격
+            pre_strip = pre.rstrip()
+            post_strip = post.lstrip()
+            if (pre_strip.endswith(r"\left\{") and
+                (post_strip.startswith(r"}\right\}") or post_strip.startswith(r"\right\}"))):
+                # cases 환경으로
+                pre = pre_strip[:-len(r"\left\{")]
+                if post_strip.startswith(r"}\right\}"):
+                    post = post_strip[len(r"}\right\}"):]
+                else:
+                    post = post_strip[len(r"\right\}"):]
+                s = pre + r"\begin{cases}" + body + r"\end{cases}" + post
+            else:
+                s = pre + r"\begin{" + env + "}" + body + r"\end{" + env + "}" + post
+
     # 3) 분수: {num} over {den} → \frac{num}{den} (중첩 허용)
     for _ in range(5):
         new_s = re.sub(
@@ -370,6 +459,12 @@ def hwp_eq_to_latex(script: str) -> str:
         if new_s == s:
             break
         s = new_s
+
+    # 3-a) frac{A}{B} → \frac{A}{B} (HWP가 `frac{..}{..}` 표기하는 변형)
+    s = re.sub(
+        r"(?<![A-Za-z\\])frac(\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})(\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})",
+        r"\\frac\1\2", s,
+    )
 
     # 3-b) 중괄호 없는 over: 확장된 OPERAND (sqrt/root 포함)
     #      +/- 부호는 분수 밖 연산자이므로 OPERAND에 포함하지 않음
@@ -407,6 +502,9 @@ def hwp_eq_to_latex(script: str) -> str:
     s = re.sub(r"\bsqrt\s*\{", r"\\sqrt{", s)
     # sqrt 중괄호 없는 경우: sqrt(expr), sqrt-N, sqrtN
     s = re.sub(r"\bsqrt\s*\(([^)]+)\)", r"\\sqrt{\1}", s)
+    # sqrt-(expr) → \sqrt{-(expr)}
+    s = re.sub(r"\bsqrt\s*-\s*\(([^)]+)\)",
+               lambda m: r"\sqrt{-(" + m.group(1) + r")}", s)
     s = re.sub(r"\bsqrt\s*(-[A-Za-z0-9]+)", r"\\sqrt{\1}", s)
     s = re.sub(r"\bsqrt\s+([A-Za-z0-9])", r"\\sqrt{\1}", s)
     # sqrtN (붙어있는 경우)
@@ -428,10 +526,46 @@ def hwp_eq_to_latex(script: str) -> str:
         lambda m: r"\overline{" + m.group(1) + r"}",
         s,
     )
+    # bar 뒤 공백 + 숫자/혼합 (bar 4i → \overline{4i}, bar 2 → \overline{2})
+    s = re.sub(
+        r"\bbar\s+([0-9][A-Za-z0-9]*)",
+        lambda m: r"\overline{" + m.group(1) + r"}",
+        s,
+    )
+    # bar 뒤 `-숫자` (bar-3 → \overline{-3})
+    s = re.sub(
+        r"\bbar(-[0-9]+)",
+        lambda m: r"\overline{" + m.group(1) + r"}",
+        s,
+    )
+    s = re.sub(
+        r"\bbar\s+(-[0-9]+)",
+        lambda m: r"\overline{" + m.group(1) + r"}",
+        s,
+    )
+    # bar 뒤 LaTeX 명령 (bar \frac{..}{..} → \overline{\frac{..}{..}})
+    # 공백 있든 없든 모두 처리 (bar\frac... 또는 bar \frac...)
+    s = re.sub(
+        r"\bbar\s*(\\[A-Za-z]+(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}){1,2})",
+        lambda m: r"\overline{" + m.group(1) + r"}",
+        s,
+    )
+    # bar + (표현식) — 괄호로 묶인 식
+    s = re.sub(
+        r"\bbar\s*(\([^()]*\))",
+        lambda m: r"\overline{" + m.group(1) + r"}",
+        s,
+    )
 
     # 7) hat, vec, dot, ddot, tilde
     for accent in ["hat", "vec", "dot", "ddot", "tilde"]:
         s = re.sub(rf"\b{accent}\s*\{{", rf"\\{accent}{{", s)
+        # 중괄호 없이 공백+단일문자 (vec a → \vec{a})
+        s = re.sub(
+            rf"(?<![A-Za-z\\])(?:\\mathrm\{{)?{accent}(?:\}})?\s+([A-Za-z][A-Za-z0-9]*)",
+            lambda m, a=accent: rf"\{a}{{" + m.group(1) + "}",
+            s,
+        )
 
     # 8) rm{...} → \mathrm{...}
     s = re.sub(r"\brm\s*\{", r"\\mathrm{", s)
@@ -487,8 +621,22 @@ def hwp_eq_to_latex(script: str) -> str:
     s = re.sub(r"~+", " ", s)
 
     # 15) & 제거, # → \\
+    # matrix/cases/array 환경 내부의 `&`(열 구분자)는 보존해야 하므로
+    # placeholder로 임시 치환 → & 제거 → 복원.
+    _env_pat = re.compile(
+        r"\\begin\{(matrix|pmatrix|bmatrix|vmatrix|Bmatrix|cases|array)\}"
+        r".*?\\end\{\1\}",
+        re.DOTALL,
+    )
+    _env_stash = []
+    def _stash(m):
+        _env_stash.append(m.group(0))
+        return f"\x01ENV{len(_env_stash)-1}\x02"
+    s = _env_pat.sub(_stash, s)
     s = s.replace("&", "")
     s = re.sub(r"\s*#\s*", r" \\\\ ", s)
+    for i, v in enumerate(_env_stash):
+        s = s.replace(f"\x01ENV{i}\x02", v)
 
     # 16) 끝에 매달린 단독 백슬래시 제거
     s = re.sub(r"\\(?=\s|$)", "", s)
@@ -629,11 +777,41 @@ def _postprocess_latex(s: str) -> str:
         lambda m: r"{\overline{" + m.group(1) + "}}",
         s,
     )
+    # {bar} + LaTeX 명령 (예: `{bar} \alpha^2` → `{\overline{\alpha^2}}`)
+    s = re.sub(
+        r"\{bar\}\s*(\\[A-Za-z]+(?:\^[A-Za-z0-9]+|\{[^{}]*\})?)",
+        lambda m: r"{\overline{" + m.group(1) + "}}",
+        s,
+    )
+    # frac 두번째 분모가 {bar}{X} 분할된 케이스: `\frac{A}{bar}{B}` → `\frac{A}{\overline{B}}`
+    s = re.sub(
+        r"\}\{bar\}\{([^{}]+)\}",
+        lambda m: r"}{\overline{" + m.group(1) + "}}",
+        s,
+    )
     # {sqrt} 고립 케이스: `{bar}`와 동일 원인 (over 분수 분모 쪼갬).
     #   `\frac{8}{sqrt} { -2}`  →  `\frac{8}{\sqrt{-2}}`
+    # 공백+숫자/단어 형태도 처리: `{sqrt} 2` → `{\sqrt{2}}`
     s = re.sub(
-        r"\{sqrt\}\s*\{\s*(-?[A-Za-z0-9]+)\s*\}",
+        r"\{sqrt\}\s*\{\s*([^{}]+?)\s*\}",
+        lambda m: r"{\sqrt{" + m.group(1).strip() + "}}",
+        s,
+    )
+    s = re.sub(
+        r"\{sqrt\}\s+(-?[A-Za-z0-9]+)",
         lambda m: r"{\sqrt{" + m.group(1) + "}}",
+        s,
+    )
+    # {sqrt} + LaTeX 명령 (`{sqrt} \alpha` → `{\sqrt{\alpha}}`)
+    s = re.sub(
+        r"\{sqrt\}\s*(\\[A-Za-z]+(?:\^[A-Za-z0-9]+|\{[^{}]*\})?)",
+        lambda m: r"{\sqrt{" + m.group(1) + "}}",
+        s,
+    )
+    # {box} 고립 → {\boxed{...}} (1단계 중첩 브레이스 허용)
+    s = re.sub(
+        r"(?<!\\)\bbox\s*\{((?:[^{}]|\{[^{}]*\})*)\}",
+        lambda m: r"\boxed{" + m.group(1).strip() + "}",
         s,
     )
     # bar 뒤 숫자 접합 (postprocess 잔여분)
@@ -652,10 +830,17 @@ def _postprocess_latex(s: str) -> str:
     # times 결합
     s = re.sub(r"(?i)\btimes(?=[A-Za-z])", r"\\times ", s)
 
-    # rm 잔여
-    s = re.sub(r"(?i)\brm(?=[A-Za-z])", "", s)
-    s = re.sub(r"(?i)\brm\s+(?=\\)", "", s)
-    s = re.sub(r"(?i)\brm\b\s*", "", s)
+    # rm 잔여 — HWP는 roman(직립)을 `rm` 접두사로 표기. LaTeX에선 기본 italic이므로
+    # 대부분 삭제가 안전. `_`/`{`/숫자 앞, 영문자 뒤 모두 커버.
+    # 대문자 RM 먼저 (i 플래그 있지만 명시적)
+    s = re.sub(r"(?<![A-Za-z\\])RM(?=[A-Za-z_\{])", "", s)
+    s = re.sub(r"(?<![A-Za-z\\])RM\s+(?=[A-Za-z\\])", "", s)
+    s = re.sub(r"(?i)(?<![A-Za-z\\])rm(?=[A-Za-z_\{])", "", s)
+    s = re.sub(r"(?i)(?<![A-Za-z\\])rm\s+(?=\\)", "", s)
+    s = re.sub(r"(?i)(?<![A-Za-z\\])rm\b\s*", "", s)
+    # it 접두사도 동일 (italic은 LaTeX 기본이라 삭제)
+    s = re.sub(r"(?<![A-Za-z\\])it(?=[A-Za-z_\{])", "", s)
+    s = re.sub(r"(?<![A-Za-z\\])it\s+(?=\\)", "", s)
 
     # RIGHT/LEFT 잔여 — 이미 \left/\right로 변환된 LaTeX 명령은 보존
     s = re.sub(r"(?i)(?<!\\)RIGHT\s*\|", r"\\right|", s)
@@ -915,6 +1100,9 @@ def serialize_items(items: list) -> str:
             if item.text.strip():
                 last_was_eq = False
         elif item.kind == "equation":
+            # 빈 수식은 skip — `$$` 연쇄가 후속 $...$ 파싱을 망가뜨림
+            if not item.latex or not item.latex.strip():
+                continue
             rendered = f"${item.latex}$"
             if last_was_eq:
                 parts.append(" ")
@@ -946,7 +1134,11 @@ def sanitize_outside_math(text: str) -> str:
                 # \} 가 아닌 일반 } 중 문자열 끝 쪽부터 제거
                 for _ in range(extra):
                     inner = re.sub(r"(?<!\\)\}(?=[^{}]*$)", "", inner, count=1)
-            parts[i] = "$" + inner + "$"
+            # 축소된 결과가 비거나 공백만 남으면 `$$` 연쇄 방지 위해 전체 삭제
+            if not inner.strip():
+                parts[i] = ""
+            else:
+                parts[i] = "$" + inner + "$"
     return "".join(parts)
 
 
