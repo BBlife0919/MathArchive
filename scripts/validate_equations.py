@@ -28,6 +28,11 @@ HWP_KEYWORDS = [
     "over", "sqrt", "root", "bar", "rm", "hat", "vec", "dot", "ddot",
     "tilde", "cases", "pile", "eqalign", "matrix",
     "BOX", "box", "prime",
+    # 집합/기호 키워드 (변환 누락 시 literal 노출)
+    "vert", "VERT", "mid", "cap", "cup", "emptyset",
+    "DIVIDE", "divide",
+    # 화살표/극한
+    "TO", "to", "from", "FROM",
 ]
 
 # 단어 경계로 검사 (예: \overline의 over는 OK, 단독 over는 NG)

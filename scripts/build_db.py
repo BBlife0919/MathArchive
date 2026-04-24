@@ -328,6 +328,21 @@ def main():
     print_stats(conn)
     conn.close()
 
+    # 수식 품질 자동 스캔 (변환 누락 자동 탐지)
+    print("\n" + "=" * 60, file=sys.stderr)
+    print("  수식 품질 자동 스캔", file=sys.stderr)
+    print("=" * 60, file=sys.stderr)
+    try:
+        import subprocess
+        subprocess.run(
+            [sys.executable,
+             os.path.join(os.path.dirname(__file__), "scan_db_issues.py"),
+             "--db", args.db, "--top", "3"],
+            check=False,
+        )
+    except Exception as e:
+        print(f"  (스캔 실행 실패: {e})", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
