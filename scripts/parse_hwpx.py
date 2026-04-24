@@ -49,7 +49,7 @@ GREEK_MAP = {
 SYMBOL_MAP = {
     "TIMES": r"\times", "times": r"\times",
     "CDOT": r"\cdot", "cdot": r"\cdot",
-    "DIV": r"\div",
+    "DIVIDE": r"\div", "divide": r"\div", "DIV": r"\div",
     "PM": r"\pm", "pm": r"\pm",
     "MP": r"\mp",
     "LEQ": r"\leq", "leq": r"\leq", "le": r"\leq",
@@ -75,12 +75,15 @@ SYMBOL_MAP = {
     "IN": r"\in",
     "SUBSET": r"\subset",
     "SUPSET": r"\supset",
-    "CUP": r"\cup",
-    "CAP": r"\cap",
-    "EMPTYSET": r"\emptyset",
+    "CUP": r"\cup", "cup": r"\cup",
+    "CAP": r"\cap", "cap": r"\cap",
+    "EMPTYSET": r"\emptyset", "emptyset": r"\emptyset",
     "RIGHTARROW": r"\rightarrow",
     "LEFTARROW": r"\leftarrow",
     "LEFTRIGHTARROW": r"\leftrightarrow",
+    "TO": r"\to", "to": r"\to",
+    "VERT": r"|", "vert": r"|",
+    "MID": r"\mid", "mid": r"\mid",
 }
 
 # LaTeX 명령으로 보존해야 하는 화이트리스트
@@ -103,6 +106,38 @@ _LATEX_KEEP = {
     "circ", "degree", "neq", "ne", "le", "ge", "boxed",
     "square", "Box", "phantom",
 }
+
+
+def _strip_hwp_revision_history(script: str) -> str:
+    """HWP 수식 개정 이력 래퍼 제거.
+
+    HWP는 같은 수식의 이전 버전을 다음 형태로 중첩 저장한다:
+        {{{...{<원본>} to <ws>{<ver_code_1>}} to <ws>{<ver_code_2>}} ... to <ws>{<ver_code_N>}}
+
+    여기서 `<ver_code>`는 소문자+숫자 코드 (예: tgr510471, edr460488).
+    N개의 래퍼는 각각 `{`를 하나씩 앞에 붙이고, 뒤에 `} to {ver}`을 하나씩 덧붙인다.
+    → 원본 추출: N개의 선행 `{` 제거, 첫 `} to {ver}` 직전까지.
+    """
+    s = script
+    # 이력 코드 개수 카운트
+    n_codes = len(re.findall(
+        r"\}\s*to\s*[\r\n\s]*\{[a-z][a-z0-9]{3,}\}", s
+    ))
+    if n_codes == 0:
+        return script
+    # 선행 whitespace 제거, N개의 '{' 벗기기
+    s2 = s.lstrip()
+    stripped = 0
+    while stripped < n_codes and s2.startswith("{"):
+        s2 = s2[1:]
+        stripped += 1
+    if stripped < n_codes:
+        return script  # 구조가 기대와 다름: 원본 반환
+    # 첫 `} to {ver_code}` 앞까지를 원본으로
+    m = re.search(r"\}\s*to\s*[\r\n\s]*\{[a-z][a-z0-9]{3,}\}", s2)
+    if not m:
+        return script
+    return s2[:m.start()].strip()
 
 
 def _balance_braces(t: str) -> str:
@@ -131,6 +166,43 @@ def _balance_braces(t: str) -> str:
     if depth > 0:
         t = t + ("}" * depth)
     return t
+
+
+def _balance_left_right(t: str) -> str:
+    """\\left / \\right 짝 보정.
+
+    KaTeX는 \\left\\{ ... } 처럼 \\right 없이 닫히면 전체 수식이 빨간 에러로 렌더.
+    짝 안 맞는 \\left 는 \\right\\}를 추가, 남는 \\right 는 \\left를 앞에 추가.
+    """
+    # 단순 카운트: `\left` 와 `\right` 개수
+    n_left = len(re.findall(r"\\left(?![a-zA-Z])", t))
+    n_right = len(re.findall(r"\\right(?![a-zA-Z])", t))
+    if n_left == n_right:
+        return t
+    if n_left > n_right:
+        # 부족한 \right 추가: 마지막 } 직전에 \right\} 삽입하거나 문자열 끝에 추가
+        # 가장 안전한 것은 문자열 끝에 \right. 또는 \right\}
+        # \left\{ 로 열렸다면 \right\} 를 끝에 추가
+        missing = n_left - n_right
+        # 가장 바깥쪽 \left 가 어떤 구분자로 열렸는지 확인
+        lefts = re.findall(r"\\left\s*(\\[\{\}]|[\(\[\|\.]|\\\|)", t)
+        closers = []
+        for L in lefts[-missing:]:
+            if L in (r"\{", r"\(", "("):
+                closers.append(r"\right" + {"(": ")", r"\{": r"\}"}.get(L, ")"))
+            elif L == "[":
+                closers.append(r"\right]")
+            elif L in ("|", r"\|"):
+                closers.append(r"\right|")
+            elif L == ".":
+                closers.append(r"\right.")
+            else:
+                closers.append(r"\right.")
+        return t + "".join(closers)
+    else:
+        # 남는 \right — 처음에 \left. 를 앞에 추가
+        missing = n_right - n_left
+        return (r"\left. " * missing) + t
 
 
 def _strip_outer_braces(tok: str) -> str:
@@ -174,6 +246,8 @@ def hwp_eq_to_latex(script: str) -> str:
            "le", "ge", "ne", "cdot", "cdots", "ldots", "vdots",
            "times", "pm", "mp", "infty", "angle", "triangle",
            "perp", "parallel", "therefore", "because",
+           "vert", "VERT", "mid", "cap", "cup", "emptyset",
+           "to", "TO", "DIVIDE", "divide",
            "LEFT", "RIGHT", "left", "right",
            "TIMES", "CDOT", "ANGLE", "PERP", "INFTY"]
     )
@@ -190,6 +264,20 @@ def hwp_eq_to_latex(script: str) -> str:
         if new == s:
             break
         s = new
+
+    # 0-b2) 이항 키워드 + 단일 영문자 분리 (vertx → vert x, capx → cap x 등)
+    #       집합 기호/절대값에서 자주 발생. 단일 영문자 뒤가 비영문자일 때만.
+    _binary_kw = ["vert", "VERT", "cap", "cup", "mid", "emptyset",
+                  "to", "TO", "DIVIDE", "divide"]
+    _binary_pat = "|".join(_binary_kw)
+    # 왼쪽: 영숫자/닫힘괄호 + kw → 공백 분리
+    s = re.sub(rf"([A-Za-z0-9\}}\)\]])({_binary_pat})(?![A-Za-z])",
+               r"\1 \2", s)
+    # 오른쪽: kw + 영숫자 → 공백 분리 (단 후속이 여러 영문자면 단어일 수 있어 보호:
+    #        vertical 같은 일반 단어 → 첫 2글자는 분리 안 함)
+    s = re.sub(rf"(?<![A-Za-z])({_binary_pat})([A-Za-z])(?![A-Za-z])",
+               r"\1 \2", s)
+    s = re.sub(rf"(?<![A-Za-z])({_binary_pat})(\d)", r"\1 \2", s)
 
     # 0-c) 비교 연산자 le/ge/ne 접합 분리 (mle3, lekle1, 2ge5 등)
     #      HWP 수식에서는 이들이 비교기호로만 쓰이므로 영숫자와 붙으면 분리.
@@ -408,6 +496,9 @@ def hwp_eq_to_latex(script: str) -> str:
 
     # 17) 괄호 짝 보정
     s = _balance_braces(s)
+
+    # 17-b) \left / \right 짝 보정 (KaTeX 렌더 에러 방지)
+    s = _balance_left_right(s)
 
     # 18) 후처리
     s = _postprocess_latex(s)
@@ -659,6 +750,8 @@ def _process_equation(eq_elem, items):
     if script_el is None or not script_el.text:
         return
     raw = script_el.text
+    # HWP 수식 개정 이력 래퍼 제거 (최우선)
+    raw = _strip_hwp_revision_history(raw)
     raw = re.split(r"\n\s*\n", raw)[0].strip()
     clean = re.sub(r"\s+", "", raw)
     if not clean or re.fullmatch(r"To\d+", clean):
@@ -842,13 +935,17 @@ def sanitize_outside_math(text: str) -> str:
         else:
             inner = p[1:-1]
             inner = _postprocess_latex(inner)
-            open_b = inner.count("{")
-            close_b = inner.count("}")
+            # \{, \} (delimiter 이스케이프)는 brace 카운트에서 제외
+            counted = re.sub(r"\\[\{\}]", "", inner)
+            open_b = counted.count("{")
+            close_b = counted.count("}")
             if open_b > close_b:
                 inner = inner + ("}" * (open_b - close_b))
             elif close_b > open_b:
                 extra = close_b - open_b
-                inner = re.sub(r"\}(?=[^{}]*$)", "", inner, count=extra)
+                # \} 가 아닌 일반 } 중 문자열 끝 쪽부터 제거
+                for _ in range(extra):
+                    inner = re.sub(r"(?<!\\)\}(?=[^{}]*$)", "", inner, count=1)
             parts[i] = "$" + inner + "$"
     return "".join(parts)
 
