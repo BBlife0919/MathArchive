@@ -1076,6 +1076,32 @@ def _process_tbl(tbl_elem, items):
         items.append(ContentItem("text", text="\n" + "  ".join(parts) + "\n"))
         return
 
+    # 테두리 프레임 감지: <보기>·<조건> 같은 박스는 HWP에서
+    #   [빈 셀] [내용] [빈 셀]
+    #   [빈 셀] [빈 셀] [빈 셀]
+    # 식으로 주변을 빈 셀로 감싸 만듦. 내용 셀이 1개 컬럼에만 있으면
+    # 테두리로 판단, 중앙 콘텐츠만 추출해 깔끔한 BOX로 렌더.
+    _content_cells = [
+        (r, c, cell) for r, row in enumerate(table_rows)
+        for c, cell in enumerate(row) if cell.strip()
+    ]
+    # 완전히 빈 테이블 — BOX도 출력하지 말고 이미 넣은 BOX_START도 제거
+    if not _content_cells:
+        if items and items[-1].kind == "text" and items[-1].text.strip() == "<<BOX_START>>":
+            items.pop()
+        return
+
+    if max_cols >= 2:
+        cols_used = {c[1] for c in _content_cells}
+        if len(cols_used) == 1:
+            # 테두리 프레임 — 중앙 콘텐츠만 세로로 나열
+            for _, _, cell in _content_cells:
+                # <br> → 줄바꿈 복원 (셀 내부는 <br>로 연결돼있음)
+                content = cell.replace("<br>", "\n")
+                items.append(ContentItem("text", text=content + "\n"))
+            items.append(ContentItem("text", text="<<BOX_END>>\n"))
+            return
+
     if max_cols <= 1:
         # 1열 — 기존처럼 줄 단위 나열 (조건박스/보기박스)
         for row in table_rows:
