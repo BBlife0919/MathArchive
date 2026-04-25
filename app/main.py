@@ -225,9 +225,16 @@ def _safe_image_url(url: str) -> str:
 def _render_image(image_ref: str, file_stem: str, img_map: dict | None = None):
     """이미지 표시. DB의 image_path 우선(R2 URL), 없으면 로컬 폴더 폴백."""
     src = (img_map or {}).get(image_ref)
+    if src and src.startswith("http"):
+        # st.image()는 URL도 서버측 캐싱을 거치며 깨질 수 있어 HTML img로 직접 렌더.
+        safe = _safe_image_url(src)
+        st.markdown(
+            f'<img src="{safe}" width="400" style="display:block;margin:8px 0;">',
+            unsafe_allow_html=True,
+        )
+        return
     if src:
-        display_src = _safe_image_url(src) if src.startswith("http") else src
-        st.image(display_src, width=400)
+        st.image(src, width=400)
         return
 
     # 로컬 폴백 (개발 환경 / 마이그레이션 전 DB)
