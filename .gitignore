@@ -31,3 +31,6 @@ __pycache__/
 # Claude Code local settings
 .claude/settings.local.json
 .env
+
+# Streamlit secrets (실제 자격증명, Cloud secrets 패널에서 관리)
+.streamlit/secrets.toml

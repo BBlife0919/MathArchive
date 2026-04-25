@@ -8,13 +8,12 @@
 import io
 import json
 import re
-import sqlite3
 from pathlib import Path
 
 import streamlit as st
 
-# ── 설정 ──────────────────────────────────────────────────────
-DB_PATH = Path(__file__).resolve().parent.parent / "db" / "mathdb.sqlite"
+from db import get_connection as _get_db_connection, is_cloud
+
 PAGE_TITLE = "MathArchive by 이영우"
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
 EXAM_TYPE_KO = {"a": "중간", "b": "기말"}
@@ -49,9 +48,7 @@ def format_meta(row, *, short=False) -> str:
 # ── DB 연결 ───────────────────────────────────────────────────
 @st.cache_resource
 def get_connection():
-    conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    return conn
+    return _get_db_connection()
 
 
 def query(sql, params=()):
@@ -122,6 +119,22 @@ def search_questions(schools, chapters, difficulties, regions,
 IMAGE_DIR = Path(__file__).resolve().parent.parent / "images"
 
 
+@st.cache_data(ttl=600)
+def _image_map_for_question(question_id: int) -> dict:
+    """question_id → {image_ref: image_path/URL} 사전.
+
+    Postgres(R2) 환경에서는 모든 image_path 가 R2 URL,
+    로컬 환경에서는 파일경로(또는 R2 URL) 혼재 가능.
+    """
+    if question_id is None:
+        return {}
+    rows = query(
+        "SELECT image_ref, image_path FROM images WHERE question_id = ?",
+        (question_id,),
+    )
+    return {r["image_ref"]: r["image_path"] for r in rows if r["image_ref"]}
+
+
 # ── LaTeX 렌더링 헬퍼 ────────────────────────────────────────
 def _frac_to_dfrac(text: str) -> str:
     r"""$...$안의 \frac → \dfrac 변환 (display-style로 분수 크기 키움)."""
@@ -141,21 +154,20 @@ def _ensure_line_breaks(text: str) -> str:
     return text
 
 
-def render_question_content(text: str, file_source: str = ""):
+def render_question_content(text: str, file_source: str = "",
+                            question_id: int | None = None):
     """문제 텍스트를 Streamlit으로 렌더링한다.
 
-    - <<IMG:imageN>> → st.image()로 실제 이미지 표시
+    - <<IMG:imageN>> → st.image()로 실제 이미지 표시 (DB image_path → R2 URL or 로컬)
     - <<BOX_START>>...<<BOX_END>> → 테두리 박스로 표시
     - 인라인 수식 $...$ 은 markdown이 자동 렌더링
     - \\frac → \\dfrac 변환 (display-style 분수)
     """
-    # 빈 줄 정리
     text = re.sub(r"\n{3,}", "\n\n", text)
 
-    # 파일명 stem (이미지 매칭용)
     file_stem = Path(file_source).stem if file_source else ""
+    img_map = _image_map_for_question(question_id) if question_id else {}
 
-    # <<BOX_START>>...<<BOX_END>> → 테두리 박스, <<IMG:...>> → 이미지
     parts = re.split(r"(<<BOX_START>>|<<BOX_END>>|<<IMG:image\d+>>)", text)
 
     in_box = False
@@ -171,19 +183,14 @@ def render_question_content(text: str, file_source: str = ""):
             content = "".join(box_content).strip()
             if content:
                 content = _frac_to_dfrac(content)
-                # BOX 내부는 파서가 이미 Markdown 테이블 또는 줄단위로 직렬화함.
-                # 여기서 \n → \n\n 변환하면 MD 테이블이 깨지고, 들여쓰기가
-                # 코드블록으로 오인되므로 각 행의 선행 공백만 제거한다.
                 lines = [ln.lstrip() for ln in content.split("\n")]
                 content = "\n".join(lines)
                 with st.container(border=True):
-                    # 셀 내 <br> 태그를 렌더링하기 위해 HTML 허용.
-                    # 입력은 내부 DB(원본 HWPX 파생)라 XSS 위험 없음.
                     st.markdown(content, unsafe_allow_html=True)
             continue
         elif re.match(r"<<IMG:(image\d+)>>", part):
             ref = re.match(r"<<IMG:(image\d+)>>", part).group(1)
-            _render_image(ref, file_stem)
+            _render_image(ref, file_stem, img_map)
             continue
 
         if in_box:
@@ -196,30 +203,25 @@ def render_question_content(text: str, file_source: str = ""):
                 st.markdown(stripped)
 
 
-def _render_image(image_ref: str, file_stem: str):
-    """이미지 참조를 실제 파일로 찾아서 표시한다."""
-    if not file_stem:
-        st.caption(f"[이미지: {image_ref}]")
+def _render_image(image_ref: str, file_stem: str, img_map: dict | None = None):
+    """이미지 표시. DB의 image_path 우선(R2 URL), 없으면 로컬 폴더 폴백."""
+    src = (img_map or {}).get(image_ref)
+    if src:
+        st.image(src, width=400)
         return
 
-    # images/ 디렉토리에서 매칭되는 파일 찾기
-    image_path = None
-    if IMAGE_DIR.exists():
+    # 로컬 폴백 (개발 환경 / 마이그레이션 전 DB)
+    if file_stem and IMAGE_DIR.exists():
         for f in IMAGE_DIR.iterdir():
             if image_ref in f.name and file_stem in f.name:
-                image_path = f
-                break
-        # file_stem 매칭 안 되면 image_ref만으로 시도
-        if image_path is None:
-            for f in IMAGE_DIR.iterdir():
-                if f.stem == image_ref or image_ref in f.name:
-                    image_path = f
-                    break
+                st.image(str(f), width=400)
+                return
+        for f in IMAGE_DIR.iterdir():
+            if f.stem == image_ref or image_ref in f.name:
+                st.image(str(f), width=400)
+                return
 
-    if image_path and image_path.exists():
-        st.image(str(image_path), width=400)
-    else:
-        st.caption(f"[이미지: {image_ref}]")
+    st.caption(f"[이미지: {image_ref}]")
 
 
 def render_question_text(text: str) -> str:
@@ -236,13 +238,20 @@ def render_question_text(text: str) -> str:
     return text
 
 
-def format_choices(choices_json: str) -> str:
+def format_choices(choices_json) -> str:
     """선택지 JSON을 보기 좋게 포맷한다.
-    첫 줄에 ①②③, 둘째 줄에 ④⑤가 위치하도록 선지 3개/2개로 끊어 배치."""
-    try:
-        choices = json.loads(choices_json)
-    except (json.JSONDecodeError, TypeError):
+    첫 줄에 ①②③, 둘째 줄에 ④⑤가 위치하도록 선지 3개/2개로 끊어 배치.
+
+    Postgres JSONB 는 이미 list/dict로 디코드되므로 문자열/객체 모두 허용."""
+    if not choices_json:
         return ""
+    if isinstance(choices_json, str):
+        try:
+            choices = json.loads(choices_json)
+        except (json.JSONDecodeError, TypeError):
+            return ""
+    else:
+        choices = choices_json
     if not choices:
         return ""
     circle = {1: "①", 2: "②", 3: "③", 4: "④", 5: "⑤"}
@@ -417,7 +426,7 @@ def main():
                         if has_rich or len(qtext) > 400:
                             with st.expander("문제 보기", expanded=not has_rich):
                                 render_question_content(
-                                    qtext, row["file_source"])
+                                    qtext, row["file_source"], qid)
                         else:
                             text = render_question_text(qtext)
                             st.markdown(text)
@@ -435,7 +444,7 @@ def main():
                             if row["solution_text"]:
                                 render_question_content(
                                     row["solution_text"],
-                                    row["file_source"])
+                                    row["file_source"], qid)
                             else:
                                 st.caption("해설 없음")
 
@@ -660,7 +669,8 @@ def main():
 
                     # 문제 본문 (이미지+박스+LaTeX 렌더링)
                     render_question_content(
-                        row["question_text"], row.get("file_source", "")
+                        row["question_text"], row.get("file_source", ""),
+                        row["question_id"],
                     )
 
                     # 선택지
@@ -679,7 +689,8 @@ def main():
                             with st.expander("해설 보기"):
                                 render_question_content(
                                     row["solution_text"],
-                                    row.get("file_source", ""))
+                                    row.get("file_source", ""),
+                                    row["question_id"])
 
                     # 제거 버튼
                     if st.button(f"❌ {i}번 제거", key=f"prev_rm_{row['question_id']}"):
