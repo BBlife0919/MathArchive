@@ -9,6 +9,7 @@ import io
 import json
 import re
 from pathlib import Path
+from urllib.parse import quote, urlsplit, urlunsplit
 
 import streamlit as st
 
@@ -203,11 +204,30 @@ def render_question_content(text: str, file_source: str = "",
                 st.markdown(stripped)
 
 
+def _safe_image_url(url: str) -> str:
+    """R2 URL의 한글·대괄호·공백을 퍼센트 인코딩한다.
+
+    Why: image_path에 인코딩 안 된 특수문자가 들어있으면 Streamlit이
+    URL로 인식하지 못하고 로컬 파일로 fallback해서 MediaFileStorageError가 난다.
+    """
+    parts = urlsplit(url)
+    if not parts.scheme:
+        return url
+    return urlunsplit((
+        parts.scheme,
+        parts.netloc,
+        quote(parts.path, safe="/%"),
+        quote(parts.query, safe="=&%"),
+        parts.fragment,
+    ))
+
+
 def _render_image(image_ref: str, file_stem: str, img_map: dict | None = None):
     """이미지 표시. DB의 image_path 우선(R2 URL), 없으면 로컬 폴더 폴백."""
     src = (img_map or {}).get(image_ref)
     if src:
-        st.image(src, width=400)
+        display_src = _safe_image_url(src) if src.startswith("http") else src
+        st.image(display_src, width=400)
         return
 
     # 로컬 폴백 (개발 환경 / 마이그레이션 전 DB)
