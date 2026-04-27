@@ -74,31 +74,32 @@ def scan_text(text: str) -> list:
             text[:120],
         ))
 
-    # 0-b) BOX 중첩 — 외곽 rect 가 내부 tbl 을 감싸면서 외곽 BOX 도 함께
-    #      발행돼 두 겹이 된 케이스. 표 안 셀 값이 'shadow text' 로 본문에
-    #      덤프되는 동시에 일어남.
-    if re.search(r"<<BOX_START>>(?:[^<]|<(?!<BOX_END>>))*?<<BOX_START>>",
-                 text, re.S):
-        issues.append((
-            "box_nested",
-            "outer rect wrapping inner table",
-            text[:120],
-        ))
-
-    # 0-c) 표 직후 셀 값이 한 줄에 하나씩 덤프된 패턴 (rect+tbl 중첩의 부산물)
+    # 0-b) 표 직후 셀 값이 한 줄에 하나씩 덤프된 패턴 (rect+tbl 중첩의 부산물)
     #      예) 표 마지막 행 다음에 `$e$\n $1$\n $-5$\n ...` 형태로 늘어선 경우.
     #      3개 이상의 짧은 단독 수식 줄이 연속될 때만 보고.
+    #
+    #      NOTE: 별도의 box_nested(중첩 BOX) 검사는 의도된 중첩(풀이 박스 안의
+    #      (가) 마커 박스 등)까지 잡아내 false positive 가 많아 제거.
+    #      rect+tbl 사고 패턴은 shadow_text_dump 가 동일하게 잡고 있음.
     shadow_run = re.search(
         r"(?:(?:^|\n)\s*\$[^$\n]{1,15}\$\s*){3,}",
         text,
         re.MULTILINE,
     )
     if shadow_run and "<<BOX_END>>" in text[:shadow_run.start()]:
-        issues.append((
-            "shadow_text_dump",
-            "cell values dumped as flat list after table",
-            text[max(0, shadow_run.start() - 30):shadow_run.start() + 90],
-        ))
+        # shadow_text_dump 도 풀이 본문의 등식 체인($=...$ 연속) 에 false-positive
+        # 가 잦으므로 추가 가드 — 짧은 수식 줄들이 LaTeX 명령(\dfrac 등)을 거의
+        # 안 갖고 단순 변수/숫자 위주여야 의심.
+        snippet = shadow_run.group(0)
+        latex_cmd = len(re.findall(r"\\[a-zA-Z]+", snippet))
+        equality_signs = snippet.count("=")
+        if latex_cmd <= 2 and equality_signs <= 1:
+            issues.append((
+                "shadow_text_dump",
+                "cell values dumped as flat list after table",
+                text[max(0, shadow_run.start() - 30):
+                     shadow_run.start() + 90],
+            ))
 
     for m in MATH_SPAN.finditer(text):
         span = m.group(1)

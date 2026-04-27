@@ -1449,10 +1449,35 @@ def _split_compressed_values(block: str) -> list:
 
 
 def extract_choices(text: str) -> list:
-    """선택지를 추출한다."""
+    """선택지를 추출한다.
+
+    BOX 내부 ⃝번호는 선지 그리드 표 (예: 5×4 (가)/(나)/(다)/사분면 매핑)
+    의 행 라벨일 수 있어 ① 위치 사이의 모든 셀 텍스트가 선지로 잘못
+    합쳐진다. BOX 외부 ⃝만 본다. BOX 안에만 있으면 빈 리스트 반환 — 사용자
+    UI 는 BOX 표 자체를 보여주므로 별도 선지 분리는 필요 없음.
+    """
+    # BOX 외부 영역만 추려서 검색 대상으로 삼되, 위치 보존을 위해 BOX 부분은
+    # 같은 길이의 공백으로 치환한다.
+    masked_chars = []
+    parts = re.split(r"(<<BOX_START>>|<<BOX_END>>)", text)
+    box_depth = 0
+    for part in parts:
+        if part == "<<BOX_START>>":
+            box_depth += 1
+            masked_chars.append(" " * len(part))
+        elif part == "<<BOX_END>>":
+            box_depth -= 1
+            masked_chars.append(" " * len(part))
+        else:
+            if box_depth > 0:
+                masked_chars.append(" " * len(part))
+            else:
+                masked_chars.append(part)
+    masked = "".join(masked_chars)
+
     found = []
     for c in CIRCLES:
-        for m in re.finditer(re.escape(c), text):
+        for m in re.finditer(re.escape(c), masked):
             found.append((m.start(), CIRCLE_NUM[c]))
     if not found:
         return []
@@ -1748,11 +1773,35 @@ def _extract_questions_from_xml(section_root, watermark_images, debug=False):
 
 
 def _strip_choices_from_text(text: str) -> str:
-    """문제본문에서 선택지 부분(첫 ⃝번호 이후)을 제거한다."""
-    m = re.search(r"[①②③④⑤]", text)
-    if not m:
-        return text.strip()
-    return text[:m.start()].rstrip()
+    """문제본문에서 선택지 부분(첫 ⃝번호 이후)을 제거한다.
+
+    단, BOX(<<BOX_START>>..<<BOX_END>>) 내부의 ①②③④⑤ 는 선지가 아니라
+    선지 그리드 표(예: ①제2사분면 ②제1사분면 처럼 (가)/(나)/(다) 와
+    매핑된 표) 의 일부일 수 있다. BOX 안 ① 에서 잘라내면 표가 중간에서
+    끊어지고 짝 안 맞는 BOX_START 만 남아 렌더 깨짐.
+
+    전략: BOX 외부의 첫 ⃝번호에서만 잘라낸다. BOX 안에만 있으면 그대로 둔다.
+    """
+    if not text:
+        return text
+    # BOX 깊이를 추적하면서 BOX 외부의 첫 ⃝번호 위치 찾기
+    parts = re.split(r"(<<BOX_START>>|<<BOX_END>>)", text)
+    pos = 0
+    box_depth = 0
+    for part in parts:
+        if part == "<<BOX_START>>":
+            box_depth += 1
+            pos += len(part)
+        elif part == "<<BOX_END>>":
+            box_depth -= 1
+            pos += len(part)
+        else:
+            if box_depth == 0:
+                m = re.search(r"[①②③④⑤]", part)
+                if m:
+                    return text[: pos + m.start()].rstrip()
+            pos += len(part)
+    return text.strip()
 
 
 _BULLET_CHARS = r"⦁●■◆◇▪▫•"
