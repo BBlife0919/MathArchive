@@ -24,6 +24,9 @@ SUSPECT_KEYWORDS = [
     "DIVIDE", "divide",
     "to", "TO", "from", "FROM",
     "box",
+    # HWP 수식편집기 비교 연산자·화살표 (대문자 변형 누락 케이스 방어)
+    "LE", "GE", "NE", "LEQ", "GEQ", "NEQ",
+    "rarrow", "RARROW", "larrow", "LARROW", "lrarrow", "LRARROW",
 ]
 
 # cases/matrix/BOX는 \begin{}/\end{} 또는 <<BOX_START>>/<<BOX_END>>에 감싸지
@@ -71,22 +74,30 @@ def scan_text(text: str) -> list:
             text[:120],
         ))
 
-    # 0-b) Markdown 파이프 테이블 잔재 (렌더 실패 표시자)
-    #      `|---|---|` 같은 구분자가 최종 텍스트에 남아있다는 건
-    #      md 렌더링 단계에서 테이블이 HTML로 변환 안 됐거나,
-    #      파서가 선지 그리드를 일반 표로 출력했다는 뜻.
-    if re.search(r"\|[-]{3,}\|", text):
+    # 0-b) BOX 중첩 — 외곽 rect 가 내부 tbl 을 감싸면서 외곽 BOX 도 함께
+    #      발행돼 두 겹이 된 케이스. 표 안 셀 값이 'shadow text' 로 본문에
+    #      덤프되는 동시에 일어남.
+    if re.search(r"<<BOX_START>>(?:[^<]|<(?!<BOX_END>>))*?<<BOX_START>>",
+                 text, re.S):
         issues.append((
-            "table_leak",
-            "pipe-table separator remaining",
+            "box_nested",
+            "outer rect wrapping inner table",
             text[:120],
         ))
-    # 빈 헤더 행만 덩그러니 남은 경우 (`|   |   |   |`)
-    if re.search(r"^\|(?:\s+\|){2,}\s*$", text, re.MULTILINE):
+
+    # 0-c) 표 직후 셀 값이 한 줄에 하나씩 덤프된 패턴 (rect+tbl 중첩의 부산물)
+    #      예) 표 마지막 행 다음에 `$e$\n $1$\n $-5$\n ...` 형태로 늘어선 경우.
+    #      3개 이상의 짧은 단독 수식 줄이 연속될 때만 보고.
+    shadow_run = re.search(
+        r"(?:(?:^|\n)\s*\$[^$\n]{1,15}\$\s*){3,}",
+        text,
+        re.MULTILINE,
+    )
+    if shadow_run and "<<BOX_END>>" in text[:shadow_run.start()]:
         issues.append((
-            "table_leak",
-            "empty header row",
-            text[:120],
+            "shadow_text_dump",
+            "cell values dumped as flat list after table",
+            text[max(0, shadow_run.start() - 30):shadow_run.start() + 90],
         ))
 
     for m in MATH_SPAN.finditer(text):

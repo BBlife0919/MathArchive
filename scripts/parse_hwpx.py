@@ -53,8 +53,11 @@ SYMBOL_MAP = {
     "PM": r"\pm", "pm": r"\pm",
     "MP": r"\mp",
     "LEQ": r"\leq", "leq": r"\leq", "le": r"\leq",
+    "LE": r"\leq",
     "GEQ": r"\geq", "geq": r"\geq", "ge": r"\geq",
+    "GE": r"\geq",
     "NEQ": r"\neq", "neq": r"\neq", "ne": r"\neq",
+    "NE": r"\neq",
     "APPROX": r"\approx",
     "EQUIV": r"\equiv",
     "SIM": r"\sim",
@@ -81,6 +84,9 @@ SYMBOL_MAP = {
     "RIGHTARROW": r"\rightarrow",
     "LEFTARROW": r"\leftarrow",
     "LEFTRIGHTARROW": r"\leftrightarrow",
+    "rarrow": r"\rightarrow", "RARROW": r"\rightarrow",
+    "larrow": r"\leftarrow",  "LARROW": r"\leftarrow",
+    "lrarrow": r"\leftrightarrow", "LRARROW": r"\leftrightarrow",
     "TO": r"\to", "to": r"\to",
     "VERT": r"|", "vert": r"|",
     "MID": r"\mid", "mid": r"\mid",
@@ -261,7 +267,9 @@ def hwp_eq_to_latex(script: str) -> str:
     _all_hwp_kw = (
         sorted(GREEK_MAP.keys(), key=len, reverse=True)
         + ["bar", "rm", "RM", "it", "IT", "sqrt", "root", "leq", "geq", "neq",
-           "le", "ge", "ne", "cdot", "cdots", "ldots", "vdots",
+           "le", "ge", "ne", "LE", "GE", "NE", "LEQ", "GEQ", "NEQ",
+           "rarrow", "RARROW", "larrow", "LARROW",
+           "cdot", "cdots", "ldots", "vdots",
            "times", "pm", "mp", "infty", "angle", "triangle",
            "perp", "parallel", "therefore", "because",
            "vert", "VERT", "mid", "cap", "cup", "emptyset",
@@ -318,9 +326,14 @@ def hwp_eq_to_latex(script: str) -> str:
     s = _cmd_pat.sub(_stash_cmd, s)
 
     for kw, keep in (("leq", ""), ("geq", ""), ("neq", ""),
+                      ("LEQ", ""), ("GEQ", ""), ("NEQ", ""),
                       ("le",  "(?!ft|q)"),
                       ("ge",  "(?!q)"),
-                      ("ne",  "(?!q|g)")):
+                      ("ne",  "(?!q|g)"),
+                      # 대문자 LE/GE/NE: LEFT·LEQ·GEQ·NEQ·NEG 보호
+                      ("LE",  "(?!FT|Q)"),
+                      ("GE",  "(?!Q)"),
+                      ("NE",  "(?!Q|G)")):
         s = re.sub(rf"(?<=[A-Za-z0-9]){kw}{keep}(?![A-Za-z])", rf" {kw}", s)
         s = re.sub(rf"(?<![A-Za-z\\]){kw}{keep}(?=[A-Za-z0-9])", rf"{kw} ", s)
 
@@ -880,7 +893,15 @@ def _postprocess_latex(s: str) -> str:
 
 # ── 파일명 메타데이터 파싱 ────────────────────────────────────
 def parse_filename_metadata(filename: str) -> dict:
-    """파일명에서 메타데이터를 추출한다."""
+    """파일명에서 메타데이터를 추출한다.
+
+    macOS APFS 는 한글 파일명을 NFD 로 보존하므로 zip 항목명을 그대로
+    파싱하면 NFD 문자열이 region/school 등에 들어가 NFC/NFD 동일 글자가
+    DB 에 별개 키로 저장되는 버그가 발생. 메타데이터를 추출하기 전에 NFC
+    로 정규화한다.
+    """
+    import unicodedata
+    filename = unicodedata.normalize("NFC", filename)
     meta = {}
     brackets = re.findall(r"\[([^\]]+)\]", filename)
     if len(brackets) >= 6:
@@ -1152,9 +1173,21 @@ def _process_run_no_endnote(run_elem, items):
         elif tag == "rect":
             # rect = HWP의 조건 박스 (예: (가)(나)(다)). <<BOX_START>>/<<BOX_END>>
             # 마커로 감싸 Streamlit·PDF 양쪽이 박스 UI로 렌더하도록 한다.
+            #
+            # 단, rect 안에 tbl 이 들어있는 경우(조립제법·행렬 등 표를 둘러싼
+            # 사각 테두리)는 외곽 BOX 를 따로 발행하지 않는다. tbl 자체가
+            # <<BOX_START>>/<<BOX_END>> 를 발행하므로 외곽까지 추가하면 BOX 가
+            # 중첩되고, 동시에 drawText 의 subList 를 iter() 로 재귀 순회하면
+            # 표 셀 내부 subList 까지 다시 끌려 들어와 셀 값이 본문에 그대로
+            # 덤프되는 'shadow text' 가 발생한다.
+            inner_tbl = next(iter(child.iter(NS_PAR + "tbl")), None)
+            if inner_tbl is not None:
+                _process_tbl(inner_tbl, items)
+                continue
             items.append(ContentItem("text", text="\n<<BOX_START>>\n"))
             for dt in child.iter(NS_PAR + "drawText"):
-                for sl in dt.iter(NS_PAR + "subList"):
+                # iter → findall: drawText 의 직속 subList 만 (셀 subList 차단)
+                for sl in dt.findall(NS_PAR + "subList"):
                     for p in sl.findall(NS_PAR + "p"):
                         for run in p.findall(NS_PAR + "run"):
                             _process_run_no_endnote(run, items)
@@ -1265,11 +1298,100 @@ CIRCLES = ["①", "②", "③", "④", "⑤"]
 
 # 중단원명 정규화
 CHAPTER_NORMALIZE = {
-    "다항함수": "이차함수",
+    # 경우의 수
+    "경우의 상": "경우의 수",
+    "경우의수": "경우의 수",
+    # 고차방정식
+    "고차 방정식": "고차방정식",
+    "고차방장석": "고차방정식",
+    "고차방장식": "고차방정식",
+    "삼차방정식": "고차방정식",
+    # 항등식과 나머지정리
+    "나머지 정리 (시험 범위 외)": "항등식과 나머지정리",
+    "나머지 정리와 인수분해": "항등식과 나머지정리",
+    "항등식과 나마지정리": "항등식과 나머지정리",
+    "항등식과 나머니 정리": "항등식과 나머지정리",
     "항등식과 나머니정리": "항등식과 나머지정리",
+    "항등식과 나머지": "항등식과 나머지정리",
     "항등식과 나머지 정리": "항등식과 나머지정리",
+    "항등식과 나머지정리.": "항등식과 나머지정리",
     "나머지정리": "항등식과 나머지정리",
     "나머지 정리": "항등식과 나머지정리",
+    # 이차함수
+    "다항함수": "이차함수",
+    "다함함수": "이차함수",
+    "이차방정식과 이차함수": "이차함수",
+    # 다항식의 연산
+    "다항식": "다항식의 연산",
+    "다항식 연산": "다항식의 연산",
+    "다항식과 연산": "다항식의 연산",
+    "다항식의": "다항식의 연산",
+    "다항식의 계산": "다항식의 연산",
+    "다항식의 계수": "다항식의 연산",
+    "다항식의 곱셈": "다항식의 연산",
+    "다항식의 연산\\": "다항식의 연산",
+    "다항식의 전개": "다항식의 연산",
+    "다항식의연산": "다항식의 연산",
+    "다항식이 연산": "다항식의 연산",
+    # 도형의 이동
+    "도형의이동": "도형의 이동",
+    "도형이 이동": "도형의 이동",
+    # 등비수열
+    "등비수옇": "등비수열",
+    # 명제
+    "명제의 증명": "명제",
+    # 무리식과 무리함수
+    "무리수와 무리함수": "무리식과 무리함수",
+    "무리식과 무맇마수": "무리식과 무리함수",
+    "무리식와 무리함수": "무리식과 무리함수",
+    "무리함수": "무리식과 무리함수",
+    "무식과 무리함수": "무리식과 무리함수",
+    "유리함수, 무리함수": "무리식과 무리함수",
+    "유리함수,무리함수": "무리식과 무리함수",
+    # 복소수
+    "복수수": "복소수",
+    "볶소수": "복소수",
+    "이복소수": "복소수",
+    # 부등식
+    "부": "부등식",
+    "연립부등식": "부등식",
+    # 조합
+    "순열, 조합": "조합",
+    "순열,조합": "조합",
+    "순열~조합": "조합",
+    "순열과 조합": "조합",
+    "조함": "조합",
+    # 여러가지 방정식
+    "여러 가지 방정식": "여러가지 방정식",
+    "여러가지방정식": "여러가지 방정식",
+    # 연립방정식
+    "연립": "연립방정식",
+    "연립방징식": "연립방정식",
+    # 원의 방정식
+    "원의 반지름": "원의 방정식",
+    "원의방정식": "원의 방정식",
+    "원이 방정식": "원의 방정식",
+    # 유리식과 유리함수
+    "유리식과 무리함수": "유리식과 유리함수",
+    "유리식과 유리합수": "유리식과 유리함수",
+    "유리함수": "유리식과 유리함수",
+    # 인수분해
+    "인수분히": "인수분해",
+    # 이차방정식
+    "이치방정식": "이차방정식",
+    # 절대부등식
+    "절대 부등식": "절대부등식",
+    # 평면좌표
+    "점과 좌표": "평면좌표",
+    "퍙면좌표": "평면좌표",
+    "펑면좌표": "평면좌표",
+    "폄면좌표": "평면좌표",
+    "평면죄표": "평면좌표",
+    "평며좌표": "평면좌표",
+    "평면 좌표": "평면좌표",
+    # 직선의 방정식
+    "직선의  방정식": "직선의 방정식",
+    "직선의방정식": "직선의 방정식",
 }
 
 
@@ -1744,8 +1866,11 @@ def parse_hwpx(hwpx_path: str, image_output_dir: str = None,
                 if ref not in watermark_images
             ]
 
+        import unicodedata
         return {
-            "file_source": os.path.basename(hwpx_path),
+            "file_source": unicodedata.normalize(
+                "NFC", os.path.basename(hwpx_path)
+            ),
             "file_metadata": file_meta,
             "total_questions": len(questions),
             "questions": questions,
