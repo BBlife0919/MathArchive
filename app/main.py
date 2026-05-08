@@ -4,9 +4,11 @@
 실행:
     streamlit run app/main.py
 """
+from __future__ import annotations
 
 import io
 import json
+import random
 import re
 from pathlib import Path
 from urllib.parse import quote, urlsplit, urlunsplit
@@ -370,6 +372,7 @@ def main():
 
         if st.button("🗑️ 시험지 초기화", use_container_width=True):
             st.session_state.selected_ids = set()
+            st.session_state.mini_test_active = False
             st.rerun()
 
     # ── 문제 검색 결과 ────────────────────────────────────────
@@ -384,6 +387,53 @@ def main():
     # ── 탭 1: 문제 목록 ──────────────────────────────────────
     with tab_list:
         total = len(results)
+
+        # 미니테스트 프리셋 — 워밍업/총복습용 15분 컷
+        with st.expander("🎯 미니테스트 자동 생성 (15분 컷, 6~8문항)"):
+            st.caption(
+                "현재 필터(단원/난이도/학교 등) 안에서 난이도 비중에 맞춰 랜덤 추출합니다. "
+                "워밍업 인출 퀴즈·총복습 미니 모의에 활용."
+            )
+            mp1, mp2 = st.columns(2)
+            with mp1:
+                mini_count = st.slider("문항 수", 6, 8, 7, key="mini_count")
+            with mp2:
+                mini_easy_pct = st.slider(
+                    "쉬운 문제 비중 (%)", 0, 100, 40, step=10, key="mini_easy_pct",
+                    help="‘하’ 난이도 비중. 나머지는 ‘중’ 위주로 뽑습니다.",
+                )
+            if st.button("🎲 미니테스트 자동 생성",
+                         use_container_width=True, type="primary"):
+                if not results:
+                    st.warning("필터 조건에 맞는 문제가 없습니다. 사이드바를 확인하세요.")
+                else:
+                    easy_n = round(mini_count * mini_easy_pct / 100)
+                    rest_n = mini_count - easy_n
+                    easy_pool = [r["question_id"] for r in results if r["difficulty"] == "하"]
+                    rest_pool = [r["question_id"] for r in results if r["difficulty"] in ("중", "상")]
+                    picks = []
+                    if easy_pool:
+                        picks.extend(random.sample(easy_pool, min(easy_n, len(easy_pool))))
+                    if rest_pool:
+                        need = mini_count - len(picks)
+                        picks.extend(random.sample(rest_pool, min(need, len(rest_pool))))
+                    # 모자라면 전체 풀에서 보충
+                    if len(picks) < mini_count:
+                        all_pool = [r["question_id"] for r in results
+                                    if r["question_id"] not in picks]
+                        need = mini_count - len(picks)
+                        if all_pool:
+                            picks.extend(random.sample(all_pool, min(need, len(all_pool))))
+                    if picks:
+                        st.session_state.selected_ids = set(picks)
+                        st.session_state.mini_test_active = True
+                        st.success(
+                            f"{len(picks)}문항 자동 선택됨 → '시험지 미리보기' 탭에서 PDF 생성"
+                        )
+                        st.rerun()
+                    else:
+                        st.warning("선택 가능한 문제가 부족합니다.")
+
         PAGE_SIZE = 30
 
         # 페이지네이션 상태
@@ -480,11 +530,13 @@ def main():
                             if st.button("❌ 제거", key=f"rm_{qid}",
                                          use_container_width=True):
                                 st.session_state.selected_ids.discard(qid)
+                                st.session_state.mini_test_active = False
                                 st.rerun()
                         else:
                             if st.button("➕ 추가", key=f"add_{qid}",
                                          use_container_width=True):
                                 st.session_state.selected_ids.add(qid)
+                                st.session_state.mini_test_active = False
                                 st.rerun()
 
                         if is_selected:
@@ -536,9 +588,14 @@ def main():
             # 뒤로가기
             if st.button("⬅ 선택으로 돌아가기", key="back_to_select"):
                 st.session_state.build_mode = None
+                st.session_state.mini_test_active = False
                 st.rerun()
 
-            default_title = "수학 시험지" if mode == "exam" else "수학 교재"
+            mini_active = st.session_state.get("mini_test_active", False)
+            if mini_active and mode == "exam":
+                default_title = "미니테스트 (15분)"
+            else:
+                default_title = "수학 시험지" if mode == "exam" else "수학 교재"
             exam_title = st.text_input("제목", value=default_title)
 
             head_c1, head_c2 = st.columns(2)
