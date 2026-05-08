@@ -85,6 +85,13 @@ CREATE TABLE IF NOT EXISTS flagged_problems (
     flagged_by  TEXT,
     resolved    INTEGER DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS user_token_mappings (
+    token       TEXT PRIMARY KEY,
+    action      TEXT NOT NULL,
+    latex       TEXT,
+    added_at    TIMESTAMP DEFAULT NOW()
+);
 CREATE INDEX IF NOT EXISTS idx_flagged_qid ON flagged_problems(question_id);
 CREATE INDEX IF NOT EXISTS idx_flagged_resolved ON flagged_problems(resolved);
 
