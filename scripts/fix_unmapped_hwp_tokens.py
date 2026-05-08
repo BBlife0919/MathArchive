@@ -39,6 +39,41 @@ ATTACH_LEFT = [
 ]
 
 REPLACE = [
+    # 긴 토큰 먼저 (SMALLINTER 가 SMALL+INTER 로 분리되지 않도록)
+    (re.compile(r"(?<![A-Za-z\\])SMALLINTER(?![A-Za-z])"), r"\\cap"),
+    (re.compile(r"(?<![A-Za-z\\])SMALLINTER(?=[A-Za-z])"), r"\\cap "),
+    (re.compile(r"(?<![A-Za-z\\])SMALLUNION(?![A-Za-z])"), r"\\cup"),
+    (re.compile(r"(?<![A-Za-z\\])SMALLUNION(?=[A-Za-z])"), r"\\cup "),
+    (re.compile(r"(?<![A-Za-z\\])UNDERBRACE(?![A-Za-z])"), r"\\underbrace"),
+    (re.compile(r"(?<![A-Za-z\\])underbrace(?![A-Za-z\\])"), r"\\underbrace"),
+    (re.compile(r"(?<![A-Za-z\\])OVERBRACE(?![A-Za-z])"), r"\\overbrace"),
+    # OVER (대문자) — `X OVER Y` 형태 → `\frac` 대용 \, over 처리는 파서가 함.
+    # 여기선 단순 \\over 로 두고 KaTeX 가 \over 처리하도록.
+    (re.compile(r"(?<![A-Za-z\\])OVER(?=[A-Za-z])"), r"\\over "),
+    (re.compile(r"(?<![A-Za-z\\])OVER(?![A-Za-z])"), r"\\over"),
+    (re.compile(r"(?<![A-Za-z\\])UNDER(?=[A-Za-z])"), r"\\under "),
+    (re.compile(r"(?<![A-Za-z\\])UNDER(?![A-Za-z])"), r"\\under"),
+    # cap/cup 부착 케이스 (`A CAPB`, `X CUPY`)
+    (re.compile(r"(?<![A-Za-z\\])CAP(?=[A-Za-z])"), r"\\cap "),
+    (re.compile(r"(?<![A-Za-z\\])CAP(?![A-Za-z])"), r"\\cap"),
+    (re.compile(r"(?<![A-Za-z\\])CUP(?=[A-Za-z])"), r"\\cup "),
+    (re.compile(r"(?<![A-Za-z\\])CUP(?![A-Za-z])"), r"\\cup"),
+    (re.compile(r"(?<![A-Za-z\\])cap(?=[A-Za-z])"), r"\\cap "),
+    (re.compile(r"(?<![A-Za-z\\])cup(?=[A-Za-z])"), r"\\cup "),
+    # bold mode 제거 (HWP 굵게 토글, KaTeX 무관)
+    (re.compile(r"(?<![A-Za-z\\])bold(?![A-Za-z])"), r""),
+    (re.compile(r"(?<![A-Za-z\\])BOLD(?![A-Za-z])"), r""),
+    (re.compile(r"(?<![A-Za-z\\])IT(?![A-Za-z])"), r""),  # italic toggle
+    (re.compile(r"(?<![A-Za-z\\])BIGCAP(?![A-Za-z])"), r"\\bigcap"),
+    (re.compile(r"(?<![A-Za-z\\])BIGCUP(?![A-Za-z])"), r"\\bigcup"),
+    (re.compile(r"(?<![A-Za-z\\])NOTSUBSET(?![A-Za-z])"), r"\\not\\subset"),
+    # LEQ/GEQ/NEQ — 변환 후 영문자 부착 케이스 분리
+    (re.compile(r"(?<![A-Za-z\\])LEQ(?=[A-Za-z])"), r"\\leq "),
+    (re.compile(r"(?<![A-Za-z\\])LEQ(?![A-Za-z])"), r"\\leq"),
+    (re.compile(r"(?<![A-Za-z\\])GEQ(?=[A-Za-z])"), r"\\geq "),
+    (re.compile(r"(?<![A-Za-z\\])GEQ(?![A-Za-z])"), r"\\geq"),
+    (re.compile(r"(?<![A-Za-z\\])NEQ(?=[A-Za-z])"), r"\\neq "),
+    (re.compile(r"(?<![A-Za-z\\])NEQ(?![A-Za-z])"), r"\\neq"),
     # LE 다음 영문자 (예: `LE x`, `LEx`): \leq 뒤 공백
     (re.compile(r"(?<![A-Za-z\\])LE(?!FT|Q)(?=[A-Za-z])"), r"\\leq "),
     (re.compile(r"(?<![A-Za-z\\])LE(?!FT|Q)(?![A-Za-z])"), r"\\leq"),
@@ -60,18 +95,31 @@ REPLACE = [
     (re.compile(r"(?<![A-Za-z\\])LRARROW(?=[A-Za-z])"), r"\\leftrightarrow "),
     (re.compile(r"(?<![A-Za-z\\])LRARROW(?![A-Za-z])"), r"\\leftrightarrow"),
     # 집합 / 원소 / 합성함수 — 수식 컨텍스트 (전역 안전)
+    # 부착 케이스 (예: `Asubset`, `gCIRCf`) 도 처리 — 문자 사이 공백 삽입
+    (re.compile(r"(?<![A-Za-z\\])subset(?=[A-Za-z])"), r"\\subset "),
     (re.compile(r"(?<![A-Za-z\\])subset(?![A-Za-z])"), r"\\subset"),
+    (re.compile(r"(?<![A-Za-z\\])SUBSET(?=[A-Za-z])"), r"\\subset "),
     (re.compile(r"(?<![A-Za-z\\])SUBSET(?![A-Za-z])"), r"\\subset"),
+    (re.compile(r"(?<![A-Za-z\\])supset(?=[A-Za-z])"), r"\\supset "),
     (re.compile(r"(?<![A-Za-z\\])supset(?![A-Za-z])"), r"\\supset"),
+    (re.compile(r"(?<![A-Za-z\\])SUPSET(?=[A-Za-z])"), r"\\supset "),
     (re.compile(r"(?<![A-Za-z\\])SUPSET(?![A-Za-z])"), r"\\supset"),
+    (re.compile(r"(?<![A-Za-z\\])notin(?=[A-Za-z])"), r"\\notin "),
     (re.compile(r"(?<![A-Za-z\\])notin(?![A-Za-z])"), r"\\notin"),
+    (re.compile(r"(?<![A-Za-z\\])NOTIN(?=[A-Za-z])"), r"\\notin "),
     (re.compile(r"(?<![A-Za-z\\])NOTIN(?![A-Za-z])"), r"\\notin"),
+    (re.compile(r"(?<![A-Za-z\\])circ(?=[A-Za-z])"), r"\\circ "),
     (re.compile(r"(?<![A-Za-z\\])circ(?![A-Za-z])"), r"\\circ"),
+    (re.compile(r"(?<![A-Za-z\\])CIRC(?=[A-Za-z])"), r"\\circ "),
     (re.compile(r"(?<![A-Za-z\\])CIRC(?![A-Za-z])"), r"\\circ"),
     (re.compile(r"(?<![A-Za-z\\])cdots(?![A-Za-z])"), r"\\cdots"),
     (re.compile(r"(?<![A-Za-z\\])CDOTS(?![A-Za-z])"), r"\\cdots"),
     (re.compile(r"(?<![A-Za-z\\])vdots(?![A-Za-z])"), r"\\vdots"),
     (re.compile(r"(?<![A-Za-z\\])ddots(?![A-Za-z])"), r"\\ddots"),
+    # sqrt/over 부착 케이스 — `sqrtx` → `\sqrt x`
+    (re.compile(r"(?<![A-Za-z\\])sqrt(?=[A-Za-z])"), r"\\sqrt "),
+    (re.compile(r"(?<![A-Za-z\\])SQRT(?=[A-Za-z])"), r"\\sqrt "),
+    (re.compile(r"(?<![A-Za-z\\])SQRT(?![A-Za-z])"), r"\\sqrt"),
 ]
 
 # 영어 단어와 충돌 위험 있는 토큰 — 수식 ($...$) 안에서만 치환
@@ -94,7 +142,9 @@ MATH_ONLY_REPLACE = [
     (re.compile(r"(?<![A-Za-z\\])APPROX(?![A-Za-z])"), r"\\approx"),
     (re.compile(r"(?<![A-Za-z\\])equiv(?![A-Za-z])"), r"\\equiv"),
     (re.compile(r"(?<![A-Za-z\\])EQUIV(?![A-Za-z])"), r"\\equiv"),
+    (re.compile(r"(?<![A-Za-z\\])sim(?=[A-Za-z])"), r"\\sim "),
     (re.compile(r"(?<![A-Za-z\\])sim(?![A-Za-z])"), r"\\sim"),
+    (re.compile(r"(?<![A-Za-z\\])SIM(?=[A-Za-z])"), r"\\sim "),
     (re.compile(r"(?<![A-Za-z\\])SIM(?![A-Za-z])"), r"\\sim"),
     (re.compile(r"(?<![A-Za-z\\])therefore(?![A-Za-z])"), r"\\therefore"),
     (re.compile(r"(?<![A-Za-z\\])THEREFORE(?![A-Za-z])"), r"\\therefore"),
@@ -184,7 +234,22 @@ def main():
     for table, idcol, txtcol in targets:
         rows = cur.execute(
             f"SELECT {idcol}, {txtcol} FROM {table} "
-            f"WHERE {txtcol} GLOB '*[LGN]E*' "
+            f"WHERE {txtcol} GLOB '*SMALLINTER*' "
+            f"   OR {txtcol} GLOB '*SMALLUNION*' "
+            f"   OR {txtcol} GLOB '*UNDERBRACE*' "
+            f"   OR {txtcol} GLOB '*OVERBRACE*' "
+            f"   OR {txtcol} GLOB '*BIGCAP*' "
+            f"   OR {txtcol} GLOB '*BIGCUP*' "
+            f"   OR {txtcol} GLOB '*NOTSUBSET*' "
+            f"   OR {txtcol} GLOB '*[LGN]EQ*' "
+            f"   OR {txtcol} GLOB '*sqrt[a-zA-Z]*' "
+            f"   OR {txtcol} GLOB '*OVER*' "
+            f"   OR {txtcol} GLOB '*UNDER*' "
+            f"   OR {txtcol} GLOB '*CAP*' "
+            f"   OR {txtcol} GLOB '*CUP*' "
+            f"   OR {txtcol} GLOB '*bold*' "
+            f"   OR {txtcol} GLOB '*BIGCIRC*' "
+            f"   OR {txtcol} GLOB '*[LGN]E*' "
             f"   OR {txtcol} GLOB '*rarrow*' "
             f"   OR {txtcol} GLOB '*RARROW*' "
             f"   OR {txtcol} GLOB '*larrow*' "

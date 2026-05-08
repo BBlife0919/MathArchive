@@ -101,6 +101,13 @@ SYMBOL_MAP = {
     "INT": r"\int", "int": r"\int",
     "VDOTS": r"\vdots", "vdots": r"\vdots",
     "DDOTS": r"\ddots", "ddots": r"\ddots",
+    # HWP 특유 토큰 (작은/큰 연산자, brace)
+    "SMALLINTER": r"\cap", "SMALLUNION": r"\cup",
+    "BIGCAP": r"\bigcap", "BIGCUP": r"\bigcup",
+    "BIGINT": r"\int",
+    "UNDERBRACE": r"\underbrace", "OVERBRACE": r"\overbrace",
+    "NOTSUBSET": r"\not\subset",
+    "BIGCIRC": r"\bigcirc",
     "TO": r"\to", "to": r"\to",
     "VERT": r"|", "vert": r"|",
     "MID": r"\mid", "mid": r"\mid",

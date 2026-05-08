@@ -344,6 +344,10 @@ def main():
         layout="wide",
     )
 
+    # 인증 게이트 — 로그인/승인 안 됐으면 여기서 멈추고 로그인 화면 렌더
+    from auth_ui import require_auth, render_user_menu_in_sidebar
+    require_auth()
+
     st.title("📐 MathArchive by 이영우")
 
     # 세션 상태 초기화
@@ -380,6 +384,8 @@ def main():
             st.session_state.selected_ids = set()
             st.session_state.mini_test_active = False
             st.rerun()
+
+    render_user_menu_in_sidebar()
 
     # ── 문제 검색 결과 ────────────────────────────────────────
     results = search_questions(
