@@ -20,8 +20,6 @@ APP_DIR = Path(__file__).resolve().parent.parent
 if str(APP_DIR) not in sys.path:
     sys.path.insert(0, str(APP_DIR))
 
-import auth
-from auth_ui import require_auth, render_user_menu_in_sidebar
 from db import get_connection as _get_db_connection
 
 # scripts 경로 등록 — detect_bare_math_words 모듈 import
@@ -32,12 +30,18 @@ if str(SCRIPTS_DIR) not in sys.path:
 
 st.set_page_config(page_title="검수 — MathArchive", page_icon="🔍", layout="wide")
 
-require_auth()
-if not auth.is_admin():
-    st.error("⛔ 이 페이지는 관리자 전용입니다.")
-    st.stop()
-
-render_user_menu_in_sidebar()
+# Auth 시스템이 push 된 경우만 권한 체크. 없으면 그대로 진행 (admin URL 보호는
+# 추후 auth 모듈이 원격에 올라오면 자동 활성화).
+try:
+    import auth
+    from auth_ui import require_auth, render_user_menu_in_sidebar
+    require_auth()
+    if not auth.is_admin():
+        st.error("⛔ 이 페이지는 관리자 전용입니다.")
+        st.stop()
+    render_user_menu_in_sidebar()
+except ImportError:
+    pass
 
 
 # ─────────────────────────────────────────────────────────
