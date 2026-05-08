@@ -149,9 +149,15 @@ def _frac_to_dfrac(text: str) -> str:
 
 
 def _ensure_line_breaks(text: str) -> str:
-    """단일 \\n을 markdown 줄바꿈(\\n\\n)으로 변환하여 원본 줄넘김 보존."""
-    # 이미 \n\n인 것은 건드리지 않음
+    """단일 \\n을 markdown 줄바꿈(\\n\\n)으로 변환하여 원본 줄넘김 보존.
+
+    또한 줄별 leading tab/4-space 를 제거한다. HWP 원본에서 정렬용으로
+    탭이 들어오는 경우가 많은데, 마크다운에서 줄이 탭/4-space 로 시작하면
+    자동으로 code block 으로 렌더돼 수식이 raw LaTeX 으로 표시되는 사고 발생.
+    """
     text = re.sub(r"\n{3,}", "\n\n", text)
+    # 줄별 leading tab/4-space 제거 (마크다운 code block 오인 차단)
+    text = "\n".join(re.sub(r"^[\t ]+", "", ln) for ln in text.split("\n"))
     # 단일 \n → \n\n (markdown paragraph break)
     text = re.sub(r"(?<!\n)\n(?!\n)", "\n\n", text)
     return text

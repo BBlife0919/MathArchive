@@ -87,6 +87,20 @@ SYMBOL_MAP = {
     "rarrow": r"\rightarrow", "RARROW": r"\rightarrow",
     "larrow": r"\leftarrow",  "LARROW": r"\leftarrow",
     "lrarrow": r"\leftrightarrow", "LRARROW": r"\leftrightarrow",
+    # 집합 / 원소 / 합성함수 — 소문자 변형 추가
+    "subset": r"\subset", "supset": r"\supset",
+    "in": r"\in", "notin": r"\notin", "NOTIN": r"\notin",
+    "circ": r"\circ", "CIRC": r"\circ",
+    # 추가 누락 케이스
+    "FORALL": r"\forall", "forall": r"\forall",
+    "EXISTS": r"\exists", "exists": r"\exists",
+    "PARTIAL": r"\partial", "partial": r"\partial",
+    "NABLA": r"\nabla", "nabla": r"\nabla",
+    "SUM": r"\sum", "sum": r"\sum",
+    "PROD": r"\prod", "prod": r"\prod",
+    "INT": r"\int", "int": r"\int",
+    "VDOTS": r"\vdots", "vdots": r"\vdots",
+    "DDOTS": r"\ddots", "ddots": r"\ddots",
     "TO": r"\to", "to": r"\to",
     "VERT": r"|", "vert": r"|",
     "MID": r"\mid", "mid": r"\mid",
@@ -269,13 +283,19 @@ def hwp_eq_to_latex(script: str) -> str:
         + ["bar", "rm", "RM", "it", "IT", "sqrt", "root", "leq", "geq", "neq",
            "le", "ge", "ne", "LE", "GE", "NE", "LEQ", "GEQ", "NEQ",
            "rarrow", "RARROW", "larrow", "LARROW",
-           "cdot", "cdots", "ldots", "vdots",
+           "cdot", "cdots", "ldots", "vdots", "ddots",
            "times", "pm", "mp", "infty", "angle", "triangle",
            "perp", "parallel", "therefore", "because",
            "vert", "VERT", "mid", "cap", "cup", "emptyset",
            "to", "TO", "DIVIDE", "divide",
            "LEFT", "RIGHT", "left", "right",
-           "TIMES", "CDOT", "ANGLE", "PERP", "INFTY"]
+           "TIMES", "CDOT", "ANGLE", "PERP", "INFTY",
+           "subset", "supset", "in", "notin", "NOTIN",
+           "SUBSET", "SUPSET", "IN",
+           "circ", "CIRC",
+           "forall", "FORALL", "exists", "EXISTS",
+           "sum", "SUM", "prod", "PROD", "int", "INT",
+           "partial", "PARTIAL", "nabla", "NABLA"]
     )
     _kw_pat = "|".join(_all_hwp_kw)
     # 키워드끼리 연속 (alphabar, gammadelta 등) — 여러 번 반복해 3개 이상 대비

@@ -27,6 +27,16 @@ SUSPECT_KEYWORDS = [
     # HWP 수식편집기 비교 연산자·화살표 (대문자 변형 누락 케이스 방어)
     "LE", "GE", "NE", "LEQ", "GEQ", "NEQ",
     "rarrow", "RARROW", "larrow", "LARROW", "lrarrow", "LRARROW",
+    # 집합·원소·합성함수 — 소문자/대문자 변형
+    "subset", "supset", "SUBSET", "SUPSET",
+    "notin", "NOTIN",
+    "circ", "CIRC",
+    # 양화사·연산자
+    "forall", "FORALL", "exists", "EXISTS",
+    "partial", "PARTIAL", "nabla", "NABLA",
+    # 종종 누락되는 그리스/관계 (편집표 노이즈는 별도)
+    "cdots", "CDOTS", "ldots", "LDOTS", "vdots", "ddots",
+    "approx", "APPROX", "equiv", "EQUIV",
 ]
 
 # cases/matrix/BOX는 \begin{}/\end{} 또는 <<BOX_START>>/<<BOX_END>>에 감싸지
@@ -100,6 +110,19 @@ def scan_text(text: str) -> list:
                 text[max(0, shadow_run.start() - 30):
                      shadow_run.start() + 90],
             ))
+
+    # 0-d) 마크다운 코드블록 오인 — 줄이 탭/4-space + `$` 으로 시작하면
+    #      streamlit 이 수식이 들어있는 전 줄을 raw text 로 렌더하는 사고.
+    #      BOX 영역 안은 별도 처리되니 BOX 밖 본문에서만 검사.
+    body_outside_box = re.sub(
+        r"<<BOX_START>>.*?<<BOX_END>>", "", text, flags=re.S
+    )
+    if re.search(r"(?:^|\n)(?:\t|    )\s*\$", body_outside_box):
+        issues.append((
+            "leading_indent_codeblock",
+            "tab/4-space 시작으로 인한 markdown code block 오인",
+            body_outside_box[:120],
+        ))
 
     for m in MATH_SPAN.finditer(text):
         span = m.group(1)

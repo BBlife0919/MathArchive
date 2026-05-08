@@ -55,7 +55,10 @@ CREATE TABLE questions (
     chapter         TEXT,
     difficulty      TEXT,
     has_image       INTEGER DEFAULT 0,
-    error_note      TEXT
+    error_note      TEXT,
+    problem_type    TEXT,
+    problem_type_confidence REAL,
+    problem_type_source TEXT
 );
 
 CREATE TABLE solutions (
