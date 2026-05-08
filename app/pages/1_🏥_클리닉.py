@@ -25,6 +25,11 @@ from clinic_logic import (
 )
 
 st.set_page_config(page_title="🏥 수학 클리닉", page_icon="🏥", layout="wide")
+
+from auth_ui import require_auth, render_user_menu_in_sidebar
+require_auth()
+render_user_menu_in_sidebar()
+
 st.title("🏥 수학 클리닉")
 st.caption(
     "오답 1건 → 즉시 인출 3문항 + D+3/7/14 재도전 처방전. "
