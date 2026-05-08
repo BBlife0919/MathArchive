@@ -58,6 +58,45 @@ def query(sql, params=()):
     return get_connection().execute(sql, params).fetchall()
 
 
+def execute_write(sql, params=()):
+    """INSERT/UPDATE/DELETE 실행. SQLite/Postgres 양쪽 호환."""
+    conn = get_connection()
+    conn.execute(sql, params)
+    # SQLite 는 명시 commit 필요, Postgres 는 autocommit 이라 무해
+    if hasattr(conn, "commit"):
+        try:
+            conn.commit()
+        except Exception:
+            pass
+
+
+# ── 신고 시스템 ──────────────────────────────────────────────
+def is_flagged(qid: int) -> bool:
+    """문항이 현재 미해결 신고 상태인지."""
+    rows = query(
+        "SELECT 1 FROM flagged_problems "
+        "WHERE question_id=? AND resolved=0 LIMIT 1",
+        (qid,),
+    )
+    return bool(rows)
+
+
+def flag_problem(qid: int, reason: str = ""):
+    execute_write(
+        "INSERT INTO flagged_problems (question_id, reason, flagged_by) "
+        "VALUES (?, ?, ?)",
+        (qid, reason, "user"),
+    )
+
+
+def unflag_problem(qid: int):
+    execute_write(
+        "UPDATE flagged_problems SET resolved=1 "
+        "WHERE question_id=? AND resolved=0",
+        (qid,),
+    )
+
+
 # ── 필터 옵션 로드 ───────────────────────────────────────────
 @st.cache_data(ttl=600)
 def load_filter_options():
@@ -545,6 +584,16 @@ def main():
                                 st.session_state.mini_test_active = False
                                 st.rerun()
                         else:
+                            # 신고 버튼 — 렌더 깨짐/오류 발견 시 1클릭 신고
+                            flagged = is_flagged(qid)
+                            flag_label = "🚩 신고됨" if flagged else "🚩 신고"
+                            if st.button(flag_label, key=f"flag_{qid}",
+                                         use_container_width=True):
+                                if flagged:
+                                    unflag_problem(qid)
+                                else:
+                                    flag_problem(qid)
+                                st.rerun()
                             if st.button("➕ 추가", key=f"add_{qid}",
                                          use_container_width=True):
                                 st.session_state.selected_ids.add(qid)

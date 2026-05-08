@@ -198,6 +198,55 @@ if st.button("이번 결과 저장 (지난 실행으로 남기기)"):
 st.divider()
 
 # ─────────────────────────────────────────────────────────
+# 신고함 — 사용자가 평소 발견한 오류 누적
+# ─────────────────────────────────────────────────────────
+st.subheader("🚩 신고함")
+st.caption("사용자가 검색·시험지 페이지에서 직접 신고한 문항. "
+           "여기 모인 게 진짜 새 패턴 발견의 신호입니다.")
+
+conn = _get_db_connection()
+flagged_rows = conn.execute(
+    "SELECT f.flag_id, f.question_id, f.flagged_at, f.reason, "
+    "       q.school, q.year, q.semester, q.exam_type, q.question_number, "
+    "       q.chapter, q.question_text "
+    "FROM flagged_problems f "
+    "JOIN questions q ON f.question_id = q.question_id "
+    "WHERE f.resolved = 0 "
+    "ORDER BY f.flagged_at DESC"
+).fetchall()
+
+st.metric("미해결 신고", len(flagged_rows))
+
+if not flagged_rows:
+    st.info("신고된 문항 없음. 검색 페이지에서 🚩 버튼으로 신고하면 여기 모입니다.")
+else:
+    for r in flagged_rows[:20]:
+        with st.container(border=True):
+            cols = st.columns([4, 1, 1])
+            EXAM = {"a": "중간", "b": "기말"}
+            label = (
+                f"**[{r['school']}]** {r['year']}년 {r['semester']}학기 "
+                f"{EXAM.get(r['exam_type'], '')} {r['question_number']}번 · "
+                f"`{r['chapter']}` · qid={r['question_id']}"
+            )
+            cols[0].markdown(label)
+            cols[0].caption(f"신고일: {r['flagged_at']}")
+            text_preview = (r['question_text'] or "")[:200]
+            cols[0].code(text_preview, language="markdown")
+            if cols[1].button("처리완료",
+                              key=f"resolve_{r['flag_id']}"):
+                conn.execute(
+                    "UPDATE flagged_problems SET resolved=1 WHERE flag_id=?",
+                    (r['flag_id'],),
+                )
+                if hasattr(conn, "commit"):
+                    try:
+                        conn.commit()
+                    except Exception:
+                        pass
+                st.rerun()
+
+# ─────────────────────────────────────────────────────────
 # 가이드
 # ─────────────────────────────────────────────────────────
 with st.expander("ℹ️ 이 페이지는 어떻게 쓰나요?"):

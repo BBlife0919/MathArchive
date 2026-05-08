@@ -77,6 +77,17 @@ CREATE TABLE images (
     image_type      TEXT
 );
 
+CREATE TABLE IF NOT EXISTS flagged_problems (
+    flag_id     SERIAL PRIMARY KEY,
+    question_id INTEGER NOT NULL REFERENCES questions(question_id),
+    flagged_at  TIMESTAMP DEFAULT NOW(),
+    reason      TEXT,
+    flagged_by  TEXT,
+    resolved    INTEGER DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_flagged_qid ON flagged_problems(question_id);
+CREATE INDEX IF NOT EXISTS idx_flagged_resolved ON flagged_problems(resolved);
+
 CREATE INDEX idx_questions_school ON questions(school);
 CREATE INDEX idx_questions_chapter ON questions(chapter);
 CREATE INDEX idx_questions_difficulty ON questions(difficulty);
