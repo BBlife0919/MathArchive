@@ -349,42 +349,76 @@ ACTION_LABELS = {
     "remove": "삭제 (스타일 토글 등)",
 }
 
-for token, count in bare_words[:30]:
+# 화면에 표시할 토큰 (상위 30개)
+visible_tokens = bare_words[:30]
+
+# ─── 일괄 처리 툴바 ────────────────────────────────────
+toolbar = st.columns([2, 2, 2, 4])
+if toolbar[0].button("🚫 전체 무시 (도형 라벨로 처리)",
+                     use_container_width=True):
+    n_done = 0
+    for token, _ in visible_tokens:
+        apply_user_mapping(token, "ignore", "")
+        n_done += 1
+    st.toast(f"✅ {n_done}개 토큰 무시 처리됨", icon="✅")
+    run_bare_word_detection.clear()
+    st.rerun()
+
+if toolbar[1].button("✅ 선택한 처리 일괄 적용",
+                     use_container_width=True, type="primary"):
+    n_done = 0
+    n_affected = 0
+    for token, _ in visible_tokens:
+        action = st.session_state.get(f"act_{token}", "선택")
+        if action == "선택":
+            continue
+        latex = st.session_state.get(f"latex_{token}", "").strip()
+        if action == "map" and not latex:
+            continue
+        res = apply_user_mapping(token, action, latex)
+        n_done += 1
+        n_affected += res.get("affected", 0)
+    if n_done == 0:
+        st.toast("선택된 토큰이 없습니다", icon="⚠️")
+    else:
+        st.toast(f"✅ {n_done}개 토큰 처리 — DB {n_affected}건 변경",
+                 icon="✅")
+        run_bare_word_detection.clear()
+        run_structural_scan.clear()
+        st.rerun()
+
+st.caption("💡 대부분이 도형 라벨이면 **[전체 무시]** 한 번에 정리. "
+           "특정 토큰만 매핑/삭제 필요하면 dropdown 선택 후 **[선택한 처리 일괄 적용]**.")
+
+st.markdown("---")
+
+# 헤더
+hdr = st.columns([2, 3, 3])
+hdr[0].markdown("**토큰**")
+hdr[1].markdown("**처리 방식**")
+hdr[2].markdown("**LaTeX (매핑 시만)**")
+
+for token, count in visible_tokens:
     is_new = token not in last_words
     badge = " 🆕" if is_new else ""
-    with st.container(border=False):
-        cols = st.columns([2, 2, 2.5, 1])
-        cols[0].markdown(f"`{token}` ({count}건){badge}")
-        action = cols[1].selectbox(
-            "처리",
-            options=list(ACTION_LABELS.keys()),
-            format_func=lambda k: ACTION_LABELS[k],
-            key=f"act_{token}",
+    cols = st.columns([2, 3, 3])
+    cols[0].markdown(f"`{token}` ({count}건){badge}")
+    cols[1].selectbox(
+        "처리",
+        options=list(ACTION_LABELS.keys()),
+        format_func=lambda k: ACTION_LABELS[k],
+        key=f"act_{token}",
+        label_visibility="collapsed",
+    )
+    if st.session_state.get(f"act_{token}") == "map":
+        cols[2].text_input(
+            "LaTeX",
+            placeholder=r"예: \prec",
+            key=f"latex_{token}",
             label_visibility="collapsed",
         )
-        latex_input = ""
-        if action == "map":
-            latex_input = cols[2].text_input(
-                "LaTeX",
-                placeholder=r"예: \prec",
-                key=f"latex_{token}",
-                label_visibility="collapsed",
-            )
-        else:
-            cols[2].caption("")
-
-        if cols[3].button("적용", key=f"apply_{token}",
-                          disabled=action == "선택"
-                          or (action == "map" and not latex_input.strip()),
-                          use_container_width=True):
-            res = apply_user_mapping(
-                token, action,
-                latex_input.strip() if action == "map" else "",
-            )
-            st.toast(f"✅ {token}: {res['affected']}건 처리", icon="✅")
-            run_bare_word_detection.clear()
-            run_structural_scan.clear()
-            st.rerun()
+    else:
+        cols[2].caption("—")
 
 st.divider()
 
