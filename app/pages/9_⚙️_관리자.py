@@ -48,8 +48,14 @@ else:
             cols[1].caption(u["email"])
             cols[2].caption(f"신청일: {u['created_at']}")
             if cols[3].button("승인", key=f"approve_{u['user_id']}", type="primary"):
-                auth.approve_user(u["user_id"])
-                st.success(f"{u['username']} 승인 완료")
+                ok, warn = auth.approve_user(u["user_id"])
+                if ok:
+                    if warn:
+                        st.warning(f"{u['username']} 승인됨 — {warn}")
+                    else:
+                        st.success(f"{u['username']} 승인 완료 (환영 메일 발송됨)")
+                else:
+                    st.error(f"승인 실패: {warn}")
                 st.rerun()
             if cols[4].button("삭제", key=f"reject_{u['user_id']}"):
                 auth.delete_user(u["user_id"])
@@ -97,5 +103,11 @@ else:
                     st.rerun()
             else:
                 if cols[5].button("승인", key=f"approve_all_{u['user_id']}", type="primary"):
-                    auth.approve_user(u["user_id"])
+                    ok, warn = auth.approve_user(u["user_id"])
+                    if ok and not warn:
+                        st.success(f"{u['username']} 승인 완료 (환영 메일 발송됨)")
+                    elif ok and warn:
+                        st.warning(f"{u['username']} 승인됨 — {warn}")
+                    else:
+                        st.error(f"승인 실패: {warn}")
                     st.rerun()

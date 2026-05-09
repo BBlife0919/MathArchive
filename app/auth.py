@@ -308,8 +308,84 @@ def list_all_users() -> list[dict[str, Any]]:
     return [dict(r) for r in cur.fetchall()]
 
 
-def approve_user(user_id: int) -> None:
-    _conn().execute("UPDATE users SET approved = TRUE WHERE user_id = ?", (user_id,))
+def approve_user(user_id: int) -> tuple[bool, str | None]:
+    """승인 처리 + 첫 승인 시 환영 메일 발송.
+
+    이미 승인된 사용자엔 메일 재발송 안 함 (idempotent).
+    메일 발송 실패해도 승인 처리 자체는 성공으로 간주, 경고만 반환.
+    """
+    conn = _conn()
+    cur = conn.execute(
+        "SELECT name, email, username, approved FROM users WHERE user_id = ?",
+        (user_id,),
+    )
+    row = cur.fetchone()
+    if not row:
+        return False, "사용자를 찾을 수 없습니다."
+
+    was_approved = bool(row["approved"])
+    conn.execute("UPDATE users SET approved = TRUE WHERE user_id = ?", (user_id,))
+
+    if was_approved:
+        return True, None  # 이미 승인 → 메일 안 보냄
+
+    try:
+        _send_approval_email(
+            to_email=row["email"],
+            name=row["name"],
+            username=row["username"],
+        )
+    except Exception as e:
+        return True, f"승인은 됐지만 메일 발송 실패: {e}"
+
+    return True, None
+
+
+def _send_approval_email(to_email: str, name: str, username: str) -> None:
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    from email.utils import formataddr
+
+    gmail_user = _get_secret("GMAIL_USER")
+    gmail_pw = _get_secret("GMAIL_APP_PASSWORD")
+    from_name = _get_secret("SMTP_FROM_NAME", "MathArchive")
+    base_url = (_get_secret("APP_BASE_URL", "http://localhost:8501") or "").rstrip("/")
+    if not gmail_user or not gmail_pw:
+        raise RuntimeError("GMAIL_USER / GMAIL_APP_PASSWORD 미설정")
+    gmail_pw = gmail_pw.replace(" ", "")
+
+    html = f"""\
+    <div style="font-family: sans-serif; line-height: 1.6;">
+      <h2>🎉 MathArchive 가입 승인 완료</h2>
+      <p>{name} 님,</p>
+      <p>가입 신청이 승인되었습니다. 이제 아이디 <b>{username}</b> 로 로그인해서 이용하실 수 있어요.</p>
+      <p><a href="{base_url}" style="background:#4f46e5;color:white;padding:10px 18px;
+            text-decoration:none;border-radius:6px;display:inline-block">
+        MathArchive 들어가기
+      </a></p>
+      <p style="color:#666;font-size:12px;">
+        문의 사항이 있으면 답장으로 회신주세요.
+      </p>
+    </div>
+    """
+    text = (
+        f"{name} 님,\n\n"
+        f"MathArchive 가입 신청이 승인되었습니다.\n"
+        f"아이디 {username} 로 로그인해서 이용하세요.\n\n"
+        f"링크: {base_url}\n"
+    )
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = "[MathArchive] 가입 승인 완료 — 이제 로그인하실 수 있어요"
+    msg["From"]    = formataddr((from_name, gmail_user))
+    msg["To"]      = to_email
+    msg.attach(MIMEText(text, "plain", "utf-8"))
+    msg.attach(MIMEText(html, "html",  "utf-8"))
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as smtp:
+        smtp.login(gmail_user, gmail_pw)
+        smtp.sendmail(gmail_user, [to_email], msg.as_string())
 
 
 def revoke_user(user_id: int) -> None:
