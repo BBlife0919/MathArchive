@@ -352,9 +352,40 @@ ACTION_LABELS = {
 # 화면에 표시할 토큰 (상위 30개)
 visible_tokens = bare_words[:30]
 
+# 도형 라벨 자동 인식: 영문자 2~6글자 묶음 (대문자 또는 소문자만)
+def _is_geometry_label(token: str) -> bool:
+    if not (2 <= len(token) <= 6):
+        return False
+    # 대문자만 (ABP, EFGH, OPQ 등) — 100% 도형
+    if re.fullmatch(r"[A-Z]{2,6}", token):
+        return True
+    # 소문자 변수 묶음 (xyz, abc, abi 등) — 자음모음 패턴 영어 단어 제외
+    if re.fullmatch(r"[a-z]{2,6}", token):
+        # 영어 단어 의심 (모음 비율로 판단): 모음 1개 이상 + 자음 1개 이상
+        # 인 짧은 단어는 LaTeX 명령일 수 있어 제외
+        vowels = sum(1 for c in token if c in "aeiou")
+        if vowels >= 1 and vowels <= len(token) - 1 and len(token) >= 4:
+            return False  # 영어 단어 가능성 — 사람 검토 필요
+        return True  # xyz, ab, abc 같은 변수 묶음
+    return False
+
+
 # ─── 일괄 처리 툴바 ────────────────────────────────────
-toolbar = st.columns([2, 2, 2, 4])
-if toolbar[0].button("🚫 전체 무시 (도형 라벨로 처리)",
+toolbar = st.columns([3, 3, 3])
+
+# 1) 모든 도형 라벨 자동 무시 (전체 리스트 대상)
+if toolbar[0].button("🤖 도형 라벨 모두 자동 무시 (전체 리스트)",
+                     use_container_width=True, type="primary"):
+    geo_tokens = [t for t, _ in bare_words if _is_geometry_label(t)]
+    for t in geo_tokens:
+        apply_user_mapping(t, "ignore", "")
+    st.toast(f"✅ {len(geo_tokens)}개 도형 라벨 자동 무시 처리",
+             icon="✅")
+    run_bare_word_detection.clear()
+    st.rerun()
+
+# 2) 화면 표시 30개만 무시
+if toolbar[1].button("🚫 표시된 30개 전체 무시",
                      use_container_width=True):
     n_done = 0
     for token, _ in visible_tokens:
@@ -364,8 +395,8 @@ if toolbar[0].button("🚫 전체 무시 (도형 라벨로 처리)",
     run_bare_word_detection.clear()
     st.rerun()
 
-if toolbar[1].button("✅ 선택한 처리 일괄 적용",
-                     use_container_width=True, type="primary"):
+if toolbar[2].button("✅ 선택한 처리 일괄 적용",
+                     use_container_width=True):
     n_done = 0
     n_affected = 0
     for token, _ in visible_tokens:
