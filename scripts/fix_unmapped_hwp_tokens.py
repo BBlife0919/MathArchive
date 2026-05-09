@@ -64,6 +64,13 @@ REPLACE = [
     (re.compile(r"(?<![A-Za-z\\])bold(?![A-Za-z])"), r""),
     (re.compile(r"(?<![A-Za-z\\])BOLD(?![A-Za-z])"), r""),
     (re.compile(r"(?<![A-Za-z\\])IT(?![A-Za-z])"), r""),  # italic toggle
+    # HWP 단어 깨짐 패턴 — `triangle` 이 `triang` + `le` 로 쪼개졌고
+    # `le` 가 \\leq 로 자동 변환돼 `triang \\leq ABC` 형태로 굳어짐.
+    # 이 두 토큰을 하나로 묶어 \\triangle 로 복원.
+    (re.compile(r"(?<![A-Za-z\\])triang\s*\\leq\s*"), r"\\triangle "),
+    (re.compile(r"(?<![A-Za-z\\])triang(?=\s+[A-Z])"), r"\\triangle"),
+    # `\\angle` 도 비슷하게 깨질 수 있음 (`ang` + `le`)
+    (re.compile(r"(?<![A-Za-z\\])ang\s*\\leq\s*"), r"\\angle "),
     (re.compile(r"(?<![A-Za-z\\])BIGCAP(?![A-Za-z])"), r"\\bigcap"),
     (re.compile(r"(?<![A-Za-z\\])BIGCUP(?![A-Za-z])"), r"\\bigcup"),
     (re.compile(r"(?<![A-Za-z\\])NOTSUBSET(?![A-Za-z])"), r"\\not\\subset"),
@@ -249,6 +256,7 @@ def main():
             f"   OR {txtcol} GLOB '*CUP*' "
             f"   OR {txtcol} GLOB '*bold*' "
             f"   OR {txtcol} GLOB '*BIGCIRC*' "
+            f"   OR {txtcol} GLOB '*triang*' "
             f"   OR {txtcol} GLOB '*[LGN]E*' "
             f"   OR {txtcol} GLOB '*rarrow*' "
             f"   OR {txtcol} GLOB '*RARROW*' "
