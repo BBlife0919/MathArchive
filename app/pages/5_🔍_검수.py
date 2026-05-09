@@ -145,8 +145,27 @@ def _exec_write(conn, sql, params=()):
 # ─────────────────────────────────────────────────────────
 # 자동 처리 함수들
 # ─────────────────────────────────────────────────────────
+def _strip_leading_tabs_outside_box(text: str) -> str:
+    """BOX 외부 줄들의 leading tab/4-space 제거. BOX 내부는 보존
+    (markdown 표는 들여쓰기 의미 없음, BOX 표는 자체 구조 보존)."""
+    if not text:
+        return text
+    parts = re.split(r"(<<BOX_START>>.*?<<BOX_END>>)", text, flags=re.S)
+    out = []
+    for part in parts:
+        if part.startswith("<<BOX_START>>"):
+            out.append(part)
+        else:
+            # 줄별 leading tab/4-space 제거
+            part = "\n".join(
+                re.sub(r"^[\t ]+", "", ln) for ln in part.split("\n")
+            )
+            out.append(part)
+    return "".join(out)
+
+
 def auto_fix_structural() -> dict:
-    """BOX 짝/중첩/shadow 문제를 일괄 처리."""
+    """BOX 짝/중첩/shadow + 누락 토큰 + 탭 들여쓰기 일괄 처리."""
     from fix_nested_boxes import fix_text as fix_nested
     from fix_unmapped_hwp_tokens import fix_text as fix_tokens
 
@@ -162,6 +181,7 @@ def auto_fix_structural() -> dict:
             continue
         new = fix_nested(txt)
         new = fix_tokens(new)
+        new = _strip_leading_tabs_outside_box(new)
         if new != txt:
             _exec_write(
                 conn,
@@ -179,6 +199,7 @@ def auto_fix_structural() -> dict:
             continue
         new = fix_nested(txt)
         new = fix_tokens(new)
+        new = _strip_leading_tabs_outside_box(new)
         if new != txt:
             _exec_write(
                 conn,
