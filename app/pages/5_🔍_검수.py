@@ -369,6 +369,12 @@ def apply_user_mapping(token: str, action: str, latex: str = "") -> dict:
     pat = re.compile(rf"(?<![A-Za-z\\]){re.escape(token)}(?![A-Za-z])")
     repl = latex if action == "map" else ""
 
+    # re.sub 의 replacement 인자는 \1, \g<> 같은 escape 를 해석한다.
+    # \circ 같은 LaTeX 명령은 \c 가 invalid escape 로 잡혀 PatternError.
+    # lambda 로 우회하면 literal 그대로 치환됨.
+    def _do_sub(text):
+        return pat.sub(lambda m: repl, text)
+
     n = 0
     for table, idcol, txtcol in [
         ("questions", "question_id", "question_text"),
@@ -383,7 +389,7 @@ def apply_user_mapping(token: str, action: str, latex: str = "") -> dict:
             rid, txt = r[0], r[1]
             if not txt:
                 continue
-            new = pat.sub(repl, txt)
+            new = _do_sub(txt)
             if new != txt:
                 updates.append((rid, new))
         n += _batch_update(conn, table, idcol, txtcol, updates)
