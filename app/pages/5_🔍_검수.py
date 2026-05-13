@@ -27,6 +27,104 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 
+# ─────────────────────────────────────────────────────────
+# HWP 토큰 → LaTeX 사전 (사용자가 매번 검색 안 해도 되게)
+# ─────────────────────────────────────────────────────────
+# action: 'map' (LaTeX 치환) / 'remove' (스타일 토글, 제거)
+HWP_TOKEN_REFERENCE = {
+    # 분수/근호
+    "over": ("map", r"\frac"),
+    "OVER": ("map", r"\frac"),
+    "sqrt": ("map", r"\sqrt"),
+    "root": ("map", r"\sqrt"),
+    # 위/아래 데코
+    "bar": ("map", r"\overline"),
+    "BAR": ("map", r"\overline"),
+    "hat": ("map", r"\hat"),
+    "dot": ("map", r"\dot"),
+    "tilde": ("map", r"\tilde"),
+    "vec": ("map", r"\vec"),
+    "under": ("map", r"\underline"),
+    "UNDER": ("map", r"\underline"),
+    "underbrace": ("map", r"\underbrace"),
+    "UNDERBRACE": ("map", r"\underbrace"),
+    "overbrace": ("map", r"\overbrace"),
+    "OVERBRACE": ("map", r"\overbrace"),
+    # 비교 연산자
+    "leq": ("map", r"\leq"), "LEQ": ("map", r"\leq"),
+    "LE": ("map", r"\leq"),
+    "geq": ("map", r"\geq"), "GEQ": ("map", r"\geq"),
+    "GE": ("map", r"\geq"),
+    "neq": ("map", r"\neq"), "NEQ": ("map", r"\neq"),
+    "NE": ("map", r"\neq"),
+    "approx": ("map", r"\approx"), "APPROX": ("map", r"\approx"),
+    "equiv": ("map", r"\equiv"), "EQUIV": ("map", r"\equiv"),
+    "sim": ("map", r"\sim"), "SIM": ("map", r"\sim"),
+    # 연산
+    "pm": ("map", r"\pm"), "PM": ("map", r"\pm"),
+    "mp": ("map", r"\mp"), "MP": ("map", r"\mp"),
+    "times": ("map", r"\times"), "TIMES": ("map", r"\times"),
+    "cdot": ("map", r"\cdot"), "CDOT": ("map", r"\cdot"),
+    "div": ("map", r"\div"), "DIV": ("map", r"\div"),
+    "divide": ("map", r"\div"), "DIVIDE": ("map", r"\div"),
+    # 집합/원소
+    "in": ("map", r"\in"), "IN": ("map", r"\in"),
+    "notin": ("map", r"\notin"), "NOTIN": ("map", r"\notin"),
+    "subset": ("map", r"\subset"), "SUBSET": ("map", r"\subset"),
+    "supset": ("map", r"\supset"), "SUPSET": ("map", r"\supset"),
+    "cup": ("map", r"\cup"), "CUP": ("map", r"\cup"),
+    "cap": ("map", r"\cap"), "CAP": ("map", r"\cap"),
+    "SMALLINTER": ("map", r"\cap"),
+    "SMALLUNION": ("map", r"\cup"),
+    "emptyset": ("map", r"\emptyset"),
+    # 도형
+    "circ": ("map", r"\circ"), "CIRC": ("map", r"\circ"),
+    "triangle": ("map", r"\triangle"),
+    "angle": ("map", r"\angle"), "ANGLE": ("map", r"\angle"),
+    "perp": ("map", r"\perp"), "PERP": ("map", r"\perp"),
+    "parallel": ("map", r"\parallel"),
+    "bigcirc": ("map", r"\bigcirc"), "BIGCIRC": ("map", r"\bigcirc"),
+    "Box": ("map", r"\square"),
+    # 양화사·총합
+    "forall": ("map", r"\forall"), "FORALL": ("map", r"\forall"),
+    "exists": ("map", r"\exists"), "EXISTS": ("map", r"\exists"),
+    "sum": ("map", r"\sum"), "SUM": ("map", r"\sum"),
+    "prod": ("map", r"\prod"), "PROD": ("map", r"\prod"),
+    "int": ("map", r"\int"), "INT": ("map", r"\int"),
+    "partial": ("map", r"\partial"),
+    "nabla": ("map", r"\nabla"),
+    # 점선
+    "cdots": ("map", r"\cdots"), "CDOTS": ("map", r"\cdots"),
+    "ldots": ("map", r"\ldots"), "LDOTS": ("map", r"\ldots"),
+    "vdots": ("map", r"\vdots"),
+    "ddots": ("map", r"\ddots"),
+    # 화살표
+    "rarrow": ("map", r"\rightarrow"),
+    "RARROW": ("map", r"\rightarrow"),
+    "larrow": ("map", r"\leftarrow"),
+    "LARROW": ("map", r"\leftarrow"),
+    "lrarrow": ("map", r"\leftrightarrow"),
+    "LRARROW": ("map", r"\leftrightarrow"),
+    "RIGHTARROW": ("map", r"\rightarrow"),
+    "LEFTARROW": ("map", r"\leftarrow"),
+    # 추론 기호
+    "therefore": ("map", r"\therefore"),
+    "THEREFORE": ("map", r"\therefore"),
+    "because": ("map", r"\because"),
+    "BECAUSE": ("map", r"\because"),
+    # 무한
+    "infty": ("map", r"\infty"), "INFTY": ("map", r"\infty"),
+    # HWP 스타일 토글 (의미 없음, 제거)
+    "bold": ("remove", ""),
+    "BOLD": ("remove", ""),
+    "IT": ("remove", ""),
+    "it": ("remove", ""),
+    "RM": ("remove", ""),
+    "rm": ("remove", ""),
+    "ITALIC": ("remove", ""),
+}
+
+
 st.set_page_config(page_title="검수 — MathArchive", page_icon="🔍", layout="wide")
 
 # Auth optional
@@ -373,25 +471,34 @@ def _is_geometry_label(token: str) -> bool:
 # ─── 일괄 처리 툴바 ────────────────────────────────────
 toolbar = st.columns([3, 3, 3])
 
-# 1) 모든 도형 라벨 자동 무시 (전체 리스트 대상)
-if toolbar[0].button("🤖 도형 라벨 모두 자동 무시 (전체 리스트)",
+# 1) 알려진 HWP 토큰 자동 매핑 (사전 기반)
+if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전 기반)",
                      use_container_width=True, type="primary"):
-    geo_tokens = [t for t, _ in bare_words if _is_geometry_label(t)]
-    for t in geo_tokens:
-        apply_user_mapping(t, "ignore", "")
-    st.toast(f"✅ {len(geo_tokens)}개 도형 라벨 자동 무시 처리",
-             icon="✅")
+    n_mapped = 0
+    n_removed = 0
+    for token, _ in bare_words:
+        if token in HWP_TOKEN_REFERENCE:
+            action, latex = HWP_TOKEN_REFERENCE[token]
+            apply_user_mapping(token, action, latex)
+            if action == "map":
+                n_mapped += 1
+            else:
+                n_removed += 1
+    st.toast(
+        f"✅ 매핑 {n_mapped}건, 삭제 {n_removed}건 자동 처리",
+        icon="✅",
+    )
     run_bare_word_detection.clear()
     st.rerun()
 
-# 2) 화면 표시 30개만 무시
-if toolbar[1].button("🚫 표시된 30개 전체 무시",
+# 2) 도형 라벨 자동 무시
+if toolbar[1].button("🤖 도형 라벨 자동 무시 (전체)",
                      use_container_width=True):
-    n_done = 0
-    for token, _ in visible_tokens:
-        apply_user_mapping(token, "ignore", "")
-        n_done += 1
-    st.toast(f"✅ {n_done}개 토큰 무시 처리됨", icon="✅")
+    geo_tokens = [t for t, _ in bare_words if _is_geometry_label(t)]
+    for t in geo_tokens:
+        apply_user_mapping(t, "ignore", "")
+    st.toast(f"✅ {len(geo_tokens)}개 도형 라벨 자동 무시",
+             icon="✅")
     run_bare_word_detection.clear()
     st.rerun()
 
@@ -418,23 +525,38 @@ if toolbar[2].button("✅ 선택한 처리 일괄 적용",
         run_structural_scan.clear()
         st.rerun()
 
-st.caption("💡 대부분이 도형 라벨이면 **[전체 무시]** 한 번에 정리. "
-           "특정 토큰만 매핑/삭제 필요하면 dropdown 선택 후 **[선택한 처리 일괄 적용]**.")
+st.caption("💡 **권장 순서**: ① **[알려진 토큰 자동 매핑]** → "
+           "② **[도형 라벨 자동 무시]** → ③ 남은 거 수동 처리 → "
+           "**[선택한 처리 일괄 적용]**")
 
 st.markdown("---")
 
 # 헤더
-hdr = st.columns([2, 3, 3])
+hdr = st.columns([2, 1.5, 3, 3])
 hdr[0].markdown("**토큰**")
-hdr[1].markdown("**처리 방식**")
-hdr[2].markdown("**LaTeX (매핑 시만)**")
+hdr[1].markdown("**추천**")
+hdr[2].markdown("**처리 방식**")
+hdr[3].markdown("**LaTeX (매핑 시만)**")
 
 for token, count in visible_tokens:
     is_new = token not in last_words
     badge = " 🆕" if is_new else ""
-    cols = st.columns([2, 3, 3])
+    cols = st.columns([2, 1.5, 3, 3])
     cols[0].markdown(f"`{token}` ({count}건){badge}")
-    cols[1].selectbox(
+
+    # 추천 표시
+    if token in HWP_TOKEN_REFERENCE:
+        rec_action, rec_latex = HWP_TOKEN_REFERENCE[token]
+        if rec_action == "map":
+            cols[1].markdown(f"📘 `{rec_latex}`")
+        else:
+            cols[1].markdown("🗑 제거")
+    elif _is_geometry_label(token):
+        cols[1].markdown("🔤 변수")
+    else:
+        cols[1].markdown("❓ 미상")
+
+    cols[2].selectbox(
         "처리",
         options=list(ACTION_LABELS.keys()),
         format_func=lambda k: ACTION_LABELS[k],
@@ -442,14 +564,20 @@ for token, count in visible_tokens:
         label_visibility="collapsed",
     )
     if st.session_state.get(f"act_{token}") == "map":
-        cols[2].text_input(
+        # 추천 LaTeX 자동 채움
+        default = ""
+        if token in HWP_TOKEN_REFERENCE \
+                and HWP_TOKEN_REFERENCE[token][0] == "map":
+            default = HWP_TOKEN_REFERENCE[token][1]
+        cols[3].text_input(
             "LaTeX",
+            value=default,
             placeholder=r"예: \prec",
             key=f"latex_{token}",
             label_visibility="collapsed",
         )
     else:
-        cols[2].caption("—")
+        cols[3].caption("—")
 
 st.divider()
 
