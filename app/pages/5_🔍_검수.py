@@ -402,6 +402,28 @@ def apply_user_mapping(token: str, action: str, latex: str = "") -> dict:
 st.title("🔍 검수")
 st.caption("이 페이지에서 모든 처리 가능. 클릭 한 번이면 끝.")
 
+
+def _show_result_banner(title: str, body: str, kind: str = "success"):
+    """이전 액션 결과를 큰 배너로 표시 (페이지 상단)."""
+    st.session_state["audit_last_result"] = {
+        "title": title, "body": body, "kind": kind,
+    }
+
+
+if "audit_last_result" in st.session_state:
+    r = st.session_state["audit_last_result"]
+    with st.container(border=True):
+        if r["kind"] == "success":
+            st.success(f"### ✅ {r['title']}\n\n{r['body']}")
+        elif r["kind"] == "warning":
+            st.warning(f"### ⚠️ {r['title']}\n\n{r['body']}")
+        else:
+            st.info(f"### ℹ️ {r['title']}\n\n{r['body']}")
+        if st.button("닫기", key="dismiss_result"):
+            del st.session_state["audit_last_result"]
+            st.rerun()
+    st.divider()
+
 last = _load_last_run()
 last_words = {w: n for w, n in (last.get("bare_words") or [])}
 
@@ -420,12 +442,14 @@ with c4:
                  disabled=struct["box_mismatch"] == 0
                           and struct["code_block"] == 0,
                  use_container_width=True):
-        with st.status("처리 중...", expanded=True) as status:
-            st.write("BOX/shadow 정리 + 토큰 변환 적용 중...")
+        with st.spinner("처리 중... (5~15초)"):
             res = auto_fix_structural()
-            st.write(f"questions {res['questions_fixed']}건 갱신")
-            st.write(f"solutions {res['solutions_fixed']}건 갱신")
-            status.update(label="완료", state="complete")
+        _show_result_banner(
+            "자동 복구 완료",
+            f"- 문제 텍스트: **{res['questions_fixed']}건** 갱신\n"
+            f"- 해설 텍스트: **{res['solutions_fixed']}건** 갱신\n\n"
+            f"다음 단계: **🧠 알려진 토큰 자동 매핑** 버튼을 누르세요.",
+        )
         run_structural_scan.clear()
         run_bare_word_detection.clear()
         st.rerun()
@@ -480,31 +504,65 @@ toolbar = st.columns([3, 3, 3])
 # 1) 알려진 HWP 토큰 자동 매핑 (사전 기반)
 if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전 기반)",
                      use_container_width=True, type="primary"):
-    n_mapped = 0
-    n_removed = 0
-    for token, _ in bare_words:
-        if token in HWP_TOKEN_REFERENCE:
-            action, latex = HWP_TOKEN_REFERENCE[token]
-            apply_user_mapping(token, action, latex)
-            if action == "map":
-                n_mapped += 1
-            else:
-                n_removed += 1
-    st.toast(
-        f"✅ 매핑 {n_mapped}건, 삭제 {n_removed}건 자동 처리",
-        icon="✅",
+    with st.spinner("사전 기반 매핑 처리 중..."):
+        n_mapped = 0
+        n_removed = 0
+        n_affected_total = 0
+        mapped_examples = []
+        for token, _ in bare_words:
+            if token in HWP_TOKEN_REFERENCE:
+                action, latex = HWP_TOKEN_REFERENCE[token]
+                res = apply_user_mapping(token, action, latex)
+                n_affected_total += res.get("affected", 0)
+                if action == "map":
+                    n_mapped += 1
+                    if len(mapped_examples) < 5:
+                        mapped_examples.append(f"`{token}` → `{latex}`")
+                else:
+                    n_removed += 1
+    body = (
+        f"- 매핑: **{n_mapped}개 토큰**\n"
+        f"- 삭제: **{n_removed}개 토큰**\n"
+        f"- DB 문항 변경: **{n_affected_total}건**\n\n"
     )
+    if mapped_examples:
+        body += "**매핑 예시:**\n" + "\n".join(
+            f"- {ex}" for ex in mapped_examples) + "\n\n"
+    body += "다음 단계: **🤖 도형 라벨 자동 무시** 버튼을 누르세요."
+    if n_mapped == 0 and n_removed == 0:
+        _show_result_banner(
+            "처리할 알려진 토큰 없음",
+            "사전에 등록된 토큰이 표에 없습니다. "
+            "다음: **🤖 도형 라벨 자동 무시** 버튼을 누르세요.",
+            kind="info",
+        )
+    else:
+        _show_result_banner("알려진 토큰 자동 매핑 완료", body)
     run_bare_word_detection.clear()
     st.rerun()
 
 # 2) 도형 라벨 자동 무시
 if toolbar[1].button("🤖 도형 라벨 자동 무시 (전체)",
                      use_container_width=True):
-    geo_tokens = [t for t, _ in bare_words if _is_geometry_label(t)]
-    for t in geo_tokens:
-        apply_user_mapping(t, "ignore", "")
-    st.toast(f"✅ {len(geo_tokens)}개 도형 라벨 자동 무시",
-             icon="✅")
+    with st.spinner("도형 라벨 식별 중..."):
+        geo_tokens = [t for t, _ in bare_words if _is_geometry_label(t)]
+        for t in geo_tokens:
+            apply_user_mapping(t, "ignore", "")
+    if geo_tokens:
+        examples = ", ".join(f"`{t}`" for t in geo_tokens[:8])
+        body = (
+            f"- 무시 처리된 도형 라벨: **{len(geo_tokens)}개**\n"
+            f"- 예시: {examples}\n\n"
+            "다음 단계: 표에 남은 토큰이 있으면 dropdown 처리, "
+            "없으면 **📌 베이스라인 저장**."
+        )
+        _show_result_banner("도형 라벨 자동 무시 완료", body)
+    else:
+        _show_result_banner(
+            "처리할 도형 라벨 없음",
+            "표에 도형 라벨로 식별되는 토큰이 없습니다.",
+            kind="info",
+        )
     run_bare_word_detection.clear()
     st.rerun()
 
@@ -512,24 +570,33 @@ if toolbar[2].button("✅ 선택한 처리 일괄 적용",
                      use_container_width=True):
     n_done = 0
     n_affected = 0
-    for token, _ in visible_tokens:
-        action = st.session_state.get(f"act_{token}", "선택")
-        if action == "선택":
-            continue
-        latex = st.session_state.get(f"latex_{token}", "").strip()
-        if action == "map" and not latex:
-            continue
-        res = apply_user_mapping(token, action, latex)
-        n_done += 1
-        n_affected += res.get("affected", 0)
+    with st.spinner("선택 처리 적용 중..."):
+        for token, _ in visible_tokens:
+            action = st.session_state.get(f"act_{token}", "선택")
+            if action == "선택":
+                continue
+            latex = st.session_state.get(f"latex_{token}", "").strip()
+            if action == "map" and not latex:
+                continue
+            res = apply_user_mapping(token, action, latex)
+            n_done += 1
+            n_affected += res.get("affected", 0)
     if n_done == 0:
-        st.toast("선택된 토큰이 없습니다", icon="⚠️")
+        _show_result_banner(
+            "처리할 항목 없음",
+            "dropdown 에서 처리 방식을 선택한 토큰이 없습니다.",
+            kind="warning",
+        )
     else:
-        st.toast(f"✅ {n_done}개 토큰 처리 — DB {n_affected}건 변경",
-                 icon="✅")
+        _show_result_banner(
+            "선택 처리 적용 완료",
+            f"- 처리 토큰: **{n_done}개**\n"
+            f"- DB 변경: **{n_affected}건**\n\n"
+            "다음 단계: **📌 베이스라인 저장**.",
+        )
         run_bare_word_detection.clear()
         run_structural_scan.clear()
-        st.rerun()
+    st.rerun()
 
 st.caption("💡 **권장 순서**: ① **[알려진 토큰 자동 매핑]** → "
            "② **[도형 라벨 자동 무시]** → ③ 남은 거 수동 처리 → "
@@ -595,7 +662,10 @@ if st.button("📌 이번 결과 저장 (베이스라인 갱신)"):
         "box_mismatch": struct["box_mismatch"],
         "code_block": struct["code_block"],
     })
-    st.success("저장됨. 다음 검수 때 이 결과와 비교됩니다.")
+    _show_result_banner(
+        "베이스라인 저장 완료",
+        "다음 검수 때 이 결과와 비교돼서 새로 추가된 항목만 표시됩니다.",
+    )
     st.rerun()
 
 st.divider()
