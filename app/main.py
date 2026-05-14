@@ -187,6 +187,61 @@ def _frac_to_dfrac(text: str) -> str:
     return re.sub(r"\$([^$]+)\$", _replace_in_math, text)
 
 
+_BOX_TITLE_PAT = re.compile(
+    r"^<\s*(보\s*기|조\s*건|참\s*고|예\s*시|단\s*서)\s*>$"
+)
+_BOX_ITEM_PREFIX = re.compile(
+    r"^\s*(?:[ㄱ-ㅎ]\.|\([가-힣]\)|\(?[①②③④⑤⑥⑦⑧⑨]\)?)"
+)
+
+
+def _flatten_grid_box(content: str) -> str:
+    """`<보기>` / `<조건>` 박스가 markdown 격자 표로 들어왔을 때
+    셀들을 flatten 해서 깔끔한 세로 나열로 변환.
+
+    HWP 원본은 단순 테두리 사각형 + 내용 나열인데 표 구조로 파싱돼
+    Streamlit 에서 격자 표로 렌더되면 못생김. 이를 원본 모양에 가깝게.
+    """
+    lines = content.split("\n")
+    if not any("|---" in ln for ln in lines):
+        return content  # 표 아님, 원본 그대로
+
+    # 셀 추출
+    cells = []
+    for ln in lines:
+        s = ln.strip()
+        if not s.startswith("|"):
+            continue
+        if re.search(r"\|\s*-+\s*\|", s):
+            continue  # 구분자 행 스킵
+        parts = [c.strip() for c in s.strip("|").split("|")]
+        cells.extend(parts)
+    cells = [c for c in cells if c.strip()]
+    if not cells:
+        return content
+
+    # 헤더(`<보기>`) 와 항목 분리
+    title = None
+    items = []
+    for c in cells:
+        if _BOX_TITLE_PAT.match(c):
+            title = c
+        else:
+            items.append(c)
+
+    # 항목 prefix(`ㄱ.`, `(가)`, `①`) 가 있거나 헤더가 있으면 박스로 인정.
+    has_prefix = any(_BOX_ITEM_PREFIX.match(it) for it in items)
+    if title is None and not has_prefix:
+        return content  # 일반 수치 표는 그대로
+
+    out = []
+    if title:
+        out.append(f"<div style='text-align:center; font-weight:bold; "
+                   f"margin-bottom:0.5em;'>{title}</div>")
+    out.extend(items)
+    return "\n\n".join(out)
+
+
 def _ensure_line_breaks(text: str) -> str:
     """단일 \\n을 markdown 줄바꿈(\\n\\n)으로 변환하여 원본 줄넘김 보존.
 
@@ -233,6 +288,8 @@ def render_question_content(text: str, file_source: str = "",
                 content = _frac_to_dfrac(content)
                 lines = [ln.lstrip() for ln in content.split("\n")]
                 content = "\n".join(lines)
+                # `<보기>`/`<조건>` 격자 표 → 단순 세로 나열로 변환
+                content = _flatten_grid_box(content)
                 with st.container(border=True):
                     st.markdown(content, unsafe_allow_html=True)
             continue
