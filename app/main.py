@@ -23,27 +23,39 @@ EXAM_TYPE_KO = {"a": "중간", "b": "기말"}
 
 
 # ── 메타 포맷팅 ─────────────────────────────────────────────
+EXAM_TYPE_SHORT = {"a": "중", "b": "기"}
+
+
 def format_meta(row, *, short=False) -> str:
     """문제 row에서 출처 메타데이터를 사람이 읽을 수 있는 문자열로.
 
     short=False: `[가림고] 2025년 1학기 중간 · 26번`
-    short=True : `[가림고] 26번` (스페이스 절약용)
+    short=True : `[가림고 25.1중] 26번` (2열 그리드용 컴팩트)
     """
     school = row["school"] or "?"
     qn = row["question_number"]
-    if short:
-        return f"[{school}] {qn}번"
     try:
         year = row["year"]
         sem = row["semester"]
-        exam = EXAM_TYPE_KO.get(row["exam_type"], row["exam_type"] or "")
+        exam = row["exam_type"] or ""
     except (KeyError, IndexError):
         year = sem = exam = None
+
+    if short:
+        # `[가락고 25.1중]` 형태 — 학교+시험 출처를 한 묶음으로
+        head = school
+        if year:
+            head += f" {str(year)[-2:]}"  # 2025 → 25
+        if sem and exam:
+            head += f".{sem}{EXAM_TYPE_SHORT.get(exam, exam)}"
+        return f"[{head}] {qn}번"
+
+    exam_ko = EXAM_TYPE_KO.get(exam, exam or "")
     parts = [f"[{school}]"]
     if year and sem:
         parts.append(f"{year}년 {sem}학기")
-    if exam:
-        parts.append(exam)
+    if exam_ko:
+        parts.append(exam_ko)
     parts.append(f"{qn}번")
     return " ".join(parts)
 
@@ -152,7 +164,8 @@ def search_questions(schools, chapters, difficulties, regions,
         FROM questions q
         LEFT JOIN solutions s ON q.question_id = s.question_id
         WHERE {where}
-        ORDER BY q.school, q.question_number
+        ORDER BY q.school, q.year DESC, q.semester, q.exam_type,
+                 q.question_number
     """
     return query(sql, params)
 
