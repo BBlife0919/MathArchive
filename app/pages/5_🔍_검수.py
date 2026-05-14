@@ -166,7 +166,7 @@ def _save_run(data: dict):
 # ─────────────────────────────────────────────────────────
 # 검사 로직
 # ─────────────────────────────────────────────────────────
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=1800)
 def run_bare_word_detection(min_len: int = 3) -> list:
     from detect_bare_math_words import (
         extract_bare_words, KNOWN_TOKENS, COMMON_VARS,
@@ -203,7 +203,7 @@ def run_bare_word_detection(min_len: int = 3) -> list:
     return total.most_common(50)
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=1800)
 def run_structural_scan() -> dict:
     conn = _get_db_connection()
     rows = conn.execute(
@@ -427,10 +427,31 @@ if "audit_last_result" in st.session_state:
 last = _load_last_run()
 last_words = {w: n for w, n in (last.get("bare_words") or [])}
 
+
+# ─────────────────────────────────────────────────────────
+# 세션 캐시 — dropdown 변경 시 재스캔 방지
+# ─────────────────────────────────────────────────────────
+def _force_rescan():
+    """다음 렌더에서 강제 재스캔."""
+    st.session_state.pop("audit_bare_words", None)
+    st.session_state.pop("audit_struct", None)
+    _force_rescan()
+
+
+if "audit_bare_words" not in st.session_state:
+    with st.spinner("⏳ DB 전체 스캔 중... (첫 진입 시 1~2분)"):
+        st.session_state.audit_bare_words = run_bare_word_detection()
+
+if "audit_struct" not in st.session_state:
+    with st.spinner("⏳ 구조 무결성 검사 중..."):
+        st.session_state.audit_struct = run_structural_scan()
+
+bare_words_cached = st.session_state.audit_bare_words
+struct_cached = st.session_state.audit_struct
+
 # ─── 구조 무결성 ─────────────────────────────────────────
 st.subheader("🏗 구조 무결성")
-with st.spinner("스캔 중..."):
-    struct = run_structural_scan()
+struct = struct_cached
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("전체 문항", f"{struct['total_questions']:,}")
@@ -450,19 +471,21 @@ with c4:
             f"- 해설 텍스트: **{res['solutions_fixed']}건** 갱신\n\n"
             f"다음 단계: **🧠 알려진 토큰 자동 매핑** 버튼을 누르세요.",
         )
-        run_structural_scan.clear()
-        run_bare_word_detection.clear()
+        _force_rescan()
         st.rerun()
 
 st.divider()
 
 # ─── 누락 토큰 ─────────────────────────────────────────
 st.subheader("🔤 누락 HWP 토큰")
-st.caption("수식 안에서 백슬래시 없이 등장하는 단어. 각 행에서 처리 방식을 "
-           "선택하고 [적용]을 누르세요.")
+hdr_cols = st.columns([6, 1])
+hdr_cols[0].caption("수식 안에서 백슬래시 없이 등장하는 단어. "
+                    "각 행에서 처리 방식을 선택하고 [적용]을 누르세요.")
+if hdr_cols[1].button("🔄 다시 스캔", use_container_width=True):
+    _force_rescan()
+    st.rerun()
 
-with st.spinner("스캔 중..."):
-    bare_words = run_bare_word_detection()
+bare_words = bare_words_cached
 
 # 신규 표시
 new_count = sum(1 for w, _ in bare_words if w not in last_words)
@@ -538,7 +561,7 @@ if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전 기반)",
         )
     else:
         _show_result_banner("알려진 토큰 자동 매핑 완료", body)
-    run_bare_word_detection.clear()
+    _force_rescan()
     st.rerun()
 
 # 2) 도형 라벨 자동 무시
@@ -563,7 +586,7 @@ if toolbar[1].button("🤖 도형 라벨 자동 무시 (전체)",
             "표에 도형 라벨로 식별되는 토큰이 없습니다.",
             kind="info",
         )
-    run_bare_word_detection.clear()
+    _force_rescan()
     st.rerun()
 
 if toolbar[2].button("✅ 선택한 처리 일괄 적용",
@@ -594,8 +617,7 @@ if toolbar[2].button("✅ 선택한 처리 일괄 적용",
             f"- DB 변경: **{n_affected}건**\n\n"
             "다음 단계: **📌 베이스라인 저장**.",
         )
-        run_bare_word_detection.clear()
-        run_structural_scan.clear()
+        _force_rescan()
     st.rerun()
 
 st.caption("💡 **권장 순서**: ① **[알려진 토큰 자동 매핑]** → "

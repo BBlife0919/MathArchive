@@ -134,6 +134,9 @@ REPLACE = [
 
 # 영어 단어와 충돌 위험 있는 토큰 — 수식 ($...$) 안에서만 치환
 MATH_ONLY_REPLACE = [
+    # `inA`/`inX` 같이 in 뒤에 대문자 변수 붙은 부착 케이스 우선 분리
+    (re.compile(r"(?<![A-Za-z\\])in(?=[A-Z])"), r"\\in "),
+    (re.compile(r"(?<![A-Za-z\\])IN(?=[A-Z])"), r"\\in "),
     (re.compile(r"(?<![A-Za-z\\])in(?![A-Za-z])"), r"\\in"),
     (re.compile(r"(?<![A-Za-z\\])IN(?![A-Za-z])"), r"\\in"),
     (re.compile(r"(?<![A-Za-z\\])sum(?![A-Za-z])"), r"\\sum"),
