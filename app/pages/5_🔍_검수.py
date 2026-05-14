@@ -140,9 +140,10 @@ HWP_TOKEN_REFERENCE = {
     "subseteq": ("map", r"\subseteq"),
     "SUPSETEQ": ("map", r"\supseteq"),
     "supseteq": ("map", r"\supseteq"),
-    # 기타 HWP 토큰
-    "dyad": ("map", r"\otimes"),
-    "DYAD": ("map", r"\otimes"),
+    # HWP 벡터 표기 — `dyad{AD}` 는 `AD` 위에 → 화살표 그리는 의미
+    # 텐서곱(\otimes) 아님!
+    "dyad": ("map", r"\overrightarrow"),
+    "DYAD": ("map", r"\overrightarrow"),
 }
 
 
