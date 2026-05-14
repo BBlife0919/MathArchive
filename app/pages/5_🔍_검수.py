@@ -122,7 +122,78 @@ HWP_TOKEN_REFERENCE = {
     "RM": ("remove", ""),
     "rm": ("remove", ""),
     "ITALIC": ("remove", ""),
+    # 화살표 추가
+    "uparrow": ("map", r"\uparrow"),
+    "UPARROW": ("map", r"\uparrow"),
+    "downarrow": ("map", r"\downarrow"),
+    "DOWNARROW": ("map", r"\downarrow"),
+    "updownarrow": ("map", r"\updownarrow"),
+    "Uparrow": ("map", r"\Uparrow"),
+    "Downarrow": ("map", r"\Downarrow"),
+    # 집합 부정/포함
+    "NSUBSET": ("map", r"\not\subset"),
+    "nsubset": ("map", r"\not\subset"),
+    "NSUPSET": ("map", r"\not\supset"),
+    "SUPERSET": ("map", r"\supset"),
+    "superset": ("map", r"\supset"),
+    "SUBSETEQ": ("map", r"\subseteq"),
+    "subseteq": ("map", r"\subseteq"),
+    "SUPSETEQ": ("map", r"\supseteq"),
+    "supseteq": ("map", r"\supseteq"),
+    # 기타 HWP 토큰
+    "dyad": ("map", r"\otimes"),
+    "DYAD": ("map", r"\otimes"),
 }
+
+
+# ─────────────────────────────────────────────────────────
+# 패턴 인식기 — `inA`, `primeB`, `alphax` 등 부착 케이스
+# ─────────────────────────────────────────────────────────
+_GREEK_LOWER = ("alpha", "beta", "gamma", "delta", "epsilon", "zeta",
+                "eta", "theta", "iota", "kappa", "lambda", "mu",
+                "nu", "xi", "omicron", "pi", "rho", "sigma", "tau",
+                "upsilon", "phi", "chi", "psi", "omega")
+_GREEK_PAT = "|".join(_GREEK_LOWER)
+_SET_OPS = ("in", "IN", "notin", "NOTIN", "subset", "SUBSET",
+            "supset", "SUPSET", "cup", "CUP", "cap", "CAP",
+            "smallinter", "SMALLINTER", "smallunion", "SMALLUNION")
+_SET_OPS_MAP = {
+    "in": "in", "IN": "in", "notin": "notin", "NOTIN": "notin",
+    "subset": "subset", "SUBSET": "subset",
+    "supset": "supset", "SUPSET": "supset",
+    "cup": "cup", "CUP": "cup", "cap": "cap", "CAP": "cap",
+    "smallinter": "cap", "SMALLINTER": "cap",
+    "smallunion": "cup", "SMALLUNION": "cup",
+}
+
+HWP_TOKEN_PATTERNS = [
+    # 집합연산 + 대문자 변수: inA, smallinterB, etc.
+    (re.compile(rf"^({'|'.join(_SET_OPS)})([A-Z])$"),
+     lambda m: ("map", f"\\{_SET_OPS_MAP[m.group(1)]} {m.group(2)}")),
+    # prime + 대문자: primeB → B'
+    (re.compile(r"^[Pp]rime([A-Z])$"),
+     lambda m: ("map", f"{m.group(1)}'")),
+    # 그리스 + 영문자: alphax → \alpha x
+    (re.compile(rf"^({_GREEK_PAT})([a-zA-Z])$"),
+     lambda m: ("map", f"\\{m.group(1)} {m.group(2)}")),
+    # IT/RM/bold + 변수: ITa → a (토글 제거)
+    (re.compile(r"^(IT|RM|it|rm|bold|BOLD)([a-zA-Z]+)$"),
+     lambda m: ("map", m.group(2))),
+]
+
+
+def lookup_token(token: str):
+    """토큰의 권장 처리 방식. (action, latex) 반환.
+
+    action: 'map' / 'remove' / 'ignore' / None
+    """
+    if token in HWP_TOKEN_REFERENCE:
+        return HWP_TOKEN_REFERENCE[token]
+    for pat, fn in HWP_TOKEN_PATTERNS:
+        m = pat.match(token)
+        if m:
+            return fn(m)
+    return (None, "")
 
 
 st.set_page_config(page_title="검수 — MathArchive", page_icon="🔍", layout="wide")
@@ -524,25 +595,26 @@ def _is_geometry_label(token: str) -> bool:
 # ─── 일괄 처리 툴바 ────────────────────────────────────
 toolbar = st.columns([3, 3, 3])
 
-# 1) 알려진 HWP 토큰 자동 매핑 (사전 기반)
-if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전 기반)",
+# 1) 알려진 HWP 토큰 자동 매핑 (사전 + 패턴 기반)
+if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전+패턴)",
                      use_container_width=True, type="primary"):
-    with st.spinner("사전 기반 매핑 처리 중..."):
+    with st.spinner("사전·패턴 기반 매핑 처리 중..."):
         n_mapped = 0
         n_removed = 0
         n_affected_total = 0
         mapped_examples = []
         for token, _ in bare_words:
-            if token in HWP_TOKEN_REFERENCE:
-                action, latex = HWP_TOKEN_REFERENCE[token]
-                res = apply_user_mapping(token, action, latex)
-                n_affected_total += res.get("affected", 0)
-                if action == "map":
-                    n_mapped += 1
-                    if len(mapped_examples) < 5:
-                        mapped_examples.append(f"`{token}` → `{latex}`")
-                else:
-                    n_removed += 1
+            action, latex = lookup_token(token)
+            if action is None:
+                continue
+            res = apply_user_mapping(token, action, latex)
+            n_affected_total += res.get("affected", 0)
+            if action == "map":
+                n_mapped += 1
+                if len(mapped_examples) < 5:
+                    mapped_examples.append(f"`{token}` → `{latex}`")
+            else:
+                n_removed += 1
     body = (
         f"- 매핑: **{n_mapped}개 토큰**\n"
         f"- 삭제: **{n_removed}개 토큰**\n"
@@ -639,13 +711,14 @@ for token, count in visible_tokens:
     cols = st.columns([2, 1.5, 3, 3])
     cols[0].markdown(f"`{token}` ({count}건){badge}")
 
-    # 추천 표시
-    if token in HWP_TOKEN_REFERENCE:
-        rec_action, rec_latex = HWP_TOKEN_REFERENCE[token]
-        if rec_action == "map":
-            cols[1].markdown(f"📘 `{rec_latex}`")
-        else:
-            cols[1].markdown("🗑 제거")
+    # 추천 표시 (사전 + 패턴 인식기 모두 사용)
+    rec_action, rec_latex = lookup_token(token)
+    if rec_action == "map":
+        cols[1].markdown(f"📘 `{rec_latex}`")
+    elif rec_action == "remove":
+        cols[1].markdown("🗑 제거")
+    elif rec_action == "ignore":
+        cols[1].markdown("🚫 무시")
     elif _is_geometry_label(token):
         cols[1].markdown("🔤 변수")
     else:
@@ -659,11 +732,11 @@ for token, count in visible_tokens:
         label_visibility="collapsed",
     )
     if st.session_state.get(f"act_{token}") == "map":
-        # 추천 LaTeX 자동 채움
+        # 추천 LaTeX 자동 채움 (사전 + 패턴 모두)
         default = ""
-        if token in HWP_TOKEN_REFERENCE \
-                and HWP_TOKEN_REFERENCE[token][0] == "map":
-            default = HWP_TOKEN_REFERENCE[token][1]
+        rec_a, rec_l = lookup_token(token)
+        if rec_a == "map":
+            default = rec_l
         cols[3].text_input(
             "LaTeX",
             value=default,
