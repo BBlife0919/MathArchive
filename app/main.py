@@ -525,83 +525,102 @@ def main():
                         st.session_state.page_num += 1
                         st.rerun()
 
-            for row in page_results:
+            def _render_problem_card(row):
+                """문제 카드 1개 렌더 — 2열 그리드용 헬퍼."""
                 qid = row["question_id"]
                 is_selected = qid in st.session_state.selected_ids
 
                 with st.container(border=True):
-                    col1, col2 = st.columns([0.85, 0.15])
+                    # 헤더 정보 + 액션 버튼 (한 줄)
+                    diff_emoji = {"하": "🟢", "중": "🟡",
+                                  "상": "🔴", "킬": "💀"}.get(
+                        row["difficulty"], "⚪"
+                    )
+                    points_str = f"{row['points']}점" if row["points"] else ""
+                    subj_badge = " `서술형`" if row["is_subjective"] else ""
+                    err_badge = " ⚠️오류" if row["error_note"] else ""
 
-                    with col1:
-                        # 헤더 정보
-                        diff_emoji = {"하": "🟢", "중": "🟡", "상": "🔴", "킬": "💀"}.get(
-                            row["difficulty"], "⚪"
-                        )
-                        points_str = f"{row['points']}점" if row["points"] else ""
-                        subj_badge = " `서술형`" if row["is_subjective"] else ""
-                        err_badge = " ⚠️오류" if row["error_note"] else ""
-
-                        st.markdown(
-                            f"**{format_meta(row)}** · "
-                            f"{diff_emoji} {row['difficulty']} · "
-                            f"`{row['chapter']}` · {points_str}"
-                            f"{subj_badge}{err_badge}"
-                        )
-
-                        # 문제 텍스트 (목록에서는 이미지/박스 포함 풀 렌더링)
-                        qtext = row["question_text"]
-                        has_rich = "<<IMG:" in qtext or "<<BOX_START>>" in qtext
-                        if has_rich or len(qtext) > 400:
-                            with st.expander("문제 보기", expanded=not has_rich):
-                                render_question_content(
-                                    qtext, row["file_source"], qid)
+                    meta_line = (
+                        f"**{format_meta(row, short=True)}** · "
+                        f"{diff_emoji} · `{row['chapter']}` · "
+                        f"{points_str}{subj_badge}{err_badge}"
+                    )
+                    head_cols = st.columns([3, 1, 1])
+                    head_cols[0].markdown(meta_line)
+                    # 신고 버튼
+                    flagged = is_flagged(qid)
+                    flag_icon = "🚩" if not flagged else "🚩✓"
+                    if head_cols[1].button(
+                        flag_icon, key=f"flag_{qid}",
+                        use_container_width=True,
+                        help="신고됨 토글" if flagged else "오류 신고",
+                    ):
+                        if flagged:
+                            unflag_problem(qid)
                         else:
-                            text = render_question_text(qtext)
-                            st.markdown(text)
+                            flag_problem(qid)
+                        st.rerun()
+                    # 추가/제거 버튼
+                    if is_selected:
+                        if head_cols[2].button(
+                            "❌", key=f"rm_{qid}",
+                            use_container_width=True, help="선택 제거",
+                        ):
+                            st.session_state.selected_ids.discard(qid)
+                            st.session_state.mini_test_active = False
+                            st.rerun()
+                    else:
+                        if head_cols[2].button(
+                            "➕", key=f"add_{qid}",
+                            use_container_width=True, help="시험지에 추가",
+                            type="primary",
+                        ):
+                            st.session_state.selected_ids.add(qid)
+                            st.session_state.mini_test_active = False
+                            st.rerun()
 
-                        # 선택지
-                        choices_str = format_choices(row["choices"])
-                        if choices_str:
-                            st.caption(choices_str)
+                    # 문제 텍스트
+                    qtext = row["question_text"]
+                    has_rich = "<<IMG:" in qtext or "<<BOX_START>>" in qtext
+                    if has_rich or len(qtext) > 400:
+                        with st.expander("문제 보기",
+                                         expanded=not has_rich):
+                            render_question_content(
+                                qtext, row["file_source"], qid)
+                    else:
+                        text = render_question_text(qtext)
+                        st.markdown(text)
 
-                        # 정답/해설
-                        circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
-                        ans = row["answer"]
-                        display_ans = circle.get(ans, ans)
-                        with st.expander(f"정답: {display_ans} · 해설 보기"):
-                            if row["solution_text"]:
-                                render_question_content(
-                                    row["solution_text"],
-                                    row["file_source"], qid)
-                            else:
-                                st.caption("해설 없음")
+                    # 선택지
+                    choices_str = format_choices(row["choices"])
+                    if choices_str:
+                        st.caption(choices_str)
 
-                    with col2:
-                        if is_selected:
-                            if st.button("❌ 제거", key=f"rm_{qid}",
-                                         use_container_width=True):
-                                st.session_state.selected_ids.discard(qid)
-                                st.session_state.mini_test_active = False
-                                st.rerun()
+                    # 정답/해설
+                    circle = {"1": "①", "2": "②", "3": "③",
+                              "4": "④", "5": "⑤"}
+                    ans = row["answer"]
+                    display_ans = circle.get(ans, ans)
+                    with st.expander(f"정답: {display_ans} · 해설 보기"):
+                        if row["solution_text"]:
+                            render_question_content(
+                                row["solution_text"],
+                                row["file_source"], qid)
                         else:
-                            # 신고 버튼 — 렌더 깨짐/오류 발견 시 1클릭 신고
-                            flagged = is_flagged(qid)
-                            flag_label = "🚩 신고됨" if flagged else "🚩 신고"
-                            if st.button(flag_label, key=f"flag_{qid}",
-                                         use_container_width=True):
-                                if flagged:
-                                    unflag_problem(qid)
-                                else:
-                                    flag_problem(qid)
-                                st.rerun()
-                            if st.button("➕ 추가", key=f"add_{qid}",
-                                         use_container_width=True):
-                                st.session_state.selected_ids.add(qid)
-                                st.session_state.mini_test_active = False
-                                st.rerun()
+                            st.caption("해설 없음")
 
-                        if is_selected:
-                            st.caption("✅ 선택됨")
+                    if is_selected:
+                        st.caption("✅ 선택됨")
+
+            # 2열 그리드 — 한 줄에 문제 2개씩 (한 화면에 ~6문제)
+            page_list = list(page_results)
+            for i in range(0, len(page_list), 2):
+                grid_cols = st.columns(2, gap="small")
+                with grid_cols[0]:
+                    _render_problem_card(page_list[i])
+                if i + 1 < len(page_list):
+                    with grid_cols[1]:
+                        _render_problem_card(page_list[i + 1])
 
     # ── 탭 2: 시험지 미리보기 ────────────────────────────────
     with tab_preview:
