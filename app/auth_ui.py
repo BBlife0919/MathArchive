@@ -526,7 +526,7 @@ _AUTHED_GLOBAL_CSS = """
   justify-content: center;
   font-family: 'Montserrat', 'Noto Sans KR', -apple-system, sans-serif;
   color: #e9ecf8;
-  animation: entryFadeOut 0.65s 1.05s forwards;
+  animation: entryFadeOut 0.9s 2.6s forwards;
   pointer-events: none;
 }
 .entry-loader .brand {

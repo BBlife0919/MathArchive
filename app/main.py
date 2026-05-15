@@ -635,27 +635,70 @@ def main():
             f"검색 결과: {total}문항 · {start + 1 if total else 0}–{end}번 표시"
         )
 
+        # ── 페이지 윈도우 & 네비게이션 헬퍼 ────────────────────
+        def _page_window(current: int, last: int):
+            """첫·마지막 페이지 + 현재±2 표시. 사이가 멀면 None('…') 삽입.
+            예) last=4048, current=10 → [0, None, 8, 9, 10, 11, 12, None, 4048]"""
+            if last <= 6:
+                return list(range(last + 1))
+            pages = {0, last}
+            for p in range(max(0, current - 2), min(last, current + 2) + 1):
+                pages.add(p)
+            sorted_pages = sorted(pages)
+            result = []
+            for i, p in enumerate(sorted_pages):
+                if i > 0 and p - sorted_pages[i - 1] > 1:
+                    result.append(None)
+                result.append(p)
+            return result
+
+        def _render_pagination(prefix: str):
+            """페이지 네비게이션. prefix: 'top'/'bot' (버튼 key 충돌 방지용)."""
+            if total <= PAGE_SIZE:
+                return
+            current = st.session_state.page_num
+            pages = _page_window(current, max_page)
+            col_specs = [1] + [1] * len(pages) + [1]
+            cols = st.columns(col_specs)
+            with cols[0]:
+                if st.button("◀", disabled=current == 0,
+                             key=f"prev_{prefix}",
+                             use_container_width=True):
+                    st.session_state.page_num -= 1
+                    st.rerun()
+            for i, p in enumerate(pages):
+                with cols[i + 1]:
+                    if p is None:
+                        st.markdown(
+                            "<div style='text-align:center;padding:8px 0;"
+                            "color:#a6b2d4;'>…</div>",
+                            unsafe_allow_html=True,
+                        )
+                    elif p == current:
+                        st.markdown(
+                            f"<div style='text-align:center;padding:6px 0;"
+                            f"border:1px solid #f0cd87;border-radius:6px;"
+                            f"color:#f0cd87;font-weight:700;'>{p + 1}</div>",
+                            unsafe_allow_html=True,
+                        )
+                    else:
+                        if st.button(str(p + 1),
+                                     key=f"page_{prefix}_{p}",
+                                     use_container_width=True):
+                            st.session_state.page_num = p
+                            st.rerun()
+            with cols[-1]:
+                if st.button("▶", disabled=current >= max_page,
+                             key=f"next_{prefix}",
+                             use_container_width=True):
+                    st.session_state.page_num += 1
+                    st.rerun()
+
         if not results:
             st.info("필터 조건에 맞는 문제가 없습니다. 사이드바에서 조건을 조정해주세요.")
         else:
-            # 페이지 네비게이션 (상단)
-            if total > PAGE_SIZE:
-                nav_col1, nav_col2, nav_col3 = st.columns([1, 2, 1])
-                with nav_col1:
-                    if st.button("◀ 이전", disabled=st.session_state.page_num == 0,
-                                 key="prev_top", use_container_width=True):
-                        st.session_state.page_num -= 1
-                        st.rerun()
-                with nav_col2:
-                    st.markdown(
-                        f"<div style='text-align:center;padding-top:6px;'>"
-                        f"페이지 {st.session_state.page_num + 1} / {max_page + 1}"
-                        f"</div>", unsafe_allow_html=True)
-                with nav_col3:
-                    if st.button("다음 ▶", disabled=st.session_state.page_num >= max_page,
-                                 key="next_top", use_container_width=True):
-                        st.session_state.page_num += 1
-                        st.rerun()
+            # 상단 페이지 네비게이션
+            _render_pagination("top")
 
             def _render_problem_card(row):
                 """문제 카드 1개 렌더 — 2열 그리드용 헬퍼."""
@@ -753,6 +796,10 @@ def main():
                 if i + 1 < len(page_list):
                     with grid_cols[1]:
                         _render_problem_card(page_list[i + 1])
+
+            # 하단 페이지 네비게이션 (스크롤 후에도 이동 가능)
+            st.markdown("---")
+            _render_pagination("bot")
 
     # ── 탭 2: 시험지 미리보기 ────────────────────────────────
     with tab_preview:
