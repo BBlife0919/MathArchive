@@ -532,7 +532,6 @@ def _force_rescan():
     """다음 렌더에서 강제 재스캔."""
     st.session_state.pop("audit_bare_words", None)
     st.session_state.pop("audit_struct", None)
-    _force_rescan()
 
 
 if "audit_bare_words" not in st.session_state:
