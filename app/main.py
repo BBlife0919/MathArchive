@@ -16,6 +16,7 @@ from urllib.parse import quote, urlsplit, urlunsplit
 import streamlit as st
 
 from db import get_connection as _get_db_connection, is_cloud
+import curriculum as _curr
 
 PAGE_TITLE = "MathArchive by 이영우"
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
@@ -471,7 +472,41 @@ def main():
 
         sel_regions = st.multiselect("지역", regions)
         sel_schools = st.multiselect("학교", schools)
-        sel_chapters = st.multiselect("단원", chapters)
+
+        # ── 계층형 단원 필터: 과목 → 대단원 → 중단원 ─────────
+        st.markdown("**단원**")
+        sel_subjects = st.multiselect(
+            "과목", _curr.subjects(),
+            key="sel_subjects",
+            help="예: 공수1, 공수2, 대수, 미적1, 확통, 기하 등",
+        )
+        majors_pool = _curr.major_chapters(sel_subjects) \
+            if sel_subjects else []
+        sel_majors = st.multiselect(
+            "대단원",
+            majors_pool,
+            key="sel_majors",
+            disabled=not sel_subjects,
+            help="과목을 먼저 선택하면 활성화",
+        ) if majors_pool else []
+        minors_pool = _curr.minor_chapters(sel_subjects, sel_majors) \
+            if sel_majors else (
+                _curr.all_minor_chapters_in_subjects(sel_subjects)
+                if sel_subjects else []
+            )
+        sel_minors = st.multiselect(
+            "중단원",
+            minors_pool,
+            key="sel_minors",
+            disabled=not minors_pool,
+            help="비워두면 위 단계의 모든 중단원 검색",
+        ) if minors_pool else []
+
+        # 최종 SQL 필터에 들어갈 중단원 리스트
+        sel_chapters = _curr.expand_to_minors(
+            sel_subjects, sel_majors, sel_minors
+        )
+
         sel_difficulties = st.multiselect("난이도", difficulties)
 
         question_type = st.radio(
