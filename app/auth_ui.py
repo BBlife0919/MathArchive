@@ -504,65 +504,65 @@ def _render_landing_hero() -> None:
         if profile_uri else ''
     )
 
+    # NOTE: f-string 의 들여쓰기를 0칸으로 통일해야 한다. Streamlit `st.markdown`
+    # 은 마크다운 파서를 거치는데, 마크다운은 "4칸 이상 들여쓰여진 줄 = 코드
+    # 블록" 으로 처리한다. 보간 변수(_LANDING_CSS 등)의 내용은 0칸인데
+    # f-string 리터럴이 들여쓰여 있으면 공통 leading whitespace 가 0 이 돼
+    # textwrap.dedent 류의 자동 dedent 가 안 먹는다.
     st.markdown(
-        f"""
-        {_LANDING_CSS}
-        {_MATH_BG}
-        <section class="hero fade-in">
-          <div class="eyebrow">Mathematics · Data · Design</div>
-          <h1>All-in-One Mathematics Library<br>
-            <span class="grad">Math Archive</span>
-          </h1>
-          <p class="sub">
-            <span class="num">120,000+</span> Questions · Infinite Possibilities
-          </p>
-        </section>
-        <div class="section-title fade-in d1">Core Capabilities</div>
-        <div class="feature-scatter fade-in d2">
-          <div class="feature-circle highlight"
-               style="--x:50%; --y:42%; --d:320px;">
-            <div class="icon">⚡</div>
-            <h3>Rapid Forge</h3>
-            <span class="sub-ko">교재 · 시험지 즉시 제작</span>
-            <p>단 몇 번의 클릭으로 출판 품질 PDF 빌드.</p>
-          </div>
-          <div class="feature-circle"
-               style="--x:17%; --y:20%; --d:230px;">
-            <div class="icon">📚</div>
-            <h3>Massive Data</h3>
-            <span class="sub-ko">방대한 문항 데이터</span>
-            <p>고1~고3 전문항 120,000개.</p>
-          </div>
-          <div class="feature-circle"
-               style="--x:83%; --y:22%; --d:220px;">
-            <div class="icon">∑</div>
-            <h3>LaTeX Engine</h3>
-            <span class="sub-ko">완벽한 수식 렌더링</span>
-            <p>HWP → KaTeX 무손실 변환.</p>
-          </div>
-          <div class="feature-circle"
-               style="--x:22%; --y:82%; --d:235px;">
-            <div class="icon">🎯</div>
-            <h3>Smart Filter</h3>
-            <span class="sub-ko">정교한 추출 엔진</span>
-            <p>학교 · 단원 · 난이도 다차원 검색.</p>
-          </div>
-          <div class="feature-circle"
-               style="--x:78%; --y:80%; --d:225px;">
-            <div class="icon">🩺</div>
-            <h3>Personal Clinic</h3>
-            <span class="sub-ko">학생 맞춤 클리닉</span>
-            <p>취약점 · 인출 · 분산 복습 · 전이.</p>
-          </div>
-        </div>
-        <div class="profile-wrap fade-in d3">
-          {profile_img_html}
-          <div class="profile-text">
-            <div class="directed">Directed by</div>
-            <p class="name">이영우 · Youngwoo Lee</p>
-          </div>
-        </div>
-        """,
+f"""
+{_LANDING_CSS}
+{_MATH_BG}
+<section class="hero fade-in">
+<div class="eyebrow">Mathematics · Data · Design</div>
+<h1>All-in-One Mathematics Library<br>
+<span class="grad">Math Archive</span>
+</h1>
+<p class="sub">
+<span class="num">120,000+</span> Questions · Infinite Possibilities
+</p>
+</section>
+<div class="section-title fade-in d1">Core Capabilities</div>
+<div class="feature-scatter fade-in d2">
+<div class="feature-circle highlight" style="--x:50%; --y:42%; --d:320px;">
+<div class="icon">⚡</div>
+<h3>Rapid Forge</h3>
+<span class="sub-ko">교재 · 시험지 즉시 제작</span>
+<p>단 몇 번의 클릭으로 출판 품질 PDF 빌드.</p>
+</div>
+<div class="feature-circle" style="--x:17%; --y:20%; --d:230px;">
+<div class="icon">📚</div>
+<h3>Massive Data</h3>
+<span class="sub-ko">방대한 문항 데이터</span>
+<p>고1~고3 전문항 120,000개.</p>
+</div>
+<div class="feature-circle" style="--x:83%; --y:22%; --d:220px;">
+<div class="icon">∑</div>
+<h3>LaTeX Engine</h3>
+<span class="sub-ko">완벽한 수식 렌더링</span>
+<p>HWP → KaTeX 무손실 변환.</p>
+</div>
+<div class="feature-circle" style="--x:22%; --y:82%; --d:235px;">
+<div class="icon">🎯</div>
+<h3>Smart Filter</h3>
+<span class="sub-ko">정교한 추출 엔진</span>
+<p>학교 · 단원 · 난이도 다차원 검색.</p>
+</div>
+<div class="feature-circle" style="--x:78%; --y:80%; --d:225px;">
+<div class="icon">🩺</div>
+<h3>Personal Clinic</h3>
+<span class="sub-ko">학생 맞춤 클리닉</span>
+<p>취약점 · 인출 · 분산 복습 · 전이.</p>
+</div>
+</div>
+<div class="profile-wrap fade-in d3">
+{profile_img_html}
+<div class="profile-text">
+<div class="directed">Directed by</div>
+<p class="name">이영우 · Youngwoo Lee</p>
+</div>
+</div>
+""",
         unsafe_allow_html=True,
     )
 
