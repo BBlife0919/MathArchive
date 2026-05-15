@@ -355,38 +355,25 @@ header[data-testid="stHeader"] { background: transparent !important; }
   .feature-circle:hover { transform: scale(1.03); }
 }
 
-/* 프로필 섹션 — 사진을 텍스트 뒤 backdrop 으로 배치 */
+/* 프로필 섹션 — 사진 왼쪽 + 텍스트 오른쪽 (side by side) */
 .profile-wrap {
   position: relative; z-index: 1;
-  padding: 80px 24px 70px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 44px;
+  padding: 40px 24px 30px;
   margin: 30px auto 10px;
-  max-width: 720px;
+  max-width: 760px;
   border-top: 1px solid rgba(210, 175, 110, 0.25);
   border-bottom: 1px solid rgba(210, 175, 110, 0.25);
-  text-align: center;
-  overflow: hidden;
+  flex-wrap: wrap;
 }
-/* 누끼 PNG — 이름 텍스트 뒤로 배치, 은은하게 페이드 */
 .profile-photo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -52%);
-  height: 360px;
+  height: 260px;
   width: auto;
-  z-index: 0;
-  opacity: 0.32;
-  pointer-events: none;
-  -webkit-mask-image: radial-gradient(ellipse at center,
-                       #000 40%, rgba(0,0,0,0.6) 70%, transparent 100%);
-          mask-image: radial-gradient(ellipse at center,
-                       #000 40%, rgba(0,0,0,0.6) 70%, transparent 100%);
+  flex-shrink: 0;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.5));
 }
-.profile-text {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-}
+.profile-text { text-align: left; }
 .profile-text .directed {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -479,8 +466,9 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 
 @media (max-width: 700px) {
-  .profile-wrap { padding: 60px 16px 50px; }
-  .profile-photo { height: 280px; opacity: 0.25; }
+  .profile-wrap { flex-direction: column; text-align: center; gap: 24px; }
+  .profile-text { text-align: center; }
+  .profile-photo { height: 220px; }
   .hero { padding: 40px 0 24px; }
 }
 </style>
