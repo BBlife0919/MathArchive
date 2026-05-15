@@ -516,6 +516,161 @@ h2.exam-subtitle {
     color: #1a1a1a;
 }
 .no-sol { color: #aaa; font-style: italic; }
+
+/* ── SUMMIT POINT (네이비+골드) 교재 스타일 ───────────── */
+/* 색상 변수 — 추후 일괄 변경 용이 */
+.book-summit .slot.book-card {
+    border-top: 3px solid #d2af6e;       /* gold top bar */
+    background: #fcfcfd;
+    padding: 4mm 4mm 5mm 4mm;
+    margin-bottom: 4mm;
+    border-radius: 0 0 2mm 2mm;
+}
+.book-summit .slot.book-card .book-header {
+    border-bottom: 1px solid #e8d9b8;
+    padding-bottom: 2mm;
+    margin-bottom: 2.5mm;
+}
+.book-summit .slot.book-card .q-kicker {
+    color: #d2af6e;
+    letter-spacing: 3px;
+    font-size: 7pt;
+}
+.book-summit .slot.book-card .q-number {
+    color: #18264b;
+}
+.book-summit .slot.book-card .q-tag {
+    background: #18264b;
+    color: #f0cd87;
+    border: none;
+}
+.book-summit .slot.book-card .q-tag.diff-킬 { background: #6b0d0d; color: #fff; }
+.book-summit .slot.book-card .q-tag.diff-상 { background: #8c4a00; color: #fff; }
+.book-summit .slot.book-card .q-tag.diff-중 { background: #6a5500; color: #fff; }
+.book-summit .slot.book-card .q-tag.diff-하 { background: #1f5a1f; color: #fff; }
+
+/* Key Point 박스 */
+.book-summit .summit-kp {
+    margin-top: 3mm;
+    padding: 2mm 3mm;
+    background: #faf8f0;
+    border: 1px solid #e6c88c;
+    border-radius: 1.5mm;
+    display: flex;
+    align-items: center;
+    gap: 2.5mm;
+    min-height: 7mm;
+}
+.book-summit .summit-kp-label {
+    color: #18264b;
+    font-weight: 800;
+    font-size: 8pt;
+    letter-spacing: 1.5px;
+    background: #d2af6e;
+    color: #18264b;
+    padding: 0.6mm 2mm;
+    border-radius: 1mm;
+    flex-shrink: 0;
+}
+.book-summit .summit-kp-line {
+    flex: 1;
+    border-bottom: 1px dashed #c7b890;
+    height: 4mm;
+}
+
+/* 풀이 메모란 */
+.book-summit .summit-memo {
+    margin-top: 2.5mm;
+    padding: 2mm 1mm 1mm 1mm;
+}
+.book-summit .summit-memo-line {
+    border-bottom: 0.5px solid #b8c2d4;
+    height: 6mm;
+}
+
+/* 풀이기록 체크박스 (1차/2차/3차) */
+.book-summit .summit-tries {
+    display: flex;
+    gap: 4mm;
+    justify-content: flex-end;
+    margin-top: 2mm;
+    padding-top: 2mm;
+    border-top: 1px dotted #d5dde8;
+    font-size: 8.5pt;
+    color: #5a6378;
+}
+.book-summit .summit-tries .try-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1mm;
+}
+.book-summit .summit-tries .try-box {
+    display: inline-block;
+    width: 3mm;
+    height: 3mm;
+    border: 1.2px solid #18264b;
+    border-radius: 0.5mm;
+}
+.book-summit .summit-tries .try-label {
+    font-weight: 700;
+    color: #18264b;
+}
+
+/* ── 챕터 디바이더 페이지 ───────────────────── */
+.chapter-divider {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f1932 0%, #18264b 50%, #1d2f5c 100%);
+    color: #f0cd87;
+    page-break-after: always;
+    text-align: center;
+    padding: 0 !important;
+    height: 100vh;
+    box-sizing: border-box;
+}
+.cd-no {
+    font-size: 14pt;
+    letter-spacing: 8px;
+    color: #d2af6e;
+    margin-bottom: 6mm;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.cd-rule-top, .cd-rule-bottom {
+    width: 60mm;
+    height: 0.7mm;
+    background: #d2af6e;
+    margin: 4mm auto;
+}
+.cd-title {
+    font-size: 44pt;
+    font-weight: 900;
+    color: #f0cd87;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin: 6mm 0;
+}
+.cd-sub {
+    font-size: 13pt;
+    color: #b8a980;
+    margin-top: 4mm;
+    letter-spacing: 2px;
+}
+.cd-logo {
+    margin-top: 18mm;
+    font-size: 11pt;
+    color: #d2af6e;
+    letter-spacing: 5px;
+    font-weight: 700;
+}
+.cd-counts {
+    margin-top: 10mm;
+    font-size: 10pt;
+    color: #a89870;
+    letter-spacing: 1px;
+}
 """
 
 _HTML_WRAP = """<!doctype html>
@@ -528,10 +683,43 @@ _HTML_WRAP = """<!doctype html>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
  onload="renderMathInElement(document.body,{{delimiters:[{{left:'$$',right:'$$',display:true}},{{left:'$',right:'$',display:false}}],throwOnError:false}}); window.__katexReady=true;"></script>
 <style>{css}</style>
-</head><body>
+</head><body class="{body_class}">
 {body}
 </body></html>
 """
+
+
+# ── 챕터 디바이더 ─────────────────────────────────────────
+def _render_chapter_divider(chapter_no: int, chapter_name: str,
+                             count: int) -> str:
+    """챕터 시작 페이지 — 네이비+골드 디자인 (SUMMIT POINT 톤).
+
+    chapter_no: 1부터 시작하는 챕터 순번
+    chapter_name: 중단원 명 (예: "이차방정식")
+    count: 해당 챕터의 문제 수
+    """
+    return (
+        '<section class="page chapter-divider">'
+        f'<div class="cd-no">CHAPTER {chapter_no:02d}</div>'
+        '<div class="cd-rule-top"></div>'
+        f'<h1 class="cd-title">{_html.escape(chapter_name)}</h1>'
+        '<div class="cd-rule-bottom"></div>'
+        f'<div class="cd-counts">{count}문항</div>'
+        '<div class="cd-logo">EUM ARCHIVE</div>'
+        '</section>'
+    )
+
+
+def _group_by_chapter(questions: list[dict]) -> list[tuple[str, list[dict]]]:
+    """순서 보존하면서 같은 chapter 인접 문제 묶음."""
+    groups: list[tuple[str, list[dict]]] = []
+    for q in questions:
+        ch = q.get("chapter") or "기타"
+        if groups and groups[-1][0] == ch:
+            groups[-1][1].append(q)
+        else:
+            groups.append((ch, [q]))
+    return groups
 
 
 def _render_slot(i: int, q: dict, layout: str, include_source: bool,
@@ -547,7 +735,7 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
     choices_html = format_choices(q.get("choices"), book_mode=include_difficulty)
 
     if include_difficulty:
-        # 교재 카드 — CC 텍스트북 스타일
+        # 교재 카드 — SUMMIT POINT 스타일 (네이비+골드 + Key Point + 메모란 + 풀이기록)
         tags: list[str] = []
         if q.get("chapter"):
             tags.append(f'<span class="q-tag">{_html.escape(str(q["chapter"]))}</span>')
@@ -570,6 +758,27 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
         tags_html = (
             '<div class="q-tags">' + "".join(tags) + '</div>' if tags else ""
         )
+        # Key Point + 메모란 + 풀이기록 (SUMMIT POINT 디자인)
+        summit_extras = (
+            '<div class="summit-kp">'
+            '<span class="summit-kp-label">KEY POINT</span>'
+            '<span class="summit-kp-line"></span>'
+            '</div>'
+            '<div class="summit-memo">'
+            '<div class="summit-memo-line"></div>'
+            '<div class="summit-memo-line"></div>'
+            '<div class="summit-memo-line"></div>'
+            '<div class="summit-memo-line"></div>'
+            '</div>'
+            '<div class="summit-tries">'
+            '<span class="try-item"><span class="try-label">1차</span>'
+            '<span class="try-box"></span></span>'
+            '<span class="try-item"><span class="try-label">2차</span>'
+            '<span class="try-box"></span></span>'
+            '<span class="try-item"><span class="try-label">3차</span>'
+            '<span class="try-box"></span></span>'
+            '</div>'
+        )
         return (
             f'<div class="slot book-card {layout}">'
             f'<div class="book-header">'
@@ -579,6 +788,7 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
             f'</div>'
             f'<div class="q-body">{body_html}</div>'
             + (f'<div class="q-choices">{choices_html}</div>' if choices_html else "")
+            + summit_extras
             + '</div>'
         )
 
@@ -686,7 +896,10 @@ def build_exam_html(questions: list[dict], title: str, include_source: bool,
     body = _problem_pages_html(
         questions, include_source, overrides, header, include_difficulty
     )
-    return _HTML_WRAP.format(title=_html.escape(title), css=_CSS, body=body)
+    return _HTML_WRAP.format(
+        title=_html.escape(title), css=_CSS, body=body,
+        body_class="",
+    )
 
 
 # ── 교재 전용 섹션 ─────────────────────────────────────────
@@ -757,14 +970,30 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      logo_path: str | Path | None = None,
                      kicker_mark: str | None = None,
                      kicker_text: str | None = None) -> str:
-    """교재 HTML: 문제(2단, 난이도 prefix 포함) + 빠른정답 표 + 해설(2단 column-flow)."""
+    """교재 HTML: 챕터 디바이더 + 문제(2단 SUMMIT POINT 카드) + 빠른정답 + 해설.
+
+    SUMMIT POINT 모의고사 완전정복 스타일:
+    - 챕터마다 네이비+골드 디바이더 페이지
+    - 카드 상단 골드 바, 큰 Q번호
+    - Key Point 박스 + 풀이 메모란 4줄 + 1차/2차/3차 체크
+    """
     logo_uri = _logo_data_uri(logo_path)
     header = _render_header(title, subtitle, logo_uri,
                              kicker_mark=kicker_mark,
                              kicker_text=kicker_text)
-    problem_html = _problem_pages_html(
-        questions, include_source, overrides, header, include_difficulty=True
-    )
+    # 챕터별 그룹화 → 디바이더 + 문제 페이지 인터리브
+    groups = _group_by_chapter(questions)
+    body_parts: list[str] = []
+    for ch_idx, (chapter_name, ch_questions) in enumerate(groups, 1):
+        body_parts.append(_render_chapter_divider(
+            ch_idx, chapter_name, len(ch_questions)
+        ))
+        # 각 챕터의 첫 페이지에만 헤더 노출 (첫 챕터에만)
+        chapter_header = header if ch_idx == 1 else ""
+        body_parts.append(_problem_pages_html(
+            ch_questions, include_source, overrides, chapter_header,
+            include_difficulty=True
+        ))
     qa_html = (
         '<section class="page qa-page">'
         '<h2 class="section-title">빠른 정답</h2>'
@@ -777,8 +1006,11 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
         f'{_render_solution_items(questions, include_source, include_difficulty=True)}'
         '</section>'
     )
-    body = "\n".join([problem_html, qa_html, sol_html])
-    return _HTML_WRAP.format(title=_html.escape(title), css=_CSS, body=body)
+    body = "\n".join(body_parts + [qa_html, sol_html])
+    return _HTML_WRAP.format(
+        title=_html.escape(title), css=_CSS, body=body,
+        body_class="book-summit",
+    )
 
 
 # ── Playwright 실행 ──────────────────────────────────────
