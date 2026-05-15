@@ -187,12 +187,12 @@ header[data-testid="stHeader"] { background: transparent !important; }
   display: inline-block;
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 0.45em;
-  font-size: 11px; font-weight: 700;
+  font-size: 15px; font-weight: 700;
   color: var(--gold);
   border: 1px solid rgba(210, 175, 110, 0.4);
-  padding: 6px 18px;
+  padding: 9px 24px;
   border-radius: 999px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
   text-transform: uppercase;
 }
 .hero h1 {
@@ -212,9 +212,9 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .hero .sub {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 500;
-  font-size: clamp(15px, 1.6vw, 19px);
-  color: var(--text-soft);
+  font-weight: 600;
+  font-size: clamp(20px, 2.0vw, 26px);
+  color: var(--text);
   letter-spacing: 0.04em;
 }
 .hero .sub .num {
@@ -227,11 +227,11 @@ header[data-testid="stHeader"] { background: transparent !important; }
 .section-title {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 18px;
   letter-spacing: 0.5em;
   color: var(--gold);
   text-align: center;
-  margin: 60px 0 28px;
+  margin: 64px 0 36px;
   text-transform: uppercase;
 }
 
@@ -277,17 +277,17 @@ header[data-testid="stHeader"] { background: transparent !important; }
               0 0 50px rgba(210, 175, 110, 0.22);
 }
 .feature-circle .icon {
-  font-size: 34px;
-  margin-bottom: 10px;
+  font-size: 38px;
+  margin-bottom: 12px;
   line-height: 1;
 }
 .feature-circle h3 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: 17px;
+  font-size: 19px;
   letter-spacing: 0.12em;
   color: var(--accent-strong);
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   text-transform: uppercase;
   line-height: 1.2;
   text-align: center;
@@ -296,21 +296,21 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .feature-circle .sub-ko {
   font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 500;
-  font-size: 13px;
-  color: var(--text-soft);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
   letter-spacing: 0.02em;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: block;
   text-align: center;
 }
 .feature-circle p {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.55;
   color: var(--text-soft);
   margin: 0;
-  max-width: 82%;
+  max-width: 84%;
   text-align: center;
 }
 .feature-circle.highlight {
@@ -323,11 +323,11 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .feature-circle.highlight h3 {
   color: var(--gold-light);
-  font-size: 22px;
+  font-size: 26px;
 }
-.feature-circle.highlight .icon { font-size: 44px; }
-.feature-circle.highlight .sub-ko { font-size: 14px; }
-.feature-circle.highlight p { font-size: 14px; max-width: 84%; }
+.feature-circle.highlight .icon { font-size: 50px; }
+.feature-circle.highlight .sub-ko { font-size: 16px; }
+.feature-circle.highlight p { font-size: 15px; max-width: 86%; }
 .feature-circle.highlight::after {
   content: "FEATURED";
   position: absolute;
@@ -577,7 +577,6 @@ def _render_landing_hero() -> None:
           <div class="profile-text">
             <div class="directed">Directed by</div>
             <p class="name">이영우 · Youngwoo Lee</p>
-            <div class="role">High School Math Specialist</div>
           </div>
         </div>
         """,

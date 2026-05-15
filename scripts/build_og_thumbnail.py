@@ -63,21 +63,21 @@ body {{
 }}
 .eyebrow {{
   display: inline-block;
-  font-size: 14px; font-weight: 700;
+  font-size: 16px; font-weight: 700;
   letter-spacing: 0.5em;
   color: #d2af6e;
   border: 1px solid rgba(210, 175, 110, 0.45);
-  padding: 8px 22px;
+  padding: 9px 24px;
   border-radius: 999px;
-  margin-bottom: 28px;
+  margin-bottom: 30px;
   text-transform: uppercase;
 }}
 h1 {{
   font-weight: 900;
-  font-size: 84px;
+  font-size: 92px;
   line-height: 1.0;
   letter-spacing: -0.02em;
-  margin: 0 0 18px;
+  margin: 0 0 22px;
 }}
 h1 .grad {{
   background: linear-gradient(135deg, #4cc4ff 0%, #f0cd87 100%);
@@ -86,32 +86,26 @@ h1 .grad {{
   background-clip: text;
 }}
 .sub {{
-  font-size: 24px;
-  font-weight: 500;
-  color: #a6b2d4;
+  font-size: 34px;
+  font-weight: 600;
+  color: #c4ceea;
   letter-spacing: 0.04em;
-  margin-bottom: 36px;
+  margin-bottom: 48px;
 }}
 .sub .num {{ color: #f0cd87; font-weight: 800; }}
 .directed {{
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 18px;
+  font-size: 22px;
   color: #d2af6e;
   letter-spacing: 0.22em;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }}
 .name {{
   font-weight: 800;
-  font-size: 32px;
-  margin: 0 0 4px;
+  font-size: 48px;
+  margin: 0;
   letter-spacing: 0.02em;
-}}
-.role {{
-  font-size: 13px;
-  letter-spacing: 0.42em;
-  color: #a6b2d4;
-  text-transform: uppercase;
 }}
 
 /* 우측 누끼 사진 */
@@ -151,7 +145,6 @@ h1 .grad {{
     <div class="sub"><span class="num">120,000+</span> Questions · Infinite Possibilities</div>
     <div class="directed">Directed by</div>
     <h2 class="name">이영우 · Youngwoo Lee</h2>
-    <div class="role">High School Math Specialist</div>
   </div>
 
   <img class="right" src="{profile_uri}" />
