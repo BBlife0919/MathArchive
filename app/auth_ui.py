@@ -234,98 +234,113 @@ header[data-testid="stHeader"] { background: transparent !important; }
   text-transform: uppercase;
 }
 
-/* 카드 베노 그리드 — Rapid Forge 가 와이드 hero */
-.feature-grid {
+/* 카드 원형 산포 — 행/열 규칙 없는 nebula 레이아웃 */
+.feature-scatter {
   position: relative; z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 18px;
-  margin-bottom: 60px;
+  width: 100%;
+  height: 720px;
+  margin: 0 auto 70px;
+  max-width: 1100px;
 }
-.feature-card {
+.feature-circle {
+  position: absolute;
+  border-radius: 50%;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 28px 22px;
   backdrop-filter: blur(8px);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 24px;
+  box-sizing: border-box;
+  transition: transform 0.35s ease, border-color 0.35s ease,
+              box-shadow 0.35s ease;
+  width: var(--d, 220px);
+  height: var(--d, 220px);
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+  transform: translate(-50%, -50%);
+  cursor: default;
 }
-.feature-card.span-4 { grid-column: span 4; }
-.feature-card.span-3 { grid-column: span 3; }
-.feature-card.span-2 { grid-column: span 2; }
-@media (max-width: 900px) {
-  .feature-grid { grid-template-columns: repeat(2, 1fr); }
-  .feature-card.span-4, .feature-card.span-3, .feature-card.span-2 {
-    grid-column: span 2;
-  }
-}
-@media (max-width: 520px) {
-  .feature-grid { grid-template-columns: 1fr; }
-  .feature-card.span-4, .feature-card.span-3, .feature-card.span-2 {
-    grid-column: span 1;
-  }
-}
-.feature-card:hover {
-  transform: translateY(-4px);
+.feature-circle:hover {
+  transform: translate(-50%, -50%) scale(1.04);
   border-color: rgba(76, 196, 255, 0.55);
-  box-shadow: 0 10px 30px rgba(76, 196, 255, 0.12);
+  box-shadow: 0 14px 34px rgba(76, 196, 255, 0.18);
+  z-index: 2;
 }
-.feature-card .icon {
-  font-size: 26px;
-  margin-bottom: 14px;
-  display: inline-block;
+.feature-circle .icon {
+  font-size: 30px;
+  margin-bottom: 8px;
+  line-height: 1;
 }
-.feature-card h3 {
+.feature-circle h3 {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.06em;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.12em;
   color: var(--accent-strong);
-  margin: 0 0 8px;
+  margin: 0 0 4px;
   text-transform: uppercase;
+  line-height: 1.2;
 }
-.feature-card h3 .sub-ko {
-  display: block;
+.feature-circle .sub-ko {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-soft);
   letter-spacing: 0.02em;
-  text-transform: none;
-  margin-top: 4px;
+  margin-bottom: 8px;
+  display: block;
 }
-.feature-card p {
+.feature-circle p {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 12px;
+  line-height: 1.55;
   color: var(--text-soft);
   margin: 0;
+  max-width: 78%;
 }
-.feature-card.highlight {
+.feature-circle.highlight {
   background:
-    radial-gradient(ellipse at top right, rgba(210, 175, 110, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at top, rgba(210, 175, 110, 0.30) 0%, transparent 60%),
     linear-gradient(135deg, rgba(210, 175, 110, 0.10) 0%, rgba(76, 196, 255, 0.08) 100%);
-  border-color: rgba(210, 175, 110, 0.55);
-  box-shadow: inset 0 0 60px rgba(210, 175, 110, 0.05);
-  position: relative;
-  overflow: hidden;
+  border-color: rgba(210, 175, 110, 0.6);
+  box-shadow: 0 0 60px rgba(210, 175, 110, 0.18),
+              inset 0 0 40px rgba(210, 175, 110, 0.05);
 }
-.feature-card.highlight::before {
+.feature-circle.highlight h3 {
+  color: var(--gold-light);
+  font-size: 18px;
+}
+.feature-circle.highlight .icon { font-size: 40px; }
+.feature-circle.highlight p { font-size: 13px; max-width: 82%; }
+.feature-circle.highlight::after {
   content: "FEATURED";
   position: absolute;
-  top: 16px; right: 18px;
+  top: 16%;
   font-family: 'Montserrat', sans-serif;
   font-size: 9px;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.32em;
   color: var(--gold);
   opacity: 0.85;
 }
-.feature-card.highlight h3 { color: var(--gold-light); font-size: 22px; }
-.feature-card.highlight .icon { font-size: 34px; }
-.feature-card.highlight p { font-size: 14px; }
+
+/* 모바일: 산포 해제 → 세로 스택 */
+@media (max-width: 760px) {
+  .feature-scatter {
+    height: auto;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 18px;
+    padding: 0 8px;
+  }
+  .feature-circle {
+    position: relative;
+    left: auto; top: auto;
+    transform: none;
+    width: 240px; height: 240px;
+  }
+  .feature-circle:hover { transform: scale(1.03); }
+}
 
 /* 프로필 섹션 */
 .profile-wrap {
@@ -340,15 +355,15 @@ header[data-testid="stHeader"] { background: transparent !important; }
   flex-wrap: wrap;
 }
 .profile-photo {
-  width: 170px; height: 170px;
+  width: 180px; height: 180px;
   border-radius: 50%;
   border: 2px solid var(--gold);
   box-shadow: 0 0 0 8px rgba(210, 175, 110, 0.08),
               0 14px 32px rgba(0,0,0,0.5);
-  background-size: 220%;
-  background-position: 50% 12%;
+  background-size: 165%;
+  background-position: 50% 6%;
   background-repeat: no-repeat;
-  background-color: #1a2050;
+  background-color: #ffffff;
   flex-shrink: 0;
 }
 .profile-text { text-align: left; }
@@ -497,31 +512,41 @@ def _render_landing_hero() -> None:
     )
     st.markdown(
         """
-        <div class="feature-grid fade-in d2">
-          <div class="feature-card highlight span-4">
+        <div class="feature-scatter fade-in d2">
+          <div class="feature-circle highlight"
+               style="--x:50%; --y:30%; --d:300px;">
             <div class="icon">⚡</div>
-            <h3>Rapid Forge<span class="sub-ko">교재 · 시험지 즉시 제작</span></h3>
-            <p>단 몇 번의 클릭으로 학원 브랜드의 교재와 모의고사를 출판 품질 PDF 로 빌드. 학생의 손에 닿기까지의 거리를 가장 짧게.</p>
+            <h3>Rapid Forge</h3>
+            <span class="sub-ko">교재 · 시험지 즉시 제작</span>
+            <p>단 몇 번의 클릭으로 출판 품질 PDF 빌드.</p>
           </div>
-          <div class="feature-card span-2">
+          <div class="feature-circle"
+               style="--x:14%; --y:14%; --d:210px;">
             <div class="icon">📚</div>
-            <h3>Massive Data<span class="sub-ko">방대한 문항 데이터</span></h3>
-            <p>NGD 공동작업 고1~고3 전문항 120,000개 + 상세 해설을 단일 DB로 정제 수록.</p>
+            <h3>Massive Data</h3>
+            <span class="sub-ko">방대한 문항 데이터</span>
+            <p>고1~고3 전문항 120,000개.</p>
           </div>
-          <div class="feature-card span-2">
+          <div class="feature-circle"
+               style="--x:86%; --y:18%; --d:200px;">
             <div class="icon">∑</div>
-            <h3>LaTeX Engine<span class="sub-ko">완벽한 수식 렌더링</span></h3>
-            <p>HWP 수식편집기를 KaTeX 로 무손실 변환. 가독성과 출판 품질을 동시에.</p>
+            <h3>LaTeX Engine</h3>
+            <span class="sub-ko">완벽한 수식 렌더링</span>
+            <p>HWP → KaTeX 무손실 변환.</p>
           </div>
-          <div class="feature-card span-2">
+          <div class="feature-circle"
+               style="--x:24%; --y:78%; --d:220px;">
             <div class="icon">🎯</div>
-            <h3>Smart Filter<span class="sub-ko">정교한 추출 엔진</span></h3>
-            <p>학교 · 단원 · 난이도 · 유형 · 키워드를 계층 결합한 다차원 검색.</p>
+            <h3>Smart Filter</h3>
+            <span class="sub-ko">정교한 추출 엔진</span>
+            <p>학교 · 단원 · 난이도 다차원 검색.</p>
           </div>
-          <div class="feature-card span-2">
+          <div class="feature-circle"
+               style="--x:78%; --y:82%; --d:210px;">
             <div class="icon">🩺</div>
-            <h3>Personal Clinic<span class="sub-ko">학생 맞춤 클리닉</span></h3>
-            <p>취약점 진단 · 인출 · 분산 복습 · 전이 점수까지, 1인 1엔진 학습 관리.</p>
+            <h3>Personal Clinic</h3>
+            <span class="sub-ko">학생 맞춤 클리닉</span>
+            <p>취약점 · 인출 · 분산 복습 · 전이.</p>
           </div>
         </div>
         """,
