@@ -124,23 +124,24 @@ _LANDING_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Cormorant+Garamond:ital,wght@1,500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
 
 :root {
-  --bg: #07091a;
-  --bg-soft: #0d1230;
-  --bg-card: rgba(20, 28, 60, 0.55);
+  --bg: #061535;
+  --bg-soft: #0c2156;
+  --bg-card: rgba(28, 52, 110, 0.45);
   --accent: #4cc4ff;
-  --accent-strong: #5fd3ff;
+  --accent-strong: #7ddcff;
   --gold: #d2af6e;
   --gold-light: #f0cd87;
   --text: #e9ecf8;
-  --text-soft: #9aa3c4;
-  --border: rgba(76, 196, 255, 0.18);
+  --text-soft: #a6b2d4;
+  --border: rgba(125, 220, 255, 0.22);
 }
 
-/* 본 페이지 자체 다크화 */
+/* 본 페이지 자체 푸른 다크 */
 .stApp {
   background:
-    radial-gradient(ellipse at top, #131a3f 0%, transparent 55%),
-    radial-gradient(ellipse at bottom right, rgba(76,196,255,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at top, #163074 0%, transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(76, 196, 255, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(40, 90, 200, 0.10) 0%, transparent 55%),
     var(--bg) !important;
 }
 section[data-testid="stSidebar"] { display: none !important; }
