@@ -144,6 +144,21 @@ HWP_TOKEN_REFERENCE = {
     # 텐서곱(\otimes) 아님!
     "dyad": ("map", r"\overrightarrow"),
     "DYAD": ("map", r"\overrightarrow"),
+    # 2026-05 대규모 적재 후 새로 발견된 토큰
+    "ANG": ("map", r"\angle"),
+    "TRIANG": ("map", r"\triangle"),
+    "SMALLPROD": ("map", r"\prod"),
+    "smallprod": ("map", r"\prod"),
+    "ARROW": ("map", r"\rightarrow"),
+    "arrow": ("map", r"\rightarrow"),
+    "SEARROW": ("map", r"\searrow"),
+    "searrow": ("map", r"\searrow"),
+    "NEARROW": ("map", r"\nearrow"),
+    "SWARROW": ("map", r"\swarrow"),
+    "NWARROW": ("map", r"\nwarrow"),
+    "big": ("remove", ""),
+    "BIG": ("remove", ""),
+    "Big": ("remove", ""),
 }
 
 
@@ -167,6 +182,10 @@ _SET_OPS_MAP = {
     "smallunion": "cup", "SMALLUNION": "cup",
 }
 
+_TRIG_LOG = ("sin", "cos", "tan", "cot", "sec", "csc",
+             "sinh", "cosh", "tanh", "log", "ln", "lim", "exp")
+_TRIG_LOG_PAT = "|".join(_TRIG_LOG)
+
 HWP_TOKEN_PATTERNS = [
     # 집합연산 + 대문자 변수: inA, smallinterB, etc.
     (re.compile(rf"^({'|'.join(_SET_OPS)})([A-Z])$"),
@@ -174,11 +193,17 @@ HWP_TOKEN_PATTERNS = [
     # prime + 대문자: primeB → B'
     (re.compile(r"^[Pp]rime([A-Z])$"),
      lambda m: ("map", f"{m.group(1)}'")),
-    # 그리스 + 영문자: alphax → \alpha x
+    # 삼각/로그 함수 + 그리스 (costheta, sinalpha 등) — 함수+그리스
+    (re.compile(rf"^({_TRIG_LOG_PAT})({_GREEK_PAT})$"),
+     lambda m: ("map", f"\\{m.group(1)}\\{m.group(2)}")),
+    # 삼각/로그 함수 + 변수 (sinx, cosx, lnx, loga 등)
+    (re.compile(rf"^({_TRIG_LOG_PAT})([a-zA-Z])$"),
+     lambda m: ("map", f"\\{m.group(1)} {m.group(2)}")),
+    # 그리스 + 영문자: alphax, pix → \alpha x, \pi x
     (re.compile(rf"^({_GREEK_PAT})([a-zA-Z])$"),
      lambda m: ("map", f"\\{m.group(1)} {m.group(2)}")),
     # IT/RM/bold + 변수: ITa → a (토글 제거)
-    (re.compile(r"^(IT|RM|it|rm|bold|BOLD)([a-zA-Z]+)$"),
+    (re.compile(r"^(IT|RM|it|rm|bold|BOLD|big|BIG)([a-zA-Z]+)$"),
      lambda m: ("map", m.group(2))),
 ]
 
