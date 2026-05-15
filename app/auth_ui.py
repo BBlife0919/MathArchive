@@ -491,6 +491,108 @@ _MATH_BG = """
 """
 
 
+# ── 인증 통과 후 모든 페이지에 공통 적용되는 글로벌 톤 ────
+# 랜딩의 _LANDING_CSS 와 색조 통일 (#061535 딥 블루).
+# Streamlit 의 기본 "Running fn()..." 디버그 토스트도 영구 숨김.
+_AUTHED_GLOBAL_CSS = """
+<style>
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stHeader"] {
+  background: #061535 !important;
+}
+[data-testid="stSidebar"] > div:first-child {
+  background: linear-gradient(180deg, #0a1f48 0%, #061535 100%) !important;
+}
+[data-testid="stStatusWidget"],
+[data-testid="stConnectionStatus"],
+[data-testid="stToast"],
+.stStatusWidget {
+  display: none !important;
+}
+
+/* ── Entry Loader: 인증 후 첫 진입 시 1.7s 풀스크린 오버레이 */
+.entry-loader {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, #163074 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 90%, rgba(76,196,255,0.15) 0%, transparent 55%),
+    #061535;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', 'Noto Sans KR', -apple-system, sans-serif;
+  color: #e9ecf8;
+  animation: entryFadeOut 0.65s 1.05s forwards;
+  pointer-events: none;
+}
+.entry-loader .brand {
+  font-size: 13px;
+  letter-spacing: 0.55em;
+  color: #d2af6e;
+  margin-bottom: 26px;
+  font-weight: 700;
+  border: 1px solid rgba(210,175,110,0.4);
+  padding: 8px 22px;
+  border-radius: 999px;
+}
+.entry-loader h2 {
+  font-size: clamp(40px, 5.6vw, 72px);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, #4cc4ff 0%, #f0cd87 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 14px;
+  text-align: center;
+}
+.entry-loader .sub {
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: #a6b2d4;
+  margin-bottom: 36px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.entry-loader .bar {
+  width: 240px;
+  height: 2px;
+  background: rgba(125,220,255,0.15);
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.entry-loader .bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, #4cc4ff 50%, transparent);
+  animation: entryShimmer 0.95s linear infinite;
+}
+@keyframes entryShimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+@keyframes entryFadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+</style>
+"""
+
+_ENTRY_LOADER_HTML = """
+<div class="entry-loader">
+<div class="brand">MATH ARCHIVE</div>
+<h2>Entering the Archive</h2>
+<div class="sub">120,000+ Questions · Infinite Possibilities</div>
+<div class="bar"></div>
+</div>
+"""
+
+
 def _render_landing_hero() -> None:
     """헤로 + 카드 + 프로필 — 로그인 폼 위에 얹는 마케팅 영역.
 
@@ -613,6 +715,17 @@ def require_auth() -> None:
     if not auth.is_approved():
         _render_pending_page()
         st.stop()
+
+    # 인증 통과한 사용자: 글로벌 톤(딥 블루) + status widget 숨김 적용.
+    # 모든 페이지(main / 검수 / 관리자 / 클리닉)에 자동 적용 — 일관성 확보.
+    st.markdown(_AUTHED_GLOBAL_CSS, unsafe_allow_html=True)
+
+    # 세션 첫 진입에 한해 풀스크린 entry loader 1회 표시.
+    # CSS 애니메이션으로 1.7s 후 자동 fade-out, pointer-events:none 이라
+    # 사용자 인터랙션 차단도 없음. 페이지 이동·rerun 마다 반복 노출 방지.
+    if not st.session_state.get("_entry_loader_shown"):
+        st.markdown(_ENTRY_LOADER_HTML, unsafe_allow_html=True)
+        st.session_state._entry_loader_shown = True
 
     # 비관리자에겐 사이드바의 ⚙️ 관리자 페이지 링크 숨김
     # (페이지 가드는 페이지 내부에서 별도로 차단되지만 링크 자체를 안 보여주는 게 UX 깔끔)
