@@ -238,9 +238,9 @@ header[data-testid="stHeader"] { background: transparent !important; }
 .feature-scatter {
   position: relative; z-index: 1;
   width: 100%;
-  height: 720px;
-  margin: 0 auto 70px;
-  max-width: 1100px;
+  height: 560px;
+  margin: 0 auto 60px;
+  max-width: 980px;
 }
 .feature-circle {
   position: absolute;
@@ -263,10 +263,16 @@ header[data-testid="stHeader"] { background: transparent !important; }
   cursor: default;
 }
 .feature-circle:hover {
-  transform: translate(-50%, -50%) scale(1.04);
-  border-color: rgba(76, 196, 255, 0.55);
-  box-shadow: 0 14px 34px rgba(76, 196, 255, 0.18);
+  transform: translate(-50%, -50%) scale(1.15);
+  border-color: rgba(76, 196, 255, 0.75);
+  box-shadow: 0 18px 48px rgba(76, 196, 255, 0.28),
+              0 0 30px rgba(76, 196, 255, 0.12);
   z-index: 2;
+}
+.feature-circle.highlight:hover {
+  border-color: rgba(240, 205, 135, 0.85);
+  box-shadow: 0 18px 50px rgba(210, 175, 110, 0.32),
+              0 0 40px rgba(210, 175, 110, 0.18);
 }
 .feature-circle .icon {
   font-size: 30px;
@@ -357,14 +363,22 @@ header[data-testid="stHeader"] { background: transparent !important; }
 .profile-photo {
   width: 180px; height: 180px;
   border-radius: 50%;
-  border: 2px solid var(--gold);
-  box-shadow: 0 0 0 8px rgba(210, 175, 110, 0.08),
-              0 14px 32px rgba(0,0,0,0.5);
+  border: 1px solid rgba(210, 175, 110, 0.45);
+  box-shadow: 0 0 0 6px rgba(210, 175, 110, 0.05),
+              0 14px 32px rgba(0,0,0,0.55);
   background-size: 165%;
-  background-position: 50% 6%;
+  background-position: 32% 6%;
   background-repeat: no-repeat;
-  background-color: #ffffff;
+  background-color: transparent;
   flex-shrink: 0;
+  /* 은은한 통합: 흰 배경을 다크 페이지에 녹임 + 약간 어두운 톤 */
+  mix-blend-mode: multiply;
+  filter: brightness(1.35) contrast(0.95);
+  /* 가장자리 부드럽게 페이드 */
+  -webkit-mask-image: radial-gradient(circle at 50% 50%,
+                       #000 62%, rgba(0,0,0,0.85) 78%, transparent 100%);
+          mask-image: radial-gradient(circle at 50% 50%,
+                       #000 62%, rgba(0,0,0,0.85) 78%, transparent 100%);
 }
 .profile-text { text-align: left; }
 .profile-text .directed {
@@ -514,35 +528,35 @@ def _render_landing_hero() -> None:
         """
         <div class="feature-scatter fade-in d2">
           <div class="feature-circle highlight"
-               style="--x:50%; --y:30%; --d:300px;">
+               style="--x:50%; --y:38%; --d:280px;">
             <div class="icon">⚡</div>
             <h3>Rapid Forge</h3>
             <span class="sub-ko">교재 · 시험지 즉시 제작</span>
             <p>단 몇 번의 클릭으로 출판 품질 PDF 빌드.</p>
           </div>
           <div class="feature-circle"
-               style="--x:14%; --y:14%; --d:210px;">
+               style="--x:19%; --y:22%; --d:200px;">
             <div class="icon">📚</div>
             <h3>Massive Data</h3>
             <span class="sub-ko">방대한 문항 데이터</span>
             <p>고1~고3 전문항 120,000개.</p>
           </div>
           <div class="feature-circle"
-               style="--x:86%; --y:18%; --d:200px;">
+               style="--x:81%; --y:24%; --d:190px;">
             <div class="icon">∑</div>
             <h3>LaTeX Engine</h3>
             <span class="sub-ko">완벽한 수식 렌더링</span>
             <p>HWP → KaTeX 무손실 변환.</p>
           </div>
           <div class="feature-circle"
-               style="--x:24%; --y:78%; --d:220px;">
+               style="--x:24%; --y:80%; --d:210px;">
             <div class="icon">🎯</div>
             <h3>Smart Filter</h3>
             <span class="sub-ko">정교한 추출 엔진</span>
             <p>학교 · 단원 · 난이도 다차원 검색.</p>
           </div>
           <div class="feature-circle"
-               style="--x:78%; --y:82%; --d:210px;">
+               style="--x:76%; --y:78%; --d:200px;">
             <div class="icon">🩺</div>
             <h3>Personal Clinic</h3>
             <span class="sub-ko">학생 맞춤 클리닉</span>
