@@ -458,7 +458,7 @@ def main():
     # KakaoTalk 등 일부 스크래퍼는 문서 전체에서 og 태그를 탐지.
     _OG_IMAGE = (
         "https://raw.githubusercontent.com/BBlife0919/MathArchive/"
-        "main/app/assets/og_thumbnail.png"
+        "main/app/assets/og_thumbnail.png?v=2"
     )
     st.markdown(
         f"""
