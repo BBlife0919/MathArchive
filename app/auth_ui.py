@@ -124,7 +124,7 @@ _LANDING_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Cormorant+Garamond:ital,wght@1,500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
 
 :root {
-  --bg: #061535;
+  --bg: #0b1830;
   --bg-soft: #0c2156;
   --bg-card: rgba(28, 52, 110, 0.45);
   --accent: #4cc4ff;
@@ -492,17 +492,17 @@ _MATH_BG = """
 
 
 # ── 인증 통과 후 모든 페이지에 공통 적용되는 글로벌 톤 ────
-# 랜딩의 _LANDING_CSS 와 색조 통일 (#061535 딥 블루).
+# 랜딩의 _LANDING_CSS 와 색조 통일 (#0b1830 딥 블루).
 # Streamlit 의 기본 "Running fn()..." 디버그 토스트도 영구 숨김.
 _AUTHED_GLOBAL_CSS = """
 <style>
 .stApp,
 [data-testid="stAppViewContainer"],
 [data-testid="stHeader"] {
-  background: #061535 !important;
+  background: #0b1830 !important;
 }
 [data-testid="stSidebar"] > div:first-child {
-  background: linear-gradient(180deg, #0a1f48 0%, #061535 100%) !important;
+  background: linear-gradient(180deg, #0e2040 0%, #0b1830 100%) !important;
 }
 [data-testid="stStatusWidget"],
 [data-testid="stConnectionStatus"],
@@ -518,7 +518,7 @@ _AUTHED_GLOBAL_CSS = """
   background:
     radial-gradient(ellipse at 30% 20%, #163074 0%, transparent 55%),
     radial-gradient(ellipse at 90% 90%, rgba(76,196,255,0.15) 0%, transparent 55%),
-    #061535;
+    #0b1830;
   z-index: 999999;
   display: flex;
   flex-direction: column;
