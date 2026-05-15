@@ -1425,7 +1425,8 @@ CHAPTER_NORMALIZE = {
 def _normalize_difficulty(raw: str) -> str:
     """난이도 값을 정규화한다.
 
-    우선순위: 킬(최상 포함) > 증(오탈자→중) > 상 > 중 > 하
+    우선순위: 킬(최상 포함) > 증/즁(오탈자→중) > 상/특(특상→상) > 중 > 하
+    ㅎ 시작 오타(히/한/허) → 하.
     변형 흡수: trailing ], ) 제거, 이중마커 포함 문자열 → 가장 강한 단일값.
     """
     if not raw:
@@ -1434,12 +1435,15 @@ def _normalize_difficulty(raw: str) -> str:
     s = re.sub(r"[\]\)\s]+$", "", s).strip()
     if "최상" in s or "킬" in s:
         return "킬"
-    if "증" in s:
+    if "증" in s or "즁" in s:
         return "중"
-    if "상" in s:
+    if "특" in s or "상" in s:
         return "상"
     if "중" in s:
         return "중"
+    # 하 / 히 / 한 / 허 (ㅎ 시작 단음절 오타)
+    if s in ("하", "히", "한", "허"):
+        return "하"
     if "하" in s:
         return "하"
     return s
