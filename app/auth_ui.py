@@ -238,9 +238,9 @@ header[data-testid="stHeader"] { background: transparent !important; }
 .feature-scatter {
   position: relative; z-index: 1;
   width: 100%;
-  height: 560px;
+  height: 640px;
   margin: 0 auto 60px;
-  max-width: 980px;
+  max-width: 1020px;
 }
 .feature-circle {
   position: absolute;
@@ -263,48 +263,54 @@ header[data-testid="stHeader"] { background: transparent !important; }
   cursor: default;
 }
 .feature-circle:hover {
-  transform: translate(-50%, -50%) scale(1.15);
-  border-color: rgba(76, 196, 255, 0.75);
-  box-shadow: 0 18px 48px rgba(76, 196, 255, 0.28),
-              0 0 30px rgba(76, 196, 255, 0.12);
+  transform: translate(-50%, -50%) scale(1.28);
+  border-color: rgba(76, 196, 255, 0.85);
+  box-shadow: 0 24px 60px rgba(76, 196, 255, 0.32),
+              0 0 40px rgba(76, 196, 255, 0.18);
   z-index: 2;
 }
 .feature-circle.highlight:hover {
-  border-color: rgba(240, 205, 135, 0.85);
-  box-shadow: 0 18px 50px rgba(210, 175, 110, 0.32),
-              0 0 40px rgba(210, 175, 110, 0.18);
+  transform: translate(-50%, -50%) scale(1.22);
+  border-color: rgba(240, 205, 135, 0.9);
+  box-shadow: 0 24px 60px rgba(210, 175, 110, 0.4),
+              0 0 50px rgba(210, 175, 110, 0.22);
 }
 .feature-circle .icon {
-  font-size: 30px;
-  margin-bottom: 8px;
+  font-size: 34px;
+  margin-bottom: 10px;
   line-height: 1;
 }
 .feature-circle h3 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 17px;
   letter-spacing: 0.12em;
   color: var(--accent-strong);
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   text-transform: uppercase;
   line-height: 1.2;
+  text-align: center;
+  /* 트레일링 letter-spacing 보정 — text-align:center 시 시각적 좌측 치우침 제거 */
+  text-indent: 0.12em;
 }
 .feature-circle .sub-ko {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-soft);
   letter-spacing: 0.02em;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   display: block;
+  text-align: center;
 }
 .feature-circle p {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.55;
   color: var(--text-soft);
   margin: 0;
-  max-width: 78%;
+  max-width: 82%;
+  text-align: center;
 }
 .feature-circle.highlight {
   background:
@@ -316,10 +322,11 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .feature-circle.highlight h3 {
   color: var(--gold-light);
-  font-size: 18px;
+  font-size: 22px;
 }
-.feature-circle.highlight .icon { font-size: 40px; }
-.feature-circle.highlight p { font-size: 13px; max-width: 82%; }
+.feature-circle.highlight .icon { font-size: 44px; }
+.feature-circle.highlight .sub-ko { font-size: 14px; }
+.feature-circle.highlight p { font-size: 14px; max-width: 84%; }
 .feature-circle.highlight::after {
   content: "FEATURED";
   position: absolute;
@@ -360,25 +367,12 @@ header[data-testid="stHeader"] { background: transparent !important; }
   border-bottom: 1px solid rgba(210, 175, 110, 0.25);
   flex-wrap: wrap;
 }
+/* 누끼 PNG — 원/보더 없이 자연 silhouette 으로 페이지에 녹임 */
 .profile-photo {
-  width: 180px; height: 180px;
-  border-radius: 50%;
-  border: 1px solid rgba(210, 175, 110, 0.45);
-  box-shadow: 0 0 0 6px rgba(210, 175, 110, 0.05),
-              0 14px 32px rgba(0,0,0,0.55);
-  background-size: 165%;
-  background-position: 32% 6%;
-  background-repeat: no-repeat;
-  background-color: transparent;
+  height: 280px;
+  width: auto;
   flex-shrink: 0;
-  /* 은은한 통합: 흰 배경을 다크 페이지에 녹임 + 약간 어두운 톤 */
-  mix-blend-mode: multiply;
-  filter: brightness(1.35) contrast(0.95);
-  /* 가장자리 부드럽게 페이드 */
-  -webkit-mask-image: radial-gradient(circle at 50% 50%,
-                       #000 62%, rgba(0,0,0,0.85) 78%, transparent 100%);
-          mask-image: radial-gradient(circle at 50% 50%,
-                       #000 62%, rgba(0,0,0,0.85) 78%, transparent 100%);
+  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.55));
 }
 .profile-text { text-align: left; }
 .profile-text .directed {
@@ -498,7 +492,8 @@ _MATH_BG = """
 
 def _render_landing_hero() -> None:
     """헤로 + 카드 + 프로필 — 로그인 폼 위에 얹는 마케팅 영역."""
-    profile_uri = _img_data_uri("profile_lyw.jpeg")
+    # 누끼 PNG 가 있으면 우선 사용, 없으면 원본 JPEG 폴백
+    profile_uri = _img_data_uri("profile_lyw.png") or _img_data_uri("profile_lyw.jpeg")
 
     st.markdown(_LANDING_CSS, unsafe_allow_html=True)
     st.markdown(_MATH_BG, unsafe_allow_html=True)
@@ -528,35 +523,35 @@ def _render_landing_hero() -> None:
         """
         <div class="feature-scatter fade-in d2">
           <div class="feature-circle highlight"
-               style="--x:50%; --y:38%; --d:280px;">
+               style="--x:50%; --y:42%; --d:320px;">
             <div class="icon">⚡</div>
             <h3>Rapid Forge</h3>
             <span class="sub-ko">교재 · 시험지 즉시 제작</span>
             <p>단 몇 번의 클릭으로 출판 품질 PDF 빌드.</p>
           </div>
           <div class="feature-circle"
-               style="--x:19%; --y:22%; --d:200px;">
+               style="--x:17%; --y:20%; --d:230px;">
             <div class="icon">📚</div>
             <h3>Massive Data</h3>
             <span class="sub-ko">방대한 문항 데이터</span>
             <p>고1~고3 전문항 120,000개.</p>
           </div>
           <div class="feature-circle"
-               style="--x:81%; --y:24%; --d:190px;">
+               style="--x:83%; --y:22%; --d:220px;">
             <div class="icon">∑</div>
             <h3>LaTeX Engine</h3>
             <span class="sub-ko">완벽한 수식 렌더링</span>
             <p>HWP → KaTeX 무손실 변환.</p>
           </div>
           <div class="feature-circle"
-               style="--x:24%; --y:80%; --d:210px;">
+               style="--x:22%; --y:82%; --d:235px;">
             <div class="icon">🎯</div>
             <h3>Smart Filter</h3>
             <span class="sub-ko">정교한 추출 엔진</span>
             <p>학교 · 단원 · 난이도 다차원 검색.</p>
           </div>
           <div class="feature-circle"
-               style="--x:76%; --y:78%; --d:200px;">
+               style="--x:78%; --y:80%; --d:225px;">
             <div class="icon">🩺</div>
             <h3>Personal Clinic</h3>
             <span class="sub-ko">학생 맞춤 클리닉</span>
@@ -567,15 +562,13 @@ def _render_landing_hero() -> None:
         unsafe_allow_html=True,
     )
 
-    # PROFILE — background-image 로 얼굴 영역 크롭/줌
+    # PROFILE — 누끼 PNG 그대로 사용 (원형 크롭/보더 없음)
     if profile_uri:
         profile_img_html = (
-            f'<div class="profile-photo" '
-            f'style="background-image:url({profile_uri});" '
-            f'role="img" aria-label="이영우"></div>'
+            f'<img src="{profile_uri}" alt="이영우" class="profile-photo" />'
         )
     else:
-        profile_img_html = '<div class="profile-photo"></div>'
+        profile_img_html = ''
     st.markdown(
         f"""
         <div class="profile-wrap fade-in d3">
