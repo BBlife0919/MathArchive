@@ -351,8 +351,11 @@ def _render_image(image_ref: str, file_stem: str, img_map: dict | None = None):
         )
         return
     if src:
-        st.image(src, width=400)
-        return
+        # 비-URL src: 클라우드엔 로컬 파일이 없으므로 존재 확인 후에만 렌더.
+        p = Path(src)
+        if p.exists():
+            st.image(str(p), width=400)
+            return
 
     # 로컬 폴백 (개발 환경 / 마이그레이션 전 DB)
     if file_stem and IMAGE_DIR.exists():
