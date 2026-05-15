@@ -355,26 +355,38 @@ header[data-testid="stHeader"] { background: transparent !important; }
   .feature-circle:hover { transform: scale(1.03); }
 }
 
-/* 프로필 섹션 */
+/* 프로필 섹션 — 사진을 텍스트 뒤 backdrop 으로 배치 */
 .profile-wrap {
   position: relative; z-index: 1;
-  display: flex; align-items: center; justify-content: center;
-  gap: 38px;
-  padding: 40px 24px 30px;
+  padding: 80px 24px 70px;
   margin: 30px auto 10px;
   max-width: 720px;
   border-top: 1px solid rgba(210, 175, 110, 0.25);
   border-bottom: 1px solid rgba(210, 175, 110, 0.25);
-  flex-wrap: wrap;
+  text-align: center;
+  overflow: hidden;
 }
-/* 누끼 PNG — 원/보더 없이 자연 silhouette 으로 페이지에 녹임 */
+/* 누끼 PNG — 이름 텍스트 뒤로 배치, 은은하게 페이드 */
 .profile-photo {
-  height: 280px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -52%);
+  height: 360px;
   width: auto;
-  flex-shrink: 0;
-  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.55));
+  z-index: 0;
+  opacity: 0.32;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse at center,
+                       #000 40%, rgba(0,0,0,0.6) 70%, transparent 100%);
+          mask-image: radial-gradient(ellipse at center,
+                       #000 40%, rgba(0,0,0,0.6) 70%, transparent 100%);
 }
-.profile-text { text-align: left; }
+.profile-text {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
 .profile-text .directed {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -467,8 +479,8 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 
 @media (max-width: 700px) {
-  .profile-wrap { flex-direction: column; text-align: center; gap: 20px; }
-  .profile-text { text-align: center; }
+  .profile-wrap { padding: 60px 16px 50px; }
+  .profile-photo { height: 280px; opacity: 0.25; }
   .hero { padding: 40px 0 24px; }
 }
 </style>
@@ -507,7 +519,7 @@ def _render_landing_hero() -> None:
             <span class="grad">Math Archive</span>
           </h1>
           <p class="sub">
-            <span class="num">120,000</span> Questions · Infinite Possibilities
+            <span class="num">120,000+</span> Questions · Infinite Possibilities
           </p>
         </section>
         """,
