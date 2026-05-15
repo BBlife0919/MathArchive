@@ -20,6 +20,7 @@ import curriculum as _curr
 
 PAGE_TITLE = "MathArchive by 이영우"
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
+DIFF_VALID = ["하", "중", "상", "킬"]
 EXAM_TYPE_KO = {"a": "중간", "b": "기말"}
 
 
@@ -115,11 +116,9 @@ def unflag_problem(qid: int):
 def load_filter_options():
     schools = [r[0] for r in query("SELECT DISTINCT school FROM questions ORDER BY school")]
     chapters = [r[0] for r in query("SELECT DISTINCT chapter FROM questions ORDER BY chapter")]
-    difficulties = [r[0] for r in query(
-        "SELECT DISTINCT difficulty FROM questions ORDER BY difficulty"
-    )]
-    # 난이도 순서 정렬
-    difficulties.sort(key=lambda x: DIFF_ORDER.get(x, 99))
+    # 난이도는 정상 4종(하/중/상/킬)만 표시 — HWPX 작성자가 난이도 칸에
+    # 단원명·메모 등 잘못 입력한 잡티(다항함수/문제오류/특/즁/히 등) 차단.
+    difficulties = DIFF_VALID
     regions = [r[0] for r in query("SELECT DISTINCT region FROM questions ORDER BY region")]
     return schools, chapters, difficulties, regions
 
