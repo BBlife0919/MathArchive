@@ -492,16 +492,22 @@ _MATH_BG = """
 
 
 def _render_landing_hero() -> None:
-    """헤로 + 카드 + 프로필 — 로그인 폼 위에 얹는 마케팅 영역."""
-    # 누끼 PNG 가 있으면 우선 사용, 없으면 원본 JPEG 폴백
+    """헤로 + 카드 + 프로필 — 로그인 폼 위에 얹는 마케팅 영역.
+
+    CSS 와 모든 HTML 청크를 단일 ``st.markdown`` 호출에 묶어 한 DOM
+    노드로 mount/unmount 되게 한다. 분리하면 rerun 사이에 CSS-없는
+    순간이 생겨 FOUC (Flash of Unstyled Content) 가 발생함.
+    """
     profile_uri = _img_data_uri("profile_lyw.png") or _img_data_uri("profile_lyw.jpeg")
+    profile_img_html = (
+        f'<img src="{profile_uri}" alt="이영우" class="profile-photo" />'
+        if profile_uri else ''
+    )
 
-    st.markdown(_LANDING_CSS, unsafe_allow_html=True)
-    st.markdown(_MATH_BG, unsafe_allow_html=True)
-
-    # HERO
     st.markdown(
-        """
+        f"""
+        {_LANDING_CSS}
+        {_MATH_BG}
         <section class="hero fade-in">
           <div class="eyebrow">Mathematics · Data · Design</div>
           <h1>All-in-One Mathematics Library<br>
@@ -511,17 +517,7 @@ def _render_landing_hero() -> None:
             <span class="num">120,000+</span> Questions · Infinite Possibilities
           </p>
         </section>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # FEATURES
-    st.markdown(
-        '<div class="section-title fade-in d1">Core Capabilities</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """
+        <div class="section-title fade-in d1">Core Capabilities</div>
         <div class="feature-scatter fade-in d2">
           <div class="feature-circle highlight"
                style="--x:50%; --y:42%; --d:320px;">
@@ -559,19 +555,6 @@ def _render_landing_hero() -> None:
             <p>취약점 · 인출 · 분산 복습 · 전이.</p>
           </div>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # PROFILE — 누끼 PNG 그대로 사용 (원형 크롭/보더 없음)
-    if profile_uri:
-        profile_img_html = (
-            f'<img src="{profile_uri}" alt="이영우" class="profile-photo" />'
-        )
-    else:
-        profile_img_html = ''
-    st.markdown(
-        f"""
         <div class="profile-wrap fade-in d3">
           {profile_img_html}
           <div class="profile-text">
