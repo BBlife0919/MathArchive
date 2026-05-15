@@ -108,7 +108,75 @@ def signup(name: str, username: str, password: str, email: str) -> tuple[bool, s
     except Exception as e:
         return False, f"가입 실패: {e}"
 
+    # 관리자 알림 메일 (실패해도 가입 자체는 성공으로 처리)
+    try:
+        _send_admin_signup_notice(
+            new_name=name.strip(),
+            new_username=username,
+            new_email=email,
+        )
+    except Exception as e:
+        # 메일 실패는 사용자한테 노출하지 않음. 로그만.
+        import sys
+        print(f"[WARN] admin signup notice 실패: {e}", file=sys.stderr)
+
     return True, "가입 신청이 접수되었습니다. 관리자 승인 후 로그인할 수 있어요."
+
+
+def _send_admin_signup_notice(new_name: str, new_username: str, new_email: str) -> None:
+    """새 회원가입 발생 시 관리자(ADMIN_EMAIL) 에게 알림."""
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    from email.utils import formataddr
+
+    gmail_user = _get_secret("GMAIL_USER")
+    gmail_pw = _get_secret("GMAIL_APP_PASSWORD")
+    from_name = _get_secret("SMTP_FROM_NAME", "MathArchive")
+    admin_email = _get_secret("ADMIN_EMAIL", "ywl0919@naver.com")
+    base_url = (_get_secret("APP_BASE_URL", "http://localhost:8501") or "").rstrip("/")
+
+    if not gmail_user or not gmail_pw:
+        raise RuntimeError("GMAIL_USER / GMAIL_APP_PASSWORD 미설정")
+    if not admin_email:
+        raise RuntimeError("ADMIN_EMAIL 미설정")
+
+    gmail_pw = gmail_pw.replace(" ", "")
+    admin_url = f"{base_url}/관리자"
+
+    html = f"""\
+    <div style="font-family: sans-serif; line-height: 1.6;">
+      <h2>🔔 새 회원가입 신청</h2>
+      <table style="border-collapse:collapse;margin:12px 0;">
+        <tr><td style="padding:6px 12px;color:#666;">이름</td><td style="padding:6px 12px;"><b>{new_name}</b></td></tr>
+        <tr><td style="padding:6px 12px;color:#666;">아이디</td><td style="padding:6px 12px;"><b>{new_username}</b></td></tr>
+        <tr><td style="padding:6px 12px;color:#666;">이메일</td><td style="padding:6px 12px;"><b>{new_email}</b></td></tr>
+      </table>
+      <p>승인하려면 관리자 페이지로 이동:</p>
+      <p><a href="{admin_url}" style="background:#4f46e5;color:white;padding:10px 18px;
+            text-decoration:none;border-radius:6px;display:inline-block">
+        관리자 페이지 열기
+      </a></p>
+    </div>
+    """
+    text = (
+        f"🔔 새 회원가입 신청\n\n"
+        f"이름: {new_name}\n"
+        f"아이디: {new_username}\n"
+        f"이메일: {new_email}\n\n"
+        f"승인: {admin_url}"
+    )
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"[MathArchive] 새 가입 신청 — {new_name} ({new_username})"
+    msg["From"]    = formataddr((from_name, gmail_user))
+    msg["To"]      = admin_email
+    msg.attach(MIMEText(text, "plain", "utf-8"))
+    msg.attach(MIMEText(html, "html",  "utf-8"))
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as smtp:
+        smtp.login(gmail_user, gmail_pw)
+        smtp.sendmail(gmail_user, [admin_email], msg.as_string())
 
 
 # ── 로그인 ────────────────────────────────────────────────────────────────
