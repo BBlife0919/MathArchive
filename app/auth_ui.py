@@ -234,11 +234,11 @@ header[data-testid="stHeader"] { background: transparent !important; }
   text-transform: uppercase;
 }
 
-/* 카드 그리드 */
+/* 카드 베노 그리드 — Rapid Forge 가 와이드 hero */
 .feature-grid {
   position: relative; z-index: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 18px;
   margin-bottom: 60px;
 }
@@ -249,6 +249,24 @@ header[data-testid="stHeader"] { background: transparent !important; }
   padding: 28px 22px;
   backdrop-filter: blur(8px);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.feature-card.span-4 { grid-column: span 4; }
+.feature-card.span-3 { grid-column: span 3; }
+.feature-card.span-2 { grid-column: span 2; }
+@media (max-width: 900px) {
+  .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  .feature-card.span-4, .feature-card.span-3, .feature-card.span-2 {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 520px) {
+  .feature-grid { grid-template-columns: 1fr; }
+  .feature-card.span-4, .feature-card.span-3, .feature-card.span-2 {
+    grid-column: span 1;
+  }
 }
 .feature-card:hover {
   transform: translateY(-4px);
@@ -287,10 +305,27 @@ header[data-testid="stHeader"] { background: transparent !important; }
   margin: 0;
 }
 .feature-card.highlight {
-  background: linear-gradient(135deg, rgba(210, 175, 110, 0.12) 0%, rgba(76, 196, 255, 0.10) 100%);
-  border-color: rgba(210, 175, 110, 0.45);
+  background:
+    radial-gradient(ellipse at top right, rgba(210, 175, 110, 0.22) 0%, transparent 55%),
+    linear-gradient(135deg, rgba(210, 175, 110, 0.10) 0%, rgba(76, 196, 255, 0.08) 100%);
+  border-color: rgba(210, 175, 110, 0.55);
+  box-shadow: inset 0 0 60px rgba(210, 175, 110, 0.05);
+  position: relative;
+  overflow: hidden;
 }
-.feature-card.highlight h3 { color: var(--gold-light); }
+.feature-card.highlight::before {
+  content: "FEATURED";
+  position: absolute;
+  top: 16px; right: 18px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  opacity: 0.85;
+}
+.feature-card.highlight h3 { color: var(--gold-light); font-size: 22px; }
+.feature-card.highlight .icon { font-size: 34px; }
+.feature-card.highlight p { font-size: 14px; }
 
 /* 프로필 섹션 */
 .profile-wrap {
@@ -305,12 +340,16 @@ header[data-testid="stHeader"] { background: transparent !important; }
   flex-wrap: wrap;
 }
 .profile-photo {
-  width: 130px; height: 130px;
+  width: 170px; height: 170px;
   border-radius: 50%;
-  object-fit: cover;
   border: 2px solid var(--gold);
-  box-shadow: 0 0 0 6px rgba(210, 175, 110, 0.08),
-              0 12px 28px rgba(0,0,0,0.45);
+  box-shadow: 0 0 0 8px rgba(210, 175, 110, 0.08),
+              0 14px 32px rgba(0,0,0,0.5);
+  background-size: 220%;
+  background-position: 50% 12%;
+  background-repeat: no-repeat;
+  background-color: #1a2050;
+  flex-shrink: 0;
 }
 .profile-text { text-align: left; }
 .profile-text .directed {
@@ -459,27 +498,27 @@ def _render_landing_hero() -> None:
     st.markdown(
         """
         <div class="feature-grid fade-in d2">
-          <div class="feature-card">
+          <div class="feature-card highlight span-4">
+            <div class="icon">⚡</div>
+            <h3>Rapid Forge<span class="sub-ko">교재 · 시험지 즉시 제작</span></h3>
+            <p>단 몇 번의 클릭으로 학원 브랜드의 교재와 모의고사를 출판 품질 PDF 로 빌드. 학생의 손에 닿기까지의 거리를 가장 짧게.</p>
+          </div>
+          <div class="feature-card span-2">
             <div class="icon">📚</div>
             <h3>Massive Data<span class="sub-ko">방대한 문항 데이터</span></h3>
             <p>NGD 공동작업 고1~고3 전문항 120,000개 + 상세 해설을 단일 DB로 정제 수록.</p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card span-2">
             <div class="icon">∑</div>
             <h3>LaTeX Engine<span class="sub-ko">완벽한 수식 렌더링</span></h3>
             <p>HWP 수식편집기를 KaTeX 로 무손실 변환. 가독성과 출판 품질을 동시에.</p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card span-2">
             <div class="icon">🎯</div>
             <h3>Smart Filter<span class="sub-ko">정교한 추출 엔진</span></h3>
             <p>학교 · 단원 · 난이도 · 유형 · 키워드를 계층 결합한 다차원 검색.</p>
           </div>
-          <div class="feature-card highlight">
-            <div class="icon">⚡</div>
-            <h3>Rapid Forge<span class="sub-ko">교재 · 시험지 즉시 제작</span></h3>
-            <p>단 몇 번의 클릭으로 학원 브랜드의 교재와 모의고사를 출판 품질 PDF 로 빌드.</p>
-          </div>
-          <div class="feature-card">
+          <div class="feature-card span-2">
             <div class="icon">🩺</div>
             <h3>Personal Clinic<span class="sub-ko">학생 맞춤 클리닉</span></h3>
             <p>취약점 진단 · 인출 · 분산 복습 · 전이 점수까지, 1인 1엔진 학습 관리.</p>
@@ -489,12 +528,15 @@ def _render_landing_hero() -> None:
         unsafe_allow_html=True,
     )
 
-    # PROFILE
-    profile_img_html = (
-        f'<img src="{profile_uri}" alt="이영우" class="profile-photo" />'
-        if profile_uri
-        else '<div class="profile-photo" style="background:#1a2050;"></div>'
-    )
+    # PROFILE — background-image 로 얼굴 영역 크롭/줌
+    if profile_uri:
+        profile_img_html = (
+            f'<div class="profile-photo" '
+            f'style="background-image:url({profile_uri});" '
+            f'role="img" aria-label="이영우"></div>'
+        )
+    else:
+        profile_img_html = '<div class="profile-photo"></div>'
     st.markdown(
         f"""
         <div class="profile-wrap fade-in d3">
