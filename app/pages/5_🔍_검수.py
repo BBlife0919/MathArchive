@@ -618,7 +618,7 @@ def _is_geometry_label(token: str) -> bool:
 
 
 # ─── 일괄 처리 툴바 ────────────────────────────────────
-toolbar = st.columns([3, 3, 3])
+toolbar = st.columns([3, 3, 3, 3])
 
 # 1) 알려진 HWP 토큰 자동 매핑 (사전 + 패턴 기반)
 if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전+패턴)",
@@ -686,7 +686,43 @@ if toolbar[1].button("🤖 도형 라벨 자동 무시 (전체)",
     _force_rescan()
     st.rerun()
 
-if toolbar[2].button("✅ 선택한 처리 일괄 적용",
+# 3) 체크한 추천 일괄 적용 (NEW)
+if toolbar[2].button("☑️ 체크한 추천 일괄 적용",
+                     use_container_width=True, type="primary"):
+    n_done = 0
+    n_affected = 0
+    with st.spinner("체크된 추천 적용 중..."):
+        for token, _ in visible_tokens:
+            if not st.session_state.get(f"chk_{token}", False):
+                continue
+            rec_a, rec_l = lookup_token(token)
+            # 추천이 없지만 도형 라벨이면 ignore 로 처리
+            if rec_a is None and _is_geometry_label(token):
+                rec_a, rec_l = "ignore", ""
+            if rec_a is None:
+                continue
+            res = apply_user_mapping(token, rec_a, rec_l or "")
+            n_done += 1
+            n_affected += res.get("affected", 0)
+    if n_done == 0:
+        _show_result_banner(
+            "체크된 추천 없음",
+            "추천 컬럼 옆 체크박스를 먼저 누르세요.",
+            kind="warning",
+        )
+    else:
+        _show_result_banner(
+            "체크한 추천 일괄 적용 완료",
+            f"- 처리 토큰: **{n_done}개**\n"
+            f"- DB 변경: **{n_affected}건**\n\n"
+            "다음 단계: 남은 토큰이 있으면 dropdown 처리, "
+            "없으면 **📌 베이스라인 저장**.",
+        )
+        _force_rescan()
+    st.rerun()
+
+# 4) 선택한 처리 일괄 적용 (dropdown 사용)
+if toolbar[3].button("✅ 선택한 처리 일괄 적용",
                      use_container_width=True):
     n_done = 0
     n_affected = 0
@@ -718,38 +754,49 @@ if toolbar[2].button("✅ 선택한 처리 일괄 적용",
     st.rerun()
 
 st.caption("💡 **권장 순서**: ① **[알려진 토큰 자동 매핑]** → "
-           "② **[도형 라벨 자동 무시]** → ③ 남은 거 수동 처리 → "
-           "**[선택한 처리 일괄 적용]**")
+           "② **[도형 라벨 자동 무시]** → ③ 남은 추천에 ✓ 체크 → "
+           "**[☑️ 체크한 추천 일괄 적용]** → ④ 미상은 dropdown 수동 처리")
 
 st.markdown("---")
 
-# 헤더
-hdr = st.columns([2, 1.5, 3, 3])
+# 헤더 — '적용' 체크박스 컬럼 추가
+hdr = st.columns([2, 1.5, 0.7, 2.5, 2.8])
 hdr[0].markdown("**토큰**")
 hdr[1].markdown("**추천**")
-hdr[2].markdown("**처리 방식**")
-hdr[3].markdown("**LaTeX (매핑 시만)**")
+hdr[2].markdown("**✓ 적용**")
+hdr[3].markdown("**처리 방식**")
+hdr[4].markdown("**LaTeX (매핑 시만)**")
 
 for token, count in visible_tokens:
     is_new = token not in last_words
     badge = " 🆕" if is_new else ""
-    cols = st.columns([2, 1.5, 3, 3])
+    cols = st.columns([2, 1.5, 0.7, 2.5, 2.8])
     cols[0].markdown(f"`{token}` ({count}건){badge}")
 
     # 추천 표시 (사전 + 패턴 인식기 모두 사용)
     rec_action, rec_latex = lookup_token(token)
+    is_geo = _is_geometry_label(token)
     if rec_action == "map":
         cols[1].markdown(f"📘 `{rec_latex}`")
     elif rec_action == "remove":
         cols[1].markdown("🗑 제거")
     elif rec_action == "ignore":
         cols[1].markdown("🚫 무시")
-    elif _is_geometry_label(token):
+    elif is_geo:
         cols[1].markdown("🔤 변수")
     else:
         cols[1].markdown("❓ 미상")
 
-    cols[2].selectbox(
+    # 추천 체크박스 — 추천(또는 도형 라벨)이 있는 경우에만 활성
+    if rec_action is not None or is_geo:
+        cols[2].checkbox(
+            "적용", key=f"chk_{token}",
+            label_visibility="collapsed",
+        )
+    else:
+        cols[2].caption("—")
+
+    cols[3].selectbox(
         "처리",
         options=list(ACTION_LABELS.keys()),
         format_func=lambda k: ACTION_LABELS[k],
@@ -762,7 +809,7 @@ for token, count in visible_tokens:
         rec_a, rec_l = lookup_token(token)
         if rec_a == "map":
             default = rec_l
-        cols[3].text_input(
+        cols[4].text_input(
             "LaTeX",
             value=default,
             placeholder=r"예: \prec",
@@ -770,7 +817,7 @@ for token, count in visible_tokens:
             label_visibility="collapsed",
         )
     else:
-        cols[3].caption("—")
+        cols[4].caption("—")
 
 st.divider()
 
