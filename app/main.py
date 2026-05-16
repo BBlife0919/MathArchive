@@ -1051,6 +1051,15 @@ def main():
                     answers.append(f"{i}번: {circle.get(ans, ans)}")
                 st.code("  ".join(answers))
 
+    # ── Entry loader dismiss sentinel ──────────────────────
+    # 모든 위젯이 그려진 _뒤_ 이 sentinel 이 DOM 에 inject 되고, CSS 의
+    # `body:has(#mathdb-page-loaded) .entry-loader` 룰이 매칭돼 entry
+    # loader 가 fade-out 한다. 즉 "문항 다 로드 → 즉시 문항 페이지" UX.
+    st.markdown(
+        '<div id="mathdb-page-loaded" style="display:none"></div>',
+        unsafe_allow_html=True,
+    )
+
 
 if __name__ == "__main__":
     main()

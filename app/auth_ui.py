@@ -544,8 +544,14 @@ _AUTHED_GLOBAL_CSS = """
   justify-content: center;
   font-family: 'Montserrat', 'Noto Sans KR', -apple-system, sans-serif;
   color: #e9ecf8;
-  animation: entryFadeOut 0.9s 2.6s forwards;
   pointer-events: none;
+  /* animation 제거 — 시간 기반 fade-out 대신 페이지 끝의 sentinel 요소가
+     DOM 에 추가될 때까지 풀스크린 유지. 모든 위젯이 서버에서 그려진 직후
+     사라져 "로딩 끝 = 즉시 문항 표시" 달성. */
+}
+/* 페이지 끝에 #mathdb-page-loaded sentinel 이 inject 되면 entry loader fade-out */
+body:has(#mathdb-page-loaded) .entry-loader {
+  animation: entryFadeOut 0.45s forwards;
 }
 .entry-loader .brand {
   font-size: 13px;
