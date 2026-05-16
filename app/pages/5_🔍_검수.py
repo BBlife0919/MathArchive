@@ -753,9 +753,16 @@ if toolbar[3].button("✅ 선택한 처리 일괄 적용",
         _force_rescan()
     st.rerun()
 
-st.caption("💡 **권장 순서**: ① **[알려진 토큰 자동 매핑]** → "
-           "② **[도형 라벨 자동 무시]** → ③ 남은 추천에 ✓ 체크 → "
-           "**[☑️ 체크한 추천 일괄 적용]** → ④ 미상은 dropdown 수동 처리")
+st.caption(
+    "💡 **권장 순서**: ① **[알려진 토큰 자동 매핑]** → "
+    "② **[도형 라벨 자동 무시]** → ③ 추천이 맞으면 ✓ 체크 + "
+    "**[☑️ 체크한 추천 일괄 적용]** → ④ 추천 없는 ❓미상 행은 "
+    "dropdown 으로 수동 처리 → **[✅ 선택한 처리 일괄 적용]**"
+)
+st.caption(
+    "📌 **컬럼 의미** · **✓ 적용** = 추천이 맞을 때 체크 (한 번에 추천대로 적용) · "
+    "**처리 방식 dropdown** = 추천이 없는 미상 토큰을 직접 처리할 때 사용"
+)
 
 st.markdown("---")
 
@@ -787,37 +794,35 @@ for token, count in visible_tokens:
     else:
         cols[1].markdown("❓ 미상")
 
-    # 추천 체크박스 — 추천(또는 도형 라벨)이 있는 경우에만 활성
-    if rec_action is not None or is_geo:
+    has_rec = rec_action is not None or is_geo
+    # 추천 있는 행: 체크박스만 활성, dropdown 은 숨김 → 결정 영역 단순화
+    # 추천 없는 미상 행: dropdown + LaTeX 로 수동 처리
+    if has_rec:
         cols[2].checkbox(
             "적용", key=f"chk_{token}",
             label_visibility="collapsed",
         )
+        cols[3].caption("✓ 체크박스 사용")
+        cols[4].caption("—")
     else:
         cols[2].caption("—")
-
-    cols[3].selectbox(
-        "처리",
-        options=list(ACTION_LABELS.keys()),
-        format_func=lambda k: ACTION_LABELS[k],
-        key=f"act_{token}",
-        label_visibility="collapsed",
-    )
-    if st.session_state.get(f"act_{token}") == "map":
-        # 추천 LaTeX 자동 채움 (사전 + 패턴 모두)
-        default = ""
-        rec_a, rec_l = lookup_token(token)
-        if rec_a == "map":
-            default = rec_l
-        cols[4].text_input(
-            "LaTeX",
-            value=default,
-            placeholder=r"예: \prec",
-            key=f"latex_{token}",
+        cols[3].selectbox(
+            "처리",
+            options=list(ACTION_LABELS.keys()),
+            format_func=lambda k: ACTION_LABELS[k],
+            key=f"act_{token}",
             label_visibility="collapsed",
         )
-    else:
-        cols[4].caption("—")
+        if st.session_state.get(f"act_{token}") == "map":
+            cols[4].text_input(
+                "LaTeX",
+                value="",
+                placeholder=r"예: \prec",
+                key=f"latex_{token}",
+                label_visibility="collapsed",
+            )
+        else:
+            cols[4].caption("—")
 
 st.divider()
 
