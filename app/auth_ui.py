@@ -554,13 +554,13 @@ body:has(#mathdb-page-loaded) .entry-loader {
   animation: entryFadeOut 0.45s forwards;
 }
 .entry-loader .brand {
-  font-size: 13px;
-  letter-spacing: 0.55em;
+  font-size: 18px;
+  letter-spacing: 0.5em;
   color: #d2af6e;
-  margin-bottom: 26px;
+  margin-bottom: 28px;
   font-weight: 700;
-  border: 1px solid rgba(210,175,110,0.4);
-  padding: 8px 22px;
+  border: 1px solid rgba(210,175,110,0.45);
+  padding: 10px 28px;
   border-radius: 999px;
 }
 .entry-loader h2 {
@@ -575,10 +575,10 @@ body:has(#mathdb-page-loaded) .entry-loader {
   text-align: center;
 }
 .entry-loader .sub {
-  font-size: 12px;
-  letter-spacing: 0.4em;
+  font-size: 20px;
+  letter-spacing: 0.3em;
   color: #a6b2d4;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
   font-weight: 500;
   text-transform: uppercase;
 }
