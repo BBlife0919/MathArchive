@@ -33,7 +33,17 @@ def _render_login_form() -> None:
         if submitted:
             ok, msg = auth.login(username.strip(), password)
             if ok:
-                st.success(msg)
+                if auth.is_approved():
+                    # 새 응답에서 entry loader 가 다시 inject 되도록 가드 초기화.
+                    # 그렇지 않으면 가드 때문에 두 번째 rerun 응답에서 loader 가
+                    # 안 떠 로그인→메인 사이 빈 화면이 잠깐 노출됨.
+                    st.session_state.pop("_entry_loader_shown", None)
+                    # 현재 응답의 마지막에 entry loader + 글로벌 CSS 를 emit.
+                    # 클라이언트가 rerun 응답을 받기 전 transition 동안 풀스크린
+                    # 오버레이가 깔려 "Running fn()..." 같은 잔여물·디버그 토스트가
+                    # 전혀 안 보임.
+                    st.markdown(_AUTHED_GLOBAL_CSS, unsafe_allow_html=True)
+                    st.markdown(_ENTRY_LOADER_HTML, unsafe_allow_html=True)
                 st.rerun()
             else:
                 st.error(msg)
@@ -471,6 +481,14 @@ header[data-testid="stHeader"] { background: transparent !important; }
   .profile-text { text-align: center; }
   .profile-photo { height: 220px; }
   .hero { padding: 40px 0 24px; }
+}
+
+/* Streamlit 기본 디버그 토스트("Running fn()...") 영구 숨김 — 랜딩에서도 */
+[data-testid="stStatusWidget"],
+[data-testid="stConnectionStatus"],
+[data-testid="stToast"],
+.stStatusWidget {
+  display: none !important;
 }
 </style>
 """
