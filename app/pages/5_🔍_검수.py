@@ -601,7 +601,7 @@ ACTION_LABELS = {
 # 슬라이더로 자르지 않는다.
 visible_tokens = bare_words
 if visible_tokens:
-    st.caption(f"📋 누락 토큰 **{len(visible_tokens)}개** 전체 표시 — 한 번에 처리하세요")
+    st.info(f"📋 현재 누락 토큰 **{len(visible_tokens)}개** — 한 번에 처리하세요")
 
 # 도형 라벨 자동 인식: 영문자 2~6글자 묶음 (대문자 또는 소문자만)
 def _is_geometry_label(token: str) -> bool:
@@ -644,10 +644,13 @@ if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전+패턴)",
                     mapped_examples.append(f"`{token}` → `{latex}`")
             else:
                 n_removed += 1
+    total_done = n_mapped + n_removed
+    remaining = max(0, len(bare_words) - total_done)
     body = (
         f"- 매핑: **{n_mapped}개 토큰**\n"
         f"- 삭제: **{n_removed}개 토큰**\n"
-        f"- DB 문항 변경: **{n_affected_total}건**\n\n"
+        f"- DB 문항 변경: **{n_affected_total}건**\n"
+        f"- 남은 누락 토큰: **{remaining}개**\n\n"
     )
     if mapped_examples:
         body += "**매핑 예시:**\n" + "\n".join(
@@ -660,8 +663,10 @@ if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전+패턴)",
             "다음: **🤖 도형 라벨 자동 무시** 버튼을 누르세요.",
             kind="info",
         )
+        st.toast("ℹ️ 사전에 등록된 토큰 없음")
     else:
         _show_result_banner("알려진 토큰 자동 매핑 완료", body)
+        st.toast(f"✅ {total_done}개 처리 · {remaining}개 남음")
     _force_rescan()
     st.rerun()
 
@@ -673,20 +678,24 @@ if toolbar[1].button("🤖 도형 라벨 자동 무시 (전체)",
         for t in geo_tokens:
             apply_user_mapping(t, "ignore", "")
     if geo_tokens:
+        remaining = max(0, len(bare_words) - len(geo_tokens))
         examples = ", ".join(f"`{t}`" for t in geo_tokens[:8])
         body = (
             f"- 무시 처리된 도형 라벨: **{len(geo_tokens)}개**\n"
+            f"- 남은 누락 토큰: **{remaining}개**\n"
             f"- 예시: {examples}\n\n"
             "다음 단계: 표에 남은 토큰이 있으면 dropdown 처리, "
             "없으면 **📌 베이스라인 저장**."
         )
         _show_result_banner("도형 라벨 자동 무시 완료", body)
+        st.toast(f"✅ {len(geo_tokens)}개 처리 · {remaining}개 남음")
     else:
         _show_result_banner(
             "처리할 도형 라벨 없음",
             "표에 도형 라벨로 식별되는 토큰이 없습니다.",
             kind="info",
         )
+        st.toast("ℹ️ 도형 라벨로 식별되는 토큰 없음")
     _force_rescan()
     st.rerun()
 
@@ -714,14 +723,18 @@ if toolbar[2].button("☑️ 체크한 추천 일괄 적용",
             "추천 컬럼 옆 체크박스를 먼저 누르세요.",
             kind="warning",
         )
+        st.toast("⚠️ 체크된 추천이 없습니다")
     else:
+        remaining = max(0, len(bare_words) - n_done)
         _show_result_banner(
             "체크한 추천 일괄 적용 완료",
             f"- 처리 토큰: **{n_done}개**\n"
-            f"- DB 변경: **{n_affected}건**\n\n"
+            f"- DB 변경: **{n_affected}건**\n"
+            f"- 남은 누락 토큰: **{remaining}개**\n\n"
             "다음 단계: 남은 토큰이 있으면 dropdown 처리, "
             "없으면 **📌 베이스라인 저장**.",
         )
+        st.toast(f"✅ {n_done}개 처리 · {remaining}개 남음")
         _force_rescan()
     st.rerun()
 
@@ -747,13 +760,17 @@ if toolbar[3].button("✅ 선택한 처리 일괄 적용",
             "dropdown 에서 처리 방식을 선택한 토큰이 없습니다.",
             kind="warning",
         )
+        st.toast("⚠️ 선택된 처리가 없습니다")
     else:
+        remaining = max(0, len(bare_words) - n_done)
         _show_result_banner(
             "선택 처리 적용 완료",
             f"- 처리 토큰: **{n_done}개**\n"
-            f"- DB 변경: **{n_affected}건**\n\n"
+            f"- DB 변경: **{n_affected}건**\n"
+            f"- 남은 누락 토큰: **{remaining}개**\n\n"
             "다음 단계: **📌 베이스라인 저장**.",
         )
+        st.toast(f"✅ {n_done}개 처리 · {remaining}개 남음")
         _force_rescan()
     st.rerun()
 
