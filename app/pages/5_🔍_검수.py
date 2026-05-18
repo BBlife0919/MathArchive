@@ -596,26 +596,12 @@ ACTION_LABELS = {
     "remove": "삭제 (스타일 토글 등)",
 }
 
-# 화면에 표시할 토큰 개수 — 사용자가 슬라이더로 조절. 위젯 mount 비용이
-# 토큰 수에 비례하므로 기본 200, 최대는 실제 전체 토큰 수.
-_total_bw = len(bare_words)
-if _total_bw == 0:
-    visible_tokens = []
-else:
-    _default_show = min(_total_bw, 200)
-    _max_show = max(_total_bw, _default_show)
-    if _total_bw <= 30:
-        # 토큰 적으면 슬라이더 안 그림
-        visible_tokens = bare_words
-        st.caption(f"📋 누락 토큰 **{_total_bw}개** 전체 표시")
-    else:
-        show_n = st.slider(
-            f"표시 개수 (전체 {_total_bw}개)",
-            min_value=10, max_value=_max_show,
-            value=_default_show, step=10,
-            help="한 번에 표시할 토큰 수. 슬라이더를 끝까지 밀면 전체 토큰 한 번에 처리 가능.",
-        )
-        visible_tokens = bare_words[:show_n]
+# 누락 토큰 _전체_ 표시 — "한 방에 다 처리" 사용자 요구.
+# 위젯 mount 비용이 토큰 수에 비례하지만, 한 번 처리하고 끝낼 수 있어
+# 슬라이더로 자르지 않는다.
+visible_tokens = bare_words
+if visible_tokens:
+    st.caption(f"📋 누락 토큰 **{len(visible_tokens)}개** 전체 표시 — 한 번에 처리하세요")
 
 # 도형 라벨 자동 인식: 영문자 2~6글자 묶음 (대문자 또는 소문자만)
 def _is_geometry_label(token: str) -> bool:
