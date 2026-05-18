@@ -596,8 +596,26 @@ ACTION_LABELS = {
     "remove": "삭제 (스타일 토글 등)",
 }
 
-# 화면에 표시할 토큰 (상위 30개)
-visible_tokens = bare_words[:30]
+# 화면에 표시할 토큰 개수 — 사용자가 슬라이더로 조절. 위젯 mount 비용이
+# 토큰 수에 비례하므로 기본 200, 최대는 실제 전체 토큰 수.
+_total_bw = len(bare_words)
+if _total_bw == 0:
+    visible_tokens = []
+else:
+    _default_show = min(_total_bw, 200)
+    _max_show = max(_total_bw, _default_show)
+    if _total_bw <= 30:
+        # 토큰 적으면 슬라이더 안 그림
+        visible_tokens = bare_words
+        st.caption(f"📋 누락 토큰 **{_total_bw}개** 전체 표시")
+    else:
+        show_n = st.slider(
+            f"표시 개수 (전체 {_total_bw}개)",
+            min_value=10, max_value=_max_show,
+            value=_default_show, step=10,
+            help="한 번에 표시할 토큰 수. 슬라이더를 끝까지 밀면 전체 토큰 한 번에 처리 가능.",
+        )
+        visible_tokens = bare_words[:show_n]
 
 # 도형 라벨 자동 인식: 영문자 2~6글자 묶음 (대문자 또는 소문자만)
 def _is_geometry_label(token: str) -> bool:
@@ -763,6 +781,39 @@ st.caption(
     "📌 **컬럼 의미** · **✓ 적용** = 추천이 맞을 때 체크 (한 번에 추천대로 적용) · "
     "**처리 방식 dropdown** = 추천이 없는 미상 토큰을 직접 처리할 때 사용"
 )
+
+with st.expander("❓ 미상 토큰이란? · 처리 가이드"):
+    st.markdown(
+        """
+**미상 토큰** = 사전(SYMBOL_MAP)에도 없고 패턴 인식기(영문 변수 묶음·도형 라벨 등)에도 매칭 안 된 토큰. 즉 자동으로 판단 못 한 것.
+
+**처리 방법**:
+- **수식 토큰** (수학 기호로 보이면) → 처리 방식: `→ LaTeX 로 매핑` 선택 + LaTeX 칸에 입력 (예: `\\prec`, `\\succeq`, `\\rightarrow`)
+- **변수/도형 라벨** (영문자 묶음) → 처리 방식: `무시` — 검색·렌더링에 영향 없게
+- **의미 없는 표시 글자** (HWP 스타일 토글 등) → 처리 방식: `삭제` — 본문에서 제거
+- **모르겠으면** → 그냥 두기. 다음에 사전이 업데이트되면 자동 매핑됨
+
+**팁**: 미상이 너무 많으면 [📌 베이스라인 저장] 후 그대로 두세요. 다음 검수 때 "새로 등장한 토큰" 만 강조됩니다.
+        """
+    )
+
+# 추천 일괄 체크/해제 토글
+tk_to_toggle = [
+    t for t, _ in visible_tokens
+    if (lookup_token(t)[0] is not None) or _is_geometry_label(t)
+]
+all_checked = bool(tk_to_toggle) and all(
+    st.session_state.get(f"chk_{t}", False) for t in tk_to_toggle
+)
+toggle_label = (
+    f"☐ 추천 {len(tk_to_toggle)}개 전체 해제"
+    if all_checked
+    else f"☑️ 추천 {len(tk_to_toggle)}개 전체 체크"
+)
+if st.button(toggle_label, disabled=not tk_to_toggle):
+    for t in tk_to_toggle:
+        st.session_state[f"chk_{t}"] = not all_checked
+    st.rerun()
 
 st.markdown("---")
 
