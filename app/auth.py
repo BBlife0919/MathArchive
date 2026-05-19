@@ -265,14 +265,19 @@ def _cookie_manager():
 
 
 def _issue_session_cookie(user_id: int) -> None:
-    """로그인 성공 시 쿠키에 영속 토큰 저장."""
+    """로그인 성공 시 쿠키에 세션 토큰 저장.
+
+    expires_at 미지정 → **session cookie**. 브라우저 종료 시 자동 삭제돼
+    공용 PC 에서도 안전. 같은 브라우저의 다른 탭과는 공유됨 → 새 탭 열어도
+    자동 로그인 유지. 토큰 자체의 서버측 exp 는 30일(SESSION_TTL_DAYS) —
+    브라우저 살아있는 동안엔 그 안에서 유효.
+    """
     mgr = _cookie_manager()
     if mgr is None:
         return
     token = _encode_session_token(user_id)
-    expires_at = datetime.now(timezone.utc) + timedelta(days=SESSION_TTL_DAYS)
     try:
-        mgr.set(SESSION_COOKIE_NAME, token, expires_at=expires_at)
+        mgr.set(SESSION_COOKIE_NAME, token)
     except Exception:
         # 첫 페이지 마운트 직후엔 set 가 실패할 수 있음. 다음 rerun 에 재시도해도 무방.
         pass
