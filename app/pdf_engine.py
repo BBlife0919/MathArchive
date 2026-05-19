@@ -126,13 +126,8 @@ def _process_boxes(text: str) -> str:
     return re.sub(r"<<BOX_START>>(.*?)<<BOX_END>>", _repl, text, flags=re.DOTALL)
 
 
-_ACHIEVEMENT_RE = re.compile(r"\[?\s*성취기준[^\]\n]{0,30}\]\s*")
-
-
 def render_question_body(text: str) -> str:
     """문제 본문 텍스트 → HTML. 박스·수식 보호된 상태."""
-    # HWP 원본 `[성취기준X-Y]` 메타 태그 제거 (좌괄호 누락 변형 포함)
-    text = _ACHIEVEMENT_RE.sub("", text)
     text = re.sub(r"<<IMG:image\d+>>", "[그림]", text)
     text = re.sub(r"\n{2,}", "\n\n", text)
 
@@ -321,13 +316,7 @@ h2.exam-subtitle {
     padding-right: 2mm;
     border-right: 1px dashed #e0e0e0;
 }
-.col:last-child .slot {
-    border-right: none;
-    padding-right: 0;
-    /* 오른쪽 칼럼 좌측 안쪽 마진 — KaTeX 수식이 컨테이너 좌측 가장자리로
-       살짝 튀어나오면서 잘려 보이던 현상 방지. */
-    padding-left: 2mm;
-}
+.col:last-child .slot { border-right: none; padding-right: 0; }
 .slot.full { flex: 1 1 100%; }
 .q-header {
     font-weight: 700;

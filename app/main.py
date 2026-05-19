@@ -270,17 +270,6 @@ def _ensure_line_breaks(text: str) -> str:
     return text
 
 
-# `[성취기준2-상]` 같은 HWP 원본 메타 태그 제거 정규식.
-# 시작 괄호가 누락된 변형까지 커버 (`\[?`).
-_ACHIEVEMENT_RE = re.compile(r"\[?\s*성취기준[^\]\n]{0,30}\]\s*")
-
-
-def _strip_achievement_tags(text: str) -> str:
-    if not text:
-        return text
-    return _ACHIEVEMENT_RE.sub("", text)
-
-
 def render_question_content(text: str, file_source: str = "",
                             question_id: int | None = None):
     """문제 텍스트를 Streamlit으로 렌더링한다.
@@ -289,9 +278,7 @@ def render_question_content(text: str, file_source: str = "",
     - <<BOX_START>>...<<BOX_END>> → 테두리 박스로 표시
     - 인라인 수식 $...$ 은 markdown이 자동 렌더링
     - \\frac → \\dfrac 변환 (display-style 분수)
-    - `[성취기준X-Y]` 같은 HWP 메타 태그는 표시 전 제거
     """
-    text = _strip_achievement_tags(text)
     text = re.sub(r"\n{3,}", "\n\n", text)
 
     file_stem = Path(file_source).stem if file_source else ""
@@ -390,7 +377,6 @@ def render_question_text(text: str) -> str:
     render_question_content()를 사용하는 것이 권장되지만,
     단순 문자열 변환이 필요한 곳에서 사용.
     """
-    text = _strip_achievement_tags(text)
     text = re.sub(r"<<IMG:image\d+>>", "🖼️", text)
     text = re.sub(r"<<BOX_START>>", "", text)
     text = re.sub(r"<<BOX_END>>", "", text)
