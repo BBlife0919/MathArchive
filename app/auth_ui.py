@@ -732,10 +732,6 @@ def require_auth() -> None:
         _render_password_reset_page(token)
         st.stop()
 
-    # 쿠키 기반 자동 로그인 복원 (30일 영속). session_state 가 비어있어도
-    # 유효한 쿠키 토큰이 있으면 사용자 정보를 session_state 에 다시 채워넣는다.
-    auth.restore_session_from_cookie()
-
     if not auth.is_logged_in():
         _render_auth_gate_page()
         st.stop()

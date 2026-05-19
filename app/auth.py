@@ -2,25 +2,17 @@
 
 Supabase Auth REST 가 egress 한도로 차단돼 있어 우회. 인증 흐름:
 - 회원가입: users 테이블에 INSERT (approved=False, password_hash=bcrypt)
-- 로그인: 아이디/비번 검증 → Streamlit session_state + 영속 쿠키 토큰 발급
-- 자동 로그인: 페이지 로드 시 쿠키 토큰 검증 → session_state 복원
+- 로그인: 아이디/비번 검증 → Streamlit session_state 에 사용자 저장
 - 비번 재설정: 토큰 생성 → 이메일로 링크 발송 → 사용자가 링크 따라와서 신규 비번 설정
 - 아이디 안내: 비번 재설정 메일에 username 동봉 (단일 흐름으로 통합)
 
-영속 로그인: HMAC-서명 stateless 토큰을 쿠키에 저장. DB 테이블 불필요.
-서명 시크릿은 SESSION_SECRET 환경변수/secret 에서 읽고, 없으면 SMTP 시크릿
-파생값으로 폴백 (배포 환경 secret 누락 시에도 동작).
+세션 영속화는 안 함 (브라우저 새로고침 시 재로그인). 필요해지면 streamlit-cookies-manager 추가.
 """
 from __future__ import annotations
 
-import base64
-import hashlib
-import hmac
-import json
 import os
 import re
 import secrets
-import time
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
@@ -187,145 +179,6 @@ def _send_admin_signup_notice(new_name: str, new_username: str, new_email: str) 
         smtp.sendmail(gmail_user, [admin_email], msg.as_string())
 
 
-# ── 영속 로그인: HMAC-서명 stateless 토큰 ─────────────────────────────────
-SESSION_COOKIE_NAME = "matharchive_session"
-SESSION_TTL_DAYS = 30
-
-
-def _session_secret() -> str:
-    """HMAC 서명 시크릿. 명시 secret 없으면 SMTP 시크릿 파생값으로 폴백.
-    배포 환경 비밀이 누락된 채로도 인증이 멎지 않게 한다.
-    """
-    s = _get_secret("SESSION_SECRET")
-    if s:
-        return s
-    # 폴백: SMTP 시크릿이라도 있으면 그것 기반 파생 (배포 환경 일관)
-    smtp_pw = _get_secret("GMAIL_APP_PASSWORD") or ""
-    return hashlib.sha256(f"matharchive::{smtp_pw}".encode()).hexdigest()
-
-
-def _b64u_encode(data: bytes) -> str:
-    return base64.urlsafe_b64encode(data).rstrip(b"=").decode("ascii")
-
-
-def _b64u_decode(s: str) -> bytes:
-    padded = s + "=" * (-len(s) % 4)
-    return base64.urlsafe_b64decode(padded)
-
-
-def _encode_session_token(user_id: int) -> str:
-    """stateless 세션 토큰: payload.signature 형식."""
-    payload = {
-        "uid": int(user_id),
-        "exp": int(time.time()) + SESSION_TTL_DAYS * 86400,
-    }
-    payload_b64 = _b64u_encode(json.dumps(payload, separators=(",", ":")).encode())
-    sig = hmac.new(
-        _session_secret().encode(),
-        payload_b64.encode(),
-        hashlib.sha256,
-    ).hexdigest()
-    return f"{payload_b64}.{sig}"
-
-
-def _decode_session_token(token: str) -> int | None:
-    """토큰이 유효하면 user_id 반환, 아니면 None."""
-    try:
-        payload_b64, sig = token.split(".", 1)
-    except ValueError:
-        return None
-    expected = hmac.new(
-        _session_secret().encode(),
-        payload_b64.encode(),
-        hashlib.sha256,
-    ).hexdigest()
-    if not hmac.compare_digest(sig, expected):
-        return None
-    try:
-        payload = json.loads(_b64u_decode(payload_b64))
-    except Exception:
-        return None
-    if int(payload.get("exp", 0)) < int(time.time()):
-        return None
-    uid = payload.get("uid")
-    return int(uid) if uid else None
-
-
-def _cookie_manager():
-    """CookieManager 싱글턴. lazy import 로 라이브러리 미설치 환경에서도 안전."""
-    if "_auth_cookie_mgr" in st.session_state:
-        return st.session_state["_auth_cookie_mgr"]
-    try:
-        import extra_streamlit_components as stx
-        mgr = stx.CookieManager(key="auth_persistent_cookies")
-    except Exception:
-        mgr = None
-    st.session_state["_auth_cookie_mgr"] = mgr
-    return mgr
-
-
-def _issue_session_cookie(user_id: int) -> None:
-    """로그인 성공 시 쿠키에 영속 토큰 저장."""
-    mgr = _cookie_manager()
-    if mgr is None:
-        return
-    token = _encode_session_token(user_id)
-    expires_at = datetime.now(timezone.utc) + timedelta(days=SESSION_TTL_DAYS)
-    try:
-        mgr.set(SESSION_COOKIE_NAME, token, expires_at=expires_at)
-    except Exception:
-        # 첫 페이지 마운트 직후엔 set 가 실패할 수 있음. 다음 rerun 에 재시도해도 무방.
-        pass
-
-
-def _clear_session_cookie() -> None:
-    mgr = _cookie_manager()
-    if mgr is None:
-        return
-    try:
-        mgr.delete(SESSION_COOKIE_NAME)
-    except Exception:
-        pass
-
-
-def restore_session_from_cookie() -> None:
-    """페이지 로드 시 쿠키에서 자동 로그인 복원. 이미 로그인됐으면 no-op."""
-    if st.session_state.get("auth_user"):
-        return
-    mgr = _cookie_manager()
-    if mgr is None:
-        return
-    try:
-        token = mgr.get(SESSION_COOKIE_NAME)
-    except Exception:
-        token = None
-    if not token:
-        return
-    user_id = _decode_session_token(token)
-    if not user_id:
-        return
-    try:
-        conn = _conn()
-        cur = conn.execute(
-            "SELECT user_id, username, name, email, approved, is_admin "
-            "FROM users WHERE user_id = ?",
-            (user_id,),
-        )
-        row = cur.fetchone()
-    except Exception:
-        return
-    if not row:
-        return
-    st.session_state["auth_user"] = {
-        "user_id":  row["user_id"],
-        "username": row["username"],
-        "name":     row["name"],
-        "email":    row["email"],
-        "approved": bool(row["approved"]),
-        "is_admin": bool(row["is_admin"]),
-    }
-
-
 # ── 로그인 ────────────────────────────────────────────────────────────────
 def login(username: str, password: str) -> tuple[bool, str]:
     for err in (validate_username(username), validate_password(password)):
@@ -358,16 +211,12 @@ def login(username: str, password: str) -> tuple[bool, str]:
         "is_admin": bool(row["is_admin"]),
     }
 
-    # 영속 쿠키 발급 (30일 자동 로그인)
-    _issue_session_cookie(row["user_id"])
-
     if not row["approved"]:
         return True, "로그인은 됐지만 아직 관리자 승인 대기 중입니다."
     return True, f"환영합니다, {row['name']}님."
 
 
 def logout() -> None:
-    _clear_session_cookie()
     for k in list(st.session_state.keys()):
         if k.startswith("auth_"):
             del st.session_state[k]
