@@ -1066,6 +1066,19 @@ def main():
                     answers.append(f"{i}번: {circle.get(ans, ans)}")
                 st.code("  ".join(answers))
 
+    # ── Entry loader 즉시 dismiss ──────────────────────────
+    # main() 의 모든 위젯이 그려진 _직후_ 이 markdown 이 마지막에 도착.
+    # !important 로 기존 animation 을 덮어 즉시 0.5s fade-out 시작.
+    # → "문항 로드 끝 = 즉시 문항 페이지" UX. JS 없이 CSS 만으로 달성.
+    st.markdown(
+        """
+        <style>
+        .entry-loader { animation: entryFadeOut 0.5s forwards !important; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 if __name__ == "__main__":
     main()

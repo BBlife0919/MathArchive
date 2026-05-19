@@ -158,7 +158,15 @@ _LANDING_CSS = """
     radial-gradient(ellipse at bottom left, rgba(40, 90, 200, 0.10) 0%, transparent 55%),
     var(--bg) !important;
 }
-section[data-testid="stSidebar"] { display: none !important; }
+/* 사이드바 영역 전부 숨김 — 와일드카드 + 명시 셀렉터 보강 */
+section[data-testid="stSidebar"],
+aside[data-testid="stSidebar"],
+div[data-testid="stSidebar"],
+[data-testid="stSidebar"],
+[data-testid="stSidebarNav"],
+[data-testid="stSidebarContent"],
+[data-testid="stSidebarCollapseButton"],
+[data-testid*="stSidebar"] { display: none !important; }
 header[data-testid="stHeader"] { background: transparent !important; }
 .block-container { padding-top: 1.5rem !important; max-width: 1200px !important; }
 
@@ -548,9 +556,11 @@ _AUTHED_GLOBAL_CSS = """
   justify-content: center;
   font-family: 'Montserrat', 'Noto Sans KR', -apple-system, sans-serif;
   color: #e9ecf8;
-  /* 8s 보이고 1s fade out — main 페이지 load_filter_options 등
-     무거운 초기 로딩(보통 2~6s)이 끝날 때까지 충분히 덮음. */
-  animation: entryFadeOut 1s 8s forwards;
+  /* 기본 60s 보이고 1s fade out — 페이지 마지막에 도착하는
+     "entry loader dismiss" CSS 가 더 빠른 fade-out 으로 덮어씀.
+     즉 60s 는 안전망(컨텐츠가 그때까지 안 그려져도 결국 사라짐),
+     실제로는 main 페이지 모든 위젯 그려진 직후 즉시 fade-out. */
+  animation: entryFadeOut 1s 60s forwards;
   pointer-events: none;
 }
 .entry-loader .brand {
