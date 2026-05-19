@@ -9,6 +9,7 @@ import base64
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 import auth
 
@@ -34,14 +35,12 @@ def _render_login_form() -> None:
             ok, msg = auth.login(username.strip(), password)
             if ok:
                 if auth.is_approved():
-                    # 새 응답에서 entry loader 가 다시 inject 되도록 가드 초기화
+                    # JS 오버레이는 parent.document 에 직접 부착되므로 rerun
+                    # 후에도 살아남음. 가드는 require_auth 에서 활용.
                     st.session_state.pop("_entry_loader_shown", None)
-                    # 현재 응답 마지막에 entry loader + 글로벌 CSS emit —
-                    # rerun transition 동안 풀스크린 오버레이 깔림
                     st.markdown(_AUTHED_GLOBAL_CSS, unsafe_allow_html=True)
-                    st.markdown(_ENTRY_LOADER_HTML, unsafe_allow_html=True)
-                # switch_page 는 transition 중 broken DOM 노출 위험 → 단순 rerun.
-                # 사용자가 main URL (= 랜딩) 에서 로그인 시 자동으로 main 으로 감.
+                    _inject_js_entry_loader()
+                # switch_page 대신 단순 rerun. transition broken DOM 회피.
                 st.rerun()
             else:
                 st.error(msg)
@@ -621,6 +620,100 @@ _ENTRY_LOADER_HTML = """
 """
 
 
+# ── JavaScript 기반 entry loader (컨텐츠 로드 끝 = 즉시 dismiss) ─────
+# iframe 안 script 가 parent.document 에 직접 오버레이 inject 하고,
+# MutationObserver 로 main.py 끝의 <div id="mathdb-ready"> sentinel
+# 등장을 감시. 발견 즉시 fade-out. 안전망 30s timeout 으로 무한 로딩 0%.
+_JS_ENTRY_LOADER = """
+<script>
+(function() {
+  const doc = window.parent.document;
+  if (doc.getElementById('mathdb-entry-loader')) return;
+
+  const overlay = doc.createElement('div');
+  overlay.id = 'mathdb-entry-loader';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 2147483647;
+    background:
+      radial-gradient(ellipse at 30% 20%, #163074 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 90%, rgba(76,196,255,0.15) 0%, transparent 55%),
+      #0b1830;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: 'Montserrat', 'Noto Sans KR', -apple-system, sans-serif;
+    color: #e9ecf8;
+    transition: opacity 0.5s ease-out;
+    pointer-events: none;
+  `;
+  overlay.innerHTML = `
+    <div style="font-size:18px; letter-spacing:0.5em; color:#d2af6e;
+                margin-bottom:28px; font-weight:700;
+                border:1px solid rgba(210,175,110,0.45);
+                padding:10px 28px; border-radius:999px;">MATH ARCHIVE</div>
+    <h2 style="font-size:clamp(40px,5.6vw,72px); font-weight:900;
+               letter-spacing:-0.01em;
+               background:linear-gradient(135deg,#4cc4ff 0%,#f0cd87 100%);
+               -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+               background-clip:text; margin:0 0 14px; text-align:center;">
+      Entering the Archive
+    </h2>
+    <div style="font-size:20px; letter-spacing:0.3em; color:#a6b2d4;
+                margin-bottom:40px; font-weight:500; text-transform:uppercase;">
+      120,000+ Questions · Infinite Possibilities
+    </div>
+    <div style="width:240px; height:2px; background:rgba(125,220,255,0.15);
+                position:relative; overflow:hidden; border-radius:2px;">
+      <div id="mathdb-shimmer" style="position:absolute; inset:0;
+                  background:linear-gradient(90deg,transparent,#4cc4ff 50%,transparent);"></div>
+    </div>
+    <style>
+      @keyframes mathdb-shimmer-anim {
+        from { transform: translateX(-100%); } to { transform: translateX(100%); }
+      }
+      #mathdb-shimmer { animation: mathdb-shimmer-anim 0.95s linear infinite; }
+    </style>
+  `;
+  doc.body.appendChild(overlay);
+
+  function dismiss() {
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    }, 500);
+  }
+
+  // 이미 ready sentinel 있으면 즉시 dismiss
+  if (doc.getElementById('mathdb-ready')) {
+    dismiss();
+    return;
+  }
+
+  const observer = new MutationObserver(() => {
+    if (doc.getElementById('mathdb-ready')) {
+      dismiss();
+      observer.disconnect();
+      clearTimeout(safetyTimer);
+    }
+  });
+  observer.observe(doc.body, { childList: true, subtree: true });
+
+  // 안전망: 30s 후 강제 dismiss — sentinel 어떤 이유로 못 와도 결국 사라짐
+  const safetyTimer = setTimeout(() => {
+    dismiss();
+    observer.disconnect();
+  }, 30000);
+})();
+</script>
+"""
+
+
+def _inject_js_entry_loader() -> None:
+    """JavaScript 기반 풀스크린 entry loader 표시. main 페이지 sentinel
+    이 DOM 에 나타날 때까지 유지. CSS animation 기반보다 안전 (컨텐츠
+    로드 끝 = 즉시 dismiss). iframe height=0 이라 시각적 영향 없음."""
+    components.html(_JS_ENTRY_LOADER, height=0)
+
+
 def _render_landing_hero() -> None:
     """헤로 + 카드 + 프로필 — 로그인 폼 위에 얹는 마케팅 영역.
 
@@ -768,11 +861,11 @@ def require_auth() -> None:
         unsafe_allow_html=True,
     )
 
-    # 세션 첫 진입에 한해 풀스크린 entry loader 1회 표시.
-    # CSS 애니메이션으로 1.7s 후 자동 fade-out, pointer-events:none 이라
-    # 사용자 인터랙션 차단도 없음. 페이지 이동·rerun 마다 반복 노출 방지.
+    # 세션 첫 진입에 한해 JS 풀스크린 entry loader 1회 표시.
+    # MutationObserver 가 main.py 끝의 <div id="mathdb-ready"> sentinel
+    # 감지 시 즉시 fade-out. 안전망 30s. 사용자 인터랙션 차단 없음.
     if not st.session_state.get("_entry_loader_shown"):
-        st.markdown(_ENTRY_LOADER_HTML, unsafe_allow_html=True)
+        _inject_js_entry_loader()
         st.session_state._entry_loader_shown = True
 
     # 비관리자에겐 사이드바의 ⚙️ 관리자 페이지 링크 숨김

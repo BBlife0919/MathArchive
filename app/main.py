@@ -1075,16 +1075,12 @@ def main():
                     answers.append(f"{i}번: {circle.get(ans, ans)}")
                 st.code("  ".join(answers))
 
-    # ── Entry loader 즉시 dismiss ──────────────────────────
-    # main() 의 모든 위젯이 그려진 _직후_ 이 markdown 이 마지막에 도착.
-    # !important 로 기존 animation 을 덮어 즉시 0.5s fade-out 시작.
-    # → "문항 로드 끝 = 즉시 문항 페이지" UX. JS 없이 CSS 만으로 달성.
+    # ── Entry loader dismiss sentinel ──────────────────────
+    # main() 의 모든 위젯이 그려진 _직후_ 이 sentinel <div> 가 DOM 에 inject.
+    # auth_ui 의 JS entry loader 가 MutationObserver 로 이 element 등장을
+    # 감지하면 즉시 fade-out. → "문항 로드 끝 = 즉시 문항 페이지" 보장.
     st.markdown(
-        """
-        <style>
-        .entry-loader { animation: entryFadeOut 0.5s forwards !important; }
-        </style>
-        """,
+        '<div id="mathdb-ready" style="display:none"></div>',
         unsafe_allow_html=True,
     )
 
