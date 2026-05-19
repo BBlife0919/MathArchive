@@ -456,9 +456,9 @@ def main():
         layout="wide",
     )
 
-    # Streamlit 기본 디버그 토스트("Running fn()...") 즉시 영구 숨김.
-    # require_auth 안의 _AUTHED_GLOBAL_CSS 보다 _먼저_ 도착해야 페이지
-    # 실행 첫 순간부터 토스트가 안 보임.
+    # Streamlit 기본 디버그 토스트 + 사이드바(자동 multi-page menu 포함) 즉시
+    # 숨김. require_auth 통과 _전_ 사이드바가 노출되면 #169 같은 broken DOM
+    # 발생. 인증 통과 후 require_auth 안에서 사이드바 다시 보임 처리.
     st.markdown(
         """
         <style>
@@ -466,6 +466,15 @@ def main():
         [data-testid="stConnectionStatus"],
         [data-testid="stToast"],
         .stStatusWidget { display: none !important; }
+
+        /* 인증 전 사이드바·자동 nav 숨김 (전체 영역) */
+        [data-testid="stSidebar"],
+        [data-testid="stSidebarNav"],
+        [data-testid="stSidebarContent"],
+        [data-testid="stSidebarCollapseButton"],
+        [data-testid*="stSidebar"],
+        section[data-testid="stSidebar"],
+        aside[data-testid="stSidebar"] { display: none !important; }
         </style>
         """,
         unsafe_allow_html=True,

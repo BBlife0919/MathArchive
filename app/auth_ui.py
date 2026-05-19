@@ -34,21 +34,15 @@ def _render_login_form() -> None:
             ok, msg = auth.login(username.strip(), password)
             if ok:
                 if auth.is_approved():
-                    # 새 응답에서 entry loader 가 다시 inject 되도록 가드 초기화.
+                    # 새 응답에서 entry loader 가 다시 inject 되도록 가드 초기화
                     st.session_state.pop("_entry_loader_shown", None)
-                    # 현재 응답 마지막에 entry loader + 글로벌 CSS 를 emit —
-                    # rerun transition 동안 풀스크린 오버레이 깔림.
+                    # 현재 응답 마지막에 entry loader + 글로벌 CSS emit —
+                    # rerun transition 동안 풀스크린 오버레이 깔림
                     st.markdown(_AUTHED_GLOBAL_CSS, unsafe_allow_html=True)
                     st.markdown(_ENTRY_LOADER_HTML, unsafe_allow_html=True)
-                    # 로그인 직전에 검수·클리닉 같은 sub 페이지 URL 에서 로그아웃
-                    # 했을 수 있어, 명시적으로 main 으로 이동시킴.
-                    try:
-                        st.switch_page("main.py")
-                    except Exception:
-                        # multi-page entry 가 아니거나 미지원 버전이면 일반 rerun
-                        st.rerun()
-                else:
-                    st.rerun()
+                # switch_page 는 transition 중 broken DOM 노출 위험 → 단순 rerun.
+                # 사용자가 main URL (= 랜딩) 에서 로그인 시 자동으로 main 으로 감.
+                st.rerun()
             else:
                 st.error(msg)
 
@@ -757,6 +751,22 @@ def require_auth() -> None:
     # 인증 통과한 사용자: 글로벌 톤(딥 블루) + status widget 숨김 적용.
     # 모든 페이지(main / 검수 / 관리자 / 클리닉)에 자동 적용 — 일관성 확보.
     st.markdown(_AUTHED_GLOBAL_CSS, unsafe_allow_html=True)
+
+    # main.py 가 set_page_config 직후 사이드바를 영구 숨김 처리했으므로,
+    # 인증 통과 시점에 명시적으로 다시 보임. display: none !important 를
+    # display: flex !important 로 덮어쓰기.
+    st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"],
+        section[data-testid="stSidebar"],
+        aside[data-testid="stSidebar"] { display: flex !important; }
+        [data-testid="stSidebarNav"],
+        [data-testid="stSidebarContent"] { display: block !important; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # 세션 첫 진입에 한해 풀스크린 entry loader 1회 표시.
     # CSS 애니메이션으로 1.7s 후 자동 fade-out, pointer-events:none 이라
