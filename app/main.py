@@ -456,6 +456,21 @@ def main():
         layout="wide",
     )
 
+    # Streamlit 기본 디버그 토스트("Running fn()...") 즉시 영구 숨김.
+    # require_auth 안의 _AUTHED_GLOBAL_CSS 보다 _먼저_ 도착해야 페이지
+    # 실행 첫 순간부터 토스트가 안 보임.
+    st.markdown(
+        """
+        <style>
+        [data-testid="stStatusWidget"],
+        [data-testid="stConnectionStatus"],
+        [data-testid="stToast"],
+        .stStatusWidget { display: none !important; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     # OG / 트위터 카드 메타 (카톡·페이스북·트위터 공유 시 썸네일·제목 제어)
     # Streamlit 은 head 직접 수정을 지원하지 않아 body 에 주입.
     # KakaoTalk 등 일부 스크래퍼는 문서 전체에서 og 태그를 탐지.

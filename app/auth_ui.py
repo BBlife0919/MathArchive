@@ -35,16 +35,20 @@ def _render_login_form() -> None:
             if ok:
                 if auth.is_approved():
                     # 새 응답에서 entry loader 가 다시 inject 되도록 가드 초기화.
-                    # 그렇지 않으면 가드 때문에 두 번째 rerun 응답에서 loader 가
-                    # 안 떠 로그인→메인 사이 빈 화면이 잠깐 노출됨.
                     st.session_state.pop("_entry_loader_shown", None)
-                    # 현재 응답의 마지막에 entry loader + 글로벌 CSS 를 emit.
-                    # 클라이언트가 rerun 응답을 받기 전 transition 동안 풀스크린
-                    # 오버레이가 깔려 "Running fn()..." 같은 잔여물·디버그 토스트가
-                    # 전혀 안 보임.
+                    # 현재 응답 마지막에 entry loader + 글로벌 CSS 를 emit —
+                    # rerun transition 동안 풀스크린 오버레이 깔림.
                     st.markdown(_AUTHED_GLOBAL_CSS, unsafe_allow_html=True)
                     st.markdown(_ENTRY_LOADER_HTML, unsafe_allow_html=True)
-                st.rerun()
+                    # 로그인 직전에 검수·클리닉 같은 sub 페이지 URL 에서 로그아웃
+                    # 했을 수 있어, 명시적으로 main 으로 이동시킴.
+                    try:
+                        st.switch_page("main.py")
+                    except Exception:
+                        # multi-page entry 가 아니거나 미지원 버전이면 일반 rerun
+                        st.rerun()
+                else:
+                    st.rerun()
             else:
                 st.error(msg)
 
@@ -544,7 +548,9 @@ _AUTHED_GLOBAL_CSS = """
   justify-content: center;
   font-family: 'Montserrat', 'Noto Sans KR', -apple-system, sans-serif;
   color: #e9ecf8;
-  animation: entryFadeOut 0.9s 2.6s forwards;
+  /* 8s 보이고 1s fade out — main 페이지 load_filter_options 등
+     무거운 초기 로딩(보통 2~6s)이 끝날 때까지 충분히 덮음. */
+  animation: entryFadeOut 1s 8s forwards;
   pointer-events: none;
 }
 .entry-loader .brand {
