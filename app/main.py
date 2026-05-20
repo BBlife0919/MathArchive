@@ -85,8 +85,35 @@ def execute_write(sql, params=()):
 
 
 # ── 신고 시스템 ──────────────────────────────────────────────
+# 페이지 단위 prefetch 캐시 (현 rerun 안에서 N+1 차단)
+_PAGE_FLAGGED_SET: set[int] = set()
+_PAGE_FLAGGED_PRIMED: bool = False
+
+
+def _prefetch_flagged(question_ids: list[int]) -> None:
+    """페이지 문항 전체의 신고 상태를 1회 IN 쿼리로 일괄 조회."""
+    global _PAGE_FLAGGED_PRIMED, _PAGE_FLAGGED_SET
+    if not question_ids:
+        _PAGE_FLAGGED_SET = set()
+        _PAGE_FLAGGED_PRIMED = True
+        return
+    placeholders = ",".join("?" * len(question_ids))
+    rows = query(
+        f"SELECT question_id FROM flagged_problems "
+        f"WHERE resolved=0 AND question_id IN ({placeholders})",
+        list(question_ids),
+    )
+    _PAGE_FLAGGED_SET = {r["question_id"] for r in rows}
+    _PAGE_FLAGGED_PRIMED = True
+
+
 def is_flagged(qid: int) -> bool:
-    """문항이 현재 미해결 신고 상태인지."""
+    """문항이 현재 미해결 신고 상태인지.
+
+    페이지 prefetch 캐시가 prime 돼 있으면 거기서 조회 (N+1 차단).
+    """
+    if _PAGE_FLAGGED_PRIMED:
+        return qid in _PAGE_FLAGGED_SET
     rows = query(
         "SELECT 1 FROM flagged_problems "
         "WHERE question_id=? AND resolved=0 LIMIT 1",
@@ -224,6 +251,49 @@ def _image_map_for_question(question_id: int) -> dict:
     return {r["image_ref"]: r["image_path"] for r in rows if r["image_ref"]}
 
 
+def _prefetch_image_maps(question_ids: list[int]) -> None:
+    """페이지에 표시할 문항 ID 들의 이미지 맵을 1회 IN 쿼리로 일괄 fetch한 뒤
+    개별 `_image_map_for_question` 캐시에 prime한다.
+
+    Why: 페이지당 30문항 × per-question 쿼리 = 30 round-trip 을
+    1 round-trip 으로 줄임. Streamlit Cloud→Supabase 왕복 비용이 큼.
+    """
+    if not question_ids:
+        return
+    # 캐시 키가 인자(question_id)로 잡혀 있어 cache_data API 로는 직접
+    # 다른 키에 값을 채워 넣을 수 없다 → 함수 시그니처를 우회: 미리 한 번에
+    # 받아서 별도 함수로 캐시 prime.
+    placeholders = ",".join("?" * len(question_ids))
+    rows = query(
+        f"SELECT question_id, image_ref, image_path FROM images "
+        f"WHERE question_id IN ({placeholders})",
+        list(question_ids),
+    )
+    grouped: dict[int, dict] = {qid: {} for qid in question_ids}
+    for r in rows:
+        if r["image_ref"]:
+            grouped[r["question_id"]][r["image_ref"]] = r["image_path"]
+    # 캐시 prime: cache_data 데코레이터는 동일 인자로 호출 시 캐시 히트하므로,
+    # 여기서 _image_map_for_question.clear() 한 뒤 각 ID에 대해 결과를 미리
+    # 채워 넣어도 어차피 prime API 가 없음. 그래서 모듈 전역 dict 로 따로 캐시.
+    for qid, m in grouped.items():
+        _PAGE_IMG_CACHE[qid] = m
+
+
+# 페이지 단위로 배치 prefetch 된 이미지 맵을 담는 모듈 전역 캐시.
+# Streamlit cache_data 와 별개로 동일 rerun 안에서 N+1 을 막는 용도.
+_PAGE_IMG_CACHE: dict[int, dict] = {}
+
+
+def _get_image_map(question_id: int | None) -> dict:
+    """페이지 prefetch 캐시 우선, 없으면 per-question 쿼리 fallback."""
+    if question_id is None:
+        return {}
+    if question_id in _PAGE_IMG_CACHE:
+        return _PAGE_IMG_CACHE[question_id]
+    return _image_map_for_question(question_id)
+
+
 # ── LaTeX 렌더링 헬퍼 ────────────────────────────────────────
 def _frac_to_dfrac(text: str) -> str:
     r"""$...$안의 \frac → \dfrac 변환 (display-style로 분수 크기 키움)."""
@@ -316,7 +386,7 @@ def render_question_content(text: str, file_source: str = "",
     text = re.sub(r"\n{3,}", "\n\n", text)
 
     file_stem = Path(file_source).stem if file_source else ""
-    img_map = _image_map_for_question(question_id) if question_id else {}
+    img_map = _get_image_map(question_id) if question_id else {}
 
     parts = re.split(r"(<<BOX_START>>|<<BOX_END>>|<<IMG:image\d+>>)", text)
 
@@ -692,6 +762,9 @@ def main():
         # 2단계: 현재 페이지에 해당하는 ID 들만 전체 데이터 fetch (해설 포함)
         page_ids = [r["question_id"] for r in all_meta[start:end]]
         page_results = fetch_questions_page(page_ids)
+        # 이미지 맵·신고 상태를 1회 IN 쿼리로 일괄 prefetch (N+1 차단)
+        _prefetch_image_maps(page_ids)
+        _prefetch_flagged(page_ids)
 
         st.caption(
             f"검색 결과: {total}문항 · {start + 1 if total else 0}–{end}번 표시"
