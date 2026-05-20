@@ -124,8 +124,9 @@ def load_filter_options():
 
 
 # ── 문제 검색 ────────────────────────────────────────────────
-def search_questions(schools, chapters, difficulties, regions,
-                     is_subjective=None, keyword=""):
+def _build_search_where(schools, chapters, difficulties, regions,
+                        is_subjective=None, keyword=""):
+    """필터 조건을 (where_clause, params) 튜플로 반환."""
     conditions = []
     params = []
 
@@ -153,7 +154,40 @@ def search_questions(schools, chapters, difficulties, regions,
         params.append(f"%{keyword}%")
 
     where = " AND ".join(conditions) if conditions else "1=1"
+    return where, params
 
+
+@st.cache_data(ttl=300)
+def search_question_ids(schools, chapters, difficulties, regions,
+                        is_subjective=None, keyword=""):
+    """필터 매칭 문항의 ID + 미니테스트용 최소 메타만 반환 (가벼움).
+
+    페이지네이션·총 카운트·미니테스트 풀 추출에 사용.
+    캐시 키는 인자 전체이므로 list 는 호출 측에서 tuple 변환 후 전달.
+    """
+    where, params = _build_search_where(
+        list(schools), list(chapters), list(difficulties), list(regions),
+        is_subjective, keyword,
+    )
+    sql = f"""
+        SELECT q.question_id, q.difficulty
+        FROM questions q
+        WHERE {where}
+        ORDER BY q.school, q.year DESC, q.semester, q.exam_type,
+                 q.question_number
+    """
+    return [dict(r) for r in query(sql, params)]
+
+
+def fetch_questions_page(question_ids):
+    """주어진 ID 목록의 전체 데이터(해설 포함) 반환.
+
+    페이지 표시용 — 30개 정도만 전달되므로 안전.
+    원본 ID 순서를 보존해서 반환.
+    """
+    if not question_ids:
+        return []
+    placeholders = ",".join("?" * len(question_ids))
     sql = f"""
         SELECT q.question_id, q.file_source, q.school, q.region,
                q.year, q.semester, q.exam_type,
@@ -163,11 +197,11 @@ def search_questions(schools, chapters, difficulties, regions,
                s.solution_text
         FROM questions q
         LEFT JOIN solutions s ON q.question_id = s.question_id
-        WHERE {where}
-        ORDER BY q.school, q.year DESC, q.semester, q.exam_type,
-                 q.question_number
+        WHERE q.question_id IN ({placeholders})
     """
-    return query(sql, params)
+    rows = query(sql, list(question_ids))
+    by_id = {r["question_id"]: r for r in rows}
+    return [by_id[qid] for qid in question_ids if qid in by_id]
 
 
 # ── 이미지 경로 ──────────────────────────────────────────────
@@ -583,8 +617,10 @@ def main():
     render_user_menu_in_sidebar()
 
     # ── 문제 검색 결과 ────────────────────────────────────────
-    results = search_questions(
-        sel_schools, sel_chapters, sel_difficulties, sel_regions,
+    # 1단계: 가벼운 ID+난이도만 (전체 매칭) — 카운트·미니테스트 풀용
+    all_meta = search_question_ids(
+        tuple(sel_schools), tuple(sel_chapters),
+        tuple(sel_difficulties), tuple(sel_regions),
         is_subjective, keyword
     )
 
@@ -593,7 +629,7 @@ def main():
 
     # ── 탭 1: 문제 목록 ──────────────────────────────────────
     with tab_list:
-        total = len(results)
+        total = len(all_meta)
 
         # 미니테스트 프리셋 — 워밍업/총복습용 15분 컷
         with st.expander("🎯 미니테스트 자동 생성 (15분 컷, 6~8문항)"):
@@ -611,13 +647,13 @@ def main():
                 )
             if st.button("🎲 미니테스트 자동 생성",
                          use_container_width=True, type="primary"):
-                if not results:
+                if not all_meta:
                     st.warning("필터 조건에 맞는 문제가 없습니다. 사이드바를 확인하세요.")
                 else:
                     easy_n = round(mini_count * mini_easy_pct / 100)
                     rest_n = mini_count - easy_n
-                    easy_pool = [r["question_id"] for r in results if r["difficulty"] == "하"]
-                    rest_pool = [r["question_id"] for r in results if r["difficulty"] in ("중", "상")]
+                    easy_pool = [r["question_id"] for r in all_meta if r["difficulty"] == "하"]
+                    rest_pool = [r["question_id"] for r in all_meta if r["difficulty"] in ("중", "상")]
                     picks = []
                     if easy_pool:
                         picks.extend(random.sample(easy_pool, min(easy_n, len(easy_pool))))
@@ -626,7 +662,7 @@ def main():
                         picks.extend(random.sample(rest_pool, min(need, len(rest_pool))))
                     # 모자라면 전체 풀에서 보충
                     if len(picks) < mini_count:
-                        all_pool = [r["question_id"] for r in results
+                        all_pool = [r["question_id"] for r in all_meta
                                     if r["question_id"] not in picks]
                         need = mini_count - len(picks)
                         if all_pool:
@@ -653,7 +689,9 @@ def main():
 
         start = st.session_state.page_num * PAGE_SIZE
         end = min(start + PAGE_SIZE, total)
-        page_results = results[start:end]
+        # 2단계: 현재 페이지에 해당하는 ID 들만 전체 데이터 fetch (해설 포함)
+        page_ids = [r["question_id"] for r in all_meta[start:end]]
+        page_results = fetch_questions_page(page_ids)
 
         st.caption(
             f"검색 결과: {total}문항 · {start + 1 if total else 0}–{end}번 표시"
@@ -718,7 +756,7 @@ def main():
                     st.session_state.page_num += 1
                     st.rerun()
 
-        if not results:
+        if not all_meta:
             st.info("필터 조건에 맞는 문제가 없습니다. 사이드바에서 조건을 조정해주세요.")
         else:
             # 상단 페이지 네비게이션
