@@ -141,12 +141,31 @@ def unflag_problem(qid: int):
 # ── 필터 옵션 로드 ───────────────────────────────────────────
 @st.cache_data(ttl=600)
 def load_filter_options():
-    schools = [r[0] for r in query("SELECT DISTINCT school FROM questions ORDER BY school")]
-    chapters = [r[0] for r in query("SELECT DISTINCT chapter FROM questions ORDER BY chapter")]
+    """학교/단원/지역 옵션을 1회 쿼리로 일괄 조회.
+
+    기존: SELECT DISTINCT 3회 → 3 round-trip + 3회 full table scan.
+    개선: GROUP BY 로 1 round-trip + 1회 스캔에 모든 값 추출.
+    """
+    sql = """
+        SELECT school, chapter, region
+        FROM questions
+        GROUP BY school, chapter, region
+    """
+    rows = query(sql)
+    school_set, chapter_set, region_set = set(), set(), set()
+    for r in rows:
+        if r["school"]:
+            school_set.add(r["school"])
+        if r["chapter"]:
+            chapter_set.add(r["chapter"])
+        if r["region"]:
+            region_set.add(r["region"])
+    schools = sorted(school_set)
+    chapters = sorted(chapter_set)
+    regions = sorted(region_set)
     # 난이도는 정상 4종(하/중/상/킬)만 표시 — HWPX 작성자가 난이도 칸에
     # 단원명·메모 등 잘못 입력한 잡티(다항함수/문제오류/특/즁/히 등) 차단.
     difficulties = DIFF_VALID
-    regions = [r[0] for r in query("SELECT DISTINCT region FROM questions ORDER BY region")]
     return schools, chapters, difficulties, regions
 
 
@@ -747,7 +766,9 @@ def main():
                     else:
                         st.warning("선택 가능한 문제가 부족합니다.")
 
-        PAGE_SIZE = 30
+        # 페이지당 카드 수 — Streamlit 은 expander 안 내용도 미리 렌더하므로
+        # 카드 수가 곧 렌더 비용. 30→15 로 줄여 페이지 로딩 체감 속도 향상.
+        PAGE_SIZE = 15
 
         # 페이지네이션 상태
         if "page_num" not in st.session_state:
