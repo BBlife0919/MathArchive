@@ -577,6 +577,7 @@ def main():
         page_title=PAGE_TITLE,
         page_icon="📐",
         layout="wide",
+        initial_sidebar_state="expanded",
     )
 
     # Streamlit 기본 디버그 토스트 + 사이드바(자동 multi-page menu 포함) 즉시

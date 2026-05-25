@@ -152,14 +152,11 @@ _LANDING_CSS = """
     var(--bg) !important;
 }
 /* 사이드바 영역 전부 숨김 — 와일드카드 + 명시 셀렉터 보강 */
+/* 로그인 페이지에선 사이드바 컨테이너만 숨김 — 자식은 자동 비표시 */
 section[data-testid="stSidebar"],
 aside[data-testid="stSidebar"],
 div[data-testid="stSidebar"],
-[data-testid="stSidebar"],
-[data-testid="stSidebarNav"],
-[data-testid="stSidebarContent"],
-[data-testid="stSidebarCollapseButton"],
-[data-testid*="stSidebar"] { display: none !important; }
+[data-testid="stSidebar"] { display: none !important; }
 header[data-testid="stHeader"] { background: transparent !important; }
 .block-container { padding-top: 1.5rem !important; max-width: 1200px !important; }
 
