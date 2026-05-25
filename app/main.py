@@ -582,6 +582,8 @@ def main():
     # Streamlit 기본 디버그 토스트 + 사이드바(자동 multi-page menu 포함) 즉시
     # 숨김. require_auth 통과 _전_ 사이드바가 노출되면 #169 같은 broken DOM
     # 발생. 인증 통과 후 require_auth 안에서 사이드바 다시 보임 처리.
+    # 컨테이너 1개(stSidebar)만 숨기면 자식 요소는 자동 비표시. 와일드카드는
+    # 사용 금지 — 복구 CSS 가 못 잡는 자손 testid 가 영원히 숨겨지는 사고 방지.
     st.markdown(
         """
         <style>
@@ -590,14 +592,10 @@ def main():
         [data-testid="stToast"],
         .stStatusWidget { display: none !important; }
 
-        /* 인증 전 사이드바·자동 nav 숨김 (전체 영역) */
-        [data-testid="stSidebar"],
-        [data-testid="stSidebarNav"],
-        [data-testid="stSidebarContent"],
-        [data-testid="stSidebarCollapseButton"],
-        [data-testid*="stSidebar"],
+        /* 인증 전 사이드바 컨테이너만 숨김 — 자식은 자동으로 비표시 */
         section[data-testid="stSidebar"],
-        aside[data-testid="stSidebar"] { display: none !important; }
+        aside[data-testid="stSidebar"],
+        [data-testid="stSidebar"] { display: none !important; }
         </style>
         """,
         unsafe_allow_html=True,
