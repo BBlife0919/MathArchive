@@ -529,9 +529,19 @@ last_words = {w: n for w, n in (last.get("bare_words") or [])}
 # 세션 캐시 — dropdown 변경 시 재스캔 방지
 # ─────────────────────────────────────────────────────────
 def _force_rescan():
-    """다음 렌더에서 강제 재스캔."""
+    """다음 렌더에서 강제 재스캔.
+
+    session_state 만 비우면 @st.cache_data(ttl=1800) 가 살아있어서
+    옛 결과가 그대로 다시 채워짐 → 처리 후에도 화면이 안 바뀌는 사고.
+    두 레이어 모두 클리어해야 함.
+    """
     st.session_state.pop("audit_bare_words", None)
     st.session_state.pop("audit_struct", None)
+    try:
+        run_bare_word_detection.clear()
+        run_structural_scan.clear()
+    except Exception:
+        pass
 
 
 if "audit_bare_words" not in st.session_state:
