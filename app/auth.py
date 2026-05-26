@@ -294,8 +294,15 @@ def _clear_session_cookie() -> None:
 
 
 def restore_session_from_cookie() -> None:
-    """페이지 로드 시 쿠키에서 자동 로그인 복원. 이미 로그인됐으면 no-op."""
+    """페이지 로드 시 쿠키에서 자동 로그인 복원. 이미 로그인됐으면 no-op.
+
+    extra-streamlit-components 의 CookieManager 는 iframe 컴포넌트로 마운트
+    되며 쿠키를 비동기로 받아옴. 첫 페이지 로드(특히 새 탭) 시 첫 mgr.get()
+    호출에선 마운트 미완료로 None 반환 가능. 이 경우 1회 한정으로 짧게
+    대기 후 rerun 재시도해 컴포넌트가 쿠키를 가져올 시간을 준다.
+    """
     if st.session_state.get("auth_user"):
+        st.session_state.pop("_cookie_restore_attempts", None)
         return
     mgr = _cookie_manager()
     if mgr is None:
@@ -305,6 +312,11 @@ def restore_session_from_cookie() -> None:
     except Exception:
         token = None
     if not token:
+        attempts = st.session_state.get("_cookie_restore_attempts", 0)
+        if attempts < 1:
+            st.session_state["_cookie_restore_attempts"] = attempts + 1
+            time.sleep(0.4)
+            st.rerun()
         return
     user_id = _decode_session_token(token)
     if not user_id:
@@ -329,6 +341,7 @@ def restore_session_from_cookie() -> None:
         "approved": bool(row["approved"]),
         "is_admin": bool(row["is_admin"]),
     }
+    st.session_state.pop("_cookie_restore_attempts", None)
 
 
 # ── 로그인 ────────────────────────────────────────────────────────────────
