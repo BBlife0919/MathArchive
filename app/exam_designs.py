@@ -92,31 +92,36 @@ class ExamMeta:
 #   손글씨 (NanumBrush)         → Nanum Pen Script (한글+영문 손글씨)
 # ─────────────────────────────────────────────────────────
 COMMON_DESIGN_CSS = r"""
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Black+Han+Sans&family=Yeon+Sung&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&display=swap');
 
 .cover-page {
   page-break-after: always;
   page-break-inside: avoid;
 }
 .red, .red strong { color: #c0392b; }
-.cover-instructor .instructor-name {
-  /* 나눔손글씨 붓 대용. 굵은 손글씨 느낌은 Nanum Pen 보다 Gaegu 700 이 가까움 */
-  font-family: 'Nanum Pen Script', 'Gaegu', cursive;
-  font-weight: 700;
-  font-size: 26pt;
-  margin: 0 4px;
-  letter-spacing: 1px;
+
+/* with [이영우] [T] — 이름과 T를 같은 폰트·크기·기울기로 통일해
+   원본 NanumBrush 의 굵고 기울어진 손글씨 느낌을 재현. */
+.cover-instructor {
+  font-size: 14pt;
 }
 .cover-instructor .with-text {
   font-family: 'Nanum Pen Script', cursive;
   font-size: 20pt;
-  margin-right: 6px;
+  margin-right: 8px;
+  font-style: italic;
 }
+.cover-instructor .instructor-name,
 .cover-instructor .t-mark {
-  font-family: 'Nanum Pen Script', cursive;
-  font-size: 16pt;
-  margin-left: 2px;
+  font-family: 'Black Han Sans', 'Yeon Sung', 'Gaegu', cursive;
+  font-weight: 700;
+  font-size: 22pt;
+  display: inline-block;
+  transform: skewX(-9deg);
+  letter-spacing: 1px;
 }
+.cover-instructor .instructor-name { margin: 0 4px; }
+.cover-instructor .t-mark { margin-left: 6px; }
 """
 
 # ─────────────────────────────────────────────────────────
@@ -267,6 +272,7 @@ INNER_EUM_CSS = r"""
   border-bottom: 1.6pt solid #111;
   padding-bottom: 2mm;
   margin-bottom: 3mm;
+  align-items: stretch;
 }
 .inner-eum-left { display: flex; flex-direction: column; gap: 2mm; }
 .inner-eum-title {
@@ -287,6 +293,14 @@ INNER_EUM_CSS = r"""
   padding: 1.2mm 2mm; text-align: center;
 }
 .inner-eum-meta td.red { color: #c0392b; font-weight: 700; }
+
+/* 우측: 위쪽 빈공간을 띄우고 표를 아래 가장자리에 맞춤 → 좌측 메타박스와
+   아래선 일치 (사용자 요구). */
+.inner-eum-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 .inner-eum-teachers {
   width: 100%; border-collapse: collapse; font-size: 10pt;
 }
@@ -296,10 +310,14 @@ INNER_EUM_CSS = r"""
 }
 .inner-eum-teachers th { background: #f3f3f3; font-weight: 700; }
 .inner-eum-teachers .stamp { color: #444; }
+
+/* 안내문 박스 — 본문 좌측 컬럼 정도 너비로 줄여 우측 여백을 없앤다. */
 .inner-eum-instructions {
   border: 1pt solid #444;
   padding: 3mm 4mm; font-size: 10pt; line-height: 1.55;
-  margin-bottom: 4mm;
+  margin: 0 0 4mm 0;
+  width: 48%;
+  box-sizing: border-box;
 }
 .inner-eum-instructions ul { padding-left: 4mm; margin: 0; }
 .inner-eum-instructions li { margin: 0.6mm 0; }

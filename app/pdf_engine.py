@@ -324,9 +324,9 @@ h2.exam-subtitle {
     font-size: 10pt;
 }
 .q-meta {
-    color: #999;
-    font-size: 8.5pt;
-    font-weight: 400;
+    color: #555;
+    font-size: 9pt;
+    font-weight: 500;
     margin-left: 4pt;
 }
 .q-body { margin: 0 0 2mm 0; }
