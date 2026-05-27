@@ -92,7 +92,7 @@ class ExamMeta:
 #   손글씨 (NanumBrush)         → Nanum Pen Script (한글+영문 손글씨)
 # ─────────────────────────────────────────────────────────
 COMMON_DESIGN_CSS = r"""
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Black+Han+Sans&family=Yeon+Sung&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=East+Sea+Dokdo&family=Single+Day&family=Hi+Melody&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&display=swap');
 
 .cover-page {
   page-break-after: always;
@@ -100,28 +100,27 @@ COMMON_DESIGN_CSS = r"""
 }
 .red, .red strong { color: #c0392b; }
 
-/* with [이영우] [T] — 이름과 T를 같은 폰트·크기·기울기로 통일해
-   원본 NanumBrush 의 굵고 기울어진 손글씨 느낌을 재현. */
+/* with [이영우] [T] — East Sea Dokdo 는 한국어 붓글씨 손글씨 폰트로
+   원본 NanumBrush 와 가장 가까운 무료 웹폰트. 이름과 T 동일 폰트/크기. */
 .cover-instructor {
   font-size: 14pt;
 }
 .cover-instructor .with-text {
   font-family: 'Nanum Pen Script', cursive;
-  font-size: 20pt;
+  font-size: 22pt;
   margin-right: 8px;
   font-style: italic;
 }
 .cover-instructor .instructor-name,
 .cover-instructor .t-mark {
-  font-family: 'Black Han Sans', 'Yeon Sung', 'Gaegu', cursive;
-  font-weight: 700;
-  font-size: 22pt;
-  display: inline-block;
-  transform: skewX(-9deg);
-  letter-spacing: 1px;
+  font-family: 'East Sea Dokdo', 'Single Day', 'Hi Melody', cursive;
+  font-weight: 400;
+  font-size: 30pt;
+  letter-spacing: 2px;
+  /* 손글씨 자체에 자연스러운 기울기·붓터치가 있음 → skewX 불필요 */
 }
-.cover-instructor .instructor-name { margin: 0 4px; }
-.cover-instructor .t-mark { margin-left: 6px; }
+.cover-instructor .instructor-name { margin: 0 6px; }
+.cover-instructor .t-mark { margin-left: 8px; }
 """
 
 # ─────────────────────────────────────────────────────────
@@ -311,12 +310,12 @@ INNER_EUM_CSS = r"""
 .inner-eum-teachers th { background: #f3f3f3; font-weight: 700; }
 .inner-eum-teachers .stamp { color: #444; }
 
-/* 안내문 박스 — 본문 좌측 컬럼 정도 너비로 줄여 우측 여백을 없앤다. */
+/* 안내문 박스 — 본문 좌측 컬럼 안 첫 위치에 prepend. col 너비 100%. */
 .inner-eum-instructions {
   border: 1pt solid #444;
   padding: 3mm 4mm; font-size: 10pt; line-height: 1.55;
   margin: 0 0 4mm 0;
-  width: 48%;
+  width: 100%;
   box-sizing: border-box;
 }
 .inner-eum-instructions ul { padding-left: 4mm; margin: 0; }
@@ -326,7 +325,7 @@ INNER_EUM_CSS = r"""
 
 
 def render_inner_eum_first_page_header(meta: ExamMeta, n_total_pages: int) -> str:
-    """내지 1번의 첫 페이지에만 들어가는 메타박스+안내문 헤더 HTML."""
+    """내지 1번의 첫 페이지에만 들어가는 메타박스 헤더 (전체 너비)."""
     return f"""
 <header class="inner-eum-header">
   <div class="inner-eum-left">
@@ -357,6 +356,15 @@ def render_inner_eum_first_page_header(meta: ExamMeta, n_total_pages: int) -> st
     </table>
   </div>
 </header>
+""".strip()
+
+
+def render_inner_eum_first_col_extra(meta: ExamMeta, n_total_pages: int) -> str:
+    """본문 첫 페이지 좌측 컬럼 맨 위에 prepend 되는 안내문 박스.
+
+    이 위치에 들어가야 우측 컬럼이 위에서부터 자연스럽게 채워진다.
+    """
+    return f"""
 <div class="inner-eum-instructions">
   <ul>
     <li>답안지에 학년, 반, 번호를 정확하게 기입하시오.</li>
@@ -422,11 +430,13 @@ COVER_DESIGNS: dict = {
 INNER_DESIGNS: dict = {
     "이음고 내지 (Image #177)": {
         "first_header": render_inner_eum_first_page_header,
+        "first_col_extra": render_inner_eum_first_col_extra,
         "css": INNER_EUM_CSS,
         "needs_page_count": True,
     },
     "모의고사 스타일 (Image #178)": {
         "first_header": lambda meta, n=0: render_inner_mock_first_page_header(meta),
+        "first_col_extra": None,
         "css": INNER_MOCK_CSS,
         "needs_page_count": False,
     },

@@ -860,8 +860,13 @@ def _render_header(title: str, subtitle: str | None, logo_uri: str | None,
 def _problem_pages_html(questions: list[dict], include_source: bool,
                          overrides: dict | None,
                          header_html: str,
-                         include_difficulty: bool = False) -> str:
-    """문제 섹션(2단 레이아웃)의 HTML — header_html은 첫 page에만 삽입."""
+                         include_difficulty: bool = False,
+                         first_col_extra_html: str = "") -> str:
+    """문제 섹션(2단 레이아웃)의 HTML — header_html은 첫 page에만 삽입.
+
+    first_col_extra_html: 첫 페이지 좌측 컬럼 맨 위에 prepend 되는 HTML.
+    내지 디자인의 안내문 박스 등에 사용. 우측 컬럼은 영향 없이 위부터 시작.
+    """
     pages = paginate(questions, overrides=overrides)
     parts: list[str] = []
     slot_num = 1
@@ -873,8 +878,10 @@ def _problem_pages_html(questions: list[dict], include_source: bool,
         cols = list(page)
         while len(cols) < 2:
             cols.append([])
-        for col in cols:
+        for ci, col in enumerate(cols):
             parts.append('<div class="col">')
+            if idx == 0 and ci == 0 and first_col_extra_html:
+                parts.append(first_col_extra_html)
             for (q, layout) in col:
                 parts.append(_render_slot(
                     slot_num, q, layout, include_source, include_difficulty
@@ -1099,22 +1106,32 @@ def build_designed_exam_html(questions: list[dict],
     cover_spec = _ed.COVER_DESIGNS.get(cover_design)
     cover_html = cover_spec["render"](meta) if cover_spec else ""
 
-    # 내지 첫 페이지 헤더
+    # 내지 첫 페이지 헤더 + col1 prepend 슬롯
     inner_spec = _ed.INNER_DESIGNS.get(inner_design)
+    inner_header = ""
+    inner_col_extra = ""
     if inner_spec:
-        if inner_spec.get("needs_page_count"):
+        needs_count = inner_spec.get("needs_page_count")
+        total_pages_for_design = n_body_pages + 1  # 표지 포함
+        if needs_count:
             inner_header = inner_spec["first_header"](
-                meta, n_body_pages + 1   # 표지 포함 총 쪽수
+                meta, total_pages_for_design
             )
         else:
             inner_header = inner_spec["first_header"](meta)
-    else:
-        inner_header = ""
 
-    # 본문 — 첫 페이지에만 inner_header 삽입
+        col_extra_fn = inner_spec.get("first_col_extra")
+        if col_extra_fn:
+            if needs_count:
+                inner_col_extra = col_extra_fn(meta, total_pages_for_design)
+            else:
+                inner_col_extra = col_extra_fn(meta)
+
+    # 본문 — 첫 페이지에만 inner_header + col1 prepend 안내문
     body = _problem_pages_html(
         questions, include_source, overrides,
         inner_header, include_difficulty,
+        first_col_extra_html=inner_col_extra,
     )
 
     full_body = cover_html + "\n" + body
