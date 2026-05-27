@@ -92,7 +92,8 @@ class ExamMeta:
 #   손글씨 (NanumBrush)         → Nanum Pen Script (한글+영문 손글씨)
 # ─────────────────────────────────────────────────────────
 COMMON_DESIGN_CSS = r"""
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=East+Sea+Dokdo&family=Single+Day&family=Hi+Melody&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&display=swap');
+/* Google Fonts 는 _HTML_WRAP 의 <link> 태그에서 head 에 직접 로드됨.
+   CSS @import 는 PDF Chromium 환경에서 가끔 늦게 로드돼 fallback 발생 사고. */
 
 .cover-page {
   page-break-after: always;
@@ -100,27 +101,31 @@ COMMON_DESIGN_CSS = r"""
 }
 .red, .red strong { color: #c0392b; }
 
-/* with [이영우] [T] — East Sea Dokdo 는 한국어 붓글씨 손글씨 폰트로
-   원본 NanumBrush 와 가장 가까운 무료 웹폰트. 이름과 T 동일 폰트/크기. */
+/* with [이영우] [T] — 원본 NanumBrush 와 가장 가까운 한국어 손글씨 폰트.
+   Hi Melody 가 굵고 둥근 손글씨, fallback 으로 다른 한글 손글씨 폰트들. */
 .cover-instructor {
   font-size: 14pt;
 }
 .cover-instructor .with-text {
-  font-family: 'Nanum Pen Script', cursive;
-  font-size: 22pt;
-  margin-right: 8px;
+  font-family: 'Nanum Pen Script', 'Single Day', cursive;
+  font-size: 24pt;
+  margin-right: 10px;
   font-style: italic;
+  color: #111;
 }
 .cover-instructor .instructor-name,
 .cover-instructor .t-mark {
-  font-family: 'East Sea Dokdo', 'Single Day', 'Hi Melody', cursive;
+  /* 원본 NanumBrush(붓글씨) 가장 가까운 후보 순서:
+     Yeon Sung (강렬 손글씨) → Hi Melody → East Sea Dokdo. */
+  font-family: 'Yeon Sung', 'Hi Melody', 'East Sea Dokdo',
+               'Single Day', 'Nanum Pen Script', cursive;
   font-weight: 400;
-  font-size: 30pt;
+  font-size: 34pt;
   letter-spacing: 2px;
-  /* 손글씨 자체에 자연스러운 기울기·붓터치가 있음 → skewX 불필요 */
+  color: #111;
 }
-.cover-instructor .instructor-name { margin: 0 6px; }
-.cover-instructor .t-mark { margin-left: 8px; }
+.cover-instructor .instructor-name { margin: 0 4px; }
+.cover-instructor .t-mark { margin-left: 6px; }
 """
 
 # ─────────────────────────────────────────────────────────

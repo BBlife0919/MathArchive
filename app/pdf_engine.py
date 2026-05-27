@@ -677,6 +677,9 @@ _HTML_WRAP = """<!doctype html>
 <html lang="ko"><head>
 <meta charset="utf-8">
 <title>{title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Hi+Melody&family=Single+Day&family=East+Sea+Dokdo&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&family=Black+Han+Sans&family=Yeon+Sung&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -1056,6 +1059,14 @@ def html_to_pdf_bytes(html: str) -> bytes:
         page.set_content(html, wait_until="networkidle")
         try:
             page.wait_for_function("window.__katexReady === true", timeout=10000)
+        except Exception:
+            pass
+        # 외부 웹폰트(Google Fonts 등) 로딩 완료 대기 — 안 기다리면 한글 손글씨
+        # 폰트가 fallback (시스템 명조) 으로 떨어져 인쇄체처럼 보이는 사고.
+        try:
+            page.wait_for_function("document.fonts && document.fonts.ready",
+                                    timeout=8000)
+            page.evaluate("document.fonts.ready")
         except Exception:
             pass
         pdf_bytes = page.pdf(
