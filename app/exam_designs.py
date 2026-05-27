@@ -101,28 +101,26 @@ COMMON_DESIGN_CSS = r"""
 }
 .red, .red strong { color: #c0392b; }
 
-/* with [이영우] [T] — 원본 NanumBrush 와 가장 가까운 한국어 손글씨 폰트.
-   Hi Melody 가 굵고 둥근 손글씨, fallback 으로 다른 한글 손글씨 폰트들. */
+/* with [이영우] [T] — Nanum Brush Script (영문 붓글씨).
+   한글은 Google Fonts 에 NanumBrush 한글 버전이 없어 cursive fallback. */
 .cover-instructor {
   font-size: 14pt;
 }
-.cover-instructor .with-text {
-  font-family: 'Nanum Pen Script', 'Single Day', cursive;
-  font-size: 24pt;
-  margin-right: 10px;
-  font-style: italic;
+.cover-instructor .with-text,
+.cover-instructor .instructor-name,
+.cover-instructor .t-mark {
+  font-family: 'Nanum Brush Script', cursive;
+  font-weight: 400;
   color: #111;
+}
+.cover-instructor .with-text {
+  font-size: 28pt;
+  margin-right: 10px;
 }
 .cover-instructor .instructor-name,
 .cover-instructor .t-mark {
-  /* 원본 NanumBrush(붓글씨) 가장 가까운 후보 순서:
-     Yeon Sung (강렬 손글씨) → Hi Melody → East Sea Dokdo. */
-  font-family: 'Yeon Sung', 'Hi Melody', 'East Sea Dokdo',
-               'Single Day', 'Nanum Pen Script', cursive;
-  font-weight: 400;
   font-size: 34pt;
   letter-spacing: 2px;
-  color: #111;
 }
 .cover-instructor .instructor-name { margin: 0 4px; }
 .cover-instructor .t-mark { margin-left: 6px; }

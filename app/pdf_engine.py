@@ -679,7 +679,7 @@ _HTML_WRAP = """<!doctype html>
 <title>{title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Hi+Melody&family=Single+Day&family=East+Sea+Dokdo&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&family=Black+Han+Sans&family=Yeon+Sung&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Brush+Script&family=Hi+Melody&family=Single+Day&family=East+Sea+Dokdo&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&family=Black+Han+Sans&family=Yeon+Sung&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
