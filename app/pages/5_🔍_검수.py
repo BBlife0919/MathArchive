@@ -170,6 +170,20 @@ _GREEK_LOWER = ("alpha", "beta", "gamma", "delta", "epsilon", "zeta",
                 "nu", "xi", "omicron", "pi", "rho", "sigma", "tau",
                 "upsilon", "phi", "chi", "psi", "omega")
 _GREEK_PAT = "|".join(_GREEK_LOWER)
+
+# 그리스 문자 단독 토큰 → LaTeX 매핑 (안전 휴리스틱 #2)
+# 대문자 시작은 LaTeX 에 \Gamma 형태로 존재하는 것만 매핑, 나머지는
+# 소문자 LaTeX(=라틴 알파벳과 형태가 같은 경우)으로 fallback.
+_GREEK_UPPERCASE_LATEX = {
+    "gamma": "Gamma", "delta": "Delta", "theta": "Theta",
+    "lambda": "Lambda", "xi": "Xi", "pi": "Pi", "sigma": "Sigma",
+    "upsilon": "Upsilon", "phi": "Phi", "psi": "Psi", "omega": "Omega",
+}
+for _greek in _GREEK_LOWER:
+    HWP_TOKEN_REFERENCE.setdefault(_greek, ("map", f"\\{_greek}"))
+    HWP_TOKEN_REFERENCE.setdefault(_greek.upper(), ("map", f"\\{_greek}"))
+    _cap_latex = _GREEK_UPPERCASE_LATEX.get(_greek, _greek)
+    HWP_TOKEN_REFERENCE.setdefault(_greek.capitalize(), ("map", f"\\{_cap_latex}"))
 _SET_OPS = ("in", "IN", "notin", "NOTIN", "subset", "SUBSET",
             "supset", "SUPSET", "cup", "CUP", "cap", "CAP",
             "smallinter", "SMALLINTER", "smallunion", "SMALLUNION")
@@ -503,25 +517,31 @@ st.caption("이 페이지에서 모든 처리 가능. 클릭 한 번이면 끝."
 
 
 def _show_result_banner(title: str, body: str, kind: str = "success"):
-    """이전 액션 결과를 큰 배너로 표시 (페이지 상단)."""
-    st.session_state["audit_last_result"] = {
+    """다음 rerun 에서 dialog 로 띄울 결과 메시지 저장."""
+    st.session_state["audit_dialog"] = {
         "title": title, "body": body, "kind": kind,
     }
 
 
-if "audit_last_result" in st.session_state:
-    r = st.session_state["audit_last_result"]
-    with st.container(border=True):
-        if r["kind"] == "success":
-            st.success(f"### ✅ {r['title']}\n\n{r['body']}")
-        elif r["kind"] == "warning":
-            st.warning(f"### ⚠️ {r['title']}\n\n{r['body']}")
-        else:
-            st.info(f"### ℹ️ {r['title']}\n\n{r['body']}")
-        if st.button("닫기", key="dismiss_result"):
-            del st.session_state["audit_last_result"]
-            st.rerun()
-    st.divider()
+@st.dialog("처리 결과")
+def _audit_result_dialog(title: str, body: str, kind: str):
+    if kind == "success":
+        st.success(f"### ✅ {title}")
+    elif kind == "warning":
+        st.warning(f"### ⚠️ {title}")
+    else:
+        st.info(f"### ℹ️ {title}")
+    st.markdown(body)
+    if st.button("확인", use_container_width=True, type="primary",
+                 key="audit_dialog_close"):
+        st.session_state.pop("audit_dialog", None)
+        st.rerun()
+
+
+# 직전 액션 결과가 있으면 페이지 진입 시 다이얼로그 자동 표시
+if "audit_dialog" in st.session_state:
+    _d = st.session_state["audit_dialog"]
+    _audit_result_dialog(_d["title"], _d["body"], _d["kind"])
 
 last = _load_last_run()
 last_words = {w: n for w, n in (last.get("bare_words") or [])}
@@ -634,124 +654,71 @@ def _is_geometry_label(token: str) -> bool:
 
 
 # ─── 일괄 처리 툴바 ────────────────────────────────────
-toolbar = st.columns([3, 3, 3, 3])
+# 통합: 사전·패턴·도형 라벨·그리스 약어를 한 번에 처리.
+# 페이지네이션과 무관하게 항상 _전체_ bare_words 를 대상으로 적용.
+toolbar = st.columns([4, 3])
 
-# 1) 알려진 HWP 토큰 자동 매핑 (사전 + 패턴 기반)
-if toolbar[0].button("🧠 알려진 토큰 자동 매핑 (사전+패턴)",
+if toolbar[0].button("🚀 한 방 처리 (사전+패턴+도형+그리스, 전체)",
                      use_container_width=True, type="primary"):
-    with st.spinner("사전·패턴 기반 매핑 처리 중..."):
+    with st.spinner("자동 처리 중..."):
         n_mapped = 0
         n_removed = 0
+        n_ignored = 0
         n_affected_total = 0
-        mapped_examples = []
+        mapped_examples: list[str] = []
+        ignored_examples: list[str] = []
         for token, _ in bare_words:
             action, latex = lookup_token(token)
+            # 추천 없을 때 도형 라벨이면 ignore
+            if action is None and _is_geometry_label(token):
+                action, latex = "ignore", ""
             if action is None:
                 continue
-            res = apply_user_mapping(token, action, latex)
+            res = apply_user_mapping(token, action, latex or "")
             n_affected_total += res.get("affected", 0)
             if action == "map":
                 n_mapped += 1
                 if len(mapped_examples) < 5:
                     mapped_examples.append(f"`{token}` → `{latex}`")
-            else:
+            elif action == "remove":
                 n_removed += 1
-    total_done = n_mapped + n_removed
+            else:
+                n_ignored += 1
+                if len(ignored_examples) < 5:
+                    ignored_examples.append(f"`{token}`")
+    total_done = n_mapped + n_removed + n_ignored
     remaining = max(0, len(bare_words) - total_done)
-    body = (
-        f"- 매핑: **{n_mapped}개 토큰**\n"
-        f"- 삭제: **{n_removed}개 토큰**\n"
-        f"- DB 문항 변경: **{n_affected_total}건**\n"
-        f"- 남은 누락 토큰: **{remaining}개**\n\n"
-    )
-    if mapped_examples:
-        body += "**매핑 예시:**\n" + "\n".join(
-            f"- {ex}" for ex in mapped_examples) + "\n\n"
-    body += "다음 단계: **🤖 도형 라벨 자동 무시** 버튼을 누르세요."
-    if n_mapped == 0 and n_removed == 0:
+    if total_done == 0:
         _show_result_banner(
-            "처리할 알려진 토큰 없음",
-            "사전에 등록된 토큰이 표에 없습니다. "
-            "다음: **🤖 도형 라벨 자동 무시** 버튼을 누르세요.",
+            "처리할 토큰 없음",
+            "사전/패턴/도형 라벨/그리스 약어로 매칭되는 토큰이 없습니다. "
+            "남은 미상 토큰은 표에서 dropdown 으로 수동 처리해주세요.",
             kind="info",
         )
-        st.toast("ℹ️ 사전에 등록된 토큰 없음")
+        st.toast("ℹ️ 자동 처리 대상 없음")
     else:
-        _show_result_banner("알려진 토큰 자동 매핑 완료", body)
+        body = (
+            f"- 매핑: **{n_mapped}개 토큰**\n"
+            f"- 삭제: **{n_removed}개 토큰**\n"
+            f"- 무시 (도형 라벨): **{n_ignored}개 토큰**\n"
+            f"- DB 문항 변경: **{n_affected_total}건**\n"
+            f"- 남은 미상 토큰: **{remaining}개**\n\n"
+        )
+        if mapped_examples:
+            body += "**매핑 예시:** " + ", ".join(mapped_examples) + "\n\n"
+        if ignored_examples:
+            body += "**무시 예시:** " + ", ".join(ignored_examples) + "\n\n"
+        body += (
+            "다음 단계: 표에 남은 미상 토큰은 dropdown 으로 수동 처리 → "
+            "**[✅ 미상 dropdown 일괄 적용]** → **[📌 베이스라인 저장]**."
+        )
+        _show_result_banner("한 방 처리 완료", body)
         st.toast(f"✅ {total_done}개 처리 · {remaining}개 남음")
     _force_rescan()
     st.rerun()
 
-# 2) 도형 라벨 자동 무시
-if toolbar[1].button("🤖 도형 라벨 자동 무시 (전체)",
-                     use_container_width=True):
-    with st.spinner("도형 라벨 식별 중..."):
-        geo_tokens = [t for t, _ in bare_words if _is_geometry_label(t)]
-        for t in geo_tokens:
-            apply_user_mapping(t, "ignore", "")
-    if geo_tokens:
-        remaining = max(0, len(bare_words) - len(geo_tokens))
-        examples = ", ".join(f"`{t}`" for t in geo_tokens[:8])
-        body = (
-            f"- 무시 처리된 도형 라벨: **{len(geo_tokens)}개**\n"
-            f"- 남은 누락 토큰: **{remaining}개**\n"
-            f"- 예시: {examples}\n\n"
-            "다음 단계: 표에 남은 토큰이 있으면 dropdown 처리, "
-            "없으면 **📌 베이스라인 저장**."
-        )
-        _show_result_banner("도형 라벨 자동 무시 완료", body)
-        st.toast(f"✅ {len(geo_tokens)}개 처리 · {remaining}개 남음")
-    else:
-        _show_result_banner(
-            "처리할 도형 라벨 없음",
-            "표에 도형 라벨로 식별되는 토큰이 없습니다.",
-            kind="info",
-        )
-        st.toast("ℹ️ 도형 라벨로 식별되는 토큰 없음")
-    _force_rescan()
-    st.rerun()
-
-# 3) 체크한 추천 일괄 적용 (NEW)
-if toolbar[2].button("☑️ 체크한 추천 일괄 적용",
-                     use_container_width=True, type="primary"):
-    n_done = 0
-    n_affected = 0
-    with st.spinner("체크된 추천 적용 중..."):
-        for token, _ in visible_tokens:
-            if not st.session_state.get(f"chk_{token}", False):
-                continue
-            rec_a, rec_l = lookup_token(token)
-            # 추천이 없지만 도형 라벨이면 ignore 로 처리
-            if rec_a is None and _is_geometry_label(token):
-                rec_a, rec_l = "ignore", ""
-            if rec_a is None:
-                continue
-            res = apply_user_mapping(token, rec_a, rec_l or "")
-            n_done += 1
-            n_affected += res.get("affected", 0)
-    if n_done == 0:
-        _show_result_banner(
-            "체크된 추천 없음",
-            "추천 컬럼 옆 체크박스를 먼저 누르세요.",
-            kind="warning",
-        )
-        st.toast("⚠️ 체크된 추천이 없습니다")
-    else:
-        remaining = max(0, len(bare_words) - n_done)
-        _show_result_banner(
-            "체크한 추천 일괄 적용 완료",
-            f"- 처리 토큰: **{n_done}개**\n"
-            f"- DB 변경: **{n_affected}건**\n"
-            f"- 남은 누락 토큰: **{remaining}개**\n\n"
-            "다음 단계: 남은 토큰이 있으면 dropdown 처리, "
-            "없으면 **📌 베이스라인 저장**.",
-        )
-        st.toast(f"✅ {n_done}개 처리 · {remaining}개 남음")
-        _force_rescan()
-    st.rerun()
-
-# 4) 선택한 처리 일괄 적용 (dropdown 사용)
-if toolbar[3].button("✅ 선택한 처리 일괄 적용",
+# 미상 dropdown 일괄 적용 — 사용자가 수동으로 선택한 처리만
+if toolbar[1].button("✅ 미상 dropdown 일괄 적용",
                      use_container_width=True):
     n_done = 0
     n_affected = 0
@@ -776,10 +743,10 @@ if toolbar[3].button("✅ 선택한 처리 일괄 적용",
     else:
         remaining = max(0, len(bare_words) - n_done)
         _show_result_banner(
-            "선택 처리 적용 완료",
+            "미상 dropdown 일괄 적용 완료",
             f"- 처리 토큰: **{n_done}개**\n"
             f"- DB 변경: **{n_affected}건**\n"
-            f"- 남은 누락 토큰: **{remaining}개**\n\n"
+            f"- 남은 미상 토큰: **{remaining}개**\n\n"
             "다음 단계: **📌 베이스라인 저장**.",
         )
         st.toast(f"✅ {n_done}개 처리 · {remaining}개 남음")
@@ -787,14 +754,8 @@ if toolbar[3].button("✅ 선택한 처리 일괄 적용",
     st.rerun()
 
 st.caption(
-    "💡 **권장 순서**: ① **[알려진 토큰 자동 매핑]** → "
-    "② **[도형 라벨 자동 무시]** → ③ 추천이 맞으면 ✓ 체크 + "
-    "**[☑️ 체크한 추천 일괄 적용]** → ④ 추천 없는 ❓미상 행은 "
-    "dropdown 으로 수동 처리 → **[✅ 선택한 처리 일괄 적용]**"
-)
-st.caption(
-    "📌 **컬럼 의미** · **✓ 적용** = 추천이 맞을 때 체크 (한 번에 추천대로 적용) · "
-    "**처리 방식 dropdown** = 추천이 없는 미상 토큰을 직접 처리할 때 사용"
+    "💡 **권장 순서**: ① **[🚀 한 방 처리]** → ② 남은 미상 토큰은 표에서 "
+    "dropdown 처리 → ③ **[✅ 미상 dropdown 일괄 적용]** → ④ **[📌 베이스라인 저장]**"
 )
 
 with st.expander("❓ 미상 토큰이란? · 처리 가이드"):
@@ -812,38 +773,94 @@ with st.expander("❓ 미상 토큰이란? · 처리 가이드"):
         """
     )
 
-# 추천 일괄 체크/해제 토글
-tk_to_toggle = [
-    t for t, _ in visible_tokens
-    if (lookup_token(t)[0] is not None) or _is_geometry_label(t)
-]
-all_checked = bool(tk_to_toggle) and all(
-    st.session_state.get(f"chk_{t}", False) for t in tk_to_toggle
-)
-toggle_label = (
-    f"☐ 추천 {len(tk_to_toggle)}개 전체 해제"
-    if all_checked
-    else f"☑️ 추천 {len(tk_to_toggle)}개 전체 체크"
-)
-if st.button(toggle_label, disabled=not tk_to_toggle):
-    for t in tk_to_toggle:
-        st.session_state[f"chk_{t}"] = not all_checked
-    st.rerun()
-
 st.markdown("---")
 
-# 헤더 — '적용' 체크박스 컬럼 추가
-hdr = st.columns([2, 1.5, 0.7, 2.5, 2.8])
+# ─── 페이지네이션 ─────────────────────────────────────
+# 토큰이 많아도 스크롤이 길게 늘어지지 않게 한 페이지에 일부만 표시.
+# 일괄 처리 버튼은 항상 _전체_ visible_tokens 를 대상으로 동작하므로
+# 페이지네이션은 표시·미상 dropdown 수동 입력 보존용.
+TOKENS_PER_PAGE = 20
+total_tokens = len(visible_tokens)
+total_pages = max(1, (total_tokens + TOKENS_PER_PAGE - 1) // TOKENS_PER_PAGE)
+if "audit_page" not in st.session_state:
+    st.session_state.audit_page = 0
+if st.session_state.audit_page >= total_pages:
+    st.session_state.audit_page = 0
+cur_page = st.session_state.audit_page
+start = cur_page * TOKENS_PER_PAGE
+end = min(start + TOKENS_PER_PAGE, total_tokens)
+page_tokens = visible_tokens[start:end]
+
+
+def _render_token_pagination(prefix: str):
+    """페이지 네비게이션 — 문항 페이지와 동일 패턴."""
+    if total_pages <= 1:
+        return
+    if total_pages <= 7:
+        page_nums = list(range(total_pages))
+    else:
+        pages = {0, total_pages - 1}
+        for p in range(max(0, cur_page - 2),
+                       min(total_pages - 1, cur_page + 2) + 1):
+            pages.add(p)
+        sorted_pages = sorted(pages)
+        page_nums = []
+        for i, p in enumerate(sorted_pages):
+            if i > 0 and p - sorted_pages[i - 1] > 1:
+                page_nums.append(None)
+            page_nums.append(p)
+    col_specs = [1] + [1] * len(page_nums) + [1]
+    cols = st.columns(col_specs)
+    with cols[0]:
+        if st.button("◀", disabled=cur_page == 0,
+                     key=f"audit_prev_{prefix}", use_container_width=True):
+            st.session_state.audit_page -= 1
+            st.rerun()
+    for i, p in enumerate(page_nums):
+        with cols[i + 1]:
+            if p is None:
+                st.markdown(
+                    "<div style='text-align:center;padding:8px 0;"
+                    "color:#a6b2d4;'>…</div>",
+                    unsafe_allow_html=True,
+                )
+            elif p == cur_page:
+                st.markdown(
+                    f"<div style='text-align:center;padding:6px 0;"
+                    f"border:1px solid #f0cd87;border-radius:6px;"
+                    f"color:#f0cd87;font-weight:700;'>{p + 1}</div>",
+                    unsafe_allow_html=True,
+                )
+            else:
+                if st.button(str(p + 1),
+                             key=f"audit_page_{prefix}_{p}",
+                             use_container_width=True):
+                    st.session_state.audit_page = p
+                    st.rerun()
+    with cols[-1]:
+        if st.button("▶", disabled=cur_page >= total_pages - 1,
+                     key=f"audit_next_{prefix}", use_container_width=True):
+            st.session_state.audit_page += 1
+            st.rerun()
+
+
+st.caption(
+    f"전체 {total_tokens}개 중 {start + 1 if total_tokens else 0}–{end}번 표시 "
+    f"(페이지 {cur_page + 1}/{total_pages})"
+)
+_render_token_pagination("top")
+
+# 헤더 — 체크박스 컬럼 제거. 한 방 처리 버튼이 추천을 자동 적용함.
+hdr = st.columns([2, 1.5, 2.5, 2.8])
 hdr[0].markdown("**토큰**")
 hdr[1].markdown("**추천**")
-hdr[2].markdown("**✓ 적용**")
-hdr[3].markdown("**처리 방식**")
-hdr[4].markdown("**LaTeX (매핑 시만)**")
+hdr[2].markdown("**처리 방식 (미상 토큰만)**")
+hdr[3].markdown("**LaTeX (매핑 시만)**")
 
-for token, count in visible_tokens:
+for token, count in page_tokens:
     is_new = token not in last_words
     badge = " 🆕" if is_new else ""
-    cols = st.columns([2, 1.5, 0.7, 2.5, 2.8])
+    cols = st.columns([2, 1.5, 2.5, 2.8])
     cols[0].markdown(f"`{token}` ({count}건){badge}")
 
     # 추천 표시 (사전 + 패턴 인식기 모두 사용)
@@ -861,18 +878,13 @@ for token, count in visible_tokens:
         cols[1].markdown("❓ 미상")
 
     has_rec = rec_action is not None or is_geo
-    # 추천 있는 행: 체크박스만 활성, dropdown 은 숨김 → 결정 영역 단순화
-    # 추천 없는 미상 행: dropdown + LaTeX 로 수동 처리
     if has_rec:
-        cols[2].checkbox(
-            "적용", key=f"chk_{token}",
-            label_visibility="collapsed",
-        )
-        cols[3].caption("✓ 체크박스 사용")
-        cols[4].caption("—")
+        # 추천 있는 행: 한 방 처리 버튼이 자동 적용 → UI 단순화
+        cols[2].caption("🚀 [한 방 처리]로 자동 적용")
+        cols[3].caption("—")
     else:
-        cols[2].caption("—")
-        cols[3].selectbox(
+        # 미상 행: dropdown + LaTeX 로 수동 처리
+        cols[2].selectbox(
             "처리",
             options=list(ACTION_LABELS.keys()),
             format_func=lambda k: ACTION_LABELS[k],
@@ -880,7 +892,7 @@ for token, count in visible_tokens:
             label_visibility="collapsed",
         )
         if st.session_state.get(f"act_{token}") == "map":
-            cols[4].text_input(
+            cols[3].text_input(
                 "LaTeX",
                 value="",
                 placeholder=r"예: \prec",
@@ -888,8 +900,9 @@ for token, count in visible_tokens:
                 label_visibility="collapsed",
             )
         else:
-            cols[4].caption("—")
+            cols[3].caption("—")
 
+_render_token_pagination("bot")
 st.divider()
 
 # ─── 결과 저장 ─────────────────────────────────────────
