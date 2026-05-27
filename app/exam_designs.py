@@ -413,41 +413,192 @@ def render_inner_eum_first_col_extra(meta: ExamMeta, n_total_pages: int) -> str:
 
 
 # ─────────────────────────────────────────────────────────
-# 내지 #2 — 모의고사 스타일 (Image #178)
-#   사용자 입력: inner_title (예: "수학영역")
-#   페이지마다 좌우 반복 헤더 + 자동 페이지번호.
+# 내지 #2 — 수능형 모의고사 (Image #190~192 100% 모사)
+#   페이지별로 다른 헤더:
+#     1쪽: 좌-[제N교시], 중-부제+큰제목, 우-페이지번호+[홀수형]
+#     짝수쪽: 좌-페이지번호, 중-큰제목, 우-[홀수형]
+#     홀수쪽: 좌-[홀수형], 중-큰제목, 우-페이지번호
+#   본문 2단 사이 세로선, 1쪽 좌측 컬럼 첫 위치에 [5지선다형] 라벨.
+#   매 페이지 푸터: SVG 페이지번호 박스 + 저작권 문구.
 # ─────────────────────────────────────────────────────────
 INNER_MOCK_CSS = r"""
-.inner-mock-banner {
-  text-align: center;
+/* 본문도 명조체로 강제 (수능형 양식 폰트 매칭) */
+.mock-body { font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif; }
+.mock-body .slot { font-family: inherit; }
+
+.mock-header {
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  align-items: center;
+  border-bottom: 1.4pt solid #111;
+  padding-bottom: 3mm;
   margin-bottom: 4mm;
+  font-family: 'Nanum Myeongjo', serif;
 }
-.inner-mock-banner .period-badge {
+.mock-header.mock-header-p1 {
+  align-items: end;
+}
+.mock-h-left { text-align: left; }
+.mock-h-center { text-align: center; }
+.mock-h-right { text-align: right; }
+
+.mock-box {
+  display: inline-block;
+  border: 0.8pt solid #111;
+  padding: 1.4mm 4mm;
+  font-size: 12pt;
+  font-weight: 700;
+  background: #fff;
+  white-space: nowrap;
+}
+
+.mock-pagenum {
+  font-size: 28pt;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-block;
+}
+
+.mock-h-sub {
+  font-size: 11pt;
+  margin-bottom: 1mm;
+}
+.mock-h-big {
+  font-size: 26pt;
+  font-weight: 700;
+  letter-spacing: 6px;
+  line-height: 1.1;
+}
+
+/* 페이지 1: 우측은 페이지번호(상) + 홀수형 박스(하) 세로 배치 */
+.mock-header-p1 .mock-h-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2mm;
+}
+
+/* 5지선다형 라벨 — 1쪽 좌측 컬럼 첫 위치 prepend */
+.mock-section-label {
   display: inline-block;
   border: 1pt solid #111;
-  padding: 1mm 4mm;
-  font-size: 12pt; font-weight: 700;
-  float: left;
+  padding: 1.2mm 4mm;
+  font-size: 11pt;
+  font-weight: 700;
+  margin: 0 0 3mm 0;
 }
-.inner-mock-banner .big-title {
-  font-size: 26pt; font-weight: 800;
-  letter-spacing: 6px;
+
+/* 본문 2단 사이 세로 실선 */
+.page-body.mock-body .col + .col {
+  border-left: 0.5pt solid #555;
+  padding-left: 5mm;
 }
-.inner-mock-running {
-  font-size: 13pt; color: #aaa; letter-spacing: 6px;
-  text-align: center; margin-bottom: 2mm;
+.page-body.mock-body .col:first-child {
+  padding-right: 5mm;
+}
+
+/* 매 페이지 푸터 — 페이지번호 박스(SVG) + 저작권 */
+.mock-footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-top: 4mm;
+  padding-top: 1mm;
+  border-top: 0;
+  font-family: 'Nanum Myeongjo', serif;
+}
+.mock-footer-pagebox { text-align: center; }
+.mock-footer-pagebox svg { display: block; margin: 0 auto; }
+.mock-footer-copyright {
+  grid-column: 3;
+  text-align: right;
+  font-size: 8.5pt;
+  color: #b00;
 }
 """
 
 
-def render_inner_mock_first_page_header(meta: ExamMeta) -> str:
-    """내지 2번의 첫 페이지 큰 제목 헤더. 사용자 입력은 inner_title 하나."""
+def render_mock_page_header(meta: ExamMeta, page_idx: int,
+                             total_pages: int) -> str:
+    """수능형 모의고사 각 페이지 헤더. page_idx 는 1부터."""
+    title_big = _html_escape(meta.inner_title or "수학 영역")
+    odd_box = '<span class="mock-box">홀수형</span>'
+    pagenum = f'<span class="mock-pagenum">{page_idx}</span>'
+
+    if page_idx == 1:
+        subtitle = (
+            f"{meta.school_year}학년도 대학수학능력시험 문제지"
+        )
+        return f"""
+<header class="mock-header mock-header-p1">
+  <div class="mock-h-left">
+    <span class="mock-box">제 {meta.period} 교시</span>
+  </div>
+  <div class="mock-h-center">
+    <div class="mock-h-sub">{_html_escape(subtitle)}</div>
+    <div class="mock-h-big">{title_big}</div>
+  </div>
+  <div class="mock-h-right">
+    {pagenum}
+    {odd_box}
+  </div>
+</header>
+""".strip()
+
+    # 2쪽 이후 홀짝 패턴
+    if page_idx % 2 == 0:
+        # 짝수쪽: 페이지번호 좌, 홀수형 우
+        return f"""
+<header class="mock-header">
+  <div class="mock-h-left">{pagenum}</div>
+  <div class="mock-h-center">
+    <div class="mock-h-big">{title_big}</div>
+  </div>
+  <div class="mock-h-right">{odd_box}</div>
+</header>
+""".strip()
+    else:
+        # 홀수쪽 (3, 5, 7...): 홀수형 좌, 페이지번호 우
+        return f"""
+<header class="mock-header">
+  <div class="mock-h-left">{odd_box}</div>
+  <div class="mock-h-center">
+    <div class="mock-h-big">{title_big}</div>
+  </div>
+  <div class="mock-h-right">{pagenum}</div>
+</header>
+""".strip()
+
+
+def render_mock_page_footer(meta: ExamMeta, page_idx: int,
+                             total_pages: int) -> str:
+    """수능형 모의고사 페이지 푸터 — 페이지번호 박스(SVG 빗금) + 저작권."""
+    # SVG 박스: 좌측 현재 페이지, 대각선, 우측 총 페이지
+    svg = (
+        '<svg viewBox="0 0 90 36" width="62" height="24">'
+        '<rect x="1" y="1" width="88" height="34" fill="none" '
+        'stroke="#111" stroke-width="1.2"/>'
+        '<line x1="32" y1="34" x2="58" y2="2" stroke="#111" stroke-width="1.2"/>'
+        f'<text x="14" y="24" font-family="Nanum Myeongjo, serif" '
+        f'font-size="14" font-weight="700" fill="#111">{page_idx}</text>'
+        f'<text x="62" y="24" font-family="Nanum Myeongjo, serif" '
+        f'font-size="14" font-weight="700" fill="#111">{total_pages}</text>'
+        '</svg>'
+    )
     return f"""
-<div class="inner-mock-banner">
-  <span class="period-badge">제{meta.period}교시</span>
-  <div class="big-title">{_html_escape(meta.inner_title)}</div>
+<div class="mock-footer">
+  <div></div>
+  <div class="mock-footer-pagebox">{svg}</div>
+  <div class="mock-footer-copyright">
+    이 문제지에 관한 저작권은 {_html_escape(meta.school_org_name or "출제기관")}에 있습니다.
+  </div>
 </div>
 """.strip()
+
+
+def render_mock_first_col_extra(meta: ExamMeta) -> str:
+    """1쪽 좌측 컬럼 맨 위 prepend — [5지선다형] 라벨."""
+    return '<div class="mock-section-label">5지선다형</div>'
 
 
 # ─────────────────────────────────────────────────────────
@@ -466,12 +617,17 @@ INNER_DESIGNS: dict = {
         "first_col_extra": render_inner_eum_first_col_extra,
         "css": INNER_EUM_CSS,
         "needs_page_count": True,
+        "body_class": "",
     },
-    "모의고사 스타일 (Image #178)": {
-        "first_header": lambda meta, n=0: render_inner_mock_first_page_header(meta),
-        "first_col_extra": None,
+    "수능형 모의고사 (Image #190~192)": {
+        # 페이지 1 헤더는 per_page_header_fn 에서 처리 → first_header 는 비움
+        "first_header": lambda meta, n=0: "",
+        "first_col_extra": lambda meta, n=0: render_mock_first_col_extra(meta),
+        "per_page_header_fn": render_mock_page_header,
+        "per_page_footer_fn": render_mock_page_footer,
         "css": INNER_MOCK_CSS,
-        "needs_page_count": False,
+        "needs_page_count": False,  # first_header/col_extra 는 카운트 불필요
+        "body_class": "mock-body",
     },
 }
 

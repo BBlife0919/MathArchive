@@ -864,20 +864,32 @@ def _problem_pages_html(questions: list[dict], include_source: bool,
                          overrides: dict | None,
                          header_html: str,
                          include_difficulty: bool = False,
-                         first_col_extra_html: str = "") -> str:
-    """문제 섹션(2단 레이아웃)의 HTML — header_html은 첫 page에만 삽입.
+                         first_col_extra_html: str = "",
+                         per_page_header_fn=None,
+                         per_page_footer_fn=None,
+                         body_class: str = "") -> str:
+    """문제 섹션(2단 레이아웃)의 HTML.
 
-    first_col_extra_html: 첫 페이지 좌측 컬럼 맨 위에 prepend 되는 HTML.
-    내지 디자인의 안내문 박스 등에 사용. 우측 컬럼은 영향 없이 위부터 시작.
+    header_html: 첫 page 에만 삽입되는 정적 헤더 (기존 디자인용).
+    first_col_extra_html: 첫 페이지 좌측 컬럼 맨 위 prepend.
+    per_page_header_fn(page_idx, total_pages) -> HTML: 매 페이지 헤더 동적 생성
+        (수능형 모의고사처럼 페이지별로 헤더가 다른 경우).
+    per_page_footer_fn(page_idx, total_pages) -> HTML: 매 페이지 푸터.
+    body_class: page-body 요소에 추가되는 클래스 (디자인별 스타일링).
     """
     pages = paginate(questions, overrides=overrides)
+    total_pages = len(pages)
     parts: list[str] = []
     slot_num = 1
+    body_class_attr = f"page-body {body_class}".strip()
     for idx, page in enumerate(pages):
         parts.append('<section class="page">')
-        if idx == 0 and header_html:
+        # 동적 페이지 헤더 우선 (모의고사 양식). 없으면 정적 header_html (1쪽만).
+        if per_page_header_fn:
+            parts.append(per_page_header_fn(idx + 1, total_pages))
+        elif idx == 0 and header_html:
             parts.append(header_html)
-        parts.append('<div class="page-body">')
+        parts.append(f'<div class="{body_class_attr}">')
         cols = list(page)
         while len(cols) < 2:
             cols.append([])
@@ -892,6 +904,9 @@ def _problem_pages_html(questions: list[dict], include_source: bool,
                 slot_num += 1
             parts.append('</div>')
         parts.append('</div>')  # page-body
+        # 매 페이지 푸터
+        if per_page_footer_fn:
+            parts.append(per_page_footer_fn(idx + 1, total_pages))
         parts.append('</section>')
     return "\n".join(parts)
 
@@ -1117,10 +1132,13 @@ def build_designed_exam_html(questions: list[dict],
     cover_spec = _ed.COVER_DESIGNS.get(cover_design)
     cover_html = cover_spec["render"](meta) if cover_spec else ""
 
-    # 내지 첫 페이지 헤더 + col1 prepend 슬롯
+    # 내지 디자인 스펙
     inner_spec = _ed.INNER_DESIGNS.get(inner_design)
     inner_header = ""
     inner_col_extra = ""
+    per_page_header_fn = None
+    per_page_footer_fn = None
+    body_class = ""
     if inner_spec:
         needs_count = inner_spec.get("needs_page_count")
         total_pages_for_design = n_body_pages + 1  # 표지 포함
@@ -1138,11 +1156,29 @@ def build_designed_exam_html(questions: list[dict],
             else:
                 inner_col_extra = col_extra_fn(meta)
 
-    # 본문 — 첫 페이지에만 inner_header + col1 prepend 안내문
+        # 페이지별 동적 헤더/푸터 (수능형 모의고사) — meta 를 closure 로 캡처
+        ppf_header = inner_spec.get("per_page_header_fn")
+        if ppf_header:
+            per_page_header_fn = (
+                lambda idx, total, _fn=ppf_header, _m=meta:
+                _fn(_m, idx, total)
+            )
+        ppf_footer = inner_spec.get("per_page_footer_fn")
+        if ppf_footer:
+            per_page_footer_fn = (
+                lambda idx, total, _fn=ppf_footer, _m=meta:
+                _fn(_m, idx, total)
+            )
+        body_class = inner_spec.get("body_class", "")
+
+    # 본문
     body = _problem_pages_html(
         questions, include_source, overrides,
         inner_header, include_difficulty,
         first_col_extra_html=inner_col_extra,
+        per_page_header_fn=per_page_header_fn,
+        per_page_footer_fn=per_page_footer_fn,
+        body_class=body_class,
     )
 
     full_body = cover_html + "\n" + body
