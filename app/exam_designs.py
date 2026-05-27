@@ -51,7 +51,12 @@ class ExamMeta:
     @property
     def instructor_full_html(self) -> str:
         name = _html_escape(self.instructor_name)
-        return f'with <span class="instructor-name">{name}</span>T'
+        # with · 이름 · T 각각 다른 폰트/크기로 — 원본 NanumBrush 느낌 재현.
+        return (
+            f'<span class="with-text">with</span>'
+            f'<span class="instructor-name">{name}</span>'
+            f'<span class="t-mark">T</span>'
+        )
 
     def date_korean_full(self) -> str:
         """`2026년 4월 12일(일요일) 17시` 형식 — 표지용."""
@@ -82,19 +87,35 @@ class ExamMeta:
 
 # ─────────────────────────────────────────────────────────
 # 공통 CSS — 디자인 공유 + 디자인별 prefix
+# 폰트 매칭:
+#   본문 명조 (Haansoft-Batang) → Nanum Myeongjo (가장 가까운 무료 웹폰트)
+#   손글씨 (NanumBrush)         → Nanum Pen Script (한글+영문 손글씨)
 # ─────────────────────────────────────────────────────────
 COMMON_DESIGN_CSS = r"""
-.cover-page,
-.inner-page-eum-header,
-.inner-page-mock-header {
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&display=swap');
+
+.cover-page {
   page-break-after: always;
   page-break-inside: avoid;
 }
 .red, .red strong { color: #c0392b; }
 .cover-instructor .instructor-name {
-  font-family: 'Hi Melody', 'Caveat', cursive;
-  font-size: 22pt;
+  /* 나눔손글씨 붓 대용. 굵은 손글씨 느낌은 Nanum Pen 보다 Gaegu 700 이 가까움 */
+  font-family: 'Nanum Pen Script', 'Gaegu', cursive;
+  font-weight: 700;
+  font-size: 26pt;
   margin: 0 4px;
+  letter-spacing: 1px;
+}
+.cover-instructor .with-text {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 20pt;
+  margin-right: 6px;
+}
+.cover-instructor .t-mark {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 16pt;
+  margin-left: 2px;
 }
 """
 
@@ -102,76 +123,80 @@ COMMON_DESIGN_CSS = r"""
 # 표지 #1 — 이음고 스타일 (Image #176)
 # ─────────────────────────────────────────────────────────
 COVER_EUM_CSS = r"""
+/* A4 = 297mm. margin top/bottom 각 10mm → 본문 영역 277mm.
+   모든 요소를 한 페이지에 담기 위해 vertical margin 을 컴팩트하게 조정. */
 .cover-page {
   width: 100%;
-  min-height: 270mm;
-  padding: 18mm 16mm 14mm 16mm;
+  height: 277mm;          /* 본문 영역 전체 사용 */
+  padding: 8mm 14mm 8mm 14mm;
   text-align: center;
   font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
   color: #111;
   display: flex; flex-direction: column;
+  box-sizing: border-box;
 }
 .cover-page .cover-main-title {
-  font-size: 18pt; font-weight: 700;
+  font-size: 17pt; font-weight: 700;
   text-decoration: underline;
-  margin-bottom: 12mm;
+  margin-bottom: 8mm;
 }
 .cover-page .cover-grade {
-  font-size: 22pt; font-weight: 700; margin-bottom: 6mm;
+  font-size: 20pt; font-weight: 700; margin-bottom: 4mm;
 }
 .cover-page .cover-subject {
-  font-size: 44pt; font-weight: 800; letter-spacing: 4px;
-  margin-bottom: 14mm;
+  font-size: 42pt; font-weight: 800; letter-spacing: 4px;
+  margin-bottom: 10mm;
 }
 .cover-page .cover-datetime-box {
-  width: 65%; margin: 0 auto 16mm auto;
+  width: 60%; margin: 0 auto 10mm auto;
   border: 1px solid #222; border-radius: 2px; overflow: hidden;
 }
 .cover-page .cover-datetime-header {
-  background: #d8d8d8; padding: 4mm 0; font-size: 13pt; font-weight: 700;
+  background: #d8d8d8; padding: 3mm 0; font-size: 12pt; font-weight: 700;
   border-bottom: 1px solid #222;
 }
 .cover-page .cover-datetime-body {
-  padding: 6mm 0; font-size: 15pt;
+  padding: 5mm 0; font-size: 14pt;
 }
 .cover-page .cover-instructions {
-  width: 86%; margin: 0 auto 12mm auto;
-  border: 1px solid #222; padding: 6mm 6mm 4mm 6mm;
-  text-align: left; font-size: 11pt; line-height: 1.7;
+  width: 88%; margin: 0 auto 8mm auto;
+  border: 1px solid #222; padding: 5mm 6mm 3mm 6mm;
+  text-align: left; font-size: 10.5pt; line-height: 1.6;
 }
 .cover-page .cover-instructions ul {
-  list-style: none; padding: 0; margin: 0 0 4mm 0;
+  list-style: none; padding: 0; margin: 0 0 3mm 0;
+}
+.cover-page .cover-instructions li {
+  text-indent: -6mm; padding-left: 6mm; margin-bottom: 0.5mm;
 }
 .cover-page .cover-instructions li::before {
-  content: "○ "; font-weight: 700; margin-right: 2mm;
+  content: "○ "; font-weight: 700;
 }
 .cover-page .cover-counts {
-  text-align: center; font-weight: 700; margin-top: 3mm;
+  text-align: center; font-weight: 700; margin-top: 2mm;
 }
 .cover-page .cover-warning {
-  width: 86%; margin: 0 auto 18mm auto;
-  border: 1px solid #222; padding: 4mm 0;
-  font-weight: 700; font-size: 12pt;
+  width: 88%; margin: 0 auto 10mm auto;
+  border: 1px solid #222; padding: 3mm 0;
+  font-weight: 700; font-size: 11.5pt;
 }
 .cover-page .cover-school-name {
-  font-size: 18pt; font-weight: 700; margin-bottom: 12mm;
+  font-size: 17pt; font-weight: 700; margin-bottom: 8mm;
 }
 .cover-page .cover-footer {
   display: flex; align-items: center; justify-content: center;
-  gap: 18mm; margin-top: auto;
+  gap: 16mm; margin-top: auto;
 }
 .cover-page .cover-logo {
   display: flex; flex-direction: column; align-items: center;
 }
-.cover-page .cover-logo img { height: 22mm; margin-bottom: 2mm; }
-.cover-page .cover-motto {
-  font-size: 9pt; color: #444;
-}
-.cover-page .cover-org {
-  font-size: 11pt; font-weight: 700;
+.cover-page .cover-logo img {
+  height: 20mm; margin-bottom: 1mm;
+  /* 흰 배경 제거 / 어두운 배경 호환 위해 background 투명 가정 */
 }
 .cover-page .cover-instructor {
   font-size: 14pt; display: flex; align-items: baseline;
+  white-space: nowrap;
 }
 """
 
@@ -222,8 +247,6 @@ def render_cover_eum(meta: ExamMeta) -> str:
   <div class="cover-footer">
     <div class="cover-logo">
       {logo_html}
-      <div class="cover-motto">{_html_escape(meta.school_motto)}</div>
-      <div class="cover-org">{_html_escape(meta.school_org_name)}</div>
     </div>
     <div class="cover-instructor">{meta.instructor_full_html}</div>
   </div>

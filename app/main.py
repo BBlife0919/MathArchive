@@ -1187,18 +1187,10 @@ def main():
                                 "강사명 (→ 'with ○○T')",
                                 value="이영우", key="meta_instructor",
                             )
-                        r5 = st.columns(2)
-                        with r5[0]:
-                            in_org = st.text_input(
-                                "학원/기관명 (표지 로고 아래)",
-                                value="이음학원", key="meta_org",
-                            )
-                        with r5[1]:
-                            in_motto = st.text_input(
-                                "모토 (표지 로고 위)",
-                                value="생각을 잇고 성장을 이루다.",
-                                key="meta_motto",
-                            )
+                        # 학원명/모토는 표지에서 제거됨 (로고에 이미 포함).
+                        # 기본값은 ExamMeta dataclass 기본값으로 충분.
+                        in_org = "이음학원"
+                        in_motto = ""
 
                         # 모의고사 스타일 내지의 큰 제목
                         if inner_design_key and "모의고사" in inner_design_key:
