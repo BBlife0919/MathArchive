@@ -1075,6 +1075,72 @@ def generate_exam_pdf(questions: list[dict], title: str = "수학 시험지",
     return html_to_pdf_bytes(html)
 
 
+# ── 디자인 적용 시험지 (표지 + 내지) ─────────────────────────
+def build_designed_exam_html(questions: list[dict],
+                              meta,  # exam_designs.ExamMeta
+                              cover_design: str,
+                              inner_design: str,
+                              include_source: bool = False,
+                              overrides: dict | None = None,
+                              include_difficulty: bool = False) -> str:
+    """표지 + 내지 디자인을 입힌 시험지 HTML 을 만든다.
+
+    cover_design: exam_designs.COVER_DESIGNS 의 키
+    inner_design: exam_designs.INNER_DESIGNS 의 키
+    meta: exam_designs.ExamMeta 인스턴스
+    """
+    import exam_designs as _ed
+
+    # 본문 페이지 수를 미리 알아야 내지 #1 의 "총 X쪽" 헤더에 박을 수 있음.
+    pages = paginate(questions, overrides=overrides)
+    n_body_pages = len(pages)
+
+    # 표지
+    cover_spec = _ed.COVER_DESIGNS.get(cover_design)
+    cover_html = cover_spec["render"](meta) if cover_spec else ""
+
+    # 내지 첫 페이지 헤더
+    inner_spec = _ed.INNER_DESIGNS.get(inner_design)
+    if inner_spec:
+        if inner_spec.get("needs_page_count"):
+            inner_header = inner_spec["first_header"](
+                meta, n_body_pages + 1   # 표지 포함 총 쪽수
+            )
+        else:
+            inner_header = inner_spec["first_header"](meta)
+    else:
+        inner_header = ""
+
+    # 본문 — 첫 페이지에만 inner_header 삽입
+    body = _problem_pages_html(
+        questions, include_source, overrides,
+        inner_header, include_difficulty,
+    )
+
+    full_body = cover_html + "\n" + body
+    css = _CSS + "\n" + _ed.all_design_css()
+    return _HTML_WRAP.format(
+        title=_html.escape(meta.cover_main_title()),
+        css=css, body=full_body, body_class="",
+    )
+
+
+def generate_designed_exam_pdf(questions: list[dict],
+                                meta,
+                                cover_design: str,
+                                inner_design: str,
+                                include_source: bool = False,
+                                overrides: dict | None = None,
+                                include_difficulty: bool = False) -> bytes:
+    """디자인 표지+내지 시험지 PDF 생성 진입점."""
+    html = build_designed_exam_html(
+        questions, meta, cover_design, inner_design,
+        include_source=include_source, overrides=overrides,
+        include_difficulty=include_difficulty,
+    )
+    return html_to_pdf_bytes(html)
+
+
 def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       include_source: bool = True,
                       overrides: dict | None = None,

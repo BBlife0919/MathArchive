@@ -1070,6 +1070,182 @@ def main():
                 else (str(DEFAULT_LOGO_PATH) if show_logo and DEFAULT_LOGO_PATH.exists() else None)
             )
 
+            # ── 표지+내지 디자인 (시험지 모드 전용) ────────────────
+            design_meta = None
+            cover_design_key = None
+            inner_design_key = None
+            if mode == "exam":
+                use_design = st.toggle(
+                    "🎨 표지+내지 디자인 사용 (학교 시험지 양식)",
+                    value=False,
+                    key="use_designed_exam",
+                    help="ON: 표지 + 내지 디자인 적용 / OFF: 기본 시험지 양식",
+                )
+                if use_design:
+                    import exam_designs as _ed
+                    from datetime import date as _date
+
+                    dc1, dc2 = st.columns(2)
+                    with dc1:
+                        cover_design_key = st.selectbox(
+                            "표지 디자인", list(_ed.COVER_DESIGNS.keys()),
+                            key="cover_design_key",
+                        )
+                    with dc2:
+                        inner_design_key = st.selectbox(
+                            "내지 디자인", list(_ed.INNER_DESIGNS.keys()),
+                            key="inner_design_key",
+                        )
+
+                    with st.expander("📝 시험지 정보 입력",
+                                     expanded=True):
+                        # 학년도/학기/회차/학년
+                        r1 = st.columns(4)
+                        with r1[0]:
+                            in_year = st.number_input(
+                                "학년도", min_value=2020, max_value=2099,
+                                value=2026, key="meta_year",
+                            )
+                        with r1[1]:
+                            in_sem = st.number_input(
+                                "학기", min_value=1, max_value=2,
+                                value=1, key="meta_sem",
+                            )
+                        with r1[2]:
+                            in_session = st.number_input(
+                                "차수 / 회고사", min_value=1, max_value=10,
+                                value=1, key="meta_session",
+                            )
+                        with r1[3]:
+                            in_grade = st.number_input(
+                                "대상 학년", min_value=1, max_value=6,
+                                value=1, key="meta_grade",
+                            )
+
+                        # 과목명
+                        in_subject = st.text_input(
+                            "과목명", value="공통수학1",
+                            key="meta_subject",
+                            placeholder="예: 공통수학1, 미적분, 확률과 통계",
+                        )
+
+                        # 시행일 + 시각 + 교시 + 코드번호
+                        r2 = st.columns([2, 1, 1, 1])
+                        with r2[0]:
+                            in_date = st.date_input(
+                                "시행일", value=_date(2026, 4, 12),
+                                key="meta_date",
+                            )
+                        with r2[1]:
+                            in_hour = st.number_input(
+                                "시작 시(時)", min_value=0, max_value=23,
+                                value=17, key="meta_hour",
+                            )
+                        with r2[2]:
+                            in_period = st.number_input(
+                                "교시", min_value=1, max_value=8,
+                                value=1, key="meta_period",
+                            )
+                        with r2[3]:
+                            in_code = st.text_input(
+                                "코드번호", value="02",
+                                key="meta_code",
+                            )
+
+                        # 문항 수 (자동 카운트 + 수동 덮어쓰기)
+                        auto_choice = sum(
+                            1 for r in selected_rows
+                            if not (r["is_subjective"] or False)
+                        )
+                        auto_essay = sum(
+                            1 for r in selected_rows
+                            if (r["is_subjective"] or False)
+                        )
+                        r3 = st.columns(2)
+                        with r3[0]:
+                            in_n_choice = st.number_input(
+                                f"선택형 문항 수 (자동: {auto_choice})",
+                                min_value=0, max_value=200,
+                                value=auto_choice, key="meta_n_choice",
+                            )
+                        with r3[1]:
+                            in_n_essay = st.number_input(
+                                f"논술형 문항 수 (자동: {auto_essay})",
+                                min_value=0, max_value=200,
+                                value=auto_essay, key="meta_n_essay",
+                            )
+
+                        # 학교 / 학원 / 모토 / 강사
+                        r4 = st.columns(2)
+                        with r4[0]:
+                            in_school_short = st.text_input(
+                                "학교 약어 (→ '○○고등학교')",
+                                value="이음", key="meta_school_short",
+                            )
+                        with r4[1]:
+                            in_instructor = st.text_input(
+                                "강사명 (→ 'with ○○T')",
+                                value="이영우", key="meta_instructor",
+                            )
+                        r5 = st.columns(2)
+                        with r5[0]:
+                            in_org = st.text_input(
+                                "학원/기관명 (표지 로고 아래)",
+                                value="이음학원", key="meta_org",
+                            )
+                        with r5[1]:
+                            in_motto = st.text_input(
+                                "모토 (표지 로고 위)",
+                                value="생각을 잇고 성장을 이루다.",
+                                key="meta_motto",
+                            )
+
+                        # 모의고사 스타일 내지의 큰 제목
+                        if inner_design_key and "모의고사" in inner_design_key:
+                            in_inner_title = st.text_input(
+                                "내지 큰 제목",
+                                value="수학영역",
+                                key="meta_inner_title",
+                            )
+                        else:
+                            in_inner_title = "수학영역"
+
+                        # 로고 선택 — assets 폴더 목록 + 업로드 옵션
+                        logo_options = _ed.list_logos()
+                        if logo_options:
+                            display_names = [name for name, _ in logo_options]
+                            sel_logo_name = st.selectbox(
+                                "로고 (assets 폴더)", display_names,
+                                key="meta_logo_name",
+                            )
+                            in_logo_path = next(
+                                (p for n, p in logo_options
+                                 if n == sel_logo_name),
+                                None,
+                            )
+                        else:
+                            in_logo_path = None
+
+                    design_meta = _ed.ExamMeta(
+                        school_year=int(in_year),
+                        semester=int(in_sem),
+                        session=int(in_session),
+                        grade=int(in_grade),
+                        subject=in_subject.strip() or "공통수학1",
+                        exam_date=in_date,
+                        exam_hour=int(in_hour),
+                        period=int(in_period),
+                        code_number=in_code.strip() or "02",
+                        n_choice=int(in_n_choice),
+                        n_essay=int(in_n_essay),
+                        school_name_short=in_school_short.strip() or "이음",
+                        school_org_name=in_org.strip() or "이음학원",
+                        school_motto=in_motto.strip(),
+                        instructor_name=in_instructor.strip() or "이영우",
+                        logo_path=in_logo_path,
+                        inner_title=in_inner_title.strip() or "수학영역",
+                    )
+
             col_info, col_download = st.columns([0.7, 0.3])
             with col_info:
                 st.markdown(f"**{len(selected_rows)}문항** 선택됨")
@@ -1085,16 +1261,34 @@ def main():
             with col_download:
                 try:
                     if mode == "exam":
-                        from pdf_engine import generate_exam_pdf
-                        pdf_data = generate_exam_pdf(
-                            [dict(r) for r in selected_rows],
-                            title=exam_title,
-                            include_source=include_source,
-                            overrides=overrides,
-                            subtitle=effective_subtitle,
-                            logo_path=effective_logo,
-                        )
-                        fname = "exam.pdf"
+                        if design_meta is not None:
+                            # 표지+내지 디자인 적용
+                            from pdf_engine import generate_designed_exam_pdf
+                            pdf_data = generate_designed_exam_pdf(
+                                [dict(r) for r in selected_rows],
+                                meta=design_meta,
+                                cover_design=cover_design_key,
+                                inner_design=inner_design_key,
+                                include_source=include_source,
+                                overrides=overrides,
+                            )
+                            fname = (
+                                f"{design_meta.school_year}_"
+                                f"{design_meta.semester}_"
+                                f"{design_meta.session}회_"
+                                f"{design_meta.subject}.pdf"
+                            )
+                        else:
+                            from pdf_engine import generate_exam_pdf
+                            pdf_data = generate_exam_pdf(
+                                [dict(r) for r in selected_rows],
+                                title=exam_title,
+                                include_source=include_source,
+                                overrides=overrides,
+                                subtitle=effective_subtitle,
+                                logo_path=effective_logo,
+                            )
+                            fname = "exam.pdf"
                     else:  # book
                         from pdf_engine import generate_book_pdf
                         pdf_data = generate_book_pdf(
