@@ -11,12 +11,42 @@
 """
 from __future__ import annotations
 
+import base64
 from dataclasses import dataclass
 from datetime import date
+from functools import lru_cache
 from html import escape as _html_escape
 from pathlib import Path
 
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
+FONTS_DIR = ASSETS_DIR / "fonts"
+
+
+@lru_cache(maxsize=4)
+def _font_data_uri(ttf_name: str) -> str:
+    """app/assets/fonts/ 의 ttf 를 base64 data URI 로 인코딩.
+
+    환경 무관(macOS/Linux) 동일 폰트 렌더링 보장 — 외부 CDN 의존 0.
+    PDF 생성마다 HTML 에 inline 박힘. 캐시로 매번 인코딩 안 함.
+    """
+    p = FONTS_DIR / ttf_name
+    if not p.exists():
+        return ""
+    b64 = base64.b64encode(p.read_bytes()).decode("ascii")
+    return f"data:font/truetype;base64,{b64}"
+
+
+def font_face_css() -> str:
+    """모든 임베드 폰트의 @font-face 선언."""
+    out: list[str] = []
+    nanum_brush = _font_data_uri("NanumBrushScript-Regular.ttf")
+    if nanum_brush:
+        out.append(
+            "@font-face { font-family: 'NanumBrush'; "
+            f"src: url('{nanum_brush}') format('truetype'); "
+            "font-display: block; }"
+        )
+    return "\n".join(out)
 
 
 # ─────────────────────────────────────────────────────────
@@ -101,15 +131,15 @@ COMMON_DESIGN_CSS = r"""
 }
 .red, .red strong { color: #c0392b; }
 
-/* with [이영우] [T] — Nanum Brush Script (영문 붓글씨).
-   한글은 Google Fonts 에 NanumBrush 한글 버전이 없어 cursive fallback. */
+/* with [이영우] [T] — 'NanumBrush' 는 @font-face 로 ttf 를 base64
+   inline 임베드 (font_face_css). 한글+영문 동일 붓글씨 폰트로 렌더. */
 .cover-instructor {
   font-size: 14pt;
 }
 .cover-instructor .with-text,
 .cover-instructor .instructor-name,
 .cover-instructor .t-mark {
-  font-family: 'Nanum Brush Script', cursive;
+  font-family: 'NanumBrush', 'Nanum Brush Script', cursive;
   font-weight: 400;
   color: #111;
 }
@@ -447,8 +477,11 @@ INNER_DESIGNS: dict = {
 
 
 def all_design_css() -> str:
-    """페이지 전체에 들어갈 디자인 CSS 모음 (모든 디자인 분 + 공통)."""
-    return "\n".join([COMMON_DESIGN_CSS]
+    """페이지 전체에 들어갈 디자인 CSS 모음.
+
+    @font-face 임베드를 가장 먼저 두어 다른 폰트 family 선언 전에 등록.
+    """
+    return "\n".join([font_face_css(), COMMON_DESIGN_CSS]
                      + [d["css"] for d in COVER_DESIGNS.values()]
                      + [d["css"] for d in INNER_DESIGNS.values()])
 
