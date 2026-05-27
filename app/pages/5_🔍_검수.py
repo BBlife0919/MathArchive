@@ -297,7 +297,9 @@ def run_bare_word_detection(min_len: int = 3) -> list:
         elif w in user_tokens:
             del total[w]
 
-    return total.most_common(50)
+    # 모든 토큰 반환 — 처리 후 "감춰져 있던 51번째 이후가 또 떠오르는" 사고
+    # 방지를 위한 사용자 요구. 위젯 마운트 비용은 있지만 한 번에 끝낼 수 있음.
+    return total.most_common()
 
 
 @st.cache_data(ttl=1800)
@@ -900,8 +902,12 @@ if st.button("📌 이번 결과 저장 (베이스라인 갱신)"):
     })
     _show_result_banner(
         "베이스라인 저장 완료",
-        "다음 검수 때 이 결과와 비교돼서 새로 추가된 항목만 표시됩니다.",
+        "처리된 토큰은 화이트리스트에 반영돼 새로고침 후 사라집니다. "
+        "남은 토큰만 표시됩니다.",
     )
+    # 캐시 비우고 재스캔 → 처리된 토큰은 user_tokens 화이트리스트로
+    # 자동 제외되어 남은 토큰만 표에 보임.
+    _force_rescan()
     st.rerun()
 
 st.divider()
