@@ -758,6 +758,38 @@ st.caption(
     "dropdown 처리 → ③ **[✅ 미상 dropdown 일괄 적용]** → ④ **[📌 베이스라인 저장]**"
 )
 
+# ─── 남은 미상 전체 무시 (한 방 정리) ─────────────────────
+st.divider()
+unknown_tokens = [
+    t for t, _ in visible_tokens
+    if lookup_token(t)[0] is None and not _is_geometry_label(t)
+]
+nuc1, nuc2 = st.columns([3, 2])
+with nuc1:
+    st.markdown(
+        f"**❓ 남은 미상 토큰: {len(unknown_tokens)}개**  \n"
+        "사전·패턴·도형 라벨 어디에도 안 잡힌 토큰입니다. "
+        "대부분 OCR·파싱 오류로 생긴 잡문자라 그냥 무시해도 안전합니다 "
+        "(무시는 DB 변경 X — 후회해도 user_token_mappings 에서 row 삭제하면 복원)."
+    )
+with nuc2:
+    if st.button("🧹 남은 미상 전체 무시 (한 방 정리)",
+                 use_container_width=True,
+                 disabled=not unknown_tokens):
+        with st.spinner(f"미상 {len(unknown_tokens)}개 무시 처리 중..."):
+            for t in unknown_tokens:
+                apply_user_mapping(t, "ignore", "")
+        _show_result_banner(
+            "남은 미상 전체 무시 완료",
+            f"- 무시 처리: **{len(unknown_tokens)}개 토큰**\n"
+            f"- DB 변경: 0건 (무시는 화이트리스트 등록만)\n"
+            "- 다음 검수부터 표에서 자동 제외됩니다.\n\n"
+            "되돌리려면 `user_token_mappings` 테이블에서 해당 row 삭제.",
+        )
+        st.toast(f"✅ 미상 {len(unknown_tokens)}개 모두 무시 처리")
+        _force_rescan()
+        st.rerun()
+
 with st.expander("❓ 미상 토큰이란? · 처리 가이드"):
     st.markdown(
         """
