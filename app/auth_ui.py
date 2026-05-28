@@ -838,9 +838,8 @@ def require_auth() -> None:
         _render_pending_page()
         st.stop()
 
-    # sliding session — 매 페이지 진입 시 cookie 만료시각 갱신.
-    # 활동 중인 사용자는 사실상 무기한 로그인 유지.
-    auth.refresh_session_cookie()
+    # NOTE: refresh_session_cookie 는 호출 시 mgr.set() 비동기 응답 대기로
+    # 페이지 hang 사고 발생 → 호출 제거. cookie expires_at=30일 명시로 충분.
 
     # 인증 통과한 사용자: 글로벌 톤(딥 블루) + status widget 숨김 적용.
     # 모든 페이지(main / 검수 / 관리자 / 클리닉)에 자동 적용 — 일관성 확보.
