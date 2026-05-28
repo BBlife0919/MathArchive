@@ -267,20 +267,33 @@ def _cookie_manager():
 def _issue_session_cookie(user_id: int) -> None:
     """로그인 성공 시 쿠키에 세션 토큰 저장.
 
-    expires_at 미지정 → **session cookie**. 브라우저 종료 시 자동 삭제돼
-    공용 PC 에서도 안전. 같은 브라우저의 다른 탭과는 공유됨 → 새 탭 열어도
-    자동 로그인 유지. 토큰 자체의 서버측 exp 는 30일(SESSION_TTL_DAYS) —
-    브라우저 살아있는 동안엔 그 안에서 유효.
+    expires_at 을 명시(30일) — extra-streamlit-components 일부 버전이
+    expires_at=None 시 1일짜리로 박아서 자동 풀리는 사고 회피.
+    매 require_auth 시점에 cookie 가 자동 갱신되므로 활동 중에는 무기한.
     """
     mgr = _cookie_manager()
     if mgr is None:
         return
     token = _encode_session_token(user_id)
     try:
-        mgr.set(SESSION_COOKIE_NAME, token)
+        mgr.set(
+            SESSION_COOKIE_NAME, token,
+            expires_at=datetime.now() + timedelta(days=SESSION_TTL_DAYS),
+        )
     except Exception:
         # 첫 페이지 마운트 직후엔 set 가 실패할 수 있음. 다음 rerun 에 재시도해도 무방.
         pass
+
+
+def refresh_session_cookie() -> None:
+    """이미 로그인된 사용자의 cookie 만료시각을 매 페이지 진입 시 갱신.
+
+    활동 중인 사용자에게 sliding-session 효과 → 사실상 무기한 로그인 유지.
+    """
+    user = st.session_state.get("auth_user")
+    if not user:
+        return
+    _issue_session_cookie(user.get("user_id"))
 
 
 def _clear_session_cookie() -> None:
@@ -313,9 +326,10 @@ def restore_session_from_cookie() -> None:
         token = None
     if not token:
         attempts = st.session_state.get("_cookie_restore_attempts", 0)
-        if attempts < 1:
+        if attempts < 2:
             st.session_state["_cookie_restore_attempts"] = attempts + 1
-            time.sleep(0.4)
+            # 첫 시도는 짧게, 두 번째는 더 길게 — iframe 마운트 + 쿠키 수신 여유.
+            time.sleep(0.4 if attempts == 0 else 0.7)
             st.rerun()
         return
     user_id = _decode_session_token(token)
