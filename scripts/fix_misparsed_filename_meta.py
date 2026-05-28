@@ -40,7 +40,7 @@ def _safe_int(v):
         return None
 
 
-def fix(conn, placeholder: str):
+def fix(conn, placeholder: str, dry_run: bool = False):
     cur = conn.cursor()
     # 학교급(고/중/초) 이 첫 bracket 이 아닌 file_source 만 후보.
     cur.execute(
@@ -52,12 +52,30 @@ def fix(conn, placeholder: str):
     rows = cur.fetchall()
     print(f"prefix bracket 의심 파일: {len(rows)}건")
     fixed_files = 0
+    affected_rows_total = 0
     for r in rows:
         fs = r[0] if not isinstance(r, dict) else r["file_source"]
         meta = parse_filename_metadata(Path(fs).stem)
         if not meta.get("school"):
             print(f"  skip (메타 추출 실패): {fs[:80]}")
             continue
+        # 해당 file_source 의 행 수 확인
+        cnt_sql = (
+            f"SELECT COUNT(*) FROM questions WHERE file_source={placeholder}"
+        )
+        cur.execute(cnt_sql, (fs,))
+        n_rows = cur.fetchone()[0]
+        affected_rows_total += n_rows
+
+        prefix = "[DRY-RUN] " if dry_run else "  "
+        print(f"{prefix}OK: {meta.get('school')} "
+              f"({meta.get('year')}년 {meta.get('semester')}학기 "
+              f"{meta.get('exam_type')}) — {n_rows}행 ← {fs[:60]}")
+
+        if dry_run:
+            fixed_files += 1
+            continue
+
         sql = (
             f"UPDATE questions SET "
             f"school={placeholder}, school_level={placeholder}, "
@@ -75,27 +93,30 @@ def fix(conn, placeholder: str):
             fs,
         ))
         fixed_files += 1
-        print(f"  OK: {meta.get('school')} ({meta.get('year')}년 "
-              f"{meta.get('semester')}학기 {meta.get('exam_type')}) ← {fs[:60]}")
-    conn.commit()
-    print(f"\n수정 완료: {fixed_files} 파일")
+    if not dry_run:
+        conn.commit()
+    tag = "[DRY-RUN] " if dry_run else ""
+    print(f"\n{tag}수정 대상: {fixed_files} 파일, "
+          f"총 {affected_rows_total} 행")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cloud", action="store_true",
                     help="Supabase Postgres 대상 (기본은 로컬 SQLite)")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="변경 사항만 출력, 실제 UPDATE 안 함")
     args = ap.parse_args()
 
     if args.cloud:
         import psycopg2
         dsn = os.environ["SUPABASE_DB_URL"]
         conn = psycopg2.connect(dsn)
-        fix(conn, "%s")
+        fix(conn, "%s", dry_run=args.dry_run)
     else:
         db_path = Path(__file__).resolve().parent.parent / "db" / "mathdb.sqlite"
         conn = sqlite3.connect(db_path)
-        fix(conn, "?")
+        fix(conn, "?", dry_run=args.dry_run)
     conn.close()
 
 

@@ -32,10 +32,14 @@ def format_meta(row, *, short=False) -> str:
     """문제 row에서 출처 메타데이터를 사람이 읽을 수 있는 문자열로.
 
     short=False: `[가림고] 2025년 1학기 중간 · 26번`
-    short=True : `[가림고 25.1중] 26번` (2열 그리드용 컴팩트)
+    short=True : `[가락고 25-1-1-a] 26번` (year-grade-semester-examtype)
     """
     school = row["school"] or "?"
     qn = row["question_number"]
+    try:
+        grade = row["grade"]
+    except (KeyError, IndexError):
+        grade = None
     try:
         year = row["year"]
         sem = row["semester"]
@@ -44,12 +48,20 @@ def format_meta(row, *, short=False) -> str:
         year = sem = exam = None
 
     if short:
-        # `[가락고 25.1중]` 형태 — 학교+시험 출처를 한 묶음으로
+        # `[가락고 25-1-1-a]` 형태 — 학교 + (year-grade-semester-examtype)
+        # Why: 학년(grade) 까지 한 줄에 압축해서 시험지 식별을 명확히.
         head = school
+        meta_parts = []
         if year:
-            head += f" {str(year)[-2:]}"  # 2025 → 25
-        if sem and exam:
-            head += f".{sem}{EXAM_TYPE_SHORT.get(exam, exam)}"
+            meta_parts.append(str(year)[-2:])  # 2025 → 25
+        if grade:
+            meta_parts.append(str(grade))
+        if sem:
+            meta_parts.append(str(sem))
+        if exam:
+            meta_parts.append(str(exam))
+        if meta_parts:
+            head += " " + "-".join(meta_parts)
         return f"[{head}] {qn}번"
 
     exam_ko = EXAM_TYPE_KO.get(exam, exam or "")
@@ -236,7 +248,7 @@ def fetch_questions_page(question_ids):
     placeholders = ",".join("?" * len(question_ids))
     sql = f"""
         SELECT q.question_id, q.file_source, q.school, q.region,
-               q.year, q.semester, q.exam_type,
+               q.grade, q.year, q.semester, q.exam_type,
                q.question_number, q.question_text, q.choices,
                q.answer, q.answer_type, q.points, q.chapter,
                q.difficulty, q.has_image, q.is_subjective, q.error_note,
