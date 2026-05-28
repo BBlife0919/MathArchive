@@ -931,18 +931,27 @@ def parse_filename_metadata(filename: str) -> dict:
     filename = unicodedata.normalize("NFC", filename)
     meta = {}
     brackets = re.findall(r"\[([^\]]+)\]", filename)
-    if len(brackets) >= 6:
-        meta["school_level"] = brackets[0]
-        meta["year"] = brackets[1]
-        grade_parts = brackets[2].split("-")
+    # 학교급(`고`/`중`/`초`) bracket 을 anchor 로 잡는다.
+    # Why: 일부 파일은 `[재배포]`, `[복사본]` 등 prefix bracket 이 앞에 붙어
+    # `brackets[0]==school_level` 가정이 깨지면 school/region/year 가 한 칸씩
+    # 밀려 저장됨 (예: school 에 `2-2-a` 가 들어가는 사고).
+    anchor = -1
+    for i, b in enumerate(brackets):
+        if b in ("고", "중", "초"):
+            anchor = i
+            break
+    if anchor >= 0 and len(brackets) >= anchor + 6:
+        meta["school_level"] = brackets[anchor]
+        meta["year"] = brackets[anchor + 1]
+        grade_parts = brackets[anchor + 2].split("-")
         if len(grade_parts) >= 3:
             meta["grade"] = grade_parts[0]
             meta["semester"] = grade_parts[1]
             meta["exam_type"] = grade_parts[2]
-        meta["region"] = brackets[3]
-        meta["school"] = brackets[4]
-        meta["subject"] = brackets[5]
-        for b in brackets[6:]:
+        meta["region"] = brackets[anchor + 3]
+        meta["school"] = brackets[anchor + 4]
+        meta["subject"] = brackets[anchor + 5]
+        for b in brackets[anchor + 6:]:
             if re.search(r"[가-힣].*[-~].*[가-힣]", b):
                 meta["chapter_range"] = b
                 break

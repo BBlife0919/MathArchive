@@ -376,10 +376,12 @@ def _strip_leading_tabs_outside_box(text: str) -> str:
 
 
 def _batch_update(conn, table: str, idcol: str, txtcol: str,
-                  updates: list) -> int:
+                  updates: list, *, jsonb: bool = False) -> int:
     """배치 UPDATE — Postgres 는 execute_values, SQLite 는 executemany.
 
     개별 UPDATE 1,000회 = 100~200초. 배치 = 1~5초.
+    jsonb=True: Postgres JSONB 컬럼 대상. SET 절에 ::jsonb 캐스팅을 붙임.
+    SQLite 는 JSON 도 TEXT 컬럼이라 동일 경로.
     """
     if not updates:
         return 0
@@ -387,9 +389,10 @@ def _batch_update(conn, table: str, idcol: str, txtcol: str,
     if hasattr(conn, "_conn") and hasattr(conn._conn, "cursor"):
         from psycopg2.extras import execute_values
         cur = conn._conn.cursor()
+        cast = "::jsonb" if jsonb else ""
         execute_values(
             cur,
-            f"UPDATE {table} SET {txtcol} = data.t "
+            f"UPDATE {table} SET {txtcol} = data.t{cast} "
             f"FROM (VALUES %s) AS data(id, t) "
             f"WHERE {table}.{idcol} = data.id",
             updates,
@@ -414,10 +417,93 @@ def _batch_update(conn, table: str, idcol: str, txtcol: str,
     return len(updates)
 
 
+def _choices_to_list(raw):
+    """choices 컬럼 raw 값을 list[dict] 로 통일.
+
+    SQLite → TEXT(JSON string) / Postgres JSONB → list 자동 디코딩.
+    """
+    if raw is None:
+        return None
+    if isinstance(raw, (list, dict)):
+        return raw
+    try:
+        return json.loads(raw)
+    except (TypeError, ValueError):
+        return None
+
+
+def _apply_to_choices(raw, text_fixer):
+    """choices JSON 의 각 선지 text 에 text_fixer 적용.
+
+    반환: (new_json_str_or_None, changed_bool). 변환 후 텍스트가 같으면
+    changed=False — 호출자가 불필요한 UPDATE 를 피하게 한다.
+    """
+    choices = _choices_to_list(raw)
+    if not choices:
+        return None, False
+    changed = False
+    new_list = []
+    for c in choices:
+        if not isinstance(c, dict):
+            new_list.append(c)
+            continue
+        txt = c.get("text") or ""
+        new_txt = text_fixer(txt)
+        if new_txt != txt:
+            changed = True
+        new_c = dict(c)
+        new_c["text"] = new_txt
+        new_list.append(new_c)
+    if not changed:
+        return None, False
+    return json.dumps(new_list, ensure_ascii=False), True
+
+
+def _fix_one_question(conn, qid: int, q_text: str, choices_raw,
+                      fix_nested, fix_tokens) -> tuple[bool, bool]:
+    """단일 문항의 question_text + choices 를 동시에 복구.
+
+    반환: (q_text_changed, choices_changed).
+    """
+    q_changed = False
+    if q_text:
+        new_q = fix_tokens(fix_nested(q_text))
+        if new_q != q_text:
+            _exec_write(
+                conn,
+                "UPDATE questions SET question_text=? WHERE question_id=?",
+                (new_q, qid),
+            )
+            q_changed = True
+    new_choices, ch_changed = _apply_to_choices(
+        choices_raw, lambda t: fix_tokens(fix_nested(t))
+    )
+    if ch_changed:
+        if hasattr(conn, "_conn") and hasattr(conn._conn, "cursor"):
+            # Postgres JSONB — ::jsonb 캐스팅 필요
+            cur = conn._conn.cursor()
+            cur.execute(
+                "UPDATE questions SET choices=%s::jsonb WHERE question_id=%s",
+                (new_choices, qid),
+            )
+            try:
+                conn._conn.commit()
+            except Exception:
+                pass
+        else:
+            _exec_write(
+                conn,
+                "UPDATE questions SET choices=? WHERE question_id=?",
+                (new_choices, qid),
+            )
+    return q_changed, ch_changed
+
+
 def auto_fix_structural() -> dict:
     """BOX 짝/중첩/shadow + 누락 토큰 + 탭 들여쓰기 일괄 처리.
 
     배치 UPDATE 사용 — 90k 행을 ~10초 내 처리.
+    question_text + solution_text + choices(JSON) 모두 fixer 적용.
     """
     from fix_nested_boxes import fix_text as fix_nested
     from fix_unmapped_hwp_tokens import fix_text as fix_tokens
@@ -425,18 +511,23 @@ def auto_fix_structural() -> dict:
     conn = _get_db_connection()
 
     q_updates = []
+    ch_updates = []
     rows = conn.execute(
-        "SELECT question_id, question_text FROM questions"
+        "SELECT question_id, question_text, choices FROM questions"
     ).fetchall()
     for r in rows:
-        qid, txt = r[0], r[1]
-        if not txt:
-            continue
-        new = fix_nested(txt)
-        new = fix_tokens(new)
-        new = _strip_leading_tabs_outside_box(new)
-        if new != txt:
-            q_updates.append((qid, new))
+        qid, txt, ch_raw = r[0], r[1], r[2]
+        if txt:
+            new = fix_nested(txt)
+            new = fix_tokens(new)
+            new = _strip_leading_tabs_outside_box(new)
+            if new != txt:
+                q_updates.append((qid, new))
+        new_ch, ch_changed = _apply_to_choices(
+            ch_raw, lambda t: fix_tokens(fix_nested(t))
+        )
+        if ch_changed:
+            ch_updates.append((qid, new_ch))
 
     s_updates = []
     rows = conn.execute(
@@ -456,8 +547,11 @@ def auto_fix_structural() -> dict:
                         q_updates)
     n_s = _batch_update(conn, "solutions", "solution_id", "solution_text",
                         s_updates)
+    n_ch = _batch_update(conn, "questions", "question_id", "choices",
+                          ch_updates, jsonb=True)
 
-    return {"questions_fixed": n_q, "solutions_fixed": n_s}
+    return {"questions_fixed": n_q, "solutions_fixed": n_s,
+            "choices_fixed": n_ch}
 
 
 def apply_user_mapping(token: str, action: str, latex: str = "") -> dict:
@@ -506,7 +600,24 @@ def apply_user_mapping(token: str, action: str, latex: str = "") -> dict:
             if new != txt:
                 updates.append((rid, new))
         n += _batch_update(conn, table, idcol, txtcol, updates)
-    return {"affected": n, "note": f"{action} 적용 완료"}
+
+    # choices(JSON) 안의 선지 text 도 동일 매핑 적용
+    # Why: HWP 토큰이 본문뿐 아니라 선지에도 그대로 박혀있을 수 있는데
+    # 텍스트 컬럼만 갱신하면 OVER 같은 토큰이 영영 안 사라짐.
+    ch_rows = conn.execute(
+        "SELECT question_id, choices FROM questions "
+        "WHERE CAST(choices AS TEXT) LIKE ?", (f"%{token}%",)
+    ).fetchall()
+    ch_updates = []
+    for r in ch_rows:
+        qid, raw = r[0], r[1]
+        new_ch, changed = _apply_to_choices(raw, _do_sub)
+        if changed:
+            ch_updates.append((qid, new_ch))
+    n_ch = _batch_update(conn, "questions", "question_id", "choices",
+                          ch_updates, jsonb=True)
+    return {"affected": n + n_ch,
+            "note": f"{action} 적용 완료 (본문/해설 {n} + 선지 {n_ch})"}
 
 
 # ─────────────────────────────────────────────────────────
@@ -965,7 +1076,7 @@ conn = _get_db_connection()
 flagged_rows = conn.execute(
     "SELECT f.flag_id, f.question_id, f.flagged_at, f.reason, "
     "       q.school, q.year, q.semester, q.exam_type, q.question_number, "
-    "       q.chapter, q.question_text "
+    "       q.chapter, q.question_text, q.choices "
     "FROM flagged_problems f "
     "JOIN questions q ON f.question_id = q.question_id "
     "WHERE f.resolved = 0 "
@@ -997,12 +1108,10 @@ else:
             ):
                 for r in flagged_rows:
                     try:
-                        new = fix_tokens(fix_nested(r["question_text"] or ""))
-                        _exec_write(
-                            conn,
-                            "UPDATE questions SET question_text=? "
-                            "WHERE question_id=?",
-                            (new, r["question_id"]),
+                        _fix_one_question(
+                            conn, r["question_id"],
+                            r["question_text"] or "", r["choices"],
+                            fix_nested, fix_tokens,
                         )
                         _exec_write(
                             conn,
@@ -1039,15 +1148,13 @@ else:
             cols[0].code((r['question_text'] or "")[:200], language="markdown")
             if cols[1].button("자동 복구",
                               key=f"fix_one_{r['flag_id']}"):
-                # 단건 자동 복구 (구조 + 토큰 + 사용자 매핑)
+                # 단건 자동 복구 — 본문 + 선지(JSON) 동시 처리.
                 from fix_nested_boxes import fix_text as fix_nested
                 from fix_unmapped_hwp_tokens import fix_text as fix_tokens
-                new = fix_tokens(fix_nested(r['question_text']))
-                _exec_write(
-                    conn,
-                    "UPDATE questions SET question_text=? "
-                    "WHERE question_id=?",
-                    (new, r['question_id']),
+                _fix_one_question(
+                    conn, r['question_id'],
+                    r['question_text'] or "", r['choices'],
+                    fix_nested, fix_tokens,
                 )
                 st.toast("자동 복구 시도 완료. 결과 확인 후 처리완료.")
                 st.rerun()
