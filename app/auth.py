@@ -286,14 +286,21 @@ def _issue_session_cookie(user_id: int) -> None:
 
 
 def refresh_session_cookie() -> None:
-    """이미 로그인된 사용자의 cookie 만료시각을 매 페이지 진입 시 갱신.
+    """이미 로그인된 사용자의 cookie 만료시각을 주기적으로 갱신.
 
-    활동 중인 사용자에게 sliding-session 효과 → 사실상 무기한 로그인 유지.
+    매 페이지 진입마다 호출하면 CookieManager iframe 응답 대기로
+    페이지 hang 사고. 12시간에 1회만 실제 set 실행 → sliding session
+    효과는 유지하면서 페이지 렌더 영향 없음.
     """
     user = st.session_state.get("auth_user")
     if not user:
         return
+    last = st.session_state.get("_last_cookie_refresh_ts", 0)
+    now = time.time()
+    if now - last < 12 * 3600:  # 12시간 미만이면 skip
+        return
     _issue_session_cookie(user.get("user_id"))
+    st.session_state["_last_cookie_refresh_ts"] = now
 
 
 def _clear_session_cookie() -> None:
