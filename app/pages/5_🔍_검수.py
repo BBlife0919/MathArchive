@@ -977,6 +977,54 @@ st.metric("미해결 신고", len(flagged_rows))
 if not flagged_rows:
     st.info("신고된 문항 없음.")
 else:
+    # ─ 한 방 처리: 모든 신고에 자동 복구 + 처리완료 ─
+    fc1, fc2 = st.columns([3, 2])
+    with fc1:
+        st.markdown(
+            f"**🚀 한 방 처리**: 모든 신고({len(flagged_rows)}건)에 "
+            "자동 복구(구조+토큰) 적용 후 처리완료 마킹. "
+            "결과는 처리 후 검색 페이지에서 확인."
+        )
+    with fc2:
+        if st.button("🧹 신고함 한 방 처리 (전체)",
+                     use_container_width=True, type="primary"):
+            from fix_nested_boxes import fix_text as fix_nested
+            from fix_unmapped_hwp_tokens import fix_text as fix_tokens
+            n_fixed = 0
+            n_failed = 0
+            with st.spinner(
+                f"신고 {len(flagged_rows)}건 자동 복구 + 처리완료 중..."
+            ):
+                for r in flagged_rows:
+                    try:
+                        new = fix_tokens(fix_nested(r["question_text"] or ""))
+                        _exec_write(
+                            conn,
+                            "UPDATE questions SET question_text=? "
+                            "WHERE question_id=?",
+                            (new, r["question_id"]),
+                        )
+                        _exec_write(
+                            conn,
+                            "UPDATE flagged_problems SET resolved=1 "
+                            "WHERE flag_id=?",
+                            (r["flag_id"],),
+                        )
+                        n_fixed += 1
+                    except Exception:
+                        n_failed += 1
+            _show_result_banner(
+                "신고함 한 방 처리 완료",
+                f"- 자동 복구 + 처리완료: **{n_fixed}건**\n"
+                f"- 실패: **{n_failed}건**\n\n"
+                "복구된 내용은 검색 페이지에서 확인하세요. "
+                "여전히 이상하면 다시 신고하면 됩니다.",
+            )
+            st.toast(f"✅ 신고 {n_fixed}건 처리 (실패 {n_failed})")
+            st.rerun()
+
+    st.divider()
+
     for r in flagged_rows[:20]:
         with st.container(border=True):
             cols = st.columns([4, 1, 1])
