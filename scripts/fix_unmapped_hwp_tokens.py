@@ -39,6 +39,14 @@ ATTACH_LEFT = [
 ]
 
 REPLACE = [
+    # INF/inf → \infty (IN 매핑보다 먼저 매칭돼야 IN+F 로 갈라지지 않음).
+    # `\lim _{n -> INF}` 같은 HWP 무한대 토큰 복구.
+    (re.compile(r"(?<![A-Za-z\\])INF(?![A-Za-z])"), r"\\infty"),
+    (re.compile(r"(?<![A-Za-z\\])inf(?![A-Za-z])"), r"\\infty"),
+    # `\sqrt{N} of {M}` / `\sqrt N of M` → `\sqrt[N]{M}` (N 제곱근 M).
+    # HWP root 가 `sqrt of` 형태로 잘못 변환된 케이스 복구.
+    (re.compile(r"\\sqrt\s*\{([^{}]+)\}\s*of\s*\{([^{}]+)\}"), r"\\sqrt[\1]{\2}"),
+    (re.compile(r"\\sqrt\s+(\w+)\s+of\s+(\w+)"), r"\\sqrt[\1]{\2}"),
     # 긴 토큰 먼저 (SMALLINTER 가 SMALL+INTER 로 분리되지 않도록)
     (re.compile(r"(?<![A-Za-z\\])SMALLINTER(?![A-Za-z])"), r"\\cap"),
     (re.compile(r"(?<![A-Za-z\\])SMALLINTER(?=[A-Za-z])"), r"\\cap "),
