@@ -46,10 +46,15 @@ def format_meta(row, *, short=False) -> str:
         exam = row["exam_type"] or ""
     except (KeyError, IndexError):
         year = sem = exam = None
+    try:
+        subject = row["subject"] or ""
+    except (KeyError, IndexError):
+        subject = ""
 
     if short:
-        # `[가락고 25-1-1-a]` 형태 — 학교 + (year-grade-semester-examtype)
-        # Why: 학년(grade) 까지 한 줄에 압축해서 시험지 식별을 명확히.
+        # `[가락고 25-1-1-a · 수1]` 형태 — 학교 + (year-grade-semester-examtype) + 과목
+        # Why: 같은 학교·시험에 과목별로 분리된 시험지가 있을 때
+        # 라벨이 똑같아 보이는 회귀를 막기 위해 과목까지 표시.
         head = school
         meta_parts = []
         if year:
@@ -62,6 +67,8 @@ def format_meta(row, *, short=False) -> str:
             meta_parts.append(str(exam))
         if meta_parts:
             head += " " + "-".join(meta_parts)
+        if subject:
+            head += f" · {subject}"
         return f"[{head}] {qn}번"
 
     exam_ko = EXAM_TYPE_KO.get(exam, exam or "")
@@ -248,7 +255,7 @@ def fetch_questions_page(question_ids):
     placeholders = ",".join("?" * len(question_ids))
     sql = f"""
         SELECT q.question_id, q.file_source, q.school, q.region,
-               q.grade, q.year, q.semester, q.exam_type,
+               q.grade, q.year, q.semester, q.exam_type, q.subject,
                q.question_number, q.question_text, q.choices,
                q.answer, q.answer_type, q.points, q.chapter,
                q.difficulty, q.has_image, q.is_subjective, q.error_note,
