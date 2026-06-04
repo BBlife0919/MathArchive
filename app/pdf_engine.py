@@ -94,7 +94,11 @@ def _with_math_protected(text: str, transform) -> str:
     stashed = re.sub(r"\$[^$\n]+?\$", _stash, text)
     rendered = transform(stashed)
     for i, m in enumerate(maths):
-        rendered = rendered.replace(_ph(i), m)
+        # 수식 안 `<`,`>`,`&` 는 HTML escape — 브라우저가 `a<t<b` 의 `<` 를
+        # 태그 시작으로 오인해 DOM/레이아웃이 깨지는 것 방지.
+        # KaTeX auto-render 는 textContent(엔티티 디코딩됨)를 읽으므로 렌더 정상.
+        safe = m.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        rendered = rendered.replace(_ph(i), safe)
     return rendered
 
 
