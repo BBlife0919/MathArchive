@@ -809,6 +809,27 @@ def main():
             f"검색 결과: {total}문항 · {start + 1 if total else 0}–{end}번 표시"
         )
 
+        # 검색 결과 일괄 → 교재 만들기 워크플로우
+        # Why: 단원 여러 개로 교재 만들 때 카드별 +버튼 누르기 비효율.
+        # 필터 좁힌 뒤 한 번에 selected_ids 에 담고 교재 모드로 즉시 이동.
+        if total > 0:
+            bulk_cols = st.columns([3, 2])
+            with bulk_cols[1]:
+                if st.button(
+                    f"📚 검색 결과 전체({total}문항) → 교재로",
+                    use_container_width=True, type="primary",
+                    help="현재 필터의 모든 문항을 교재로 묶기. "
+                         "정렬은 단원순(curriculum) + 난이도 오름차순 자동.",
+                ):
+                    st.session_state.selected_ids = {
+                        r["question_id"] for r in all_meta
+                    }
+                    st.session_state.build_mode = "book"
+                    st.session_state.mini_test_active = False
+                    st.toast(f"✅ {total}문항 선택 → '시험지 미리보기' 탭 클릭",
+                              icon="📚")
+                    st.rerun()
+
         # ── 페이지 윈도우 & 네비게이션 헬퍼 ────────────────────
         def _page_window(current: int, last: int):
             """첫·마지막 페이지 + 현재±2 표시. 사이가 멀면 None('…') 삽입.
@@ -993,8 +1014,22 @@ def main():
                 FROM questions q
                 LEFT JOIN solutions s ON q.question_id = s.question_id
                 WHERE q.question_id IN ({placeholders})
-                ORDER BY q.difficulty, q.chapter
             """, list(selected_ids))
+
+            # 단원(curriculum 순서) → 난이도(하<중<상<킬) 정렬.
+            # Why: 사용자가 여러 단원을 한 번에 묶어서 교재 만들 때
+            # 단원 오름차순 + 단원 내 난이도 오름차순으로 자동 배열.
+            _all_minors = _curr.all_minor_chapters_in_subjects(_curr.subjects())
+            _chap_idx = {c: i for i, c in enumerate(_all_minors)}
+            _DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
+            selected_rows = sorted(
+                selected_rows,
+                key=lambda r: (
+                    _chap_idx.get(r["chapter"], 9999),
+                    _DIFF_ORDER.get(r["difficulty"], 99),
+                    r["question_id"],
+                ),
+            )
 
             # 생성 모드 선택 (시험지 or 교재) — 두 버튼이 각각 "제작 단계" 진입 트리거
             mode = st.session_state.get("build_mode")  # "exam" | "book" | None
