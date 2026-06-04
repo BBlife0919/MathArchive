@@ -10,6 +10,7 @@ from datetime import date, timedelta
 ERROR_CODES = [
     "개념누락", "조건해석실패", "전략선택실패", "계산실수", "시간관리"
 ]
+# 신규 코드 추가 시 app/pages/2_📋_학생카드.py 의 Q_CODES/M_CODES 도 동시 갱신.
 
 DIFF_NEXT = {"하": "중", "중": "상", "상": "킬"}
 
