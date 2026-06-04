@@ -317,9 +317,9 @@ def restore_session_from_cookie() -> None:
     """페이지 로드 시 쿠키에서 자동 로그인 복원. 이미 로그인됐으면 no-op.
 
     extra-streamlit-components 의 CookieManager 는 iframe 컴포넌트로 마운트
-    되며 쿠키를 비동기로 받아옴. 첫 페이지 로드(특히 새 탭) 시 첫 mgr.get()
-    호출에선 마운트 미완료로 None 반환 가능. 이 경우 1회 한정으로 짧게
-    대기 후 rerun 재시도해 컴포넌트가 쿠키를 가져올 시간을 준다.
+    되며 쿠키를 비동기로 받아옴. 새로고침/새 탭 등 fresh mount 시점엔 첫
+    몇 번의 mgr.get() 이 None 을 반환. retry 횟수 부족하면 cookie 가 진짜
+    있어도 로그인 풀림 → 5회까지 누적 ~3.7초 대기.
     """
     if st.session_state.get("auth_user"):
         st.session_state.pop("_cookie_restore_attempts", None)
@@ -333,10 +333,12 @@ def restore_session_from_cookie() -> None:
         token = None
     if not token:
         attempts = st.session_state.get("_cookie_restore_attempts", 0)
-        if attempts < 2:
+        # 누적 sleep: 0.3+0.5+0.7+1.0+1.2 = 3.7s. iframe 마운트가 streamlit cloud
+        # 환경에서 1~2s 걸리는 케이스도 커버. 그래도 None 이면 실제 미로그인.
+        delays = [0.3, 0.5, 0.7, 1.0, 1.2]
+        if attempts < len(delays):
             st.session_state["_cookie_restore_attempts"] = attempts + 1
-            # 첫 시도는 짧게, 두 번째는 더 길게 — iframe 마운트 + 쿠키 수신 여유.
-            time.sleep(0.4 if attempts == 0 else 0.7)
+            time.sleep(delays[attempts])
             st.rerun()
         return
     user_id = _decode_session_token(token)
