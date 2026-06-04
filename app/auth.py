@@ -267,9 +267,10 @@ def _cookie_manager():
 def _issue_session_cookie(user_id: int) -> None:
     """로그인 성공 시 쿠키에 세션 토큰 저장.
 
-    expires_at 을 명시(30일) — extra-streamlit-components 일부 버전이
-    expires_at=None 시 1일짜리로 박아서 자동 풀리는 사고 회피.
-    매 require_auth 시점에 cookie 가 자동 갱신되므로 활동 중에는 무기한.
+    CookieManager.set 기본 same_site='strict' 가 streamlit component
+    iframe 환경에서 새로고침 시 cookie 송신을 차단하는 사고 — 'lax' 로
+    완화. secure=True 로 HTTPS 전용 (streamlit cloud) 명시.
+    expires_at 은 UTC timezone-aware 로 박아 브라우저 해석 모호성 제거.
     """
     mgr = _cookie_manager()
     if mgr is None:
@@ -278,7 +279,10 @@ def _issue_session_cookie(user_id: int) -> None:
     try:
         mgr.set(
             SESSION_COOKIE_NAME, token,
-            expires_at=datetime.now() + timedelta(days=SESSION_TTL_DAYS),
+            expires_at=datetime.now(timezone.utc)
+                       + timedelta(days=SESSION_TTL_DAYS),
+            same_site="lax",
+            secure=True,
         )
     except Exception:
         # 첫 페이지 마운트 직후엔 set 가 실패할 수 있음. 다음 rerun 에 재시도해도 무방.
