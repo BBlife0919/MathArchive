@@ -126,10 +126,83 @@ def _process_boxes(text: str) -> str:
     return re.sub(r"<<BOX_START>>(.*?)<<BOX_END>>", _repl, text, flags=re.DOTALL)
 
 
-def render_question_body(text: str) -> str:
-    """문제 본문 텍스트 → HTML. 박스·수식 보호된 상태."""
-    text = re.sub(r"<<IMG:image\d+>>", "[그림]", text)
+_DOLLAR_RE = re.compile(r"(?<!\\)\$")
+_MATH_SPAN_DOTALL = re.compile(r"(?<!\\)\$(.*?)(?<!\\)\$", re.DOTALL)
+# 수식 안 함수명 (백슬래시 없이 raw) — KaTeX 파싱 실패 유발
+_BARE_FUNC = re.compile(r"(?<![\\A-Za-z])(sin|cos|tan|cot|sec|csc|log|ln|lim|sinh|cosh|tanh)(?![A-Za-z])")
+# `\,` 바로 뒤 위/아래첨자 (헐거운 첨자)
+_LOOSE_SUP = re.compile(r"\\,\s*(\^|_)")
+# 텍스트/연산자 블록 — 이 안의 함수명은 건드리면 안 됨 (\text{sin함수} 등)
+_TEXT_BLOCK = re.compile(r"\\(?:text|mathrm|mbox|operatorname)\s*\{[^{}]*\}")
+
+
+def _normalize_math_inner(s: str) -> str:
+    """`$...$` 내부 LaTeX 교정: 함수명 백슬래시 보충 + 헐거운 첨자 정리.
+
+    단, `\\text{...}`/`\\mathrm{...}` 등 블록 내부 라벨은 placeholder 로 격리해
+    함수명 변환에서 제외 (예: `\\text{sin함수}` 를 깨뜨리지 않음).
+    """
+    blocks: list[str] = []
+
+    def _stash(m):
+        blocks.append(m.group(0))
+        return f"\x00B{len(blocks) - 1}\x00"
+
+    s = _TEXT_BLOCK.sub(_stash, s)
+    s = _BARE_FUNC.sub(r"\\\1", s)
+    s = _LOOSE_SUP.sub(r"\1", s)
+    for i, b in enumerate(blocks):
+        s = s.replace(f"\x00B{i}\x00", b)
+    return s
+
+
+def _normalize_math_text(text: str) -> str:
+    """수식 `$` 정규화 (의미 보존, 렌더·DB 공용).
+
+    1) 균형 `$...$` 안의 줄바꿈/탭을 공백으로 합침 — 여러 줄로 깨진 수식 복원.
+    2) `$...$` 내부 함수명(sin→\\sin)·헐거운 첨자(\\,^→^) 교정 — KaTeX 파싱 실패 방지.
+    3) 그래도 `$` 패리티가 홀수인 줄(닫는 달러 누락)은 줄 끝에 `$` 보충.
+    """
+    text = text or ""
+
+    def _fix(m):
+        inner = re.sub(r"[ \t]*\n[ \t]*", " ", m.group(1))
+        return "$" + _normalize_math_inner(inner) + "$"
+
+    text = _MATH_SPAN_DOTALL.sub(_fix, text)
+    out = []
+    for line in text.split("\n"):
+        if len(_DOLLAR_RE.findall(line)) % 2 == 1:
+            line = line + "$"
+        out.append(line)
+    return "\n".join(out)
+
+
+def render_question_body(text: str, images: dict | None = None) -> str:
+    """문제 본문 텍스트 → HTML. 박스·수식 보호된 상태.
+
+    images: {'image3': url, ...} 가 주어지면 `<<IMG:imageN>>` 를 실제 <img> 로
+    임베드. 없으면(또는 해당 ref 없으면) '[그림]' placeholder 표시.
+    """
+    text = text or ""
+    images = images or {}
+    img_restore: dict[str, str] = {}
+
+    def _img_ph(m):
+        ref = m.group(1)
+        key = f"@XIMGX{len(img_restore)}@"
+        url = images.get(ref)
+        if url:
+            img_restore[key] = (
+                f'<img class="q-img" src="{_html.escape(url, quote=True)}" alt="">'
+            )
+        else:
+            img_restore[key] = '<span class="q-img-missing">[그림]</span>'
+        return key
+
+    text = re.sub(r"<<IMG:(image\d+)>>", _img_ph, text)
     text = re.sub(r"\n{2,}", "\n\n", text)
+    text = _normalize_math_text(text)
 
     parts: list[str] = []
     last = 0
@@ -152,6 +225,8 @@ def render_question_body(text: str) -> str:
     # <br> 스팸 정리
     html = re.sub(r'(?:<br>\s*){2,}(<div class="cond-box">)', r'<br>\1', html)
     html = re.sub(r'(</div>)(?:\s*<br>){2,}', r'\1<br>', html)
+    for key, tag in img_restore.items():
+        html = html.replace(key, tag)
     return html
 
 
@@ -627,7 +702,7 @@ h2.exam-subtitle {
     height: 100vh;
     padding: 22mm 20mm !important;
     box-sizing: border-box;
-    font-family: 'Pretendard', 'Nanum Myeongjo', sans-serif;
+    font-family: 'Pretendard', 'Pretendard Variable', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
     overflow: hidden;
 }
 .cd-header {
@@ -739,6 +814,376 @@ h2.exam-subtitle {
     max-width: 26mm;
     max-height: 18mm;
     opacity: 0.92;
+}
+
+/* ── 교재 본문 페이지 (image #208 스타일) ─────── */
+.bp-page {
+    position: relative;
+    min-height: 275mm;
+    padding: 0 18mm 0 0 !important;  /* 우측 인덱스 자리 확보 */
+    page-break-after: always;
+}
+.bp-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 0;
+    margin: 0 0 8mm 0;
+    padding: 0 0 4mm 0;
+    font-weight: 800;
+}
+.bp-head-left {
+    font-size: 11pt;
+    color: #0f172a;
+    letter-spacing: 0.5pt;
+}
+.bp-head-right {
+    font-size: 11pt;
+    color: #1e3a8a;
+    letter-spacing: 1pt;
+}
+.bp-head-right .roman {
+    color: #1e3a8a;
+    margin-right: 6pt;
+    font-weight: 900;
+}
+.bp-side {
+    position: absolute;
+    top: 22mm;
+    right: 0;
+    width: 14mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4mm;
+    z-index: 5;
+}
+.bp-side-vertical {
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 9pt;
+    font-weight: 800;
+    letter-spacing: 6pt;
+    padding: 6mm 0;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    width: 9mm;
+    text-align: center;
+}
+.bp-side-roman {
+    background: #1e3a8a;
+    color: #ffffff;
+    font-size: 22pt;
+    font-weight: 900;
+    width: 14mm;
+    height: 14mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bp-side-tail {
+    background: #c7d2fe;
+    width: 9mm;
+    flex: 1;
+    min-height: 70mm;
+}
+
+/* (구) book-kp 슬롯 CSS 제거 — 아래쪽 통합 정의(.slot.book-kp flex-column)로 일원화 */
+
+/* ── 교재 표지 (image #209 스타일) ─────── */
+.book-cover {
+    position: relative;
+    height: 100vh;
+    padding: 25mm 22mm !important;
+    page-break-after: always;
+    background: #ffffff;
+    color: #0f172a;
+    box-sizing: border-box;
+}
+.book-cover .bc-tl, .book-cover .bc-tr,
+.book-cover .bc-bl, .book-cover .bc-br {
+    position: absolute;
+    width: 18mm; height: 18mm;
+    border-color: #1e3a8a;
+    border-style: solid;
+    content: '';
+}
+.book-cover .bc-tl { top: 8mm; left: 8mm; border-width: 1.2pt 0 0 1.2pt; }
+.book-cover .bc-tr { top: 8mm; right: 8mm; border-width: 1.2pt 1.2pt 0 0; }
+.book-cover .bc-bl { bottom: 8mm; left: 8mm; border-width: 0 0 1.2pt 1.2pt; }
+.book-cover .bc-br { bottom: 8mm; right: 8mm; border-width: 0 1.2pt 1.2pt 0; }
+.book-cover .bc-kicker {
+    text-align: center;
+    font-size: 11pt;
+    font-weight: 800;
+    letter-spacing: 8pt;
+    color: #1e3a8a;
+    margin-top: 30mm;
+}
+.book-cover .bc-kicker-rule {
+    width: 14mm;
+    height: 1pt;
+    background: #1e3a8a;
+    margin: 3mm auto 0;
+}
+.book-cover .bc-title-main {
+    text-align: center;
+    margin-top: 26mm;
+    font-size: 64pt;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+    letter-spacing: -2pt;
+}
+.book-cover .bc-title-mid {
+    text-align: center;
+    margin-top: 10mm;
+    font-size: 18pt;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: 8pt;
+}
+.book-cover .bc-title-big {
+    text-align: center;
+    margin-top: 10mm;
+    font-size: 96pt;
+    font-weight: 900;
+    color: #1e3a8a;
+    letter-spacing: -2pt;
+    line-height: 1;
+}
+.book-cover .bc-big-rule {
+    width: 60mm;
+    height: 1pt;
+    background: #0f172a;
+    margin: 4mm auto 0;
+}
+/* INSTRUCTOR 박스 */
+.book-cover .bc-instructor {
+    margin: 18mm auto 0;
+    width: 60mm;
+    border: 1pt solid #1e3a8a;
+    border-radius: 4mm;
+    padding: 4mm 0;
+    text-align: center;
+    font-size: 18pt;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 2pt;
+}
+.book-cover .bc-footer {
+    position: absolute;
+    bottom: 22mm; left: 22mm; right: 22mm;
+    display: flex; justify-content: space-between; align-items: flex-end;
+}
+.book-cover .bc-footer-left {
+    font-size: 11pt;
+    font-weight: 800;
+    color: #1e3a8a;
+    line-height: 1.6;
+}
+.book-cover .bc-footer-left .sub {
+    color: #475569;
+    font-weight: 600;
+    font-size: 10pt;
+}
+.book-cover .bc-logo {
+    max-height: 22mm;
+    max-width: 30mm;
+}
+
+/* ── 본문 페이지 (image #210, #211 스타일) ─── */
+.bp-page .bp-head {
+    border-bottom: 1pt solid #cbd5e1;
+    padding: 0 0 2mm 0;
+    margin: 0 0 6mm 0;
+}
+.bp-page .bp-head-left {
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 12pt;
+    letter-spacing: 1.5pt;
+}
+.bp-page .bp-head-right {
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 11pt;
+    letter-spacing: 0.5pt;
+}
+.bp-page .bp-head-right .roman {
+    color: #0f172a;
+    font-weight: 900;
+    margin-right: 3pt;
+}
+/* 우측 인덱스 — PART 박스 (어둠) + 알파벳 박스 (골드) */
+.bp-page .bp-side {
+    position: absolute;
+    top: 22mm;
+    right: 4mm;
+    width: 10mm;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2mm;
+    z-index: 5;
+}
+.bp-page .bp-side .bp-side-part {
+    background: #1e293b;
+    color: #ffffff;
+    font-size: 9pt;
+    font-weight: 800;
+    letter-spacing: 4pt;
+    padding: 10mm 0;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    text-align: center;
+    width: 10mm;
+}
+.bp-page .bp-side .bp-side-letter {
+    background: #c8a96a;
+    color: #ffffff;
+    font-size: 22pt;
+    font-weight: 900;
+    width: 10mm;
+    height: 14mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bp-page .bp-side .bp-side-tail {
+    width: 1.2pt;
+    margin: 0 auto;
+    background: #c8a96a;
+    flex: 1;
+    min-height: 50mm;
+}
+
+/* 새 교재 슬롯 — A·01 + 1차/2차/3차/OX + KEY POINT + MEMO */
+.slot.book-kp {
+    border-right: none !important;
+    padding-right: 4mm !important;
+    display: flex;
+    flex-direction: column;
+}
+.slot.book-kp .kp-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 4mm;
+    margin-bottom: 3mm;
+}
+.slot.book-kp .kp-num-block {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.slot.book-kp .kp-num {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 22pt;
+    font-weight: 900;
+    color: #c8a96a;
+    letter-spacing: -0.5pt;
+    line-height: 1;
+}
+.slot.book-kp .kp-checks {
+    margin-top: 2mm;
+    font-size: 8pt;
+    font-weight: 700;
+    color: #475569;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5mm;
+}
+.slot.book-kp .kp-checks .row {
+    display: flex;
+    gap: 2.5mm;
+}
+.slot.book-kp .kp-checks .cb::before {
+    content: '☐';
+    margin-right: 0.5mm;
+    color: #94a3b8;
+}
+.slot.book-kp .kp-right {
+    flex: 1;
+}
+.slot.book-kp .kp-source {
+    font-size: 9pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1.5mm;
+}
+.slot.book-kp .q-body {
+    font-size: 10.5pt;
+    line-height: 1.65;
+    color: #1f2937;
+}
+.slot.book-kp .q-choices {
+    margin-top: 3mm;
+    font-size: 10pt;
+    line-height: 1.7;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 6mm;
+    row-gap: 2mm;
+}
+.slot.book-kp .q-choices .choice { white-space: nowrap; }
+.slot.book-kp .q-choices .choice .circ {
+    color: #1e3a8a;
+    font-weight: 800;
+    margin-right: 1.2mm;
+}
+.q-img {
+    display: block;
+    max-width: 88%;
+    max-height: 70mm;
+    margin: 3mm auto;
+    object-fit: contain;
+}
+.q-img-missing { color: #b00; font-size: 9pt; }
+/* KEY POINT + MEMO 박스 — 슬롯 하단 */
+.slot.book-kp .kp-keypoint {
+    margin-top: auto;
+    padding-top: 8mm;
+    display: flex;
+    align-items: stretch;
+    border-top: 0;
+    gap: 0;
+}
+.slot.book-kp .kp-keypoint .kp-label {
+    background: transparent;
+    color: #c8a96a;
+    font-size: 11pt;
+    font-weight: 900;
+    letter-spacing: 1.5pt;
+    padding: 2.5mm 4mm;
+    border: 1pt solid #d6b87a;
+    border-right: 0;
+    display: flex;
+    align-items: center;
+}
+.slot.book-kp .kp-keypoint .kp-line {
+    flex: 1;
+    border: 1pt solid #d6b87a;
+    padding: 2.5mm 4mm;
+    color: #94a3b8;
+    font-size: 9pt;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+}
+.slot.book-kp .kp-memo {
+    margin-top: 3mm;
+}
+.slot.book-kp .kp-memo .kp-memo-label {
+    font-size: 9pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1mm;
+    letter-spacing: 1pt;
+}
+.slot.book-kp .kp-memo .kp-memo-line {
+    border-bottom: 0.5pt solid #cbd5e1;
+    height: 6mm;
 }
 """
 
@@ -865,14 +1310,15 @@ def _group_by_chapter(questions: list[dict]) -> list[tuple[str, list[dict]]]:
 
 def _build_chapter_sections(
     questions: list[dict],
-) -> list[tuple[int, int, str, str, list[dict]]]:
-    """문제 리스트를 (major_no, section_no, major, minor, qs) 시퀀스로.
+) -> list[tuple[int, int, str, str, str, list[dict]]]:
+    """문제 리스트를 (major_no, section_no, letter, major, minor, qs) 시퀀스로.
 
-    major_no 는 대단원 등장 순서대로 1, 2, 3.
-    section_no 는 같은 대단원 안에서 1, 2, 3 (대단원 바뀌면 다시 1).
+    major_no = 대단원 번호 (PART 1, PART 2 ...).
+    section_no = 같은 대단원 안 소단원 번호 (대단원 바뀌면 다시 1).
+    letter = 같은 대단원 안 소단원 알파벳 ('A', 'B', 'C' ...).
     """
     groups = _group_by_chapter(questions)
-    out: list[tuple[int, int, str, str, list[dict]]] = []
+    out: list[tuple[int, int, str, str, str, list[dict]]] = []
     major_no = 0
     section_no = 0
     last_major: str | None = None
@@ -884,78 +1330,72 @@ def _build_chapter_sections(
             last_major = major
         else:
             section_no += 1
-        out.append((major_no, section_no, major, minor, qs))
+        letter = chr(ord("A") + section_no - 1) if section_no <= 26 else "?"
+        out.append((major_no, section_no, letter, major, minor, qs))
     return out
 
 
 def _render_slot(i: int, q: dict, layout: str, include_source: bool,
-                  include_difficulty: bool = False) -> str:
+                  include_difficulty: bool = False,
+                  letter: str = "") -> str:
     """문항 슬롯 HTML.
 
-    배점은 파서가 본문 꼬리에 이미 `[N점]` 형태로 삽입하므로
-    헤더에서는 중복 제거.
-    - 시험지 모드: 기존 `N번 [출처]` 한 줄 헤더
-    - 교재 모드(include_difficulty=True): 큰 Q번호 + pill 태그
+    - 시험지 모드: `N번 [출처]` 한 줄 헤더
+    - 교재 모드(include_difficulty=True): `A·01` 번호 + 1차/2차/3차/OX
+      체크박스 + 출처 한 줄 + 본문 + 선지 + 하단 KEY POINT / MEMO
+    letter: 소단원 인덱스 알파벳 (A,B,C). 슬롯 번호 prefix.
     """
-    body_html = render_question_body(q.get("question_text") or "")
+    body_html = render_question_body(q.get("question_text") or "", q.get("images"))
     choices_html = format_choices(q.get("choices"), book_mode=include_difficulty)
 
     if include_difficulty:
-        # 교재 카드 — SUMMIT POINT 스타일 (네이비+골드 + Key Point + 메모란 + 풀이기록)
-        tags: list[str] = []
-        if q.get("chapter"):
-            tags.append(f'<span class="q-tag">{_html.escape(str(q["chapter"]))}</span>')
-        diff = q.get("difficulty")
-        if diff:
-            tags.append(
-                f'<span class="q-tag diff-{_html.escape(str(diff))}">'
-                f'{_html.escape(str(diff))}난이도</span>'
-            )
-        src_parts = []
-        if q.get("school"):
-            src_parts.append(str(q["school"]))
+        # 출처 메타 (image #211 처럼 슬롯 우측 본문 위 한 줄)
+        meta_parts = []
         if q.get("year") and q.get("semester"):
             exam = EXAM_TYPE_KO.get(q.get("exam_type"), "")
-            src_parts.append(f'{q["year"]}년 {q["semester"]}학기 {exam}'.strip())
-        if src_parts and include_source:
-            tags.append(
-                f'<span class="q-tag">{_html.escape(" · ".join(src_parts))}</span>'
-            )
-        tags_html = (
-            '<div class="q-tags">' + "".join(tags) + '</div>' if tags else ""
+            meta_parts.append(f'{q["year"]}년 {q["semester"]}학기 {exam}'.strip())
+        if q.get("school"):
+            meta_parts.append(str(q["school"]))
+        diff = q.get("difficulty") or ""
+        if diff:
+            meta_parts.append(f"[{diff}]")
+        meta_html = (
+            f'<div class="kp-source">{_html.escape(" · ".join(meta_parts))}</div>'
+            if meta_parts and include_source else ""
         )
-        # Key Point + 메모란 + 풀이기록 (SUMMIT POINT 디자인)
-        summit_extras = (
-            '<div class="summit-kp">'
-            '<span class="summit-kp-label">KEY POINT</span>'
-            '<span class="summit-kp-line"></span>'
-            '</div>'
-            '<div class="summit-memo">'
-            '<div class="summit-memo-line"></div>'
-            '<div class="summit-memo-line"></div>'
-            '<div class="summit-memo-line"></div>'
-            '<div class="summit-memo-line"></div>'
-            '</div>'
-            '<div class="summit-tries">'
-            '<span class="try-item"><span class="try-label">1차</span>'
-            '<span class="try-box"></span></span>'
-            '<span class="try-item"><span class="try-label">2차</span>'
-            '<span class="try-box"></span></span>'
-            '<span class="try-item"><span class="try-label">3차</span>'
-            '<span class="try-box"></span></span>'
-            '</div>'
-        )
+        slot_label = f'{letter}·{i:02d}' if letter else f'{i:02d}'
         return (
-            f'<div class="slot book-card {layout}">'
-            f'<div class="book-header">'
-            f'<span class="q-kicker">PROBLEM</span>'
-            f'<span class="q-number">Q{i}</span>'
-            f'{tags_html}'
+            f'<div class="slot book-kp {layout}">'
+            f'<div class="kp-head">'
+            f'<div class="kp-num-block">'
+            f'<span class="kp-num">{_html.escape(slot_label)}</span>'
+            f'<div class="kp-checks">'
+            f'<div class="row">'
+            f'<span class="cb">1차</span><span class="cb">2차</span>'
+            f'<span class="cb">3차</span>'
             f'</div>'
+            f'<div class="row">'
+            f'<span class="cb">O</span><span class="cb">X</span>'
+            f'</div>'
+            f'</div>'
+            f'</div>'
+            f'<div class="kp-right">'
+            f'{meta_html}'
             f'<div class="q-body">{body_html}</div>'
             + (f'<div class="q-choices">{choices_html}</div>' if choices_html else "")
-            + summit_extras
             + '</div>'
+            '</div>'
+            # 슬롯 하단 KEY POINT + MEMO
+            '<div class="kp-keypoint">'
+            '<span class="kp-label">KEY POINT</span>'
+            '<span class="kp-line">이 문제 핵심 한 줄로 정리</span>'
+            '</div>'
+            '<div class="kp-memo">'
+            '<div class="kp-memo-label">MEMO</div>'
+            '<div class="kp-memo-line"></div>'
+            '<div class="kp-memo-line"></div>'
+            '</div>'
+            '</div>'
         )
 
     # 시험지 모드 (기존 그대로)
@@ -1030,23 +1470,27 @@ def _problem_pages_html(questions: list[dict], include_source: bool,
                          first_col_extra_html: str = "",
                          per_page_header_fn=None,
                          per_page_footer_fn=None,
-                         body_class: str = "") -> str:
+                         body_class: str = "",
+                         start_slot: int = 1,
+                         page_class: str = "",
+                         side_html: str = "",
+                         slot_letter: str = "") -> str:
     """문제 섹션(2단 레이아웃)의 HTML.
 
-    header_html: 첫 page 에만 삽입되는 정적 헤더 (기존 디자인용).
-    first_col_extra_html: 첫 페이지 좌측 컬럼 맨 위 prepend.
-    per_page_header_fn(page_idx, total_pages) -> HTML: 매 페이지 헤더 동적 생성
-        (수능형 모의고사처럼 페이지별로 헤더가 다른 경우).
-    per_page_footer_fn(page_idx, total_pages) -> HTML: 매 페이지 푸터.
-    body_class: page-body 요소에 추가되는 클래스 (디자인별 스타일링).
+    start_slot: 슬롯 번호 시작값 (책 전체 누적 번호 유지용).
+    page_class: section.page 에 추가되는 클래스 (예: 'bp-page').
+    side_html: 매 페이지 본문 시작 직전에 삽입되는 절대-위치 aside HTML.
     """
     pages = paginate(questions, overrides=overrides)
     total_pages = len(pages)
     parts: list[str] = []
-    slot_num = 1
+    slot_num = start_slot
     body_class_attr = f"page-body {body_class}".strip()
+    page_class_attr = f"page {page_class}".strip()
     for idx, page in enumerate(pages):
-        parts.append('<section class="page">')
+        parts.append(f'<section class="{page_class_attr}">')
+        if side_html:
+            parts.append(side_html)
         # 동적 페이지 헤더 우선 (모의고사 양식). 없으면 정적 header_html (1쪽만).
         if per_page_header_fn:
             parts.append(per_page_header_fn(idx + 1, total_pages))
@@ -1062,7 +1506,8 @@ def _problem_pages_html(questions: list[dict], include_source: bool,
                 parts.append(first_col_extra_html)
             for (q, layout) in col:
                 parts.append(_render_slot(
-                    slot_num, q, layout, include_source, include_difficulty
+                    slot_num, q, layout, include_source, include_difficulty,
+                    letter=slot_letter,
                 ))
                 slot_num += 1
             parts.append('</div>')
@@ -1071,7 +1516,13 @@ def _problem_pages_html(questions: list[dict], include_source: bool,
         if per_page_footer_fn:
             parts.append(per_page_footer_fn(idx + 1, total_pages))
         parts.append('</section>')
-    return "\n".join(parts)
+    return "\n".join(parts), slot_num
+
+
+def _problem_pages_html_simple(*args, **kwargs) -> str:
+    """기존 호출자 호환용 — 튜플의 첫 요소(HTML)만 반환."""
+    html, _ = _problem_pages_html(*args, **kwargs)
+    return html
 
 
 def build_exam_html(questions: list[dict], title: str, include_source: bool,
@@ -1081,7 +1532,7 @@ def build_exam_html(questions: list[dict], title: str, include_source: bool,
                      include_difficulty: bool = False) -> str:
     logo_uri = _logo_data_uri(logo_path)
     header = _render_header(title, subtitle, logo_uri)
-    body = _problem_pages_html(
+    body, _ = _problem_pages_html(
         questions, include_source, overrides, header, include_difficulty
     )
     return _HTML_WRAP.format(
@@ -1134,7 +1585,7 @@ def _render_solution_items(questions: list[dict], include_source: bool,
     for i, q in enumerate(questions, 1):
         sol_raw = q.get("solution_text") or ""
         sol_body = (
-            render_question_body(sol_raw) if sol_raw
+            render_question_body(sol_raw, q.get("images_sol") or q.get("images")) if sol_raw
             else '<p class="no-sol">해설 없음</p>'
         )
         raw_ans = q.get("answer")
@@ -1152,6 +1603,87 @@ def _render_solution_items(questions: list[dict], include_source: bool,
     return f'<div class="solutions-flow">{"".join(items)}</div>'
 
 
+def _render_book_cover(
+    title_main: str,
+    title_mid: str = "",
+    big_word: str = "FINAL",
+    instructor: str = "",
+    kicker_top: str = "MATH WORKBOOK · 2026",
+    footer_left_main: str = "",
+    footer_left_sub: str = "",
+    logo_uri: str | None = None,
+) -> str:
+    """교재 표지 (image #209 디자인).
+
+    title_main: 큰 메인 제목 (예: 'KERNEL POINT')
+    title_mid: 그 아래 자간 넓은 부제 (예: '대수 1학기 기말 내신기출')
+    big_word: 큰 파란색 워드 (예: 'FINAL')
+    instructor: 둥근 박스 안 강사명 (예: '이영우 T')
+    """
+    mid_html = (
+        f'<div class="bc-title-mid">{_html.escape(title_mid)}</div>'
+        if title_mid else ""
+    )
+    instructor_html = (
+        f'<div class="bc-instructor">{_html.escape(instructor)}</div>'
+        if instructor else ""
+    )
+    logo_html = (
+        f'<img class="bc-logo" src="{logo_uri}" alt="logo">' if logo_uri else ""
+    )
+    footer_html = ""
+    if footer_left_main or footer_left_sub or logo_uri:
+        footer_html = (
+            '<div class="bc-footer">'
+            '<div class="bc-footer-left">'
+            f'{_html.escape(footer_left_main)}'
+            f'{"<br>" if footer_left_sub else ""}'
+            f'<span class="sub">{_html.escape(footer_left_sub)}</span>'
+            '</div>'
+            f'{logo_html}'
+            '</div>'
+        )
+    return (
+        '<section class="page book-cover">'
+        '<span class="bc-tl"></span><span class="bc-tr"></span>'
+        '<span class="bc-bl"></span><span class="bc-br"></span>'
+        f'<div class="bc-kicker">{_html.escape(kicker_top)}</div>'
+        '<div class="bc-kicker-rule"></div>'
+        f'<div class="bc-title-main">{_html.escape(title_main)}</div>'
+        f'{mid_html}'
+        f'<div class="bc-title-big">{_html.escape(big_word)}</div>'
+        '<div class="bc-big-rule"></div>'
+        f'{instructor_html}'
+        f'{footer_html}'
+        '</section>'
+    )
+
+
+def _render_book_page_head(running_left: str, part_no: int,
+                            major_name: str) -> str:
+    """본문 페이지 좌상단 / 우상단 머릿말."""
+    return (
+        '<header class="bp-head">'
+        f'<span class="bp-head-left">{_html.escape(running_left)}</span>'
+        '<span class="bp-head-right">'
+        f'<span class="roman">PART {part_no}</span>'
+        f'· {_html.escape(major_name)}'
+        '</span>'
+        '</header>'
+    )
+
+
+def _render_book_page_side(part_no: int, letter: str) -> str:
+    """본문 페이지 우측 인덱스 바 (PART {n} 어둠박스 + 알파벳 골드박스)."""
+    return (
+        '<aside class="bp-side">'
+        f'<div class="bp-side-part">PART {part_no}</div>'
+        f'<div class="bp-side-letter">{_html.escape(letter)}</div>'
+        '<div class="bp-side-tail"></div>'
+        '</aside>'
+    )
+
+
 def build_book_html(questions: list[dict], title: str, include_source: bool = True,
                      overrides: dict | None = None,
                      subtitle: str | None = None,
@@ -1160,30 +1692,35 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      kicker_text: str | None = None,
                      divider_meta_top: str | None = None,
                      divider_footer_title: str | None = None,
-                     divider_footer_sub: str | None = None) -> str:
-    """교재 HTML: 챕터 디바이더 + 문제(2단 SUMMIT POINT 카드) + 빠른정답 + 해설.
-
-    각 소단원(chapter) 시작마다 화이트+블루 디바이더 페이지 자동 삽입.
-    대단원(curriculum 매핑)이 바뀌면 로마자 번호 증가 (I, II, III),
-    같은 대단원 안의 소단원은 SECTION 번호 증가 (1, 2, 3).
-
-    divider_meta_top: 우상단 메타 (예: '대수 1학기 기말 · FINAL')
-    divider_footer_title: 좌하단 제목 (생략 시 title 사용)
-    divider_footer_sub: 좌하단 부제 (예: '이영우 T')
-    """
+                     divider_footer_sub: str | None = None,
+                     cover_kicker: str | None = None,
+                     cover_big_word: str | None = None,
+                     cover_main_title: str | None = None,
+                     cover_tagline: str | None = None,
+                     cover_footer_main: str | None = None,
+                     cover_footer_sub: str | None = None,
+                     page_running_left: str | None = None) -> str:
+    """교재 HTML: 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설."""
     logo_uri = _logo_data_uri(logo_path)
-    header = _render_header(title, subtitle, logo_uri,
-                             kicker_mark=kicker_mark,
-                             kicker_text=kicker_text)
     # 디바이더 메타 디폴트
     if divider_footer_title is None:
         divider_footer_title = title
-    # 챕터별 그룹화 → (major_no, section_no, major, minor, qs) 시퀀스
+    # 표지 (책 가장 앞)
+    cover_html = _render_book_cover(
+        title_main=cover_main_title or title,
+        title_mid=cover_tagline or subtitle or "",
+        big_word=cover_big_word or "FINAL",
+        instructor=divider_footer_sub or "이영우 T",
+        kicker_top=cover_kicker or "MATH WORKBOOK · 2026",
+        footer_left_main=cover_footer_main or "Algebra Final Workbook · 2026",
+        footer_left_sub=cover_footer_sub or "필수유형으로 끝내는 기말 마무리",
+        logo_uri=logo_uri,
+    )
+    # 챕터별 그룹화 → (major_no, section_no, letter, major, minor, qs) 시퀀스
     sections = _build_chapter_sections(questions)
-    body_parts: list[str] = []
-    for idx, (major_no, section_no, major, minor, ch_qs) in enumerate(
-        sections, 1
-    ):
+    body_parts: list[str] = [cover_html]
+    running_left = page_running_left or title or "KERNEL POINT"
+    for major_no, section_no, letter, major, minor, ch_qs in sections:
         body_parts.append(_render_chapter_divider(
             major_no, section_no, major, minor,
             meta_top=divider_meta_top or "",
@@ -1191,12 +1728,21 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
             footer_sub=divider_footer_sub or "",
             logo_uri=logo_uri,
         ))
-        # 첫 챕터의 본문 페이지에만 헤더 표시 (전체 책 제목/로고)
-        chapter_header = header if idx == 1 else ""
-        body_parts.append(_problem_pages_html(
-            ch_qs, include_source, overrides, chapter_header,
-            include_difficulty=True
-        ))
+        # 매 페이지 헤더/우측 인덱스 클로저
+        def _hdr(idx_, total_, _p=major_no, _m=major):
+            return _render_book_page_head(running_left, _p, _m)
+        side = _render_book_page_side(major_no, letter)
+        # 슬롯 번호는 소단원(letter)마다 1부터 다시 시작 (A·01, A·02, ..., B·01)
+        body_html, _ = _problem_pages_html(
+            ch_qs, include_source, overrides, "",
+            include_difficulty=True,
+            per_page_header_fn=_hdr,
+            page_class="bp-page",
+            side_html=side,
+            start_slot=1,
+            slot_letter=letter,
+        )
+        body_parts.append(body_html)
     qa_html = (
         '<section class="page qa-page">'
         '<h2 class="section-title">빠른 정답</h2>'
@@ -1350,7 +1896,7 @@ def build_designed_exam_html(questions: list[dict],
         body_class = inner_spec.get("body_class", "")
 
     # 본문
-    body = _problem_pages_html(
+    body, _ = _problem_pages_html(
         questions, include_source, overrides,
         inner_header, include_difficulty,
         first_col_extra_html=inner_col_extra,
@@ -1392,8 +1938,15 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       kicker_text: str | None = None,
                       divider_meta_top: str | None = None,
                       divider_footer_title: str | None = None,
-                      divider_footer_sub: str | None = None) -> bytes:
-    """교재 PDF 생성. 챕터 디바이더 → 문제 → 빠른정답 → 해설 순."""
+                      divider_footer_sub: str | None = None,
+                      cover_kicker: str | None = None,
+                      cover_big_word: str | None = None,
+                      cover_main_title: str | None = None,
+                      cover_tagline: str | None = None,
+                      cover_footer_main: str | None = None,
+                      cover_footer_sub: str | None = None,
+                      page_running_left: str | None = None) -> bytes:
+    """교재 PDF 생성. 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
         subtitle=subtitle, logo_path=logo_path,
@@ -1401,5 +1954,12 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         divider_meta_top=divider_meta_top,
         divider_footer_title=divider_footer_title,
         divider_footer_sub=divider_footer_sub,
+        cover_kicker=cover_kicker,
+        cover_big_word=cover_big_word,
+        cover_main_title=cover_main_title,
+        cover_tagline=cover_tagline,
+        cover_footer_main=cover_footer_main,
+        cover_footer_sub=cover_footer_sub,
+        page_running_left=page_running_left,
     )
     return html_to_pdf_bytes(html)
