@@ -71,6 +71,25 @@ def format_choices(choices_json, book_mode: bool = False) -> str:
     )
 
 
+def _choice_col_class(choices_json) -> str:
+    """선지 배열 클래스. 기본 3/2(cols3), 선지가 길면 2/2/1(cols2)."""
+    try:
+        choices = json.loads(choices_json) if isinstance(choices_json, str) else choices_json
+    except Exception:
+        return "cols3"
+    if not choices:
+        return "cols3"
+
+    def vlen(t):
+        t = t or ""
+        # 분수/루트/적분 등은 시각적으로 넓어 가중치
+        wide = len(re.findall(r"\\d?frac|\\sqrt|\\sum|\\int|\\lim", t))
+        s = re.sub(r"\\[a-zA-Z]+|[${}\\^_~\\\\]|\s", "", t)
+        return len(s) + wide * 4
+
+    return "cols2" if max(vlen(c.get("text", "")) for c in choices) > 13 else "cols3"
+
+
 # ── HTML-safe 변환 (수식 보호) ────────────────────────────
 def _escape_pseudo_tags(s: str) -> str:
     """`<보기>` 같이 실제 HTML 태그가 아닌 꺾쇠를 escape."""
@@ -121,6 +140,54 @@ def _render_box_content(body: str) -> str:
         rendered,
     )
     return rendered
+
+
+_BOGI_HDR = re.compile(r"<\s*보\s*기\s*>")
+
+
+def _normalize_boxes(text: str) -> str:
+    """중첩된 `<<BOX_START>>`/`<<BOX_END>>` 평탄화 + 박스 내부 중복(<보기>) 제거.
+
+    parse_hwpx 가 `<보기>` 를 박스 안에 박스로 중첩하고 내용을 두 번 출력하는
+    사고를 정리 → 하나의 박스에 `<보기>`+ㄱㄴㄷ 이 한 번만 들어가게 한다.
+    """
+    if "<<BOX_START>>" not in text:
+        return text
+    # 1) 최외곽 박스만 남기고 내부 마커 제거 (depth 스택)
+    out = []
+    depth = 0
+    for tok in re.split(r"(<<BOX_START>>|<<BOX_END>>)", text):
+        if tok == "<<BOX_START>>":
+            if depth == 0:
+                out.append(tok)
+            depth += 1
+        elif tok == "<<BOX_END>>":
+            depth = max(0, depth - 1)
+            if depth == 0:
+                out.append(tok)
+        else:
+            out.append(tok)
+    flat = "".join(out)
+
+    # 2) 박스 내부 <보기> 가 2회 이상이면 첫 블록만 (중복 제거)
+    def _dedup(m):
+        inner = m.group(1)
+        hdrs = [mm.start() for mm in _BOGI_HDR.finditer(inner)]
+        if len(hdrs) >= 2:
+            inner = inner[:hdrs[1]].rstrip()
+        return "<<BOX_START>>" + inner + "<<BOX_END>>"
+
+    flat = re.sub(r"<<BOX_START>>(.*?)<<BOX_END>>", _dedup, flat, flags=re.DOTALL)
+    # 3) 박스 끝난 뒤 같은 <보기> 블록이 plain 으로 반복되면 제거 (박스 밖 중복)
+    def _drop_trailing_dup(m):
+        box, after = m.group(1), m.group(2)
+        if _BOGI_HDR.search(after):
+            return box
+        return m.group(0)
+
+    flat = re.sub(r"(<<BOX_END>>)\s*(<\s*보\s*기\s*>.*?)(?=<<BOX_START>>|$)",
+                  _drop_trailing_dup, flat, flags=re.DOTALL)
+    return flat
 
 
 def _process_boxes(text: str) -> str:
@@ -206,6 +273,7 @@ def render_question_body(text: str, images: dict | None = None) -> str:
 
     text = re.sub(r"<<IMG:(image\d+)>>", _img_ph, text)
     text = re.sub(r"\n{2,}", "\n\n", text)
+    text = _normalize_boxes(text)
     text = _normalize_math_text(text)
 
     parts: list[str] = []
@@ -824,7 +892,7 @@ h2.exam-subtitle {
 .bp-page {
     position: relative;
     min-height: 275mm;
-    padding: 0 18mm 0 0 !important;  /* 우측 인덱스 자리 확보 */
+    padding: 0 13mm 0 0 !important;  /* 우측 인덱스 자리 확보 (여백 축소) */
     page-break-after: always;
 }
 .bp-head {
@@ -1023,7 +1091,7 @@ h2.exam-subtitle {
 .bp-page .bp-side {
     position: absolute;
     top: 22mm;
-    right: 4mm;
+    right: 2mm;
     width: 10mm;
     display: flex;
     flex-direction: column;
@@ -1127,14 +1195,24 @@ h2.exam-subtitle {
     line-height: 1.7;
     display: flex;
     flex-wrap: wrap;
-    column-gap: 6mm;
-    row-gap: 2mm;
+    column-gap: 3mm;
+    row-gap: 2.5mm;
 }
-.slot.book-kp .q-choices .choice { white-space: nowrap; }
+/* 기본 3/2 배열 (한 줄에 3개) */
+.slot.book-kp .q-choices.cols3 .choice { flex: 0 0 calc(33.333% - 2.2mm); }
+/* 선지가 길 때 2/2/1 배열 (한 줄에 2개) */
+.slot.book-kp .q-choices.cols2 .choice { flex: 0 0 calc(50% - 1.6mm); }
+.slot.book-kp .q-choices .choice {
+    white-space: normal;
+    overflow-wrap: break-word;
+    display: flex;
+    align-items: baseline;
+}
 .slot.book-kp .q-choices .choice .circ {
-    color: #1e3a8a;
-    font-weight: 800;
-    margin-right: 1.2mm;
+    color: #111111;
+    font-weight: 700;
+    margin-right: 1.4mm;
+    flex-shrink: 0;
 }
 .q-img {
     display: block;
@@ -1386,7 +1464,8 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
             f'<div class="kp-right">'
             f'{meta_html}'
             f'<div class="q-body">{body_html}</div>'
-            + (f'<div class="q-choices">{choices_html}</div>' if choices_html else "")
+            + (f'<div class="q-choices {_choice_col_class(q.get("choices"))}">{choices_html}</div>'
+               if choices_html else "")
             + '</div>'
             '</div>'
             # 슬롯 하단 KEY POINT + MEMO
