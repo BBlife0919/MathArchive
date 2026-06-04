@@ -616,60 +616,129 @@ h2.exam-subtitle {
     color: #18264b;
 }
 
-/* ── 챕터 디바이더 페이지 ───────────────────── */
+/* ── 챕터 디바이더 페이지 (화이트 + 블루 톤) ─── */
 .chapter-divider {
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #0f1932 0%, #18264b 50%, #1d2f5c 100%);
-    color: #f0cd87;
+    background: #ffffff !important;
+    color: #1f2937;
     page-break-after: always;
-    text-align: center;
-    padding: 0 !important;
+    page-break-before: always;
+    page-break-inside: avoid;
+    position: relative;
     height: 100vh;
+    padding: 22mm 20mm !important;
     box-sizing: border-box;
+    font-family: 'Pretendard', 'Nanum Myeongjo', sans-serif;
+    overflow: hidden;
 }
-.cd-no {
-    font-size: 14pt;
-    letter-spacing: 8px;
-    color: #d2af6e;
-    margin-bottom: 6mm;
-    font-weight: 600;
-    text-transform: uppercase;
+.cd-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    position: relative;
+    z-index: 2;
 }
-.cd-rule-top, .cd-rule-bottom {
-    width: 60mm;
-    height: 0.7mm;
-    background: #d2af6e;
-    margin: 4mm auto;
-}
-.cd-title {
-    font-size: 44pt;
-    font-weight: 900;
-    color: #f0cd87;
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-    margin: 6mm 0;
-}
-.cd-sub {
-    font-size: 13pt;
-    color: #b8a980;
-    margin-top: 4mm;
-    letter-spacing: 2px;
-}
-.cd-logo {
-    margin-top: 18mm;
+.cd-chapter-label {
     font-size: 11pt;
-    color: #d2af6e;
-    letter-spacing: 5px;
-    font-weight: 700;
+    font-weight: 800;
+    letter-spacing: 3pt;
+    color: #1e3a8a;
+    border-bottom: 2px solid #1e3a8a;
+    padding-bottom: 2pt;
 }
-.cd-counts {
-    margin-top: 10mm;
+.cd-meta-top {
     font-size: 10pt;
-    color: #a89870;
-    letter-spacing: 1px;
+    font-weight: 700;
+    letter-spacing: 1pt;
+    color: #475569;
+}
+.cd-big-num {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 360pt;
+    font-weight: 900;
+    color: #e2ecfa;
+    z-index: 0;
+    letter-spacing: -12pt;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+}
+.cd-body {
+    position: relative;
+    z-index: 1;
+    margin-top: 60mm;
+    padding-left: 4mm;
+}
+.cd-major {
+    font-size: 28pt;
+    font-weight: 900;
+    color: #1e3a8a;
+    margin: 0 0 2mm 0;
+    letter-spacing: -0.5pt;
+}
+.cd-major-roman {
+    color: #1e3a8a;
+    margin-right: 8pt;
+}
+.cd-major-rule {
+    position: relative;
+    height: 0.6pt;
+    background: #cbd5e1;
+    margin: 12mm 0 12mm 0;
+}
+.cd-major-rule::before, .cd-major-rule::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5pt;
+    height: 5pt;
+    background: #1e3a8a;
+    border-radius: 50%;
+}
+.cd-major-rule::before { left: 0; }
+.cd-major-rule::after { right: 0; }
+.cd-section-label {
+    font-size: 11pt;
+    font-weight: 700;
+    letter-spacing: 3pt;
+    color: #94a3b8;
+}
+.cd-section-title {
+    font-size: 38pt;
+    font-weight: 900;
+    color: #1f2937;
+    margin-top: 4mm;
+    letter-spacing: -1pt;
+    line-height: 1.1;
+}
+.cd-footer {
+    position: absolute;
+    bottom: 18mm;
+    left: 22mm;
+    right: 20mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 2;
+}
+.cd-footer-title {
+    font-size: 11pt;
+    font-weight: 800;
+    color: #1f2937;
+    line-height: 1.7;
+}
+.cd-footer-sub {
+    font-size: 10pt;
+    font-weight: 500;
+    color: #6b7280;
+}
+.cd-logo-bottom {
+    max-width: 26mm;
+    max-height: 18mm;
+    opacity: 0.92;
 }
 """
 
@@ -693,22 +762,91 @@ _HTML_WRAP = """<!doctype html>
 
 
 # ── 챕터 디바이더 ─────────────────────────────────────────
-def _render_chapter_divider(chapter_no: int, chapter_name: str,
-                             count: int) -> str:
-    """챕터 시작 페이지 — 네이비+골드 디자인 (SUMMIT POINT 톤).
+ROMAN_NUMERALS = [
+    "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X",
+    "XI", "XII", "XIII", "XIV", "XV",
+]
 
-    chapter_no: 1부터 시작하는 챕터 순번
-    chapter_name: 중단원 명 (예: "이차방정식")
-    count: 해당 챕터의 문제 수
+
+def _minor_to_major(chapter: str) -> str:
+    """소단원(중단원, 예: '삼각함수와 그래프') → 대단원(예: '삼각함수').
+
+    curriculum.CURRICULUM 의 역매핑. 매칭 못 찾으면 chapter 그대로 반환.
     """
+    try:
+        # pdf_engine.py 는 app/ 안에 있으므로 curriculum 모듈도 같은 경로.
+        import sys
+        from pathlib import Path
+        app_dir = str(Path(__file__).resolve().parent)
+        if app_dir not in sys.path:
+            sys.path.insert(0, app_dir)
+        import curriculum as _curr
+        for subj, majors in _curr.CURRICULUM.items():
+            for major, minors in majors.items():
+                if chapter in minors:
+                    return major
+    except Exception:
+        pass
+    return chapter or "기타"
+
+
+def _render_chapter_divider(
+    major_no: int, section_no: int,
+    major_name: str, minor_name: str,
+    meta_top: str = "",
+    footer_title: str = "",
+    footer_sub: str = "",
+    logo_uri: str | None = None,
+) -> str:
+    """챕터 디바이더 페이지 — 화이트+블루 디자인.
+
+    major_no: 대단원 번호 (I, II, III ...)
+    section_no: 대단원 안의 소단원 번호 (1부터)
+    major_name: 대단원 명 (예: '삼각함수')
+    minor_name: 소단원 명 (예: '삼각함수의 그래프')
+    meta_top: 우상단 메타 (예: '대수 1학기 기말 · FINAL')
+    footer_title: 좌하단 제목
+    footer_sub: 좌하단 부제 (예: '이영우 T')
+    logo_uri: 우하단 로고 data URI
+    """
+    roman = ROMAN_NUMERALS[major_no - 1] if 0 < major_no <= len(ROMAN_NUMERALS) \
+        else str(major_no)
+    meta_html = (
+        f'<span class="cd-meta-top">{_html.escape(meta_top)}</span>'
+        if meta_top else ""
+    )
+    footer_left = ""
+    if footer_title or footer_sub:
+        footer_left = (
+            f'<div class="cd-footer-title">'
+            f'{_html.escape(footer_title)}'
+            f'{"<br>" if footer_sub else ""}'
+            f'<span class="cd-footer-sub">{_html.escape(footer_sub)}</span>'
+            f'</div>'
+        )
+    logo_html = (
+        f'<img class="cd-logo-bottom" src="{logo_uri}" alt="logo">'
+        if logo_uri else '<span></span>'
+    )
     return (
         '<section class="page chapter-divider">'
-        f'<div class="cd-no">CHAPTER {chapter_no:02d}</div>'
-        '<div class="cd-rule-top"></div>'
-        f'<h1 class="cd-title">{_html.escape(chapter_name)}</h1>'
-        '<div class="cd-rule-bottom"></div>'
-        f'<div class="cd-counts">{count}문항</div>'
-        '<div class="cd-logo">EUM ARCHIVE</div>'
+        '<div class="cd-header">'
+        f'<span class="cd-chapter-label">CHAPTER · {major_no:02d}</span>'
+        f'{meta_html}'
+        '</div>'
+        f'<div class="cd-big-num">{major_no:02d}</div>'
+        '<div class="cd-body">'
+        f'<h2 class="cd-major">'
+        f'<span class="cd-major-roman">{roman}.</span>'
+        f'{_html.escape(major_name)}'
+        f'</h2>'
+        '<div class="cd-major-rule"></div>'
+        f'<span class="cd-section-label">SECTION · {section_no}</span>'
+        f'<h1 class="cd-section-title">{_html.escape(minor_name)}</h1>'
+        '</div>'
+        '<div class="cd-footer">'
+        f'{footer_left or "<span></span>"}'
+        f'{logo_html}'
         '</section>'
     )
 
@@ -723,6 +861,31 @@ def _group_by_chapter(questions: list[dict]) -> list[tuple[str, list[dict]]]:
         else:
             groups.append((ch, [q]))
     return groups
+
+
+def _build_chapter_sections(
+    questions: list[dict],
+) -> list[tuple[int, int, str, str, list[dict]]]:
+    """문제 리스트를 (major_no, section_no, major, minor, qs) 시퀀스로.
+
+    major_no 는 대단원 등장 순서대로 1, 2, 3.
+    section_no 는 같은 대단원 안에서 1, 2, 3 (대단원 바뀌면 다시 1).
+    """
+    groups = _group_by_chapter(questions)
+    out: list[tuple[int, int, str, str, list[dict]]] = []
+    major_no = 0
+    section_no = 0
+    last_major: str | None = None
+    for minor, qs in groups:
+        major = _minor_to_major(minor)
+        if major != last_major:
+            major_no += 1
+            section_no = 1
+            last_major = major
+        else:
+            section_no += 1
+        out.append((major_no, section_no, major, minor, qs))
+    return out
 
 
 def _render_slot(i: int, q: dict, layout: str, include_source: bool,
@@ -994,29 +1157,44 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      subtitle: str | None = None,
                      logo_path: str | Path | None = None,
                      kicker_mark: str | None = None,
-                     kicker_text: str | None = None) -> str:
+                     kicker_text: str | None = None,
+                     divider_meta_top: str | None = None,
+                     divider_footer_title: str | None = None,
+                     divider_footer_sub: str | None = None) -> str:
     """교재 HTML: 챕터 디바이더 + 문제(2단 SUMMIT POINT 카드) + 빠른정답 + 해설.
 
-    SUMMIT POINT 모의고사 완전정복 스타일:
-    - 챕터마다 네이비+골드 디바이더 페이지
-    - 카드 상단 골드 바, 큰 Q번호
-    - Key Point 박스 + 풀이 메모란 4줄 + 1차/2차/3차 체크
+    각 소단원(chapter) 시작마다 화이트+블루 디바이더 페이지 자동 삽입.
+    대단원(curriculum 매핑)이 바뀌면 로마자 번호 증가 (I, II, III),
+    같은 대단원 안의 소단원은 SECTION 번호 증가 (1, 2, 3).
+
+    divider_meta_top: 우상단 메타 (예: '대수 1학기 기말 · FINAL')
+    divider_footer_title: 좌하단 제목 (생략 시 title 사용)
+    divider_footer_sub: 좌하단 부제 (예: '이영우 T')
     """
     logo_uri = _logo_data_uri(logo_path)
     header = _render_header(title, subtitle, logo_uri,
                              kicker_mark=kicker_mark,
                              kicker_text=kicker_text)
-    # 챕터별 그룹화 → 디바이더 + 문제 페이지 인터리브
-    groups = _group_by_chapter(questions)
+    # 디바이더 메타 디폴트
+    if divider_footer_title is None:
+        divider_footer_title = title
+    # 챕터별 그룹화 → (major_no, section_no, major, minor, qs) 시퀀스
+    sections = _build_chapter_sections(questions)
     body_parts: list[str] = []
-    for ch_idx, (chapter_name, ch_questions) in enumerate(groups, 1):
+    for idx, (major_no, section_no, major, minor, ch_qs) in enumerate(
+        sections, 1
+    ):
         body_parts.append(_render_chapter_divider(
-            ch_idx, chapter_name, len(ch_questions)
+            major_no, section_no, major, minor,
+            meta_top=divider_meta_top or "",
+            footer_title=divider_footer_title or "",
+            footer_sub=divider_footer_sub or "",
+            logo_uri=logo_uri,
         ))
-        # 각 챕터의 첫 페이지에만 헤더 노출 (첫 챕터에만)
-        chapter_header = header if ch_idx == 1 else ""
+        # 첫 챕터의 본문 페이지에만 헤더 표시 (전체 책 제목/로고)
+        chapter_header = header if idx == 1 else ""
         body_parts.append(_problem_pages_html(
-            ch_questions, include_source, overrides, chapter_header,
+            ch_qs, include_source, overrides, chapter_header,
             include_difficulty=True
         ))
     qa_html = (
@@ -1211,11 +1389,17 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       subtitle: str | None = None,
                       logo_path: str | Path | None = None,
                       kicker_mark: str | None = None,
-                      kicker_text: str | None = None) -> bytes:
-    """교재 PDF 생성. 문제 → 빠른정답 표 → 해설 순."""
+                      kicker_text: str | None = None,
+                      divider_meta_top: str | None = None,
+                      divider_footer_title: str | None = None,
+                      divider_footer_sub: str | None = None) -> bytes:
+    """교재 PDF 생성. 챕터 디바이더 → 문제 → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
         subtitle=subtitle, logo_path=logo_path,
         kicker_mark=kicker_mark, kicker_text=kicker_text,
+        divider_meta_top=divider_meta_top,
+        divider_footer_title=divider_footer_title,
+        divider_footer_sub=divider_footer_sub,
     )
     return html_to_pdf_bytes(html)

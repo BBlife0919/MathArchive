@@ -1098,6 +1098,9 @@ def main():
             # 교재 모드 전용: 제목 위 kicker (디자인 요소)
             kicker_mark = None
             kicker_text = None
+            divider_meta_top = None
+            divider_footer_title = None
+            divider_footer_sub = None
             if mode == "book":
                 show_kicker = st.toggle(
                     "상단 라벨 표시", value=True,
@@ -1117,6 +1120,30 @@ def main():
                         )
                     kicker_mark = kicker_mark.strip() or None
                     kicker_text = kicker_text.strip() or None
+
+                with st.expander("📑 챕터 디바이더 메타", expanded=True):
+                    st.caption(
+                        "각 소단원 시작 페이지(디바이더) 의 우상단/좌하단 라벨. "
+                        "비워두면 책 제목 사용."
+                    )
+                    divider_meta_top = st.text_input(
+                        "우상단 (예: 대수 1학기 기말 · FINAL)",
+                        value="대수 1학기 기말 · FINAL",
+                        key="divider_meta_top",
+                    ).strip() or None
+                    dc1, dc2 = st.columns([0.65, 0.35])
+                    with dc1:
+                        divider_footer_title = st.text_input(
+                            "좌하단 제목",
+                            value="대수 1학기 기말고사 · 필수유형 FINAL",
+                            key="divider_footer_title",
+                        ).strip() or None
+                    with dc2:
+                        divider_footer_sub = st.text_input(
+                            "좌하단 부제",
+                            value="이영우 T",
+                            key="divider_footer_sub",
+                        ).strip() or None
 
             effective_subtitle = subtitle_text.strip() if show_subtitle else None
             effective_logo = (
@@ -1346,6 +1373,9 @@ def main():
                             logo_path=effective_logo,
                             kicker_mark=kicker_mark,
                             kicker_text=kicker_text,
+                            divider_meta_top=divider_meta_top,
+                            divider_footer_title=divider_footer_title,
+                            divider_footer_sub=divider_footer_sub,
                         )
                         fname = "book.pdf"
                     st.download_button(
