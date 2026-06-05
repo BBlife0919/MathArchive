@@ -143,14 +143,42 @@ def _render_box_content(body: str) -> str:
 
 
 _BOGI_HDR = re.compile(r"<\s*보\s*기\s*>")
+_BOGI_ITEM = re.compile(r"^\s*([ㄱ-ㅎ])\s*[.ㆍ]")
+_HANGUL_IDX = {c: i for i, c in enumerate("ㄱㄴㄷㄹㅁㅂㅅㅇ")}
+
+
+def _unwrap_bogi_table(inner: str) -> str:
+    """박스 안 <보기>가 빈 셀 많은 마크다운 표로 감싸진 경우 → 평문으로 언랩.
+
+    진짜 데이터 표(정규분포표 등 — 보기/ㄱㄴㄷ 없음)는 그대로 둔다.
+    """
+    if "|" not in inner or "---" not in inner:
+        return inner
+    cells = []
+    for line in inner.split("\n"):
+        s = line.strip()
+        if not s.startswith("|"):
+            continue
+        if set(s) <= set("|-: "):       # 구분선
+            continue
+        for c in s.split("|")[1:-1]:
+            c = c.strip()
+            if c:
+                cells.append(c)
+    frags = []
+    for c in cells:
+        frags += [f.strip() for f in re.split(r"<br\s*/?>", c) if f.strip()]
+    items = [f for f in frags if _BOGI_ITEM.match(f)]
+    has_hdr = any(_BOGI_HDR.search(f) for f in frags)
+    if not items and not has_hdr:
+        return inner                     # 진짜 표 → 유지
+    items.sort(key=lambda s: _HANGUL_IDX.get(_BOGI_ITEM.match(s).group(1), 99))
+    out = (["< 보 기 >"] if has_hdr else []) + items
+    return "\n".join(out)
 
 
 def _normalize_boxes(text: str) -> str:
-    """중첩된 `<<BOX_START>>`/`<<BOX_END>>` 평탄화 + 박스 내부 중복(<보기>) 제거.
-
-    parse_hwpx 가 `<보기>` 를 박스 안에 박스로 중첩하고 내용을 두 번 출력하는
-    사고를 정리 → 하나의 박스에 `<보기>`+ㄱㄴㄷ 이 한 번만 들어가게 한다.
-    """
+    """박스 사고 정리: 중첩 평탄화 + 보기-표 언랩 + 반복 박스 제거 + 보기 중복 제거."""
     if "<<BOX_START>>" not in text:
         return text
     # 1) 최외곽 박스만 남기고 내부 마커 제거 (depth 스택)
@@ -169,24 +197,26 @@ def _normalize_boxes(text: str) -> str:
             out.append(tok)
     flat = "".join(out)
 
-    # 2) 박스 내부 <보기> 가 2회 이상이면 첫 블록만 (중복 제거)
-    def _dedup(m):
-        inner = m.group(1)
+    # 2) 박스별: 보기-표 언랩 + 박스 내 <보기> 2회↑ 중복 제거
+    seen = set()
+
+    def _fix_box(m):
+        inner = _unwrap_bogi_table(m.group(1))
         hdrs = [mm.start() for mm in _BOGI_HDR.finditer(inner)]
         if len(hdrs) >= 2:
             inner = inner[:hdrs[1]].rstrip()
+        # 반복되는 동일 박스(공백무시)는 두 번째부터 제거
+        key = re.sub(r"\s+", "", inner)
+        if key and key in seen:
+            return ""
+        seen.add(key)
         return "<<BOX_START>>" + inner + "<<BOX_END>>"
 
-    flat = re.sub(r"<<BOX_START>>(.*?)<<BOX_END>>", _dedup, flat, flags=re.DOTALL)
-    # 3) 박스 끝난 뒤 같은 <보기> 블록이 plain 으로 반복되면 제거 (박스 밖 중복)
-    def _drop_trailing_dup(m):
-        box, after = m.group(1), m.group(2)
-        if _BOGI_HDR.search(after):
-            return box
-        return m.group(0)
+    flat = re.sub(r"<<BOX_START>>(.*?)<<BOX_END>>", _fix_box, flat, flags=re.DOTALL)
 
-    flat = re.sub(r"(<<BOX_END>>)\s*(<\s*보\s*기\s*>.*?)(?=<<BOX_START>>|$)",
-                  _drop_trailing_dup, flat, flags=re.DOTALL)
+    # 3) 박스 끝난 뒤 같은 <보기> 블록이 plain 으로 반복되면 제거 (박스 밖 중복)
+    flat = re.sub(r"(<<BOX_END>>)\s*<\s*보\s*기\s*>.*?(?=<<BOX_START>>|$)",
+                  r"\1", flat, flags=re.DOTALL)
     return flat
 
 
@@ -492,6 +522,12 @@ h2.exam-subtitle {
 .cond-box p { margin: 2pt 0; }
 .cond-box p:first-child { margin-top: 0; }
 .cond-box p:last-child { margin-bottom: 0; }
+/* 박스 안 넓은 표가 컬럼 폭을 넘어 잘리지 않게 — 폭 맞춤 + 폰트 축소 */
+.slot.book-kp .cond-box { max-width: 100%; overflow: hidden; }
+.slot.book-kp .cond-box table { max-width: 100%; font-size: 0.8em; table-layout: auto; }
+.slot.book-kp .cond-box table td,
+.slot.book-kp .cond-box table th { padding: 2pt 3pt !important; }
+.slot.book-kp .cond-box .katex { font-size: 0.92em !important; }
 .katex { font-size: 1.02em !important; }
 .katex-display { margin: 0.4em 0 !important; }
 
@@ -1222,6 +1258,16 @@ h2.exam-subtitle {
     object-fit: contain;
 }
 .q-img-missing { color: #b00; font-size: 9pt; }
+.img-check {
+    margin: 2mm 0;
+    padding: 1.5mm 3mm;
+    background: #fff4e5;
+    border: 0.8pt solid #f0a04b;
+    border-radius: 1.5mm;
+    color: #9a4a00;
+    font-size: 8pt;
+    font-weight: 700;
+}
 /* KEY POINT + MEMO 박스 — 슬롯 하단 */
 .slot.book-kp .kp-keypoint {
     margin-top: auto;
@@ -1428,6 +1474,9 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
     letter: 소단원 인덱스 알파벳 (A,B,C). 슬롯 번호 prefix.
     """
     body_html = render_question_body(q.get("question_text") or "", q.get("images"))
+    if q.get("img_check"):
+        body_html += ('<div class="img-check">⚠ 그림 확인 필요 — 원본이 여러 그림을 '
+                      '한 이미지로 합쳐 저장한 문항입니다.</div>')
     choices_html = format_choices(q.get("choices"), book_mode=include_difficulty)
 
     if include_difficulty:

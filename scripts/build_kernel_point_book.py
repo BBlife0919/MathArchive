@@ -82,6 +82,15 @@ def fetch_rows():
             if r["question_id"] in sol_by_q:
                 r["images_sol"] = sol_by_q[r["question_id"]]
 
+        # 합성 이미지 의심 문항 → '그림 확인 필요' 배지 플래그
+        import json as _json
+        comp_path = ROOT / "output" / "composite_image_qids.json"
+        if comp_path.exists():
+            comp = set(_json.loads(comp_path.read_text()))
+            for r in rows:
+                if r["question_id"] in comp:
+                    r["img_check"] = True
+
     cur.close()
     conn.close()
     return rows
