@@ -26,7 +26,7 @@ from typing import Any
 
 import streamlit as st
 
-from db import get_connection as _get_db_connection
+from db import get_connection as _get_db_connection, is_cloud
 
 
 # ── 환경 설정 ──────────────────────────────────────────────────────────────
@@ -269,7 +269,9 @@ def _issue_session_cookie(user_id: int) -> None:
 
     CookieManager.set 기본 same_site='strict' 가 streamlit component
     iframe 환경에서 새로고침 시 cookie 송신을 차단하는 사고 — 'lax' 로
-    완화. secure=True 로 HTTPS 전용 (streamlit cloud) 명시.
+    완화. secure 플래그는 환경 자동 결정: 클라우드(HTTPS)는 True,
+    로컬(HTTP)은 False — 로컬에서 secure=True 면 브라우저가 쿠키 저장
+    자체를 거부해 새로고침마다 로그인 풀림.
     expires_at 은 UTC timezone-aware 로 박아 브라우저 해석 모호성 제거.
     """
     mgr = _cookie_manager()
@@ -282,7 +284,7 @@ def _issue_session_cookie(user_id: int) -> None:
             expires_at=datetime.now(timezone.utc)
                        + timedelta(days=SESSION_TTL_DAYS),
             same_site="lax",
-            secure=True,
+            secure=is_cloud(),
         )
     except Exception:
         # 첫 페이지 마운트 직후엔 set 가 실패할 수 있음. 다음 rerun 에 재시도해도 무방.
