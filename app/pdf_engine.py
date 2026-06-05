@@ -931,7 +931,15 @@ h2.exam-subtitle {
 /* ── 교재 본문 페이지 (image #208 스타일) ─────── */
 .bp-page {
     position: relative;
-    min-height: 275mm;
+    /* height:100vh(인쇄에서 vh 는 본문영역≈275mm 기준으로 존중·고정) 로 페이지를 꽉 채우고,
+       display:flex 컬럼으로 inner flex:1(page-body→col→slot) 이 이 높이까지 자라게 함
+       → 슬롯이 페이지 바닥까지 차고 margin-top:auto 가 메모를 바닥에 앵커.
+       ※ min-height 로 주면 긴 문제에서 박스가 본문영역을 넘게 자라 빈 페이지 생김 → 반드시 고정 height.
+       overflow:hidden 으로 넘치는 메모/본문 끝을 바닥에서 절단. */
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     padding: 0 13mm 0 0 !important;  /* 우측 인덱스 자리 확보 (여백 축소) */
     page-break-after: always;
 }
@@ -1176,6 +1184,8 @@ h2.exam-subtitle {
     padding-right: 4mm !important;
     display: flex;
     flex-direction: column;
+    /* .slot 기본 flex:1 로 col(=bp-page flex 컬럼) 높이까지 자람.
+       margin-top:auto(kp-keypoint)가 메모 블록을 슬롯 바닥=페이지 바닥에 앵커. */
 }
 .slot.book-kp .kp-head {
     display: flex;
@@ -1272,7 +1282,10 @@ h2.exam-subtitle {
     font-size: 8pt;
     font-weight: 700;
 }
-/* KEY POINT + MEMO 박스 — 슬롯 하단 */
+/* KEY POINT + MEMO 박스 — 슬롯 하단 앵커.
+   슬롯이 .bp-page(height:100vh)+flex 체인으로 페이지 바닥까지 늘어나므로
+   margin-top:auto 가 KEY POINT+MEMO 블록을 페이지 바닥에 밀착시킴(하단여백 ~10mm).
+   본문이 길면 메모 줄이 적게(자동 적응), 넘치면 .bp-page overflow:hidden 이 절단. */
 .slot.book-kp .kp-keypoint {
     margin-top: auto;
     padding-top: 8mm;
@@ -1315,7 +1328,7 @@ h2.exam-subtitle {
 }
 .slot.book-kp .kp-memo .kp-memo-line {
     border-bottom: 0.5pt solid #cbd5e1;
-    height: 6mm;
+    height: 7mm;
 }
 """
 
@@ -1528,7 +1541,7 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
             '</div>'
             '<div class="kp-memo">'
             '<div class="kp-memo-label">MEMO</div>'
-            + '<div class="kp-memo-line"></div>' * 6
+            + '<div class="kp-memo-line"></div>' * 12
             + '</div>'
             '</div>'
         )
