@@ -55,6 +55,10 @@ def format_choices(choices_json, book_mode: bool = False) -> str:
         choices = choices_json
     if not choices:
         return ""
+    # 선지 번호가 1부터 시작하지 않으면 잘못 파싱된 조각 → 숨김 (서술형 등)
+    nums = [c.get("number") for c in choices if isinstance(c, dict) and c.get("number")]
+    if nums and 1 not in nums:
+        return ""
     circle = {1: "①", 2: "②", 3: "③", 4: "④", 5: "⑤"}
     if book_mode:
         # 가로 flex — .q-choices 의 gap으로 간격 조정
