@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import sys
 from collections import Counter
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -136,13 +136,33 @@ st.caption(
     "비율이 한쪽으로 치우치면 처방 전략을 바꿔야 합니다."
 )
 
-entries = q(
+entries_all = q(
     "SELECT error_code, wrong_date FROM clinic_entries WHERE student_id = ? "
     "ORDER BY wrong_date DESC",
     (sid,),
 )
+
+# 시간 윈도우 토글 (PDF §6 "2~4주 단위 오류 분포")
+qm_window = st.radio(
+    "집계 기간",
+    options=["전체", "최근 4주", "최근 2주"],
+    horizontal=True,
+    key="qm_window",
+)
+if qm_window == "최근 4주":
+    cutoff = (date.today() - timedelta(weeks=4)).isoformat()
+    entries = [e for e in entries_all if (e["wrong_date"] or "") >= cutoff]
+elif qm_window == "최근 2주":
+    cutoff = (date.today() - timedelta(weeks=2)).isoformat()
+    entries = [e for e in entries_all if (e["wrong_date"] or "") >= cutoff]
+else:
+    entries = entries_all
+
 if not entries:
-    st.info("아직 클리닉 오답 기록이 없습니다. 클리닉 페이지에서 처방전을 1건 생성하세요.")
+    if entries_all:
+        st.info(f"선택한 기간({qm_window})에 오답이 없습니다.")
+    else:
+        st.info("아직 클리닉 오답 기록이 없습니다. 클리닉 페이지에서 처방전을 1건 생성하세요.")
 else:
     counter = Counter(e["error_code"] for e in entries)
     q_total = sum(counter[c] for c in Q_CODES)
@@ -163,7 +183,7 @@ else:
     )
     st.bar_chart(df.set_index("오류코드")["건수"], height=220)
 
-    with st.expander("최근 오답 10건"):
+    with st.expander("선택 기간 내 최근 10건"):
         for e in entries[:10]:
             tag = "Q" if e["error_code"] in Q_CODES else "M"
             st.caption(f"· [{tag}] {e['wrong_date']} · {e['error_code']}")
@@ -214,7 +234,28 @@ if predicts:
             "격차": gap,
             "메모": p["note"] or "",
         })
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+    # 시간 순 line chart (PDF §5 "자가예측 격차 시각화", §6 메타인지 카드)
+    df_pred = pd.DataFrame(rows)
+    df_chart = (
+        df_pred[["날짜", "예측", "실제"]]
+        .iloc[::-1]                       # 최신→오래된 → 오래된→최신 (시간 축)
+        .set_index("날짜")
+    )
+    # 같은 날 2건 이상 입력된 경우 일일 평균으로 집약 — zigzag 방지
+    df_chart = df_chart.groupby(df_chart.index).mean()
+    st.line_chart(df_chart, height=240)
+
+    # 평균 격차 metric
+    avg_gap = df_pred["격차"].mean()
+    over_count  = int((df_pred["격차"] < 0).sum())   # 예측 > 실제 (과신)
+    under_count = int((df_pred["격차"] > 0).sum())   # 예측 < 실제 (과소)
+    gc1, gc2, gc3 = st.columns(3)
+    gc1.metric("평균 격차", f"{avg_gap:+.1f}점")
+    gc2.metric("과신 (예측>실제)", f"{over_count}건")
+    gc3.metric("과소 (예측<실제)", f"{under_count}건")
+
+    st.dataframe(df_pred, use_container_width=True, hide_index=True)
 else:
     st.info("아직 자가예측 기록이 없습니다.")
 
