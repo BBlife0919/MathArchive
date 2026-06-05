@@ -174,9 +174,9 @@ def main():
         npg = out.new_page(width=pg.rect.width, height=pg.rect.height)
         npg.insert_image(pg.rect, stream=pix.tobytes("jpeg", jpg_quality=82))
     # 다운로드 폴더는 macOS Gatekeeper 가 격리(quarantine)를 적극 붙여 뷰어에서 빈 화면이
-    # 뜨므로, 다운로드 밖 전용 폴더(~/교재)에 저장. (다운로드 폴더엔 ~/교재 로 가는
+    # 뜨므로, 다운로드 밖 전용 폴더(~/클로드교재)에 저장. (다운로드 폴더엔 ~/클로드교재 로 가는
     # 심볼릭 링크가 있어 한 번 클릭으로 진입 가능)
-    book_dir = Path.home() / "교재"
+    book_dir = Path.home() / "클로드교재"
     book_dir.mkdir(exist_ok=True)
     out_path = book_dir / "대수 1학기 기말 KERNEL POINT.pdf"
     # ⚠ 저장 옵션은 단순하게 유지할 것. gs 재증류·clean=True 를 넣었더니 Acrobat 에서
