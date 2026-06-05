@@ -156,9 +156,28 @@ def main():
         page_running_left="KERNEL POINT",
     )
 
+    # 벡터 원본 보관 (텍스트 선택용)
+    vec_path = ROOT / "output" / "daesu_kernel_point_vector.pdf"
+    vec_path.parent.mkdir(exist_ok=True)
+    vec_path.write_bytes(pdf_bytes)
+
+    # Downloads 에는 '뷰어 안전' 래스터화본 — Chromium 의 Type3 폰트 과부하로
+    # Acrobat/Preview 가 렌더 못 하는 문제 회피 (각 페이지 이미지화). 빈 페이지도 제거.
+    import fitz
+    src = fitz.open(stream=pdf_bytes, filetype="pdf")
+    out = fitz.open()
+    mat = fitz.Matrix(180 / 72, 180 / 72)
+    for pg in src:
+        if len(pg.get_text().strip()) < 3 and not pg.get_images() and len(pg.get_drawings()) < 3:
+            continue  # 빈 페이지 건너뜀
+        pix = pg.get_pixmap(matrix=mat, alpha=False)
+        npg = out.new_page(width=pg.rect.width, height=pg.rect.height)
+        npg.insert_image(pg.rect, stream=pix.tobytes("jpeg", jpg_quality=82))
     out_path = Path("/Users/youngwoolee/Downloads/대수 1학기 기말 KERNEL POINT.pdf")
-    out_path.write_bytes(pdf_bytes)
-    print(f"[4/4] 저장: {out_path}  ({len(pdf_bytes)/1024:.0f} KB)")
+    out.save(str(out_path), garbage=4, deflate=True)
+    out.close(); src.close()
+    print(f"[4/4] 저장: {out_path} (래스터/뷰어안전, {out_path.stat().st_size/1024/1024:.0f}MB) "
+          f"+ 벡터본 {vec_path}")
 
 
 if __name__ == "__main__":
