@@ -166,7 +166,7 @@ def main():
     import fitz
     src = fitz.open(stream=pdf_bytes, filetype="pdf")
     out = fitz.open()
-    mat = fitz.Matrix(180 / 72, 180 / 72)
+    mat = fitz.Matrix(180 / 72, 180 / 72)  # 인쇄 품질
     for pg in src:
         if len(pg.get_text().strip()) < 3 and not pg.get_images() and len(pg.get_drawings()) < 3:
             continue  # 빈 페이지 건너뜀
@@ -179,6 +179,12 @@ def main():
     # 정상 표시됨(닫을 때 뜨는 '저장' 프롬프트는 Acrobat 특성이니 저장 말고 닫으면 됨).
     out.save(str(out_path), garbage=4, deflate=True)
     out.close(); src.close()
+
+    # macOS 격리/기본앱 확장속성 제거. 진짜 원인이 이거였음: Acrobat 으로 한 번 열면
+    # com.apple.quarantine(악성코드 미확인) + OpenWith=Acrobat 속성이 파일에 붙어
+    # 이후 Gatekeeper 가 모든 뷰어에서 열기를 차단(빈 화면/경고) → 매 빌드 후 싹 제거.
+    import subprocess as _sp
+    _sp.run(["xattr", "-c", str(out_path)], check=False)
     print(f"[4/4] 저장: {out_path} (래스터/뷰어안전, {out_path.stat().st_size/1024/1024:.0f}MB) "
           f"+ 벡터본 {vec_path}")
 
