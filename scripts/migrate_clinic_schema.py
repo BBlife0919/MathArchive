@@ -38,17 +38,19 @@ DDL_SQLITE = [
     "CREATE INDEX IF NOT EXISTS idx_students_school ON students(school)",
     """
     CREATE TABLE IF NOT EXISTS clinic_entries (
-        entry_id           INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_id         INTEGER NOT NULL REFERENCES students(student_id),
-        wrong_question_id  INTEGER NOT NULL REFERENCES questions(question_id),
-        wrong_date         TEXT NOT NULL,
-        error_code         TEXT NOT NULL,
-        keyword            TEXT,
-        prescribed_qids    TEXT,
-        retry_d3_status    TEXT DEFAULT 'pending',
-        retry_d7_status    TEXT DEFAULT 'pending',
-        retry_d14_status   TEXT DEFAULT 'pending',
-        created_at         TEXT DEFAULT CURRENT_TIMESTAMP
+        entry_id             INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id           INTEGER NOT NULL REFERENCES students(student_id),
+        wrong_question_id    INTEGER NOT NULL REFERENCES questions(question_id),
+        wrong_date           TEXT NOT NULL,
+        error_code           TEXT NOT NULL,
+        keyword              TEXT,
+        prescribed_qids      TEXT,
+        retry_d3_status      TEXT DEFAULT 'pending',
+        retry_d7_status      TEXT DEFAULT 'pending',
+        retry_d14_status     TEXT DEFAULT 'pending',
+        retry_d30_status     TEXT DEFAULT 'pending',
+        retry_exam_2w_status TEXT DEFAULT 'pending',
+        created_at           TEXT DEFAULT CURRENT_TIMESTAMP
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_clinic_student ON clinic_entries(student_id)",
@@ -70,17 +72,19 @@ DDL_POSTGRES = [
     "CREATE INDEX IF NOT EXISTS idx_students_school ON students(school)",
     """
     CREATE TABLE IF NOT EXISTS clinic_entries (
-        entry_id           SERIAL PRIMARY KEY,
-        student_id         INTEGER NOT NULL REFERENCES students(student_id),
-        wrong_question_id  INTEGER NOT NULL REFERENCES questions(question_id),
-        wrong_date         DATE NOT NULL,
-        error_code         TEXT NOT NULL,
-        keyword            TEXT,
-        prescribed_qids    JSONB,
-        retry_d3_status    TEXT DEFAULT 'pending',
-        retry_d7_status    TEXT DEFAULT 'pending',
-        retry_d14_status   TEXT DEFAULT 'pending',
-        created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        entry_id             SERIAL PRIMARY KEY,
+        student_id           INTEGER NOT NULL REFERENCES students(student_id),
+        wrong_question_id    INTEGER NOT NULL REFERENCES questions(question_id),
+        wrong_date           DATE NOT NULL,
+        error_code           TEXT NOT NULL,
+        keyword              TEXT,
+        prescribed_qids      JSONB,
+        retry_d3_status      TEXT DEFAULT 'pending',
+        retry_d7_status      TEXT DEFAULT 'pending',
+        retry_d14_status     TEXT DEFAULT 'pending',
+        retry_d30_status     TEXT DEFAULT 'pending',
+        retry_exam_2w_status TEXT DEFAULT 'pending',
+        created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_clinic_student ON clinic_entries(student_id)",

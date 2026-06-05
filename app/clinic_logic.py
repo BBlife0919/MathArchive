@@ -68,11 +68,16 @@ def find_similar_questions(conn, wrong_qid: int) -> list[int]:
 
 
 def compute_retry_schedule(wrong_date: date) -> dict:
-    """D+3 / D+7 / D+14 재도전 날짜 계산."""
+    """D+3 / D+7 / D+14 / D+30 재도전 날짜 계산.
+
+    D+30 은 통합비전 v3 §4-3 확장분산 — 단기 인출(D+3/7/14) 뒤
+    장기 보존을 위한 추가 재도전 슬롯.
+    """
     return {
-        "d3": wrong_date + timedelta(days=3),
-        "d7": wrong_date + timedelta(days=7),
+        "d3":  wrong_date + timedelta(days=3),
+        "d7":  wrong_date + timedelta(days=7),
         "d14": wrong_date + timedelta(days=14),
+        "d30": wrong_date + timedelta(days=30),
     }
 
 
@@ -115,6 +120,7 @@ def list_pending_retries(conn, student_id: "int | None" = None) -> list:
         SELECT e.entry_id, e.student_id, e.wrong_question_id, e.wrong_date,
                e.error_code, e.keyword, e.prescribed_qids,
                e.retry_d3_status, e.retry_d7_status, e.retry_d14_status,
+               e.retry_d30_status,
                s.name as student_name
         FROM clinic_entries e
         JOIN students s ON e.student_id = s.student_id
@@ -134,10 +140,11 @@ def list_pending_retries(conn, student_id: "int | None" = None) -> list:
             continue
         sched = compute_retry_schedule(wd)
 
-        d3_due = r[7] == 'pending' and sched["d3"] <= today
-        d7_due = r[8] == 'pending' and sched["d7"] <= today
+        d3_due  = r[7] == 'pending' and sched["d3"]  <= today
+        d7_due  = r[8] == 'pending' and sched["d7"]  <= today
         d14_due = r[9] == 'pending' and sched["d14"] <= today
-        if not (d3_due or d7_due or d14_due):
+        d30_due = r[10] == 'pending' and sched["d30"] <= today
+        if not (d3_due or d7_due or d14_due or d30_due):
             continue
 
         out.append({
@@ -148,9 +155,10 @@ def list_pending_retries(conn, student_id: "int | None" = None) -> list:
             "error_code": r[4],
             "keyword": r[5],
             "prescribed_qids": json.loads(r[6]) if r[6] else [],
-            "retry_d3_status": r[7],
-            "retry_d7_status": r[8],
+            "retry_d3_status":  r[7],
+            "retry_d7_status":  r[8],
             "retry_d14_status": r[9],
-            "student_name": r[10],
+            "retry_d30_status": r[10],
+            "student_name": r[11],
         })
     return out

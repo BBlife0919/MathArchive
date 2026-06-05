@@ -32,7 +32,7 @@ render_user_menu_in_sidebar()
 
 st.title("🏥 수학 클리닉")
 st.caption(
-    "오답 1건 → 즉시 인출 3문항 + D+3/7/14 재도전 처방전. "
+    "오답 1건 → 즉시 인출 3문항 + D+3/7/14/30 재도전 처방전. "
     "스테이플러 묶음에 끼워넣어 점수 엔진을 가동하세요."
 )
 
@@ -196,7 +196,8 @@ if st.button("🩺 처방전 생성", type="primary", use_container_width=True,
     student_name = next(s["name"] for s in students if s["student_id"] == selected_student_id)
     rx_subtitle = (
         f"{student_name} · 오류코드: {error_code} · "
-        f"재도전: D+3 {schedule['d3']} / D+7 {schedule['d7']} / D+14 {schedule['d14']}"
+        f"재도전: D+3 {schedule['d3']} / D+7 {schedule['d7']} / "
+        f"D+14 {schedule['d14']} / D+30 {schedule['d30']}"
     )
 
     try:
@@ -232,7 +233,8 @@ if st.button("🩺 처방전 생성", type="primary", use_container_width=True,
     st.markdown(
         f"- D+3 ({schedule['d3']})  ☐\n"
         f"- D+7 ({schedule['d7']})  ☐\n"
-        f"- D+14 ({schedule['d14']})  ☐"
+        f"- D+14 ({schedule['d14']})  ☐\n"
+        f"- D+30 ({schedule['d30']})  ☐"
     )
 
 # ── 하단: 미해결 재도전 ─────────────────────────────────
@@ -248,6 +250,8 @@ if pendings:
             flags.append("D+7")
         if p["retry_d14_status"] == "pending":
             flags.append("D+14")
+        if p["retry_d30_status"] == "pending":
+            flags.append("D+30")
         st.caption(
             f"· {p['student_name']} · 오답 q={p['wrong_question_id']} ({p['wrong_date']}) "
             f"· 오류 {p['error_code']} · 미완료: {', '.join(flags)}"
