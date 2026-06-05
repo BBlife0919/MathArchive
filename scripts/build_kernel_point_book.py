@@ -174,11 +174,10 @@ def main():
         npg = out.new_page(width=pg.rect.width, height=pg.rect.height)
         npg.insert_image(pg.rect, stream=pix.tobytes("jpeg", jpg_quality=82))
     out_path = Path("/Users/youngwoolee/Downloads/대수 1학기 기말 KERNEL POINT.pdf")
-    # clean=True 로 PDF 구조를 정상화(sanitize) → Acrobat 이 열 때 자동 복구를 시도하며
-    # 저장 프롬프트/error 117 을 내던 문제 방지. gs 재증류는 Acrobat 에서 오히려 빈 화면이
-    # 떠서(렌더 실패) 사용 안 함 — 각 페이지 단일 JPEG + 정상 구조가 가장 호환성 높음.
-    out.set_metadata({"producer": "MathDB", "creator": "MathDB KERNEL POINT"})
-    out.save(str(out_path), garbage=4, deflate=True, clean=True, pretty=False)
+    # ⚠ 저장 옵션은 단순하게 유지할 것. gs 재증류·clean=True 를 넣었더니 Acrobat 에서
+    # 1페이지부터 빈 화면(렌더 실패)이 떴음. 단순 garbage+deflate 본은 Acrobat 에서
+    # 정상 표시됨(닫을 때 뜨는 '저장' 프롬프트는 Acrobat 특성이니 저장 말고 닫으면 됨).
+    out.save(str(out_path), garbage=4, deflate=True)
     out.close(); src.close()
     print(f"[4/4] 저장: {out_path} (래스터/뷰어안전, {out_path.stat().st_size/1024/1024:.0f}MB) "
           f"+ 벡터본 {vec_path}")
