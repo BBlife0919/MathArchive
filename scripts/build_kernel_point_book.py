@@ -174,44 +174,14 @@ def main():
         npg = out.new_page(width=pg.rect.width, height=pg.rect.height)
         npg.insert_image(pg.rect, stream=pix.tobytes("jpeg", jpg_quality=82))
     out_path = Path("/Users/youngwoolee/Downloads/대수 1학기 기말 KERNEL POINT.pdf")
-    out.save(str(out_path), garbage=4, deflate=True)
+    # clean=True 로 PDF 구조를 정상화(sanitize) → Acrobat 이 열 때 자동 복구를 시도하며
+    # 저장 프롬프트/error 117 을 내던 문제 방지. gs 재증류는 Acrobat 에서 오히려 빈 화면이
+    # 떠서(렌더 실패) 사용 안 함 — 각 페이지 단일 JPEG + 정상 구조가 가장 호환성 높음.
+    out.set_metadata({"producer": "MathDB", "creator": "MathDB KERNEL POINT"})
+    out.save(str(out_path), garbage=4, deflate=True, clean=True, pretty=False)
     out.close(); src.close()
-
-    # Ghostscript 재증류 — PyMuPDF 가 만든 PDF 구조를 Acrobat 이 열 때 자동 '복구'를
-    # 시도하며 저장 시 error 117(읽기 오류)을 내는 문제 회피. gs 가 완전히 새 구조로
-    # 다시 쓰면 Acrobat/Preview 모두 깔끔히 열림. (180dpi 유지, gs 없으면 PyMuPDF 본 유지)
-    _gs_redistill(out_path)
     print(f"[4/4] 저장: {out_path} (래스터/뷰어안전, {out_path.stat().st_size/1024/1024:.0f}MB) "
           f"+ 벡터본 {vec_path}")
-
-
-def _gs_redistill(path: Path) -> None:
-    """Acrobat 호환을 위해 Ghostscript 로 PDF 재증류 (실패 시 원본 유지)."""
-    import shutil
-    import subprocess
-    gs = shutil.which("gs")
-    if not gs:
-        print("  (gs 없음 → PyMuPDF 본 유지)")
-        return
-    tmp = path.with_suffix(".gs.pdf")
-    cmd = [
-        gs, "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.6",
-        "-dPDFSETTINGS=/printer", "-dNOPAUSE", "-dBATCH", "-dQUIET",
-        "-dAutoRotatePages=/None", "-dDetectDuplicateImages=true",
-        "-dColorImageDownsampleType=/Bicubic", "-dColorImageResolution=180",
-        f"-sOutputFile={tmp}", str(path),
-    ]
-    try:
-        r = subprocess.run(cmd, timeout=300)
-        if r.returncode == 0 and tmp.exists() and tmp.stat().st_size > 0:
-            shutil.move(str(tmp), str(path))
-            print("  (gs 재증류 완료 — Acrobat 호환)")
-        else:
-            tmp.unlink(missing_ok=True)
-            print("  (gs 실패 → PyMuPDF 본 유지)")
-    except Exception as e:  # noqa: BLE001
-        tmp.unlink(missing_ok=True)
-        print(f"  (gs 예외 {e} → PyMuPDF 본 유지)")
 
 
 if __name__ == "__main__":
