@@ -1528,9 +1528,8 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
             '</div>'
             '<div class="kp-memo">'
             '<div class="kp-memo-label">MEMO</div>'
-            '<div class="kp-memo-line"></div>'
-            '<div class="kp-memo-line"></div>'
-            '</div>'
+            + '<div class="kp-memo-line"></div>' * 6
+            + '</div>'
             '</div>'
         )
 
