@@ -156,6 +156,19 @@ def main():
         page_running_left="KERNEL POINT",
     )
 
+    # 빈 페이지 제거 (페이지 나눔 잔여 등) — Preview 렌더 안정화
+    import fitz
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    blanks = [i for i in range(len(doc))
+              if len(doc[i].get_text().strip()) < 3
+              and not doc[i].get_images() and len(doc[i].get_drawings()) < 3]
+    for i in reversed(blanks):
+        doc.delete_page(i)
+    if blanks:
+        print(f"  빈 페이지 {len(blanks)}장 제거")
+    pdf_bytes = doc.tobytes(garbage=4, deflate=True)
+    doc.close()
+
     out_path = Path("/Users/youngwoolee/Downloads/대수 1학기 기말 KERNEL POINT.pdf")
     out_path.write_bytes(pdf_bytes)
     print(f"[4/4] 저장: {out_path}  ({len(pdf_bytes)/1024:.0f} KB)")
