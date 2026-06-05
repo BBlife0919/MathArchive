@@ -41,7 +41,6 @@ def main():
     div = fitz.open(str(DIVIDERS))
     probs = fitz.open(str(PROBLEMS))
     sols = fitz.open(str(SOLUTIONS))
-    qa = fitz.open(str(QUICK_ANS))
 
     n_ch = len(CHAPTERS)
 
@@ -76,7 +75,13 @@ def main():
             # 여기서는 빌더가 인쇄한 값에 의존하지 말고 chapter 별 다시 빌드 안 함.
             raise NotImplementedError
 
-    prob_breaks = chapter_page_breaks(pmeta, len(probs), per_page=4)
+    # build 가 저장한 정확한 chapter→page 매핑 사용
+    prob_breaks_path = OUT_DIR / "problems_page_breaks.json"
+    if prob_breaks_path.exists():
+        raw = json.loads(prob_breaks_path.read_text(encoding="utf-8"))
+        prob_breaks = {int(k): v for k, v in raw.items()}
+    else:
+        prob_breaks = chapter_page_breaks(pmeta, len(probs), per_page=4)
     # solutions: stack 기반이라 추적 어려움 — solutions 빌더가 챕터 바뀌면 새 페이지 시작하므로
     # solutions_2col.pdf 의 각 페이지 헤더를 보고 매핑하지 말고, 해설 클립을 직접 머지
     # 하지 말고 챕터 단위로 페이지 범위를 별도 계산.
@@ -151,10 +156,7 @@ def main():
     # 3) Solution divider (dividers 의 마지막 페이지 = AK)
     out.insert_pdf(div, from_page=len(div) - 1, to_page=len(div) - 1)
 
-    # 4) 빠른정답 (해설 디바이더 다음, 본격 해설 전)
-    out.insert_pdf(qa)
-
-    # 5) Solutions (챕터별 페이지 범위 차례로)
+    # 4) Solutions (챕터별 페이지 범위 차례로)
     for ch_idx in range(n_ch):
         s_start = sol_breaks[ch_idx]
         s_end = (sol_breaks[ch_idx + 1] - 1) if (ch_idx + 1) in sol_breaks else (len(sols) - 1)
@@ -164,10 +166,12 @@ def main():
     div.close()
     probs.close()
     sols.close()
-    qa.close()
 
     n_pages = len(out)
     out.save(str(OUT_PDF), garbage=4, deflate=True)
+    # ~/교재 자동 전달(다운로드 격리 회피)
+    import sys as _sys; _sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from lib_deliver import deliver as _deliver; _deliver(OUT_PDF)
     out.close()
     print(f"[OK] Final PDF: {OUT_PDF}")
     print(f"  Total pages: {n_pages}")

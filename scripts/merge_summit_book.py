@@ -69,6 +69,9 @@ def main():
 
     n_pages = len(out)
     out.save(str(OUT_PDF), garbage=4, deflate=True)
+    # ~/교재 자동 전달(다운로드 격리 회피)
+    import sys as _sys; _sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from lib_deliver import deliver as _deliver; _deliver(OUT_PDF)
     out.close()
     print(f"[OK] Final PDF: {OUT_PDF}")
     print(f"  Total pages: {n_pages}")
