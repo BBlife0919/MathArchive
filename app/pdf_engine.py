@@ -89,9 +89,12 @@ def _choice_col_class(choices_json) -> str:
         # 분수/루트/적분 등은 시각적으로 넓어 가중치
         wide = len(re.findall(r"\\d?frac|\\sqrt|\\sum|\\int|\\lim", t))
         s = re.sub(r"\\[a-zA-Z]+|[${}\\^_~\\\\]|\s", "", t)
-        return len(s) + wide * 4
+        # 한글·쉼표·부등호는 폭 가중치 (한 줄 못 들어가는 케이스 방지)
+        han = len(re.findall(r"[ㄱ-ㅎ가-힣]", t))
+        punct = t.count(",") + t.count("≤") + t.count("≥")
+        return len(s) + wide * 4 + han * 1 + punct * 1
 
-    return "cols2" if max(vlen(c.get("text", "")) for c in choices) > 13 else "cols3"
+    return "cols2" if max(vlen(c.get("text", "")) for c in choices) > 10 else "cols3"
 
 
 # ── HTML-safe 변환 (수식 보호) ────────────────────────────
@@ -254,6 +257,9 @@ def _normalize_math_inner(s: str) -> str:
         return f"\x00B{len(blocks) - 1}\x00"
 
     s = _TEXT_BLOCK.sub(_stash, s)
+    # HWP 변환 잔재: ANG ≤ X / ANG <= X / ANG \leq X → \angle X (LE 두 글자가 <= 로 잘못 매핑됨)
+    s = re.sub(r"\bANGLE\s+", r"\\angle ", s)
+    s = re.sub(r"\bANG\s*(?:≤|<=|\\leq)\s*", r"\\angle ", s)
     s = _BARE_FUNC.sub(r"\\\1", s)
     s = _LOOSE_SUP.sub(r"\1", s)
     for i, b in enumerate(blocks):
@@ -1238,6 +1244,17 @@ h2.exam-subtitle {
     font-size: 10.5pt;
     line-height: 1.65;
     color: #1f2937;
+    min-width: 0;
+    overflow: hidden;
+}
+.slot.book-kp .q-body .katex,
+.slot.book-kp .q-body .katex-display {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.slot.book-kp .q-choices .choice .katex {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 .slot.book-kp .q-choices {
     margin-top: 3mm;
@@ -1541,7 +1558,7 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
             '</div>'
             '<div class="kp-memo">'
             '<div class="kp-memo-label">MEMO</div>'
-            + '<div class="kp-memo-line"></div>' * 12
+            + '<div class="kp-memo-line"></div>' * 6
             + '</div>'
             '</div>'
         )

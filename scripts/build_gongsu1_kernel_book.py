@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
-"""KERNEL POINT — 광명 고2 대수 1학기 기말 내신기출 PDF 빌더.
+"""KERNEL POINT — 광명 고1 공수1 1학기 기말대비 PDF 빌더.
 
 조건:
-- region='경기광명시', grade=2
-- chapter ∈ 6개 (curriculum 순서):
-  삼각함수와 그래프 → 사인법칙과 코사인법칙 → 등차수열 → 등비수열
-  → 수열의 합 → 수학적 귀납법
+- region='경기광명시', grade=1
+- chapter ∈ 7개 (curriculum 순서):
+  고차방정식 → 연립방정식 → 부등식 → 순열 → 조합 → 행렬의 뜻 → 행렬의 연산
 - 정렬: 단원(curriculum) 오름차순 → 난이도(하<중<상<킬) 오름차순
 - 레이아웃: 2단, 단당 1문제 (페이지당 2문제, 모든 문항 full)
 - 해설: 맨 뒤 챕터별 쭉
-- 챕터 디바이더: 화이트+블루 디자인 (자동 I/II + SECTION 번호)
 
-데이터 소스: cloud Postgres (chapter 정규화 완료된 상태).
-출력: /Users/youngwoolee/Downloads/대수_1학기기말_필수유형FINAL.pdf
+데이터 소스: cloud Postgres.
+출력: ~/클로드교재/공수1 1학기 기말 KERNEL POINT.pdf
 """
 from __future__ import annotations
 
@@ -31,12 +29,13 @@ except ImportError:
     pass
 
 CHAPTERS = [
-    "삼각함수와 그래프",
-    "사인법칙과 코사인법칙",
-    "등차수열",
-    "등비수열",
-    "수열의 합",
-    "수학적 귀납법",
+    "고차방정식",
+    "연립방정식",
+    "부등식",
+    "순열",
+    "조합",
+    "행렬의 뜻",
+    "행렬의 연산",
 ]
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
 
@@ -59,7 +58,7 @@ def fetch_rows():
         f"LEFT JOIN solutions s ON q.question_id = s.question_id "
         f"WHERE q.region = %s AND q.grade = %s "
         f"  AND q.chapter IN ({marks})",
-        ("경기광명시", 2, *CHAPTERS),
+        ("경기광명시", 1, *CHAPTERS),
     )
     rows = [dict(r) for r in cur.fetchall()]
 
@@ -103,11 +102,6 @@ def main():
     # 난이도 '상' 행 제외 (사용자 지시)
     rows = [r for r in rows if r.get("difficulty") != "상"]
     print(f"  난이도 '상' 제외 후: {len(rows)}")
-    # 진성고 [중] 난이도 제외 (사용자 지시)
-    before = len(rows)
-    rows = [r for r in rows
-            if not (r.get("school") == "진성고" and r.get("difficulty") == "중")]
-    print(f"  진성고+중 제외 후: {len(rows)} (제거 {before - len(rows)})")
 
     # 정렬: chapter (CHAPTERS 순서) → 난이도 → question_id
     chap_idx = {c: i for i, c in enumerate(CHAPTERS)}
@@ -143,26 +137,26 @@ def main():
     pdf_bytes = generate_book_pdf(
         rows,
         title="KERNEL POINT",
-        subtitle="대수 1학기 기말 내신기출",
+        subtitle="공수1 1학기 기말대비",
         include_source=True,
         overrides=overrides,
         logo_path=str(logo_path) if logo_path.exists() else None,
         kicker_mark=None,
         kicker_text=None,
-        divider_meta_top="대수 1학기 기말 · KERNEL POINT",
-        divider_footer_title="대수 1학기 기말 · 내신기출 KERNEL POINT",
+        divider_meta_top="공수1 1학기 기말 · KERNEL POINT",
+        divider_footer_title="공수1 1학기 기말 · 내신기출 KERNEL POINT",
         divider_footer_sub="이영우 T",
         cover_main_title="KERNEL POINT",
-        cover_tagline="대수 1학기 기말 내신기출",
+        cover_tagline="공수1 1학기 기말대비",
         cover_big_word="FINAL",
         cover_kicker="MATH WORKBOOK · 2026",
-        cover_footer_main="Algebra Final Workbook · 2026",
-        cover_footer_sub="필수유형으로 끝내는 기말 마무리",
+        cover_footer_main="Gongsu 1 Final Workbook · 2026",
+        cover_footer_sub="필수유형으로 끝내는 공수1 기말 마무리",
         page_running_left="KERNEL POINT",
     )
 
     # 벡터 원본 보관 (텍스트 선택용)
-    vec_path = ROOT / "output" / "daesu_kernel_point_vector.pdf"
+    vec_path = ROOT / "output" / "gongsu1_kernel_point_vector.pdf"
     vec_path.parent.mkdir(exist_ok=True)
     vec_path.write_bytes(pdf_bytes)
 
@@ -183,7 +177,7 @@ def main():
     # 심볼릭 링크가 있어 한 번 클릭으로 진입 가능)
     book_dir = Path.home() / "클로드교재"
     book_dir.mkdir(exist_ok=True)
-    out_path = book_dir / "대수 1학기 기말 KERNEL POINT.pdf"
+    out_path = book_dir / "공수1 1학기 기말 KERNEL POINT.pdf"
     # ⚠ 저장 옵션은 단순하게 유지할 것. gs 재증류·clean=True 를 넣었더니 Acrobat 에서
     # 1페이지부터 빈 화면(렌더 실패)이 떴음. 단순 garbage+deflate 본은 Acrobat 에서
     # 정상 표시됨(닫을 때 뜨는 '저장' 프롬프트는 Acrobat 특성이니 저장 말고 닫으면 됨).
