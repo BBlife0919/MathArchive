@@ -33,5 +33,8 @@ __pycache__/
 .env
 .env.*
 
+# 세션 인계용 임시 메모 (커밋 X)
+HANDOFF.md
+
 # Streamlit secrets (실제 자격증명, Cloud secrets 패널에서 관리)
 .streamlit/secrets.toml
