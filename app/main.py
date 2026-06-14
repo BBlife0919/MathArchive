@@ -204,6 +204,50 @@ def load_filter_options():
             years, grades, semesters, exam_types)
 
 
+# ── 빠른 검색: 자연어 → 필터 ─────────────────────────────────
+_QUICK_TOKEN_MAP = {
+    "1학기": ("semesters", 1), "2학기": ("semesters", 2),
+    "1학년": ("grades", 1), "2학년": ("grades", 2), "3학년": ("grades", 3),
+    "고1": ("grades", 1), "고2": ("grades", 2), "고3": ("grades", 3),
+    "중간": ("exam_types", "a"), "기말": ("exam_types", "b"),
+    "중간고사": ("exam_types", "a"), "기말고사": ("exam_types", "b"),
+}
+_YEAR_RE = re.compile(r"^20[0-9]\d$")
+
+
+def parse_quick_search(text: str) -> dict:
+    """공백 분리 자연어 → 필터 조각.
+
+    예) "수도여고 2023 1학기 기말" →
+        {years:[2023], semesters:[1], exam_types:['b'], school_kw:'수도여고'}
+    """
+    out = {"years": [], "grades": [], "semesters": [], "exam_types": [],
+           "school_kw": ""}
+    if not text:
+        return out
+    school_parts = []
+    for tok in text.split():
+        if _YEAR_RE.match(tok):
+            out["years"].append(int(tok))
+            continue
+        # "2023년" 같은 한글 suffix
+        if tok.endswith("년") and _YEAR_RE.match(tok[:-1]):
+            out["years"].append(int(tok[:-1]))
+            continue
+        if tok in _QUICK_TOKEN_MAP:
+            k, v = _QUICK_TOKEN_MAP[tok]
+            out[k].append(v)
+            continue
+        if tok.lower() in ("a", "b"):
+            out["exam_types"].append(tok.lower())
+            continue
+        # 학교명 키워드
+        school_parts.append(tok)
+    if school_parts:
+        out["school_kw"] = " ".join(school_parts)
+    return out
+
+
 # ── 문제 검색 ────────────────────────────────────────────────
 def _build_search_where(schools, chapters, difficulties, regions,
                         years=None, grades=None, semesters=None,
@@ -700,6 +744,29 @@ def main():
     with st.sidebar:
         st.header("🔍 문제 필터")
 
+        # ── 빠른 검색 (타이핑 → 버튼 클릭 시 적용) ───────────────
+        # 입력 중에는 검색 안 함 (rerun 폭주 방지). 버튼 클릭 시만.
+        quick_input = st.text_input(
+            "⚡ 빠른 검색",
+            placeholder="예: 수도여고 2023 1학기 기말",
+            key="quick_q_input",
+            help="공백 구분. 학교명·년도·학기·중간/기말 자동 인식.",
+        )
+        qbc1, qbc2 = st.columns([0.65, 0.35])
+        with qbc1:
+            if st.button("🔍 검색", use_container_width=True,
+                         type="primary", key="quick_apply"):
+                st.session_state["quick_active"] = quick_input.strip()
+                st.rerun()
+        with qbc2:
+            if st.button("✖ 해제", use_container_width=True,
+                         key="quick_clear"):
+                st.session_state["quick_active"] = ""
+                st.rerun()
+        if st.session_state.get("quick_active"):
+            st.caption(f"🔎 적용 중: `{st.session_state['quick_active']}`")
+        st.divider()
+
         sel_regions = st.multiselect("지역", regions)
         sel_schools = st.multiselect("학교", schools)
 
@@ -713,7 +780,9 @@ def main():
                                        format_func=lambda v: f"{v}학기")
         sel_exam_types = st.multiselect(
             "중간/기말", exam_types,
-            format_func=lambda v: {"a": "중간", "b": "기말"}.get(v, v),
+            format_func=lambda v: {"a": "중간", "b": "기말"}.get(
+                str(v).lower(), v
+            ),
         )
 
         # ── 계층형 단원 필터: 과목 → 대단원 → 중단원 ─────────
@@ -774,13 +843,31 @@ def main():
 
     render_user_menu_in_sidebar()
 
+    # ── 빠른 검색 자연어 → multiselect 와 합치기 ─────────────
+    # 카테고리별: multiselect 가 비어있으면 quick 값 사용. 둘 다 있으면 multiselect 우선.
+    # 학교는 LIKE 매칭: multiselect 비어있고 quick.school_kw 있을 때 schools 리스트
+    # 에서 prefix 또는 부분일치 학교만 추려서 IN 절에 전달.
+    _quick = parse_quick_search(st.session_state.get("quick_active", ""))
+    eff_years = sel_years or _quick["years"]
+    eff_grades = sel_grades or _quick["grades"]
+    eff_semesters = sel_semesters or _quick["semesters"]
+    eff_exam_types = sel_exam_types or _quick["exam_types"]
+    if sel_schools:
+        eff_schools = sel_schools
+    elif _quick["school_kw"]:
+        _kw = _quick["school_kw"]
+        eff_schools = [s for s in schools if _kw in s]
+        # 매칭 0 일 때 옛 값으로 fallback 하지 않고 빈 리스트로 → 결과 0 안내
+    else:
+        eff_schools = []
+
     # ── 문제 검색 결과 ────────────────────────────────────────
     # 1단계: 가벼운 ID+난이도만 (전체 매칭) — 카운트·미니테스트 풀용
     all_meta = search_question_ids(
-        tuple(sel_schools), tuple(sel_chapters),
+        tuple(eff_schools), tuple(sel_chapters),
         tuple(sel_difficulties), tuple(sel_regions),
-        years=tuple(sel_years), grades=tuple(sel_grades),
-        semesters=tuple(sel_semesters), exam_types=tuple(sel_exam_types),
+        years=tuple(eff_years), grades=tuple(eff_grades),
+        semesters=tuple(eff_semesters), exam_types=tuple(eff_exam_types),
         is_subjective=is_subjective, keyword=keyword,
     )
 

@@ -138,6 +138,10 @@ REPLACE = [
     (re.compile(r"(?<![A-Za-z\\])sqrt(?=[A-Za-z])"), r"\\sqrt "),
     (re.compile(r"(?<![A-Za-z\\])SQRT(?=[A-Za-z])"), r"\\sqrt "),
     (re.compile(r"(?<![A-Za-z\\])SQRT(?![A-Za-z])"), r"\\sqrt"),
+    # sup + 숫자 → ^{N}  (HWP 수식편집기 superscript: `x sup 3` → `x^{3}`)
+    (re.compile(r"\bsup\s+(\d+)\b"), r"^{\1}"),
+    # int from A to B → \int_{A}^{B}  (적분 한계: `int from 0 to x` → `\int_{0}^{x}`)
+    (re.compile(r"\bint\s+from\s+(\S+)\s+to\s+(\S+)"), r"\\int_{\1}^{\2}"),
 ]
 
 # 영어 단어와 충돌 위험 있는 토큰 — 수식 ($...$) 안에서만 치환
