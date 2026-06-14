@@ -5,12 +5,14 @@
 2. Q-M Chart (clinic_entries 집계: Q=이해/방법, M=실수/시간)
 3. 자가예측 격차 (예측 vs 실제 — 메타인지 추적)
 4. 학습 로그 (진도/숙제/시험 통합 입력)
-5. 관리 로그 (보호자/출결/메모 통합 입력)
+5. 과제 정밀평가 (PDF §5-2: 정량 매일 A/B/C/D + 정성 월 2회 4항목)
+6. 관리 로그 (보호자/출결/메모 통합 입력)
 
 DB:
 - students (tenant_id 추가됨)
 - student_progress (진도/숙제/시험/자가예측)
 - student_log (보호자/출결/메모)
+- student_assessment (과제 정밀평가 — 정량/정성)
 - clinic_entries (Q-M Chart 원천)
 """
 from __future__ import annotations
@@ -324,8 +326,96 @@ else:
 st.divider()
 
 
-# ── 섹션 5: 관리 로그 (보호자/출결/메모) ─────────────
-st.subheader("5. 관리 로그 — 보호자·출결·메모")
+# ── 섹션 5: 과제 정밀평가 (PDF §5-2) ───────────────────
+st.subheader("5. 과제 정밀평가")
+st.caption(
+    "정량(매일 A/B/C/D)은 처방 갱신 신호, "
+    "정성(월 2회 4항목)은 자기학습 자세 추적."
+)
+
+GRADE_OPTIONS = ["A", "B", "C", "D"]
+
+with st.expander("➕ 정량 평가 (매일)", expanded=False):
+    with st.form("add_assess_quant"):
+        aq_date = st.date_input("평가일", value=date.today(), key="aq_date")
+        aq_grade = st.radio("과제 완성도", GRADE_OPTIONS, horizontal=True, key="aq_grade")
+        aq_note = st.text_input("메모 (선택)", placeholder="예: 풀이 빈약, 시간 부족", key="aq_note")
+        if st.form_submit_button("저장"):
+            exec_commit(
+                """INSERT INTO student_assessment
+                   (student_id, eval_date, eval_type, quantity_grade, note)
+                   VALUES (?, ?, 'quantity', ?, ?)""",
+                (sid, aq_date.isoformat(), aq_grade,
+                 aq_note.strip() or None),
+            )
+            st.success("저장됨")
+            st.rerun()
+
+with st.expander("➕ 정성 평가 (월 2회 · 4항목)", expanded=False):
+    with st.form("add_assess_qual"):
+        al_date = st.date_input("평가일", value=date.today(), key="al_date")
+        sl1 = st.slider("풀이노트 완성도",       1, 5, 3, key="sl_note")
+        sl2 = st.slider("서술형 완성도",         1, 5, 3, key="sl_written")
+        sl3 = st.slider("교재 표시 습관",         1, 5, 3, key="sl_textbook")
+        sl4 = st.slider("2차 풀이 후 틀린 이유 작성", 1, 5, 3, key="sl_second")
+        al_note = st.text_input("메모 (선택)", key="al_note")
+        if st.form_submit_button("저장"):
+            exec_commit(
+                """INSERT INTO student_assessment
+                   (student_id, eval_date, eval_type,
+                    note_completion, written_completion,
+                    textbook_marking, second_solve_reason, note)
+                   VALUES (?, ?, 'qualitative', ?, ?, ?, ?, ?)""",
+                (sid, al_date.isoformat(),
+                 int(sl1), int(sl2), int(sl3), int(sl4),
+                 al_note.strip() or None),
+            )
+            st.success("저장됨")
+            st.rerun()
+
+# 최근 4주 정량 분포
+quant_cutoff = (date.today() - timedelta(weeks=4)).isoformat()
+quants = q(
+    "SELECT quantity_grade FROM student_assessment "
+    "WHERE student_id = ? AND eval_type = 'quantity' AND eval_date >= ?",
+    (sid, quant_cutoff),
+)
+if quants:
+    grade_counter = Counter(r["quantity_grade"] for r in quants if r["quantity_grade"])
+    total_q = sum(grade_counter.values())
+    gq1, gq2, gq3, gq4 = st.columns(4)
+    for col, g in zip([gq1, gq2, gq3, gq4], GRADE_OPTIONS):
+        cnt = grade_counter.get(g, 0)
+        pct = f"{cnt / total_q * 100:.0f}%" if total_q else "-"
+        col.metric(f"{g} 등급", f"{cnt}건", pct)
+else:
+    st.info("최근 4주 정량 평가 기록 없음.")
+
+# 최근 정성 1건
+latest_qual = q(
+    "SELECT eval_date, note_completion, written_completion, "
+    "       textbook_marking, second_solve_reason, note "
+    "FROM student_assessment "
+    "WHERE student_id = ? AND eval_type = 'qualitative' "
+    "ORDER BY eval_date DESC LIMIT 1",
+    (sid,),
+)
+if latest_qual:
+    lq = latest_qual[0]
+    st.markdown(f"**최근 정성 평가 ({lq['eval_date']})**")
+    pq1, pq2, pq3, pq4 = st.columns(4)
+    pq1.metric("풀이노트",       f"{lq['note_completion']}/5")
+    pq2.metric("서술형",         f"{lq['written_completion']}/5")
+    pq3.metric("교재 표시",       f"{lq['textbook_marking']}/5")
+    pq4.metric("2차 풀이 이유",   f"{lq['second_solve_reason']}/5")
+    if lq["note"]:
+        st.caption(f"📝 {lq['note']}")
+
+st.divider()
+
+
+# ── 섹션 6: 관리 로그 (보호자/출결/메모) ─────────────
+st.subheader("6. 관리 로그 — 보호자·출결·메모")
 st.caption("학부모 신뢰의 핵심. 모든 연락/결석/특이사항을 1줄씩 누적합니다.")
 
 with st.expander("➕ 관리 로그 추가", expanded=False):
