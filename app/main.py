@@ -166,12 +166,13 @@ def load_filter_options():
     개선: GROUP BY 로 1 round-trip + 1회 스캔에 모든 값 추출.
     """
     sql = """
-        SELECT school, chapter, region
+        SELECT school, chapter, region, year, grade, semester, exam_type
         FROM questions
-        GROUP BY school, chapter, region
+        GROUP BY school, chapter, region, year, grade, semester, exam_type
     """
     rows = query(sql)
     school_set, chapter_set, region_set = set(), set(), set()
+    year_set, grade_set, semester_set, exam_set = set(), set(), set(), set()
     for r in rows:
         if r["school"]:
             school_set.add(r["school"])
@@ -179,17 +180,34 @@ def load_filter_options():
             chapter_set.add(r["chapter"])
         if r["region"]:
             region_set.add(r["region"])
+        if r["year"]:
+            year_set.add(int(r["year"]))
+        if r["grade"]:
+            grade_set.add(int(r["grade"]))
+        if r["semester"]:
+            semester_set.add(int(r["semester"]))
+        if r["exam_type"]:
+            exam_set.add(r["exam_type"])
     schools = sorted(school_set)
     chapters = sorted(chapter_set)
     regions = sorted(region_set)
+    # 년도 내림차순 (최근 우선), 학년·학기 오름차순
+    years = sorted(year_set, reverse=True)
+    grades = sorted(grade_set)
+    semesters = sorted(semester_set)
+    # 시험유형: a=중간, b=기말 (그 외 값은 끝에)
+    exam_types = sorted(exam_set, key=lambda v: {"a": 0, "b": 1}.get(v, 9))
     # 난이도는 정상 4종(하/중/상/킬)만 표시 — HWPX 작성자가 난이도 칸에
     # 단원명·메모 등 잘못 입력한 잡티(다항함수/문제오류/특/즁/히 등) 차단.
     difficulties = DIFF_VALID
-    return schools, chapters, difficulties, regions
+    return (schools, chapters, difficulties, regions,
+            years, grades, semesters, exam_types)
 
 
 # ── 문제 검색 ────────────────────────────────────────────────
 def _build_search_where(schools, chapters, difficulties, regions,
+                        years=None, grades=None, semesters=None,
+                        exam_types=None,
                         is_subjective=None, keyword=""):
     """필터 조건을 (where_clause, params) 튜플로 반환."""
     conditions = []
@@ -211,6 +229,22 @@ def _build_search_where(schools, chapters, difficulties, regions,
         placeholders = ",".join("?" * len(regions))
         conditions.append(f"q.region IN ({placeholders})")
         params.extend(regions)
+    if years:
+        placeholders = ",".join("?" * len(years))
+        conditions.append(f"q.year IN ({placeholders})")
+        params.extend(years)
+    if grades:
+        placeholders = ",".join("?" * len(grades))
+        conditions.append(f"q.grade IN ({placeholders})")
+        params.extend(grades)
+    if semesters:
+        placeholders = ",".join("?" * len(semesters))
+        conditions.append(f"q.semester IN ({placeholders})")
+        params.extend(semesters)
+    if exam_types:
+        placeholders = ",".join("?" * len(exam_types))
+        conditions.append(f"q.exam_type IN ({placeholders})")
+        params.extend(exam_types)
     if is_subjective is not None:
         conditions.append("q.is_subjective = ?")
         params.append(1 if is_subjective else 0)
@@ -224,6 +258,7 @@ def _build_search_where(schools, chapters, difficulties, regions,
 
 @st.cache_data(ttl=300)
 def search_question_ids(schools, chapters, difficulties, regions,
+                        years=(), grades=(), semesters=(), exam_types=(),
                         is_subjective=None, keyword=""):
     """필터 매칭 문항의 ID + 미니테스트용 최소 메타만 반환 (가벼움).
 
@@ -232,7 +267,9 @@ def search_question_ids(schools, chapters, difficulties, regions,
     """
     where, params = _build_search_where(
         list(schools), list(chapters), list(difficulties), list(regions),
-        is_subjective, keyword,
+        years=list(years), grades=list(grades),
+        semesters=list(semesters), exam_types=list(exam_types),
+        is_subjective=is_subjective, keyword=keyword,
     )
     sql = f"""
         SELECT q.question_id, q.difficulty
@@ -656,7 +693,8 @@ def main():
     if "selected_ids" not in st.session_state:
         st.session_state.selected_ids = set()
 
-    schools, chapters, difficulties, regions = load_filter_options()
+    (schools, chapters, difficulties, regions,
+     years, grades, semesters, exam_types) = load_filter_options()
 
     # ── 사이드바: 필터 ────────────────────────────────────────
     with st.sidebar:
@@ -664,6 +702,19 @@ def main():
 
         sel_regions = st.multiselect("지역", regions)
         sel_schools = st.multiselect("학교", schools)
+
+        # 시험 메타 (학년·년도·학기·중간/기말) — 같은 학교라도
+        # 시험별로 좁힐 수 있게.
+        sel_grades = st.multiselect("학년", grades,
+                                    format_func=lambda v: f"고{v}")
+        sel_years = st.multiselect("년도", years,
+                                   format_func=lambda v: f"{v}년")
+        sel_semesters = st.multiselect("학기", semesters,
+                                       format_func=lambda v: f"{v}학기")
+        sel_exam_types = st.multiselect(
+            "중간/기말", exam_types,
+            format_func=lambda v: {"a": "중간", "b": "기말"}.get(v, v),
+        )
 
         # ── 계층형 단원 필터: 과목 → 대단원 → 중단원 ─────────
         st.markdown("**단원**")
@@ -728,7 +779,9 @@ def main():
     all_meta = search_question_ids(
         tuple(sel_schools), tuple(sel_chapters),
         tuple(sel_difficulties), tuple(sel_regions),
-        is_subjective, keyword
+        years=tuple(sel_years), grades=tuple(sel_grades),
+        semesters=tuple(sel_semesters), exam_types=tuple(sel_exam_types),
+        is_subjective=is_subjective, keyword=keyword,
     )
 
     # 탭 구성
@@ -1059,422 +1112,462 @@ def main():
                 st.session_state.mini_test_active = False
                 st.rerun()
 
-            mini_active = st.session_state.get("mini_test_active", False)
-            if mini_active and mode == "exam":
-                default_title = "미니테스트 (15분)"
-            else:
-                default_title = "수학 시험지" if mode == "exam" else "수학 교재"
-            exam_title = st.text_input("제목", value=default_title)
+            # ── 좌우 분할: 좌측=옵션·문항 / 우측=PDF 미리보기(sticky) ──
+            col_settings, col_preview = st.columns([0.58, 0.42], gap="large")
+            with col_settings:
+                mini_active = st.session_state.get("mini_test_active", False)
+                if mini_active and mode == "exam":
+                    default_title = "미니테스트 (15분)"
+                else:
+                    default_title = "수학 시험지" if mode == "exam" else "수학 교재"
+                exam_title = st.text_input("제목", value=default_title)
 
-            head_c1, head_c2 = st.columns(2)
-            with head_c1:
-                show_subtitle = st.toggle("부제 표시", value=False,
-                                          help="제목 아래에 작은 글씨로 표시됩니다.")
-                subtitle_text = ""
-                if show_subtitle:
-                    subtitle_text = st.text_input(
-                        "부제", value="", placeholder="예: 2026학년도 1학기 중간대비",
-                        label_visibility="collapsed",
-                    )
-            with head_c2:
-                show_logo = st.toggle("로고 표시", value=False,
-                                      help="우측 상단에 로고 이미지 표시.")
-                logo_override = None
-                if show_logo:
-                    uploaded_logo = st.file_uploader(
-                        "로고 업로드 (기본: 이음학원 로고)", type=["png", "jpg", "jpeg"],
-                        label_visibility="collapsed",
-                    )
-                    if uploaded_logo is not None:
-                        tmp = Path("/tmp") / f"logo_upload_{uploaded_logo.name}"
-                        tmp.write_bytes(uploaded_logo.getvalue())
-                        logo_override = str(tmp)
+                head_c1, head_c2 = st.columns(2)
+                with head_c1:
+                    show_subtitle = st.toggle("부제 표시", value=False,
+                                              help="제목 아래에 작은 글씨로 표시됩니다.")
+                    subtitle_text = ""
+                    if show_subtitle:
+                        subtitle_text = st.text_input(
+                            "부제", value="", placeholder="예: 2026학년도 1학기 중간대비",
+                            label_visibility="collapsed",
+                        )
+                with head_c2:
+                    show_logo = st.toggle("로고 표시", value=False,
+                                          help="우측 상단에 로고 이미지 표시.")
+                    logo_override = None
+                    if show_logo:
+                        uploaded_logo = st.file_uploader(
+                            "로고 업로드 (기본: 이음학원 로고)", type=["png", "jpg", "jpeg"],
+                            label_visibility="collapsed",
+                        )
+                        if uploaded_logo is not None:
+                            tmp = Path("/tmp") / f"logo_upload_{uploaded_logo.name}"
+                            tmp.write_bytes(uploaded_logo.getvalue())
+                            logo_override = str(tmp)
 
-            include_source = st.toggle(
-                "출처 삽입 (학교·연도·학기 표시)", value=True,
-                help="꺼두면 문제 번호만 표시됩니다."
-            )
-
-            # 교재 모드 전용: 제목 위 kicker (디자인 요소)
-            kicker_mark = None
-            kicker_text = None
-            divider_meta_top = None
-            divider_footer_title = None
-            divider_footer_sub = None
-            if mode == "book":
-                show_kicker = st.toggle(
-                    "상단 라벨 표시", value=True,
-                    help="제목 위에 작은 포인트 텍스트 (예: '#01 MATH ARCHIVE')"
+                include_source = st.toggle(
+                    "출처 삽입 (학교·연도·학기 표시)", value=True,
+                    help="꺼두면 문제 번호만 표시됩니다."
                 )
-                if show_kicker:
-                    kc1, kc2 = st.columns([0.35, 0.65])
-                    with kc1:
-                        kicker_mark = st.text_input(
-                            "포인트 (주황)", value="#01",
-                            placeholder="예: #01, VOL.1, 2026",
-                        )
-                    with kc2:
-                        kicker_text = st.text_input(
-                            "브랜드", value="MATH ARCHIVE",
-                            placeholder="예: MATH ARCHIVE, EUM ACADEMY",
-                        )
-                    kicker_mark = kicker_mark.strip() or None
-                    kicker_text = kicker_text.strip() or None
 
-                with st.expander("📑 챕터 디바이더 메타", expanded=True):
-                    st.caption(
-                        "각 소단원 시작 페이지(디바이더) 의 우상단/좌하단 라벨. "
-                        "비워두면 책 제목 사용."
+                # 교재 모드 전용: 제목 위 kicker (디자인 요소)
+                kicker_mark = None
+                kicker_text = None
+                divider_meta_top = None
+                divider_footer_title = None
+                divider_footer_sub = None
+                if mode == "book":
+                    show_kicker = st.toggle(
+                        "상단 라벨 표시", value=True,
+                        help="제목 위에 작은 포인트 텍스트 (예: '#01 MATH ARCHIVE')"
                     )
-                    divider_meta_top = st.text_input(
-                        "우상단 (예: 대수 1학기 기말 · FINAL)",
-                        value="대수 1학기 기말 · FINAL",
-                        key="divider_meta_top",
-                    ).strip() or None
-                    dc1, dc2 = st.columns([0.65, 0.35])
-                    with dc1:
-                        divider_footer_title = st.text_input(
-                            "좌하단 제목",
-                            value="대수 1학기 기말고사 · 필수유형 FINAL",
-                            key="divider_footer_title",
-                        ).strip() or None
-                    with dc2:
-                        divider_footer_sub = st.text_input(
-                            "좌하단 부제",
-                            value="이영우 T",
-                            key="divider_footer_sub",
-                        ).strip() or None
+                    if show_kicker:
+                        kc1, kc2 = st.columns([0.35, 0.65])
+                        with kc1:
+                            kicker_mark = st.text_input(
+                                "포인트 (주황)", value="#01",
+                                placeholder="예: #01, VOL.1, 2026",
+                            )
+                        with kc2:
+                            kicker_text = st.text_input(
+                                "브랜드", value="MATH ARCHIVE",
+                                placeholder="예: MATH ARCHIVE, EUM ACADEMY",
+                            )
+                        kicker_mark = kicker_mark.strip() or None
+                        kicker_text = kicker_text.strip() or None
 
-            effective_subtitle = subtitle_text.strip() if show_subtitle else None
-            effective_logo = (
-                logo_override if show_logo and logo_override
-                else (str(DEFAULT_LOGO_PATH) if show_logo and DEFAULT_LOGO_PATH.exists() else None)
-            )
+                    with st.expander("📑 챕터 디바이더 메타", expanded=True):
+                        st.caption(
+                            "각 소단원 시작 페이지(디바이더) 의 우상단/좌하단 라벨. "
+                            "비워두면 책 제목 사용."
+                        )
+                        divider_meta_top = st.text_input(
+                            "우상단 (예: 대수 1학기 기말 · FINAL)",
+                            value="대수 1학기 기말 · FINAL",
+                            key="divider_meta_top",
+                        ).strip() or None
+                        dc1, dc2 = st.columns([0.65, 0.35])
+                        with dc1:
+                            divider_footer_title = st.text_input(
+                                "좌하단 제목",
+                                value="대수 1학기 기말고사 · 필수유형 FINAL",
+                                key="divider_footer_title",
+                            ).strip() or None
+                        with dc2:
+                            divider_footer_sub = st.text_input(
+                                "좌하단 부제",
+                                value="이영우 T",
+                                key="divider_footer_sub",
+                            ).strip() or None
 
-            # ── 표지+내지 디자인 (시험지 모드 전용) ────────────────
-            design_meta = None
-            cover_design_key = None
-            inner_design_key = None
-            if mode == "exam":
-                use_design = st.toggle(
-                    "🎨 표지+내지 디자인 사용 (학교 시험지 양식)",
-                    value=False,
-                    key="use_designed_exam",
-                    help="ON: 표지 + 내지 디자인 적용 / OFF: 기본 시험지 양식",
+                effective_subtitle = subtitle_text.strip() if show_subtitle else None
+                effective_logo = (
+                    logo_override if show_logo and logo_override
+                    else (str(DEFAULT_LOGO_PATH) if show_logo and DEFAULT_LOGO_PATH.exists() else None)
                 )
-                if use_design:
-                    import exam_designs as _ed
-                    from datetime import date as _date
 
-                    dc1, dc2 = st.columns(2)
-                    with dc1:
-                        cover_design_key = st.selectbox(
-                            "표지 디자인", list(_ed.COVER_DESIGNS.keys()),
-                            key="cover_design_key",
-                        )
-                    with dc2:
-                        inner_design_key = st.selectbox(
-                            "내지 디자인", list(_ed.INNER_DESIGNS.keys()),
-                            key="inner_design_key",
-                        )
-
-                    with st.expander("📝 시험지 정보 입력",
-                                     expanded=True):
-                        # 학년도/학기/회차/학년
-                        r1 = st.columns(4)
-                        with r1[0]:
-                            in_year = st.number_input(
-                                "학년도", min_value=2020, max_value=2099,
-                                value=2026, key="meta_year",
-                            )
-                        with r1[1]:
-                            in_sem = st.number_input(
-                                "학기", min_value=1, max_value=2,
-                                value=1, key="meta_sem",
-                            )
-                        with r1[2]:
-                            in_session = st.number_input(
-                                "차수 / 회고사", min_value=1, max_value=10,
-                                value=1, key="meta_session",
-                            )
-                        with r1[3]:
-                            in_grade = st.number_input(
-                                "대상 학년", min_value=1, max_value=6,
-                                value=1, key="meta_grade",
-                            )
-
-                        # 과목명
-                        in_subject = st.text_input(
-                            "과목명", value="공통수학1",
-                            key="meta_subject",
-                            placeholder="예: 공통수학1, 미적분, 확률과 통계",
-                        )
-
-                        # 시행일 + 시각 + 교시 + 코드번호
-                        r2 = st.columns([2, 1, 1, 1])
-                        with r2[0]:
-                            in_date = st.date_input(
-                                "시행일", value=_date(2026, 4, 12),
-                                key="meta_date",
-                            )
-                        with r2[1]:
-                            in_hour = st.number_input(
-                                "시작 시(時)", min_value=0, max_value=23,
-                                value=17, key="meta_hour",
-                            )
-                        with r2[2]:
-                            in_period = st.number_input(
-                                "교시", min_value=1, max_value=8,
-                                value=1, key="meta_period",
-                            )
-                        with r2[3]:
-                            in_code = st.text_input(
-                                "코드번호", value="02",
-                                key="meta_code",
-                            )
-
-                        # 문항 수 (자동 카운트 + 수동 덮어쓰기)
-                        auto_choice = sum(
-                            1 for r in selected_rows
-                            if not (r["is_subjective"] or False)
-                        )
-                        auto_essay = sum(
-                            1 for r in selected_rows
-                            if (r["is_subjective"] or False)
-                        )
-                        r3 = st.columns(2)
-                        with r3[0]:
-                            in_n_choice = st.number_input(
-                                f"선택형 문항 수 (자동: {auto_choice})",
-                                min_value=0, max_value=200,
-                                value=auto_choice, key="meta_n_choice",
-                            )
-                        with r3[1]:
-                            in_n_essay = st.number_input(
-                                f"논술형 문항 수 (자동: {auto_essay})",
-                                min_value=0, max_value=200,
-                                value=auto_essay, key="meta_n_essay",
-                            )
-
-                        # 학교 / 학원 / 모토 / 강사
-                        r4 = st.columns(2)
-                        with r4[0]:
-                            in_school_short = st.text_input(
-                                "학교 약어 (→ '○○고등학교')",
-                                value="이음", key="meta_school_short",
-                            )
-                        with r4[1]:
-                            in_instructor = st.text_input(
-                                "강사명 (→ 'with ○○T')",
-                                value="이영우", key="meta_instructor",
-                            )
-                        # 학원명/모토는 표지에서 제거됨 (로고에 이미 포함).
-                        # 기본값은 ExamMeta dataclass 기본값으로 충분.
-                        in_org = "이음학원"
-                        in_motto = ""
-
-                        # 모의고사 스타일 내지의 큰 제목
-                        if inner_design_key and "모의고사" in inner_design_key:
-                            in_inner_title = st.text_input(
-                                "내지 큰 제목",
-                                value="수학영역",
-                                key="meta_inner_title",
-                            )
-                        else:
-                            in_inner_title = "수학영역"
-
-                        # 로고 선택 — assets 폴더 목록 + 업로드 옵션
-                        logo_options = _ed.list_logos()
-                        if logo_options:
-                            display_names = [name for name, _ in logo_options]
-                            sel_logo_name = st.selectbox(
-                                "로고 (assets 폴더)", display_names,
-                                key="meta_logo_name",
-                            )
-                            in_logo_path = next(
-                                (p for n, p in logo_options
-                                 if n == sel_logo_name),
-                                None,
-                            )
-                        else:
-                            in_logo_path = None
-
-                    design_meta = _ed.ExamMeta(
-                        school_year=int(in_year),
-                        semester=int(in_sem),
-                        session=int(in_session),
-                        grade=int(in_grade),
-                        subject=in_subject.strip() or "공통수학1",
-                        exam_date=in_date,
-                        exam_hour=int(in_hour),
-                        period=int(in_period),
-                        code_number=in_code.strip() or "02",
-                        n_choice=int(in_n_choice),
-                        n_essay=int(in_n_essay),
-                        school_name_short=in_school_short.strip() or "이음",
-                        school_org_name=in_org.strip() or "이음학원",
-                        school_motto=in_motto.strip(),
-                        instructor_name=in_instructor.strip() or "이영우",
-                        logo_path=in_logo_path,
-                        inner_title=in_inner_title.strip() or "수학영역",
+                # ── 표지+내지 디자인 (시험지 모드 전용) ────────────────
+                design_meta = None
+                cover_design_key = None
+                inner_design_key = None
+                if mode == "exam":
+                    use_design = st.toggle(
+                        "🎨 표지+내지 디자인 사용 (학교 시험지 양식)",
+                        value=False,
+                        key="use_designed_exam",
+                        help="ON: 표지 + 내지 디자인 적용 / OFF: 기본 시험지 양식",
                     )
+                    if use_design:
+                        import exam_designs as _ed
+                        from datetime import date as _date
 
-            col_info, col_download = st.columns([0.7, 0.3])
-            with col_info:
-                st.markdown(f"**{len(selected_rows)}문항** 선택됨")
-                total_pts = sum(r["points"] or 0 for r in selected_rows)
-                if total_pts:
-                    st.caption(f"총 배점: {total_pts:.1f}점")
-
-            # 레이아웃 override (수동 1단/2단 전환)
-            if "layout_overrides" not in st.session_state:
-                st.session_state.layout_overrides = {}
-            overrides = st.session_state.layout_overrides
-
-            with col_download:
-                try:
-                    if mode == "exam":
-                        if design_meta is not None:
-                            # 표지+내지 디자인 적용
-                            from pdf_engine import generate_designed_exam_pdf
-                            pdf_data = generate_designed_exam_pdf(
-                                [dict(r) for r in selected_rows],
-                                meta=design_meta,
-                                cover_design=cover_design_key,
-                                inner_design=inner_design_key,
-                                include_source=include_source,
-                                overrides=overrides,
+                        dc1, dc2 = st.columns(2)
+                        with dc1:
+                            cover_design_key = st.selectbox(
+                                "표지 디자인", list(_ed.COVER_DESIGNS.keys()),
+                                key="cover_design_key",
                             )
-                            fname = (
-                                f"{design_meta.school_year}_"
-                                f"{design_meta.semester}_"
-                                f"{design_meta.session}회_"
-                                f"{design_meta.subject}.pdf"
+                        with dc2:
+                            inner_design_key = st.selectbox(
+                                "내지 디자인", list(_ed.INNER_DESIGNS.keys()),
+                                key="inner_design_key",
                             )
-                        else:
-                            from pdf_engine import generate_exam_pdf
-                            pdf_data = generate_exam_pdf(
+
+                        with st.expander("📝 시험지 정보 입력",
+                                         expanded=True):
+                            # 학년도/학기/회차/학년
+                            r1 = st.columns(4)
+                            with r1[0]:
+                                in_year = st.number_input(
+                                    "학년도", min_value=2020, max_value=2099,
+                                    value=2026, key="meta_year",
+                                )
+                            with r1[1]:
+                                in_sem = st.number_input(
+                                    "학기", min_value=1, max_value=2,
+                                    value=1, key="meta_sem",
+                                )
+                            with r1[2]:
+                                in_session = st.number_input(
+                                    "차수 / 회고사", min_value=1, max_value=10,
+                                    value=1, key="meta_session",
+                                )
+                            with r1[3]:
+                                in_grade = st.number_input(
+                                    "대상 학년", min_value=1, max_value=6,
+                                    value=1, key="meta_grade",
+                                )
+
+                            # 과목명
+                            in_subject = st.text_input(
+                                "과목명", value="공통수학1",
+                                key="meta_subject",
+                                placeholder="예: 공통수학1, 미적분, 확률과 통계",
+                            )
+
+                            # 시행일 + 시각 + 교시 + 코드번호
+                            r2 = st.columns([2, 1, 1, 1])
+                            with r2[0]:
+                                in_date = st.date_input(
+                                    "시행일", value=_date(2026, 4, 12),
+                                    key="meta_date",
+                                )
+                            with r2[1]:
+                                in_hour = st.number_input(
+                                    "시작 시(時)", min_value=0, max_value=23,
+                                    value=17, key="meta_hour",
+                                )
+                            with r2[2]:
+                                in_period = st.number_input(
+                                    "교시", min_value=1, max_value=8,
+                                    value=1, key="meta_period",
+                                )
+                            with r2[3]:
+                                in_code = st.text_input(
+                                    "코드번호", value="02",
+                                    key="meta_code",
+                                )
+
+                            # 문항 수 (자동 카운트 + 수동 덮어쓰기)
+                            auto_choice = sum(
+                                1 for r in selected_rows
+                                if not (r["is_subjective"] or False)
+                            )
+                            auto_essay = sum(
+                                1 for r in selected_rows
+                                if (r["is_subjective"] or False)
+                            )
+                            r3 = st.columns(2)
+                            with r3[0]:
+                                in_n_choice = st.number_input(
+                                    f"선택형 문항 수 (자동: {auto_choice})",
+                                    min_value=0, max_value=200,
+                                    value=auto_choice, key="meta_n_choice",
+                                )
+                            with r3[1]:
+                                in_n_essay = st.number_input(
+                                    f"논술형 문항 수 (자동: {auto_essay})",
+                                    min_value=0, max_value=200,
+                                    value=auto_essay, key="meta_n_essay",
+                                )
+
+                            # 학교 / 학원 / 모토 / 강사
+                            r4 = st.columns(2)
+                            with r4[0]:
+                                in_school_short = st.text_input(
+                                    "학교 약어 (→ '○○고등학교')",
+                                    value="이음", key="meta_school_short",
+                                )
+                            with r4[1]:
+                                in_instructor = st.text_input(
+                                    "강사명 (→ 'with ○○T')",
+                                    value="이영우", key="meta_instructor",
+                                )
+                            # 학원명/모토는 표지에서 제거됨 (로고에 이미 포함).
+                            # 기본값은 ExamMeta dataclass 기본값으로 충분.
+                            in_org = "이음학원"
+                            in_motto = ""
+
+                            # 모의고사 스타일 내지의 큰 제목
+                            if inner_design_key and "모의고사" in inner_design_key:
+                                in_inner_title = st.text_input(
+                                    "내지 큰 제목",
+                                    value="수학영역",
+                                    key="meta_inner_title",
+                                )
+                            else:
+                                in_inner_title = "수학영역"
+
+                            # 로고 선택 — assets 폴더 목록 + 업로드 옵션
+                            logo_options = _ed.list_logos()
+                            if logo_options:
+                                display_names = [name for name, _ in logo_options]
+                                sel_logo_name = st.selectbox(
+                                    "로고 (assets 폴더)", display_names,
+                                    key="meta_logo_name",
+                                )
+                                in_logo_path = next(
+                                    (p for n, p in logo_options
+                                     if n == sel_logo_name),
+                                    None,
+                                )
+                            else:
+                                in_logo_path = None
+
+                        design_meta = _ed.ExamMeta(
+                            school_year=int(in_year),
+                            semester=int(in_sem),
+                            session=int(in_session),
+                            grade=int(in_grade),
+                            subject=in_subject.strip() or "공통수학1",
+                            exam_date=in_date,
+                            exam_hour=int(in_hour),
+                            period=int(in_period),
+                            code_number=in_code.strip() or "02",
+                            n_choice=int(in_n_choice),
+                            n_essay=int(in_n_essay),
+                            school_name_short=in_school_short.strip() or "이음",
+                            school_org_name=in_org.strip() or "이음학원",
+                            school_motto=in_motto.strip(),
+                            instructor_name=in_instructor.strip() or "이영우",
+                            logo_path=in_logo_path,
+                            inner_title=in_inner_title.strip() or "수학영역",
+                        )
+
+                col_info, col_download = st.columns([0.7, 0.3])
+                with col_info:
+                    st.markdown(f"**{len(selected_rows)}문항** 선택됨")
+                    total_pts = sum(r["points"] or 0 for r in selected_rows)
+                    if total_pts:
+                        st.caption(f"총 배점: {total_pts:.1f}점")
+
+                # 레이아웃 override (수동 1단/2단 전환)
+                if "layout_overrides" not in st.session_state:
+                    st.session_state.layout_overrides = {}
+                overrides = st.session_state.layout_overrides
+
+                with col_download:
+                    try:
+                        if mode == "exam":
+                            if design_meta is not None:
+                                # 표지+내지 디자인 적용
+                                from pdf_engine import generate_designed_exam_pdf
+                                pdf_data = generate_designed_exam_pdf(
+                                    [dict(r) for r in selected_rows],
+                                    meta=design_meta,
+                                    cover_design=cover_design_key,
+                                    inner_design=inner_design_key,
+                                    include_source=include_source,
+                                    overrides=overrides,
+                                )
+                                fname = (
+                                    f"{design_meta.school_year}_"
+                                    f"{design_meta.semester}_"
+                                    f"{design_meta.session}회_"
+                                    f"{design_meta.subject}.pdf"
+                                )
+                            else:
+                                from pdf_engine import generate_exam_pdf
+                                pdf_data = generate_exam_pdf(
+                                    [dict(r) for r in selected_rows],
+                                    title=exam_title,
+                                    include_source=include_source,
+                                    overrides=overrides,
+                                    subtitle=effective_subtitle,
+                                    logo_path=effective_logo,
+                                )
+                                fname = "exam.pdf"
+                        else:  # book
+                            from pdf_engine import generate_book_pdf
+                            pdf_data = generate_book_pdf(
                                 [dict(r) for r in selected_rows],
                                 title=exam_title,
                                 include_source=include_source,
                                 overrides=overrides,
                                 subtitle=effective_subtitle,
                                 logo_path=effective_logo,
+                                kicker_mark=kicker_mark,
+                                kicker_text=kicker_text,
+                                divider_meta_top=divider_meta_top,
+                                divider_footer_title=divider_footer_title,
+                                divider_footer_sub=divider_footer_sub,
                             )
-                            fname = "exam.pdf"
-                    else:  # book
-                        from pdf_engine import generate_book_pdf
-                        pdf_data = generate_book_pdf(
-                            [dict(r) for r in selected_rows],
-                            title=exam_title,
-                            include_source=include_source,
-                            overrides=overrides,
-                            subtitle=effective_subtitle,
-                            logo_path=effective_logo,
-                            kicker_mark=kicker_mark,
-                            kicker_text=kicker_text,
-                            divider_meta_top=divider_meta_top,
-                            divider_footer_title=divider_footer_title,
-                            divider_footer_sub=divider_footer_sub,
+                            fname = "book.pdf"
+                        st.download_button(
+                            "📥 PDF 다운로드",
+                            data=pdf_data,
+                            file_name=fname,
+                            mime="application/pdf",
+                            use_container_width=True,
                         )
-                        fname = "book.pdf"
-                    st.download_button(
-                        "📥 PDF 다운로드",
-                        data=pdf_data,
-                        file_name=fname,
-                        mime="application/pdf",
-                        use_container_width=True,
-                    )
-                except Exception as e:
-                    st.error(f"PDF 생성 실패: {type(e).__name__}")
-                    st.caption(str(e)[:200])
+                        # 우측 sticky 미리보기용 캐시
+                        st.session_state["preview_pdf_bytes"] = pdf_data
+                        st.session_state["preview_pdf_fname"] = fname
+                    except Exception as e:
+                        st.error(f"PDF 생성 실패: {type(e).__name__}")
+                        st.caption(str(e)[:200])
 
-            st.divider()
+                st.divider()
 
-            # 미리보기
-            show_answers = st.toggle("정답/해설 표시", value=False)
+                # 미리보기
+                show_answers = st.toggle("정답/해설 표시", value=False)
 
-            from pdf_engine import estimate_layout
+                from pdf_engine import estimate_layout
 
-            for i, row in enumerate(selected_rows, 1):
-                qid = row["question_id"]
-                # 자동 판정 + 수동 override
-                auto_layout = estimate_layout(dict(row))
-                current = overrides.get(qid, auto_layout)
+                for i, row in enumerate(selected_rows, 1):
+                    qid = row["question_id"]
+                    # 자동 판정 + 수동 override
+                    auto_layout = estimate_layout(dict(row))
+                    current = overrides.get(qid, auto_layout)
 
-                with st.container(border=True):
-                    h_col1, h_col2 = st.columns([0.75, 0.25])
-                    with h_col1:
-                        pts = f" [{row['points']}점]" if row["points"] else ""
-                        st.markdown(f"### {i}번{pts}")
-                        meta_line = format_meta(row) if include_source else None
-                        caption_parts = []
-                        if meta_line:
-                            caption_parts.append(meta_line)
-                        caption_parts.append(f"`{row['chapter']}`")
-                        caption_parts.append(f"난이도: {row['difficulty']}")
-                        st.caption(" · ".join(caption_parts))
-                    with h_col2:
-                        layout_label = "📄 단 전체" if current == "full" else "📐 반 단"
-                        help_txt = (
-                            "이 문제가 단의 절반(2문제 공존) vs 단 하나 통째로(1문제 전용)"
+                    with st.container(border=True):
+                        h_col1, h_col2 = st.columns([0.75, 0.25])
+                        with h_col1:
+                            pts = f" [{row['points']}점]" if row["points"] else ""
+                            st.markdown(f"### {i}번{pts}")
+                            meta_line = format_meta(row) if include_source else None
+                            caption_parts = []
+                            if meta_line:
+                                caption_parts.append(meta_line)
+                            caption_parts.append(f"`{row['chapter']}`")
+                            caption_parts.append(f"난이도: {row['difficulty']}")
+                            st.caption(" · ".join(caption_parts))
+                        with h_col2:
+                            layout_label = "📄 단 전체" if current == "full" else "📐 반 단"
+                            help_txt = (
+                                "이 문제가 단의 절반(2문제 공존) vs 단 하나 통째로(1문제 전용)"
+                            )
+                            new_layout = st.selectbox(
+                                "배치",
+                                options=["half", "full"],
+                                format_func=lambda x: "반 단 (2문제/단)" if x == "half" else "단 전체 (1문제/단)",
+                                index=0 if current == "half" else 1,
+                                key=f"layout_{qid}",
+                                help=help_txt,
+                                label_visibility="collapsed",
+                            )
+                            if new_layout != auto_layout:
+                                overrides[qid] = new_layout
+                            elif qid in overrides:
+                                del overrides[qid]
+                            if new_layout != current:
+                                st.rerun()
+
+                        # 문제 본문 (이미지+박스+LaTeX 렌더링)
+                        render_question_content(
+                            row["question_text"], row.get("file_source", ""),
+                            row["question_id"],
                         )
-                        new_layout = st.selectbox(
-                            "배치",
-                            options=["half", "full"],
-                            format_func=lambda x: "반 단 (2문제/단)" if x == "half" else "단 전체 (1문제/단)",
-                            index=0 if current == "half" else 1,
-                            key=f"layout_{qid}",
-                            help=help_txt,
-                            label_visibility="collapsed",
-                        )
-                        if new_layout != auto_layout:
-                            overrides[qid] = new_layout
-                        elif qid in overrides:
-                            del overrides[qid]
-                        if new_layout != current:
+
+                        # 선택지
+                        choices_str = format_choices(row["choices"])
+                        if choices_str:
+                            st.markdown(choices_str)
+
+                        # 정답/해설
+                        if show_answers:
+                            circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
+                            ans = row["answer"]
+                            display_ans = circle.get(ans, ans)
+                            st.success(f"**정답:** {display_ans}")
+
+                            if row["solution_text"]:
+                                with st.expander("해설 보기"):
+                                    render_question_content(
+                                        row["solution_text"],
+                                        row.get("file_source", ""),
+                                        row["question_id"])
+
+                        # 제거 버튼
+                        if st.button(f"❌ {i}번 제거", key=f"prev_rm_{row['question_id']}"):
+                            st.session_state.selected_ids.discard(row["question_id"])
                             st.rerun()
 
-                    # 문제 본문 (이미지+박스+LaTeX 렌더링)
-                    render_question_content(
-                        row["question_text"], row.get("file_source", ""),
-                        row["question_id"],
+                # 정답표
+                if show_answers:
+                    st.divider()
+                    st.markdown("### 정답표")
+                    circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
+                    answers = []
+                    for i, row in enumerate(selected_rows, 1):
+                        ans = row["answer"]
+                        answers.append(f"{i}번: {circle.get(ans, ans)}")
+                    st.code("  ".join(answers))
+
+            with col_preview:
+                st.markdown("#### 📄 PDF 미리보기")
+                _pdf_bytes_for_preview = st.session_state.get("preview_pdf_bytes")
+                if _pdf_bytes_for_preview:
+                    import base64 as _b64m
+                    _b64 = _b64m.b64encode(_pdf_bytes_for_preview).decode()
+                    st.markdown(
+                        f'<iframe src="data:application/pdf;base64,{_b64}#zoom=page-width" '
+                        f'width="100%" height="820" '
+                        f'style="border:1px solid #d0d4dc;border-radius:8px;background:#fafafa;"></iframe>',
+                        unsafe_allow_html=True,
+                    )
+                else:
+                    st.info(
+                        "좌측 옵션을 입력하면 자동 생성됩니다. "
+                        "PDF 생성에 5~15초 정도 걸립니다."
                     )
 
-                    # 선택지
-                    choices_str = format_choices(row["choices"])
-                    if choices_str:
-                        st.markdown(choices_str)
-
-                    # 정답/해설
-                    if show_answers:
-                        circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
-                        ans = row["answer"]
-                        display_ans = circle.get(ans, ans)
-                        st.success(f"**정답:** {display_ans}")
-
-                        if row["solution_text"]:
-                            with st.expander("해설 보기"):
-                                render_question_content(
-                                    row["solution_text"],
-                                    row.get("file_source", ""),
-                                    row["question_id"])
-
-                    # 제거 버튼
-                    if st.button(f"❌ {i}번 제거", key=f"prev_rm_{row['question_id']}"):
-                        st.session_state.selected_ids.discard(row["question_id"])
-                        st.rerun()
-
-            # 정답표
-            if show_answers:
-                st.divider()
-                st.markdown("### 정답표")
-                circle = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
-                answers = []
-                for i, row in enumerate(selected_rows, 1):
-                    ans = row["answer"]
-                    answers.append(f"{i}번: {circle.get(ans, ans)}")
-                st.code("  ".join(answers))
+            # 우측 컬럼 sticky 처리 (옵션 길어도 미리보기는 화면 따라옴)
+            st.markdown(
+                """
+<style>
+div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:nth-of-type(2) > div:first-child {
+    position: sticky;
+    top: 4.5rem;
+    align-self: flex-start;
+    max-height: calc(100vh - 5.5rem);
+    overflow-y: auto;
+}
+</style>
+                """,
+                unsafe_allow_html=True,
+            )
 
     # ── Entry loader dismiss sentinel ──────────────────────
     # main() 의 모든 위젯이 그려진 _직후_ 이 sentinel <div> 가 DOM 에 inject.
