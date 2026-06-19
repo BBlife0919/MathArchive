@@ -12,6 +12,7 @@
 """
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -115,7 +116,20 @@ def _sqlite_add_tenant_id(conn) -> None:
     conn.execute("CREATE INDEX IF NOT EXISTS idx_students_tenant ON students(tenant_id)")
 
 
+def _load_env_file() -> None:
+    """루트 .env 자동 로드 (다른 마이그레이션 패턴과 일치)."""
+    env_path = ROOT / ".env"
+    if not env_path.exists():
+        return
+    for line in env_path.read_text().splitlines():
+        if line.strip().startswith("#") or "=" not in line:
+            continue
+        k, _, v = line.partition("=")
+        os.environ.setdefault(k.strip(), v.strip())
+
+
 def migrate() -> None:
+    _load_env_file()
     cloud = is_cloud()
     conn = get_connection()
     ddl = DDL_POSTGRES if cloud else DDL_SQLITE

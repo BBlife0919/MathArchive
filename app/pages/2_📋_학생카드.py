@@ -98,6 +98,28 @@ with st.sidebar:
         "- M = 계산실수 / 시간관리"
     )
 
+    st.divider()
+    with st.expander("📄 학생용 양식 다운로드", expanded=False):
+        st.caption("매번 같은 양식을 인쇄해서 학생에게 나눠주세요.")
+        tpl_dir = Path(__file__).resolve().parent.parent.parent / "output" / "student_templates"
+        for fname, label in [
+            ("풀이노트_양식.pdf", "📘 풀이노트"),
+            ("오답노트_양식.pdf", "📕 오답노트"),
+            ("교재표시_규칙.pdf", "📗 교재표시 규칙"),
+        ]:
+            fpath = tpl_dir / fname
+            if fpath.exists():
+                st.download_button(
+                    label=label,
+                    data=fpath.read_bytes(),
+                    file_name=fname,
+                    mime="application/pdf",
+                    key=f"dl_{fname}",
+                    use_container_width=True,
+                )
+            else:
+                st.caption(f"⚠️ {fname} 미생성 — `python scripts/build_student_templates.py` 실행 필요")
+
 student = next(s for s in students if s["student_id"] == sid)
 
 
@@ -333,12 +355,52 @@ st.caption(
     "정성(월 2회 4항목)은 자기학습 자세 추적."
 )
 
+with st.expander("📘 평가 가이드 (각 항목 의미 + 운영법)", expanded=False):
+    st.markdown(
+        """
+**정량 (매일, A~D)** — 그날 숙제 했나
+- **A** 100% 완료 + 풀이 흔적 깔끔
+- **B** 완료했지만 일부 미흡 (답만 적힌 문제 있음)
+- **C** 절반만 풀었거나 풀이 부실
+- **D** 거의 안 함
+→ 3일 연속 C/D 면 보호자 알림. A 80% 이상이면 숙제량 ↑
+
+---
+
+**정성 (월 2회, 1~5점)** — 공부 습관이 잡혔나
+
+**① 풀이노트 완성도**
+노트에 풀이 과정을 남겼는가? (답만 적혀있으면 1점)
+→ 양식: `[날짜][단원][문제번호] → 식 전개 → 답`
+
+**② 서술형 완성도**
+서술형 문제에서 **"왜냐하면 ~이므로 ~이다"** 식 논증을 글로 적었는가?
+→ ∵(왜냐하면) ∴(따라서) 기호 의무화
+
+**③ 교재표시 습관**
+교재에 본인 마킹이 있는가? (새 책처럼 깨끗 = 공부 안 한 것)
+→ 마킹 규칙: ★ 모르는 문제 / △ 헷갈렸지만 맞춤 / 형광 시험 전 다시볼 곳 / ✓ 확실해진 문제
+
+**④ 2차 풀이 후 틀린 이유 작성**
+틀린 문제 다시 풀 때, **처음 왜 틀렸는지 원인**을 적었는가?
+→ 원인 카테고리 5개로 한정: 개념 / 조건 / 전략 / 계산 / 시간
+→ 이게 가장 중요. 원인 인식 없이 다시 풀면 같은 실수 반복.
+        """
+    )
+
 GRADE_OPTIONS = ["A", "B", "C", "D"]
 
 with st.expander("➕ 정량 평가 (매일)", expanded=False):
     with st.form("add_assess_quant"):
         aq_date = st.date_input("평가일", value=date.today(), key="aq_date")
-        aq_grade = st.radio("과제 완성도", GRADE_OPTIONS, horizontal=True, key="aq_grade")
+        aq_grade = st.radio(
+            "과제 완성도",
+            GRADE_OPTIONS,
+            horizontal=True,
+            key="aq_grade",
+            help="A=100%완료+깔끔 / B=완료했지만 일부 미흡 / "
+                 "C=절반 풀이 부실 / D=거의 안 함",
+        )
         aq_note = st.text_input("메모 (선택)", placeholder="예: 풀이 빈약, 시간 부족", key="aq_note")
         if st.form_submit_button("저장"):
             exec_commit(
@@ -354,10 +416,22 @@ with st.expander("➕ 정량 평가 (매일)", expanded=False):
 with st.expander("➕ 정성 평가 (월 2회 · 4항목)", expanded=False):
     with st.form("add_assess_qual"):
         al_date = st.date_input("평가일", value=date.today(), key="al_date")
-        sl1 = st.slider("풀이노트 완성도",       1, 5, 3, key="sl_note")
-        sl2 = st.slider("서술형 완성도",         1, 5, 3, key="sl_written")
-        sl3 = st.slider("교재 표시 습관",         1, 5, 3, key="sl_textbook")
-        sl4 = st.slider("2차 풀이 후 틀린 이유 작성", 1, 5, 3, key="sl_second")
+        sl1 = st.slider(
+            "풀이노트 완성도", 1, 5, 3, key="sl_note",
+            help="답만 적힘=1 / 단계별 식 전개+답 구분=5",
+        )
+        sl2 = st.slider(
+            "서술형 완성도", 1, 5, 3, key="sl_written",
+            help="식만 나열=1 / ∵(왜냐하면) ∴(따라서) 논증 완성=5",
+        )
+        sl3 = st.slider(
+            "교재 표시 습관", 1, 5, 3, key="sl_textbook",
+            help="새 책처럼 깨끗=1 / 본인 마킹(★△형광✓) 시스템 작동=5",
+        )
+        sl4 = st.slider(
+            "2차 풀이 후 틀린 이유 작성", 1, 5, 3, key="sl_second",
+            help="그냥 다시 풀기만=1 / 원인 5종(개념/조건/전략/계산/시간) 명시=5",
+        )
         al_note = st.text_input("메모 (선택)", key="al_note")
         if st.form_submit_button("저장"):
             exec_commit(
