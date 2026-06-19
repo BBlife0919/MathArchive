@@ -410,11 +410,21 @@ _CSS = r"""
 * { box-sizing: border-box; }
 body {
     margin: 0;
-    font-family: 'Pretendard', 'Pretendard Variable', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    font-size: 10.5pt;
+    font-family: 'NanumGothic', 'Nanum Gothic', '나눔고딕', 'Pretendard', 'Pretendard Variable', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    font-size: 10pt;
     line-height: 1.5;
     color: #111;
     -webkit-font-smoothing: antialiased;
+}
+/* 본문 한글: 나눔고딕 10pt */
+.q-body, .slot .q-body, .q-choices .choice {
+    font-family: 'NanumGothic', 'Nanum Gothic', '나눔고딕', 'Pretendard', sans-serif;
+    font-size: 10pt;
+}
+/* 수식(KaTeX): HYhwpEQ 폴백 + 11pt */
+.katex, .katex *, .q-body .katex {
+    font-family: 'HYhwpEQ', 'HYHWPEQ', 'KaTeX_Main', 'Times New Roman', serif !important;
+    font-size: 11pt !important;
 }
 .page {
     min-height: 275mm;
@@ -1040,17 +1050,17 @@ h2.exam-subtitle {
 .book-cover .bc-br { bottom: 8mm; right: 8mm; border-width: 0 1.2pt 1.2pt 0; }
 .book-cover .bc-kicker {
     text-align: center;
-    font-size: 11pt;
-    font-weight: 800;
-    letter-spacing: 8pt;
+    font-size: 18pt;
+    font-weight: 900;
+    letter-spacing: 10pt;
     color: #1e3a8a;
-    margin-top: 30mm;
+    margin-top: 26mm;
 }
 .book-cover .bc-kicker-rule {
-    width: 14mm;
-    height: 1pt;
+    width: 22mm;
+    height: 1.6pt;
     background: #1e3a8a;
-    margin: 3mm auto 0;
+    margin: 4mm auto 0;
 }
 .book-cover .bc-title-main {
     text-align: center;
@@ -1193,38 +1203,44 @@ h2.exam-subtitle {
     /* .slot 기본 flex:1 로 col(=bp-page flex 컬럼) 높이까지 자람.
        margin-top:auto(kp-keypoint)가 메모 블록을 슬롯 바닥=페이지 바닥에 앵커. */
 }
+/* 헤더: 번호 + 체크박스 박스 두 개 한 줄, 그 아래 본문 풀폭 */
 .slot.book-kp .kp-head {
     display: flex;
-    align-items: flex-start;
-    gap: 4mm;
-    margin-bottom: 3mm;
+    flex-direction: column;
+    gap: 2mm;
+    margin-bottom: 2.5mm;
 }
 .slot.book-kp .kp-num-block {
     flex-shrink: 0;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    gap: 3mm;
+    flex-wrap: wrap;
 }
 .slot.book-kp .kp-num {
     font-family: 'Pretendard', sans-serif;
-    font-size: 22pt;
+    font-size: 14pt;
     font-weight: 900;
     color: #c8a96a;
-    letter-spacing: -0.5pt;
+    letter-spacing: -0.3pt;
     line-height: 1;
 }
 .slot.book-kp .kp-checks {
-    margin-top: 2mm;
     font-size: 8pt;
     font-weight: 700;
     color: #475569;
     display: flex;
-    flex-direction: column;
-    gap: 0.5mm;
+    flex-direction: row;
+    gap: 2mm;
 }
 .slot.book-kp .kp-checks .row {
     display: flex;
-    gap: 2.5mm;
+    gap: 2mm;
+    border: 0.35mm solid #c8a96a;
+    background: #fdfaf3;
+    border-radius: 1mm;
+    padding: 0.8mm 2mm;
 }
 .slot.book-kp .kp-checks .cb::before {
     content: '☐';
@@ -1232,7 +1248,7 @@ h2.exam-subtitle {
     color: #94a3b8;
 }
 .slot.book-kp .kp-right {
-    flex: 1;
+    width: 100%;
 }
 .slot.book-kp .kp-source {
     font-size: 9pt;

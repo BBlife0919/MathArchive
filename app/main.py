@@ -697,6 +697,17 @@ def main():
         section[data-testid="stSidebar"],
         aside[data-testid="stSidebar"],
         [data-testid="stSidebar"] { display: none !important; }
+
+        /* 본문 한글 10pt + 수식 11pt 통일 (PDF 와 일관) */
+        [data-testid="stMain"] [data-testid="stVerticalBlockBorderWrapper"]
+            .stMarkdown {
+            font-size: 10pt;
+            line-height: 1.65;
+        }
+        [data-testid="stMain"] [data-testid="stVerticalBlockBorderWrapper"]
+            .stMarkdown .katex {
+            font-size: 11pt;
+        }
         </style>
         """,
         unsafe_allow_html=True,
