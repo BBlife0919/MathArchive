@@ -78,10 +78,40 @@ def main():
             s_changed += 1
     print(f"  S UPDATE: {s_changed}")
 
+    # choices (jsonb) 도 같은 패턴 보정 — 각 선지 text 에 같은 룰 적용
+    import json as _json
+    cur.execute(
+        r"SELECT question_id, choices FROM questions "
+        r"WHERE choices::text ~ '\\begin\{[pbvVB]?matrix\}'"
+    )
+    crows = cur.fetchall()
+    print(f"choices 후보: {len(crows)}")
+    c_changed = 0
+    for qid, choices in crows:
+        if not choices:
+            continue
+        new_choices = []
+        any_diff = False
+        for ch in choices:
+            if isinstance(ch, dict):
+                old = ch.get("text", "") or ""
+                new = fix_text(old)
+                if new != old:
+                    any_diff = True
+                    ch = {**ch, "text": new}
+            new_choices.append(ch)
+        if any_diff:
+            cur.execute(
+                "UPDATE questions SET choices=%s::jsonb WHERE question_id=%s",
+                (_json.dumps(new_choices, ensure_ascii=False), qid),
+            )
+            c_changed += 1
+    print(f"  choices UPDATE: {c_changed}")
+
     conn.commit()
     cur.close()
     conn.close()
-    print(f"[OK] 보정 완료: Q {q_changed} + S {s_changed}")
+    print(f"[OK] 보정 완료: Q {q_changed} + S {s_changed} + choices {c_changed}")
 
 
 if __name__ == "__main__":

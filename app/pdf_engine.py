@@ -60,17 +60,22 @@ def format_choices(choices_json, book_mode: bool = False) -> str:
     if nums and 1 not in nums:
         return ""
     circle = {1: "①", 2: "②", 3: "③", 4: "④", 5: "⑤"}
+
+    def _ct(c):
+        # 선지 text도 본문과 동일한 수식 정규화 (행렬 행 구분자 등)
+        return _normalize_math_text(c.get("text", "") or "")
+
     if book_mode:
         # 가로 flex — .q-choices 의 gap으로 간격 조정
         return "".join(
             f'<span class="choice">'
             f'<span class="circ">{circle.get(c.get("number"), c.get("number"))}</span>'
-            f'{c.get("text", "")}'
+            f'{_ct(c)}'
             f'</span>'
             for c in choices
         )
     return "&nbsp;&nbsp;&nbsp;".join(
-        f"{circle.get(c.get('number'), c.get('number'))} {c.get('text', '')}"
+        f"{circle.get(c.get('number'), c.get('number'))} {_ct(c)}"
         for c in choices
     )
 
