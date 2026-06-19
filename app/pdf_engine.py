@@ -260,6 +260,13 @@ def _normalize_math_inner(s: str) -> str:
     # HWP 변환 잔재: ANG ≤ X / ANG <= X / ANG \leq X → \angle X (LE 두 글자가 <= 로 잘못 매핑됨)
     s = re.sub(r"\bANGLE\s+", r"\\angle ", s)
     s = re.sub(r"\bANG\s*(?:≤|<=|\\leq)\s*", r"\\angle ", s)
+    # matrix 환경 안의 단독 `\ ` → `\\` (LaTeX 행 구분) — KaTeX 행렬 일자 노출 방지
+    def _fix_mat(m):
+        head, body, tail = m.group(1), m.group(2), m.group(3)
+        body = re.sub(r"(?<!\\)\\(?!\\)(?=[\s&])", r"\\\\", body)
+        return head + body + tail
+    s = re.sub(r"(\\begin\{[pbvVB]?matrix\})(.*?)(\\end\{[pbvVB]?matrix\})",
+               _fix_mat, s, flags=re.DOTALL)
     s = _BARE_FUNC.sub(r"\\\1", s)
     s = _LOOSE_SUP.sub(r"\1", s)
     for i, b in enumerate(blocks):
