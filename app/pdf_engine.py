@@ -272,6 +272,11 @@ def _normalize_math_inner(s: str) -> str:
         return head + body + tail
     s = re.sub(r"(\\begin\{[pbvVB]?matrix\})(.*?)(\\end\{[pbvVB]?matrix\})",
                _fix_mat, s, flags=re.DOTALL)
+    # 큰 연산자(시그마·적분·곱·합집합 등) 있는 수식 → \displaystyle 자동 prefix
+    # KaTeX 인라인 textstyle 에서 시그마 본체가 작고 limits 가 옆에 첨자로 붙는 못생김 방지
+    if re.search(r"\\(sum|prod|int|iint|iiint|oint|bigcup|bigcap|coprod|biguplus|bigvee|bigwedge|bigsqcup|bigodot|bigotimes|bigoplus|lim)\b", s):
+        if not s.lstrip().startswith("\\displaystyle"):
+            s = "\\displaystyle " + s
     s = _BARE_FUNC.sub(r"\\\1", s)
     s = _LOOSE_SUP.sub(r"\1", s)
     for i, b in enumerate(blocks):
