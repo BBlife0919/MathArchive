@@ -15,7 +15,7 @@ import streamlit as st
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from db import get_connection as _get_db_connection
+from db import get_connection as _get_db_connection, is_cloud
 from clinic_logic import (
     ERROR_CODES,
     find_similar_questions,
@@ -56,12 +56,24 @@ def list_students():
 
 
 def create_student(name: str, school: str, grade: int, class_name: str) -> int:
+    cloud = is_cloud()
+    sql = "INSERT INTO students (name, school, grade, class_name) VALUES (?, ?, ?, ?)"
+    if cloud:
+        sql += " RETURNING student_id"
     cur = get_conn().execute(
-        "INSERT INTO students (name, school, grade, class_name) VALUES (?, ?, ?, ?)",
+        sql,
         (name.strip(), school.strip() or None, grade or None, class_name.strip() or None),
     )
-    get_conn().commit()
-    return cur.lastrowid
+    if cloud:
+        sid = cur.fetchone()[0]
+    else:
+        sid = cur.lastrowid
+    if hasattr(get_conn(), "commit"):
+        try:
+            get_conn().commit()
+        except Exception:
+            pass
+    return sid
 
 
 # ── 사이드바: 학생 선택/등록 ────────────────────────────

@@ -91,19 +91,32 @@ def insert_clinic_entry(
     prescribed_qids: list[int],
 ) -> int:
     """clinic_entries 1행 INSERT, entry_id 반환."""
-    cursor = conn.execute(
-        """
+    # Postgres(autocommit, lastrowid 없음) vs SQLite 분기
+    is_pg = hasattr(conn, "_dsn")
+    sql = """
         INSERT INTO clinic_entries
             (student_id, wrong_question_id, wrong_date, error_code, keyword, prescribed_qids)
         VALUES (?, ?, ?, ?, ?, ?)
-        """,
+    """
+    if is_pg:
+        sql += " RETURNING entry_id"
+    cursor = conn.execute(
+        sql,
         (
             student_id, wrong_question_id, wrong_date_iso,
             error_code, keyword, json.dumps(prescribed_qids),
         ),
     )
-    conn.commit()
-    return cursor.lastrowid
+    if is_pg:
+        entry_id = cursor.fetchone()[0]
+    else:
+        entry_id = cursor.lastrowid
+    if hasattr(conn, "commit"):
+        try:
+            conn.commit()
+        except Exception:
+            pass
+    return entry_id
 
 
 def list_pending_retries(conn, student_id: "int | None" = None) -> list:
