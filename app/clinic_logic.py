@@ -84,19 +84,25 @@ def compute_retry_schedule(wrong_date: date) -> dict:
 def insert_clinic_entry(
     conn,
     student_id: int,
-    wrong_question_id: int,
+    wrong_question_id: "int | None",
     wrong_date_iso: str,
     error_code: str,
     keyword: str,
     prescribed_qids: list[int],
+    external_label: "str | None" = None,
 ) -> int:
-    """clinic_entries 1행 INSERT, entry_id 반환."""
+    """clinic_entries 1행 INSERT, entry_id 반환.
+
+    wrong_question_id 가 None 이면 외부 문제 (DB 미적재). external_label 에
+    학교/교재/페이지/메모 자유 텍스트 저장.
+    """
     # Postgres(autocommit, lastrowid 없음) vs SQLite 분기
     is_pg = hasattr(conn, "_dsn")
     sql = """
         INSERT INTO clinic_entries
-            (student_id, wrong_question_id, wrong_date, error_code, keyword, prescribed_qids)
-        VALUES (?, ?, ?, ?, ?, ?)
+            (student_id, wrong_question_id, wrong_date, error_code,
+             keyword, prescribed_qids, external_label)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     """
     if is_pg:
         sql += " RETURNING entry_id"
@@ -105,6 +111,7 @@ def insert_clinic_entry(
         (
             student_id, wrong_question_id, wrong_date_iso,
             error_code, keyword, json.dumps(prescribed_qids),
+            external_label,
         ),
     )
     if is_pg:
@@ -133,7 +140,7 @@ def list_pending_retries(conn, student_id: "int | None" = None) -> list:
         SELECT e.entry_id, e.student_id, e.wrong_question_id, e.wrong_date,
                e.error_code, e.keyword, e.prescribed_qids,
                e.retry_d3_status, e.retry_d7_status, e.retry_d14_status,
-               e.retry_d30_status,
+               e.retry_d30_status, e.external_label,
                s.name as student_name
         FROM clinic_entries e
         JOIN students s ON e.student_id = s.student_id
@@ -168,10 +175,11 @@ def list_pending_retries(conn, student_id: "int | None" = None) -> list:
             "error_code": r[4],
             "keyword": r[5],
             "prescribed_qids": json.loads(r[6]) if r[6] else [],
+            "external_label":  r[11],
             "retry_d3_status":  r[7],
             "retry_d7_status":  r[8],
             "retry_d14_status": r[9],
             "retry_d30_status": r[10],
-            "student_name": r[11],
+            "student_name": r[12],
         })
     return out

@@ -113,78 +113,130 @@ if selected_student_id is None:
 
 st.subheader("📝 오답 입력 → 처방전 생성")
 
-c1, c2 = st.columns([0.4, 0.6])
+# 문제 출처 모드 선택
+source_mode = st.radio(
+    "문제 출처",
+    ["📚 DB 검색 (매쓰아카이브 적재 문제)", "✏️ 외부 문제 (학교 내신지·시판 교재)"],
+    horizontal=True,
+    key="src_mode",
+    help="DB 검색은 인출 3문항 자동 추출 + 처방전 PDF 가능. 외부 문제는 클리닉 기록만 저장.",
+)
+is_db_mode = source_mode.startswith("📚")
 
-with c1:
-    wrong_qid = st.number_input(
-        "오답 문제 ID (question_id)",
-        min_value=1, step=1,
-        help="시험지 PDF 또는 문제목록에서 확인한 question_id 입력",
+qrow = None
+wrong_qid = None
+external_label = None
+
+if is_db_mode:
+    c1, c2 = st.columns([0.45, 0.55])
+    with c1:
+        kw = st.text_input(
+            "🔍 검색어 (학교명·단원·키워드)",
+            placeholder="예: 광명북 / 이차함수 / 인수분해",
+            key="search_kw",
+        )
+        results = []
+        if kw.strip():
+            like = f"%{kw.strip()}%"
+            results = query(
+                "SELECT question_id, school, year, semester, exam_type, question_number, "
+                "chapter, difficulty, question_text "
+                "FROM questions "
+                "WHERE school LIKE ? OR chapter LIKE ? OR question_text LIKE ? "
+                "ORDER BY question_id DESC LIMIT 20",
+                (like, like, like),
+            )
+        if kw.strip() and not results:
+            st.error("검색 결과 없음 — 다른 키워드를 시도하거나 '외부 문제' 모드를 사용하세요.")
+        elif results:
+            options = {
+                f"[{r['school']}] {r['question_number']}번 · {r['chapter']} · {r['difficulty']}  (id={r['question_id']})": r
+                for r in results
+            }
+            picked = st.radio(
+                f"검색 결과 ({len(results)}건)",
+                options=list(options.keys()),
+                key="search_pick",
+            )
+            qrow = options[picked]
+            wrong_qid = qrow["question_id"]
+
+        error_code = st.selectbox("오류코드", ERROR_CODES,
+                                  help="틀린 이유 5분류. 학생이 직접 고르게 하세요.")
+        keyword = st.text_input(
+            "키워드 (학생 작성)", placeholder="예: 인수정리 적용 후 조립제법 단계 빼먹음"
+        )
+        wrong_dt = st.date_input("오답 발생일", value=date.today())
+
+    with c2:
+        if qrow:
+            st.markdown("**선택한 오답 미리보기**")
+            with st.container(border=True):
+                st.markdown(qrow["question_text"][:600] + ("…" if len(qrow["question_text"]) > 600 else ""))
+else:
+    # 외부 문제 모드
+    external_label = st.text_input(
+        "외부 문제 라벨",
+        placeholder="예: 광명북중 1학기 기말 12번 · 시판 ‘쎈’ p.84 17번",
+        key="ext_label",
+        help="DB에 없는 문제. 어디서 나온 문제인지 학생이 식별 가능하게 적기.",
     )
-
-    qrow = None
-    if wrong_qid:
-        rows = query(
-            "SELECT question_id, school, year, semester, exam_type, question_number, "
-            "chapter, difficulty, question_text "
-            "FROM questions WHERE question_id = ?",
-            (int(wrong_qid),),
-        )
-        if rows:
-            qrow = rows[0]
-
-    if qrow:
-        st.success(
-            f"✅ [{qrow['school']}] {qrow['question_number']}번 · "
-            f"`{qrow['chapter']}` · 난이도 {qrow['difficulty']}"
-        )
-    elif wrong_qid:
-        st.error(f"question_id={wrong_qid} 없음")
-
     error_code = st.selectbox("오류코드", ERROR_CODES,
                               help="틀린 이유 5분류. 학생이 직접 고르게 하세요.")
     keyword = st.text_input(
-        "키워드 (학생 작성)", placeholder="예: 인수정리 적용 후 조립제법 단계 빼먹음"
+        "키워드 (학생 작성)", placeholder="예: 부등호 방향 헷갈림"
     )
     wrong_dt = st.date_input("오답 발생일", value=date.today())
-
-with c2:
-    if qrow:
-        st.markdown("**오답 미리보기**")
-        with st.container(border=True):
-            st.markdown(qrow["question_text"][:600] + ("…" if len(qrow["question_text"]) > 600 else ""))
+    st.info("외부 문제는 클리닉 기록만 저장됩니다 (인출 3문항·처방전 PDF 미생성).")
 
 st.divider()
 
 # ── 처방전 생성 ──────────────────────────────────────────
-if st.button("🩺 처방전 생성", type="primary", use_container_width=True,
-             disabled=qrow is None):
-    conn = get_conn()
-    similar_qids = find_similar_questions(conn, int(wrong_qid))
-    if len(similar_qids) < 3:
-        st.error(
-            f"⚠️ 인출 문항이 {len(similar_qids)}개만 추출됨 — "
-            f"같은 단원의 풀이 가능 문제가 부족합니다. "
-            f"처방전 생성을 중단합니다. (chapter: {qrow['chapter']})"
-        )
-        st.caption(
-            "해결책: 같은 chapter에 더 많은 문제를 DB에 추가하거나, "
-            "다른 오답 문제로 시도해보세요."
-        )
-        st.stop()
+can_submit = (is_db_mode and qrow is not None) or (not is_db_mode and external_label and external_label.strip())
+btn_label = "🩺 처방전 생성" if is_db_mode else "💾 클리닉 기록 저장"
 
+if st.button(btn_label, type="primary", use_container_width=True, disabled=not can_submit):
+    conn = get_conn()
+    similar_qids: list = []
     schedule = compute_retry_schedule(wrong_dt)
+
+    if is_db_mode:
+        similar_qids = find_similar_questions(conn, int(wrong_qid))
+        if len(similar_qids) < 3:
+            st.error(
+                f"⚠️ 인출 문항이 {len(similar_qids)}개만 추출됨 — "
+                f"같은 단원의 풀이 가능 문제가 부족합니다. "
+                f"처방전 생성을 중단합니다. (chapter: {qrow['chapter']})"
+            )
+            st.caption(
+                "해결책: 같은 chapter에 더 많은 문제를 DB에 추가하거나, "
+                "다른 오답 문제로 시도해보세요."
+            )
+            st.stop()
+
     entry_id = insert_clinic_entry(
         conn,
         student_id=selected_student_id,
-        wrong_question_id=int(wrong_qid),
+        wrong_question_id=int(wrong_qid) if is_db_mode else None,
         wrong_date_iso=wrong_dt.isoformat(),
         error_code=error_code,
         keyword=keyword,
         prescribed_qids=similar_qids,
+        external_label=(external_label.strip() if not is_db_mode else None),
     )
     st.success(f"✅ 클리닉 엔트리 저장됨 (entry_id={entry_id})")
+    if not is_db_mode:
+        st.caption(f"📌 외부 문제 — {external_label}")
+        st.markdown("**📅 재도전 스케줄**")
+        st.markdown(
+            f"- D+3 ({schedule['d3']})  ☐\n"
+            f"- D+7 ({schedule['d7']})  ☐\n"
+            f"- D+14 ({schedule['d14']})  ☐\n"
+            f"- D+30 ({schedule['d30']})  ☐"
+        )
+        st.stop()
 
+    # ── 이하는 DB 모드 전용 (처방전 PDF + 인출 3문항) ──
     # 처방전용 4문항 (오답 + 인출 3) PDF 생성
     all_qids = [int(wrong_qid)] + similar_qids
     placeholders = ",".join("?" * len(all_qids))
@@ -264,8 +316,11 @@ if pendings:
             flags.append("D+14")
         if p["retry_d30_status"] == "pending":
             flags.append("D+30")
+        qref = (f"q={p['wrong_question_id']}"
+                if p.get("wrong_question_id")
+                else f"외부 · {p.get('external_label') or '-'}")
         st.caption(
-            f"· {p['student_name']} · 오답 q={p['wrong_question_id']} ({p['wrong_date']}) "
+            f"· {p['student_name']} · 오답 {qref} ({p['wrong_date']}) "
             f"· 오류 {p['error_code']} · 미완료: {', '.join(flags)}"
         )
 else:
