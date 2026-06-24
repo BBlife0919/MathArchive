@@ -633,10 +633,12 @@ def format_choices(choices_json) -> str:
         txt = c.get("text", "")
         txt = _frac_to_dfrac(txt)
         parts.append(f"{circle.get(num, str(num))} {txt}")
-    # 첫 줄 3개 + 둘째 줄 나머지 (Markdown 단락 분리 \n\n)
+    # 첫 줄 3개 + 둘째 줄 나머지 (em-space 로 넓은 간격, 줄 사이 빈 줄)
+    # PDF 슬롯의 q-choices flex 간격과 시각적으로 비슷하게.
+    sep = "   "  # em-space 3개 (≈3em 너비)
     if len(parts) > 3:
-        return "    ".join(parts[:3]) + "\n\n" + "    ".join(parts[3:])
-    return "    ".join(parts)
+        return sep.join(parts[:3]) + "\n\n" + sep.join(parts[3:])
+    return sep.join(parts)
 
 
 # ── PDF 생성 ──────────────────────────────────────────────────
