@@ -3,7 +3,7 @@
 
 추가/변경:
 - students.tenant_id  : 멀티 테넌트 분리 대비 (기본값 'default')
-- student_progress    : 진도/숙제/시험/Q-M/자가예측 기록 (학생×일 단위)
+- student_progress    : 진도/숙제/시험/PRISM/자가예측 기록 (학생×일 단위)
 - student_log         : 보호자 연락 / 출결 / 관리 메모 로그
 
 실행:

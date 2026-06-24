@@ -2,7 +2,7 @@
 
 구성 (대치동 노하우 + 클리닉 통합 기반):
 1. 기본정보 (이름·학교·학년·반·메모)
-2. Q-M Chart (clinic_entries 집계: Q=이해/방법, M=실수/시간)
+2. PRISM — 오답 5스펙트럼 분광 (이해 RIS / 수행 PM)
 3. 자가예측 격차 (예측 vs 실제 — 메타인지 추적)
 4. 학습 로그 (진도/숙제/시험 통합 입력)
 5. 과제 정밀평가 (PDF §5-2: 정량 매일 A/B/C/D + 정성 월 2회 4항목)
@@ -13,7 +13,7 @@ DB:
 - student_progress (진도/숙제/시험/자가예측)
 - student_log (보호자/출결/메모)
 - student_assessment (과제 정밀평가 — 정량/정성)
-- clinic_entries (Q-M Chart 원천)
+- clinic_entries (PRISM 원천)
 """
 from __future__ import annotations
 
@@ -36,14 +36,26 @@ require_auth()
 render_user_menu_in_sidebar()
 
 st.title("📋 학생 카드")
-st.caption("한 명 = 한 장. 진도·Q-M·자가예측·보호자 연락이 한 화면에 누적됩니다.")
+st.caption("한 명 = 한 장. 진도·PRISM·자가예측·보호자 연락이 한 화면에 누적됩니다.")
 
 
-# ── 오류코드 → Q/M 매핑 ────────────────────────────────
-# Q (Question, 이해/방법 부재): 32% — 시간 들여 가르쳐야 사라짐
-# M (Mistake, 실수/시간): 68% — 양과 절차로 사라짐
-Q_CODES = {"개념누락", "조건해석실패", "전략선택실패"}
-M_CODES = {"계산실수", "시간관리"}
+# ── PRISM — 오답 5스펙트럼 분광 ─────────────────────────
+# P: Precision   계산실수        (수행 — 양·절차로 사라짐)
+# R: Reading     조건해석실패    (이해 — 가르침으로 사라짐)
+# I: Insight     개념누락        (이해)
+# S: Strategy    전략선택실패    (이해)
+# M: Management  시간관리        (수행)
+PRISM_LETTER = {
+    "계산실수":       "P",
+    "조건해석실패":   "R",
+    "개념누락":       "I",
+    "전략선택실패":   "S",
+    "시간관리":       "M",
+}
+PRISM_ORDER = ["계산실수", "조건해석실패", "개념누락", "전략선택실패", "시간관리"]
+# 두 갈래 (이해 RIS / 수행 PM)
+RIS_CODES = {"개념누락", "조건해석실패", "전략선택실패"}   # 이해
+PM_CODES  = {"계산실수", "시간관리"}                       # 수행
 
 LOG_TYPES = ["보호자", "출결", "메모"]
 PROGRESS_CATEGORIES = ["진도", "숙제", "시험", "자가예측"]
@@ -93,9 +105,13 @@ with st.sidebar:
 
     st.divider()
     st.caption(
-        "Q-M Chart 매핑:\n"
-        "- Q = 개념누락 / 조건해석실패 / 전략선택실패\n"
-        "- M = 계산실수 / 시간관리"
+        "PRISM 5스펙트럼:\n"
+        "- **P** 계산실수 (Precision)\n"
+        "- **R** 조건해석실패 (Reading)\n"
+        "- **I** 개념누락 (Insight)\n"
+        "- **S** 전략선택실패 (Strategy)\n"
+        "- **M** 시간관리 (Management)\n"
+        "→ 이해(RIS) vs 수행(PM)"
     )
 
     st.divider()
@@ -153,10 +169,10 @@ with st.expander("기본정보 수정"):
 st.divider()
 
 
-# ── 섹션 2: Q-M Chart ────────────────────────────────
-st.subheader("2. Q-M Chart — 오답 원인 분포")
+# ── 섹션 2: PRISM ────────────────────────────────────
+st.subheader("2. PRISM — 오답 5스펙트럼 분광")
 st.caption(
-    "Q(이해/방법 부재)는 가르침으로, M(실수/시간)은 양과 절차로 사라집니다. "
+    "이해(RIS) = 가르침으로, 수행(PM) = 양과 절차로 사라집니다. "
     "비율이 한쪽으로 치우치면 처방 전략을 바꿔야 합니다."
 )
 
@@ -167,16 +183,16 @@ entries_all = q(
 )
 
 # 시간 윈도우 토글 (PDF §6 "2~4주 단위 오류 분포")
-qm_window = st.radio(
+prism_window = st.radio(
     "집계 기간",
     options=["전체", "최근 4주", "최근 2주"],
     horizontal=True,
-    key="qm_window",
+    key="prism_window",
 )
-if qm_window == "최근 4주":
+if prism_window == "최근 4주":
     cutoff = (date.today() - timedelta(weeks=4)).isoformat()
     entries = [e for e in entries_all if (e["wrong_date"] or "") >= cutoff]
-elif qm_window == "최근 2주":
+elif prism_window == "최근 2주":
     cutoff = (date.today() - timedelta(weeks=2)).isoformat()
     entries = [e for e in entries_all if (e["wrong_date"] or "") >= cutoff]
 else:
@@ -184,33 +200,34 @@ else:
 
 if not entries:
     if entries_all:
-        st.info(f"선택한 기간({qm_window})에 오답이 없습니다.")
+        st.info(f"선택한 기간({prism_window})에 오답이 없습니다.")
     else:
         st.info("아직 클리닉 오답 기록이 없습니다. 클리닉 페이지에서 처방전을 1건 생성하세요.")
 else:
     counter = Counter(e["error_code"] for e in entries)
-    q_total = sum(counter[c] for c in Q_CODES)
-    m_total = sum(counter[c] for c in M_CODES)
-    total = q_total + m_total
+    ris_total = sum(counter[c] for c in RIS_CODES)
+    pm_total  = sum(counter[c] for c in PM_CODES)
+    total = ris_total + pm_total
 
     cc1, cc2, cc3 = st.columns(3)
-    cc1.metric("Q (이해/방법)", f"{q_total}건",
-               f"{q_total/total*100:.0f}%" if total else "-")
-    cc2.metric("M (실수/시간)", f"{m_total}건",
-               f"{m_total/total*100:.0f}%" if total else "-")
+    cc1.metric("이해 RIS", f"{ris_total}건",
+               f"{ris_total/total*100:.0f}%" if total else "-")
+    cc2.metric("수행 PM", f"{pm_total}건",
+               f"{pm_total/total*100:.0f}%" if total else "-")
     cc3.metric("총 오답", f"{total}건")
 
     df = pd.DataFrame(
-        [{"오류코드": code, "건수": counter.get(code, 0),
-          "구분": "Q" if code in Q_CODES else "M"}
-         for code in list(Q_CODES) + list(M_CODES)]
+        [{"PRISM": f"{PRISM_LETTER[code]} · {code}",
+          "건수": counter.get(code, 0),
+          "구분": "이해" if code in RIS_CODES else "수행"}
+         for code in PRISM_ORDER]
     )
-    st.bar_chart(df.set_index("오류코드")["건수"], height=220)
+    st.bar_chart(df.set_index("PRISM")["건수"], height=220)
 
     with st.expander("선택 기간 내 최근 10건"):
         for e in entries[:10]:
-            tag = "Q" if e["error_code"] in Q_CODES else "M"
-            st.caption(f"· [{tag}] {e['wrong_date']} · {e['error_code']}")
+            letter = PRISM_LETTER.get(e["error_code"], "?")
+            st.caption(f"· [{letter}] {e['wrong_date']} · {e['error_code']}")
 
 st.divider()
 

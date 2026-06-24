@@ -1,7 +1,7 @@
 """카톡 승인 큐 — 주간 학부모 보고 발송 관리 (P4 카톡 자동화 v1).
 
 PDF §7-3 운영 룰:
-1. AI 가 학생별 데이터(Q-M·자가예측·학습 로그)를 요약해 draft 생성
+1. AI 가 학생별 데이터(PRISM·자가예측·학습 로그)를 요약해 draft 생성
 2. 강사가 학생별 1문장(instructor_note) 직접 추가 → 승인
 3. cron(GitHub Actions, 금 17시) 이 approved row 만 발송
 4. instructor_note 미입력 시 발송 차단 (코드 레벨)
@@ -40,8 +40,8 @@ st.caption(
     "금요일 17시 cron 이 솔라피로 발송합니다. (PDF §7-3 하이브리드 강제)"
 )
 
-Q_CODES = {"개념누락", "조건해석실패", "전략선택실패"}
-M_CODES = {"계산실수", "시간관리"}
+RIS_CODES = {"개념누락", "조건해석실패", "전략선택실패"}   # PRISM 이해
+PM_CODES  = {"계산실수", "시간관리"}                       # PRISM 수행
 
 
 @st.cache_resource
@@ -62,7 +62,7 @@ def exec_commit(sql: str, params=()) -> int:
 
 # ── AI draft 생성 로직 (학생카드 데이터 요약) ─────────────
 def build_ai_draft(student_id: int, student_name: str) -> str:
-    """학생카드의 Q-M Chart + 자가예측 + 학습 로그 → PDF §7-4 템플릿 문장.
+    """학생카드의 PRISM + 자가예측 + 학습 로그 → PDF §7-4 템플릿 문장.
 
     솔라피 알림톡 템플릿이 심사 완료되면 본문은 템플릿 변수 치환으로 가지만,
     지금은 자유 텍스트 draft 로 만들어 강사가 검수/편집할 수 있게 한다.
@@ -70,7 +70,7 @@ def build_ai_draft(student_id: int, student_name: str) -> str:
     today = date.today()
     week_start = today - timedelta(days=today.weekday())
 
-    # 최근 4주 Q-M 비율
+    # 최근 4주 PRISM 이해/수행 비율
     cutoff = (today - timedelta(weeks=4)).isoformat()
     entries = q(
         "SELECT error_code FROM clinic_entries "
@@ -78,8 +78,8 @@ def build_ai_draft(student_id: int, student_name: str) -> str:
         (student_id, cutoff),
     )
     counter = Counter(e["error_code"] for e in entries)
-    q_total = sum(counter[c] for c in Q_CODES)
-    m_total = sum(counter[c] for c in M_CODES)
+    ris_total = sum(counter[c] for c in RIS_CODES)
+    pm_total  = sum(counter[c] for c in PM_CODES)
 
     # 직전 자가예측
     pred = q(
@@ -109,7 +109,7 @@ def build_ai_draft(student_id: int, student_name: str) -> str:
         f"· 이번 주 학습 로그: "
         f"{log_summary.get('진도', 0)}진도·{log_summary.get('숙제', 0)}숙제·"
         f"{log_summary.get('시험', 0)}시험\n"
-        f"· Q-M Chart (최근 4주): Q {q_total}건 / M {m_total}건\n"
+        f"· PRISM (최근 4주): 이해 RIS {ris_total}건 / 수행 PM {pm_total}건\n"
         + gap_line +
         "· 다음 주 과제: [강사 코멘트로 보강 예정]\n"
         "※ 학습 데이터는 AI 로 요약 후 담당 강사가 검수·발송합니다."

@@ -2,7 +2,7 @@
 """학생카드 PDF 한 장 생성 — 학부모 보고용 맛보기.
 
 데이터 출처: students / clinic_entries / student_progress / student_assessment / student_log
-출력: A4 1페이지, 학원 브랜드 + Q-M 막대 차트 + 정량/정성/자가예측/로그 표
+출력: A4 1페이지, 학원 브랜드 + PRISM 막대 차트 + 정량/정성/자가예측/로그 표
 
 실행:
     python scripts/render_student_card_pdf.py
@@ -24,8 +24,13 @@ sys.path.insert(0, str(ROOT / "app"))
 
 from db import get_connection, is_cloud  # noqa: E402
 
-Q_CODES = {"개념누락", "조건해석실패", "전략선택실패"}
-M_CODES = {"계산실수", "시간관리"}
+PRISM_LETTER = {
+    "계산실수": "P", "조건해석실패": "R", "개념누락": "I",
+    "전략선택실패": "S", "시간관리": "M",
+}
+PRISM_ORDER = ["계산실수", "조건해석실패", "개념누락", "전략선택실패", "시간관리"]
+RIS_CODES = {"개념누락", "조건해석실패", "전략선택실패"}   # 이해
+PM_CODES  = {"계산실수", "시간관리"}                       # 수행
 
 
 def _load_env_file() -> None:
@@ -98,8 +103,8 @@ def _fetch_student_data(conn, name: str) -> dict:
     }
 
 
-def _render_qm_chart_b64(clinic_rows: list) -> str:
-    """matplotlib 으로 Q-M 분포 막대 → base64 PNG."""
+def _render_prism_chart_b64(clinic_rows: list) -> str:
+    """matplotlib 으로 PRISM 5스펙트럼 분포 막대 → base64 PNG."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -115,14 +120,15 @@ def _render_qm_chart_b64(clinic_rows: list) -> str:
                 break
 
     counter = Counter(r["error_code"] for r in clinic_rows)
-    codes = ["개념누락", "조건해석실패", "전략선택실패", "계산실수", "시간관리"]
-    values = [counter.get(c, 0) for c in codes]
-    colors = ["#4F46E5", "#6366F1", "#8B5CF6", "#F97316", "#EF4444"]
+    labels = [f"{PRISM_LETTER[c]}\n{c}" for c in PRISM_ORDER]
+    values = [counter.get(c, 0) for c in PRISM_ORDER]
+    # PRISM 순서대로: P=빨강(수행), R=인디고(이해), I=인디고, S=인디고, M=빨강
+    colors = ["#F97316", "#4F46E5", "#6366F1", "#8B5CF6", "#EF4444"]
 
     fig, ax = plt.subplots(figsize=(8, 3.2), dpi=140)
-    bars = ax.bar(codes, values, color=colors, width=0.55)
+    bars = ax.bar(labels, values, color=colors, width=0.55)
     ax.set_ylabel("건수", fontsize=10)
-    ax.set_title("Q-M Chart — 최근 4주 오답 원인 분포", fontsize=12, pad=10)
+    ax.set_title("PRISM — 최근 4주 오답 5스펙트럼 분광", fontsize=12, pad=10)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.tick_params(axis="x", labelsize=9)
@@ -144,13 +150,13 @@ def _build_html(data: dict, chart_b64: str) -> str:
     today_str = date.today().isoformat()
     week_start = (date.today() - timedelta(days=date.today().weekday())).isoformat()
 
-    # Q/M 합계
+    # PRISM 이해(RIS) / 수행(PM) 합계
     counter = Counter(r["error_code"] for r in data["clinic"])
-    q_total = sum(counter[c] for c in Q_CODES)
-    m_total = sum(counter[c] for c in M_CODES)
-    total = q_total + m_total
-    q_pct = f"{q_total/total*100:.0f}%" if total else "—"
-    m_pct = f"{m_total/total*100:.0f}%" if total else "—"
+    ris_total = sum(counter[c] for c in RIS_CODES)
+    pm_total  = sum(counter[c] for c in PM_CODES)
+    total = ris_total + pm_total
+    ris_pct = f"{ris_total/total*100:.0f}%" if total else "—"
+    pm_pct  = f"{pm_total/total*100:.0f}%"  if total else "—"
 
     # 정량 분포
     grade_counter = Counter(r["quantity_grade"] for r in data["assess_q"]
@@ -260,14 +266,14 @@ def _build_html(data: dict, chart_b64: str) -> str:
     <div><strong>학년/반</strong>{s.get('grade') or '-'}-{s.get('class_name') or '-'}</div>
   </div>
 
-  <h2>Q-M Chart · 최근 4주 오답 원인 분포</h2>
+  <h2>PRISM · 최근 4주 오답 5스펙트럼 분광</h2>
   <div class="qm-summary">
-    <div class="card"><div class="label">Q (이해/방법 부재)</div>
-      <div class="val">{q_total}건</div><div class="pct">{q_pct}</div></div>
-    <div class="card m"><div class="label">M (실수/시간)</div>
-      <div class="val">{m_total}건</div><div class="pct">{m_pct}</div></div>
+    <div class="card"><div class="label">이해 RIS (Reading·Insight·Strategy)</div>
+      <div class="val">{ris_total}건</div><div class="pct">{ris_pct}</div></div>
+    <div class="card m"><div class="label">수행 PM (Precision·Management)</div>
+      <div class="val">{pm_total}건</div><div class="pct">{pm_pct}</div></div>
   </div>
-  <div class="chart"><img src="data:image/png;base64,{chart_b64}" alt="Q-M chart"/></div>
+  <div class="chart"><img src="data:image/png;base64,{chart_b64}" alt="PRISM chart"/></div>
 
   <h2>과제 정밀평가</h2>
   <div class="quant-grid">
@@ -336,7 +342,7 @@ def main() -> None:
     print(f"  - clinic {len(data['clinic'])} / assess_q {len(data['assess_q'])} / "
           f"preds {len(data['preds'])} / logs {len(data['logs'])}")
 
-    chart_b64 = _render_qm_chart_b64(data["clinic"])
+    chart_b64 = _render_prism_chart_b64(data["clinic"])
     html = _build_html(data, chart_b64)
 
     out = Path(args.out)

@@ -151,7 +151,7 @@ def _seed(conn, ph: str, cloud: bool) -> int:
     # 5) student_log
     log_rows = [
         (_today_minus(1),  "보호자", "단원평가 결과 공유",   "어머니께 점수 72점 + 시간관리 보강 안내"),
-        (_today_minus(10), "보호자", "주간 보고 카톡",       "주간 학습량 + Q-M 비율 공유"),
+        (_today_minus(10), "보호자", "주간 보고 카톡",       "주간 학습량 + PRISM 비율 공유"),
         (_today_minus(5),  "출결",   "결석 1회",             "병원 진료, 다음 주 보충"),
         (_today_minus(3),  "메모",   "집중도 회복",          "오답노트 작성 후 적극성 증가"),
         (_today_minus(8),  "메모",   "Q→M 전이 신호",        "개념 누락 ↓, 계산실수 ↑"),
