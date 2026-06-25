@@ -95,11 +95,13 @@ def apply_rules(text: str) -> tuple[str, list[str]]:
     return new, applied
 
 
-# ── DB 연결 ────────────────────────────────────────────────
+# ── DB 연결 ─ 환경 감지 (Cloud Postgres / 로컬 SQLite) ─────
+from db import get_connection, is_cloud
+
+
 @st.cache_resource
-def _sqlite():
-    p = APP_DIR.parent / "db" / "mathdb.sqlite"
-    return sqlite3.connect(str(p), check_same_thread=False)
+def _conn():
+    return get_connection()
 
 
 def _pg_connect():
@@ -114,12 +116,11 @@ def find_candidates(limit: int = 200) -> list[dict]:
 
     각 행: {table, pk, col, qid(meta), before, after, applied_rules, meta_label}
     """
-    conn = _sqlite()
-    cur = conn.cursor()
+    conn = _conn()
     result = []
 
     # questions
-    cur.execute(
+    cur = conn.execute(
         "SELECT q.question_id, q.school, q.year, q.grade, q.semester, "
         "       q.exam_type, q.question_number, q.question_text "
         "FROM questions q"
@@ -143,7 +144,7 @@ def find_candidates(limit: int = 200) -> list[dict]:
             return result
 
     # solutions
-    cur.execute(
+    cur = conn.execute(
         "SELECT s.solution_id, s.question_id, q.school, q.year, q.grade, "
         "       q.semester, q.exam_type, q.question_number, s.solution_text "
         "FROM solutions s JOIN questions q ON s.question_id = q.question_id"
@@ -168,43 +169,27 @@ def find_candidates(limit: int = 200) -> list[dict]:
     return result
 
 
-# ── 양쪽 DB UPDATE ─────────────────────────────────────────
+# ── DB UPDATE (환경 감지) ──────────────────────────────────
 def apply_to_dbs(table: str, pk: str, col: str,
                  pk_value: int, new_text: str) -> tuple[bool, str]:
-    """로컬 SQLite + 클라우드 Postgres 동기 UPDATE.
+    """현재 환경의 DB 에 UPDATE.
 
-    Postgres pk 는 별도 매핑 필요 — questions 는 (file_source, qnum) 기준,
-    solutions 는 cloud question_id 기준. 단순화: 같은 텍스트 행이 다중일 수
-    있어 cloud 에서는 (table, 매칭 텍스트) 로 UPDATE. 실패 시 로컬만 반영.
+    Cloud 환경 (Streamlit Cloud): Postgres 만 갱신 → 매쓰아카이브 즉시 반영.
+    로컬 환경: SQLite 만 갱신.
     """
-    # 로컬 먼저
-    sl = _sqlite()
-    cur = sl.cursor()
-    cur.execute(f"SELECT {col} FROM {table} WHERE {pk}=?", (pk_value,))
-    row = cur.fetchone()
-    if not row:
-        return False, "로컬에서 행을 찾을 수 없음"
-    old_text = row[0]
-    cur.execute(
+    conn = _conn()
+    conn.execute(
         f"UPDATE {table} SET {col}=? WHERE {pk}=?",
         (new_text, pk_value),
     )
-    sl.commit()
-
-    # 클라우드 — 동일 (table, col, old_text) 매칭 행 UPDATE
-    try:
-        pg = _pg_connect()
-        pcur = pg.cursor()
-        pcur.execute(
-            f"UPDATE {table} SET {col} = %s WHERE {col} = %s",
-            (new_text, old_text),
-        )
-        n = pcur.rowcount
-        pg.commit()
-        pg.close()
-        return True, f"로컬 + 클라우드 ({n}행) 반영 완료"
-    except Exception as e:
-        return True, f"로컬만 반영. 클라우드 에러: {type(e).__name__}"
+    # autocommit 인지 확인 (psycopg2 _PgConnection 은 autocommit=True)
+    if hasattr(conn, "commit"):
+        try:
+            conn.commit()
+        except Exception:
+            pass
+    target = "클라우드 Postgres" if is_cloud() else "로컬 SQLite"
+    return True, f"{target} 반영 완료"
 
 
 # ── 상태 ────────────────────────────────────────────────────
