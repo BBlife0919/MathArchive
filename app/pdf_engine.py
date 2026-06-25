@@ -277,6 +277,10 @@ def _normalize_math_inner(s: str) -> str:
     if re.search(r"\\(sum|prod|int|iint|iiint|oint|bigcup|bigcap|coprod|biguplus|bigvee|bigwedge|bigsqcup|bigodot|bigotimes|bigoplus|lim)\b", s):
         if not s.lstrip().startswith("\\displaystyle"):
             s = "\\displaystyle " + s
+    # \dfrac (displaystyle 강제 분수) → \frac (context 자동) — 첨자/지수 안에서
+    # \dfrac 이 displaystyle 크기로 렌더되어 분수만 비정상적으로 커지고
+    # 괄호/중괄호가 자동 확대되는 케이스(log_{1/2}, 2^{(101-2k)/3}, f(5π/3) 등) 일괄 보정
+    s = s.replace(r"\dfrac", r"\frac")
     s = _BARE_FUNC.sub(r"\\\1", s)
     s = _LOOSE_SUP.sub(r"\1", s)
     for i, b in enumerate(blocks):
@@ -438,9 +442,10 @@ body {
     font-family: 'NanumGothic', 'Nanum Gothic', '나눔고딕', 'Pretendard', sans-serif;
     font-size: 10pt;
 }
-/* 수식(KaTeX): HYhwpEQ 폴백 + 11pt */
-.katex, .katex *, .q-body .katex {
-    font-family: 'HYhwpEQ', 'HYHWPEQ', 'KaTeX_Main', 'Times New Roman', serif !important;
+/* 수식(KaTeX) — 컨테이너에만 사이즈 적용. `.katex *` 로 자식까지 강제하면
+   KaTeX 내부 첨자/지수/limits 의 상대 비율이 깨져 시그마는 작고 위/아래는
+   본체 크기로 비대칭 확대됨. 컨테이너 사이즈만 지정해 KaTeX 자체 계층 보호. */
+.katex, .q-body .katex {
     font-size: 11pt !important;
 }
 .page {
