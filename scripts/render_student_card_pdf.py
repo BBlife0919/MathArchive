@@ -93,6 +93,12 @@ def _fetch_student_data(conn, name: str) -> dict:
         "ORDER BY log_date DESC LIMIT 5",
         (sid,))
 
+    prism_rows = _q(conn,
+        "SELECT eval_date, score_p, score_r, score_i, score_s, score_m, note "
+        "FROM prism_assessment WHERE student_id = ? "
+        "ORDER BY eval_date DESC, assessment_id DESC LIMIT 1",
+        (sid,))
+
     return {
         "student":   dict(s),
         "clinic":    [dict(r) for r in clinic],
@@ -100,35 +106,73 @@ def _fetch_student_data(conn, name: str) -> dict:
         "assess_l":  dict(assess_l_rows[0]) if assess_l_rows else None,
         "preds":     [dict(r) for r in preds],
         "logs":      [dict(r) for r in logs],
+        "prism":     dict(prism_rows[0]) if prism_rows else None,
     }
 
 
-def _render_prism_chart_b64(clinic_rows: list) -> str:
-    """matplotlib 으로 PRISM 5스펙트럼 분포 막대 → base64 PNG."""
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-    from matplotlib import font_manager
-
-    # macOS 한글 폰트
+def _setup_korean_font(plt, font_manager) -> None:
     for f in ("AppleSDGothicNeo.ttc", "AppleGothic.ttf", "AppleSDGothicNeo-Regular.otf"):
         for p in ("/System/Library/Fonts/", "/Library/Fonts/"):
             full = Path(p) / f
             if full.exists():
                 font_manager.fontManager.addfont(str(full))
                 plt.rcParams["font.family"] = font_manager.FontProperties(fname=str(full)).get_name()
-                break
+                return
+
+
+def _render_prism_radar_b64(prism_row: dict) -> str:
+    """강사 PRISM 평가 → 5각형 레이더 차트 PNG (base64)."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib import font_manager
+    import numpy as np
+
+    _setup_korean_font(plt, font_manager)
+
+    categories = ["P 계산실수", "R 조건해석", "I 개념누락", "S 전략선택", "M 시간관리"]
+    scores = [prism_row["score_p"], prism_row["score_r"], prism_row["score_i"],
+              prism_row["score_s"], prism_row["score_m"]]
+    values = scores + scores[:1]
+    angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(6, 6), dpi=140, subplot_kw=dict(polar=True))
+    ax.fill(angles, values, color="#4F46E5", alpha=0.25)
+    ax.plot(angles, values, "o-", color="#4F46E5", linewidth=2.2)
+    ax.set_thetagrids(np.degrees(angles[:-1]), categories, fontsize=11)
+    ax.set_ylim(0, 5)
+    ax.set_yticks([1, 2, 3, 4, 5])
+    ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=8)
+    ax.grid(True, alpha=0.5)
+    ax.set_title(f"PRISM — 강사 임상 평가 ({prism_row['eval_date']})",
+                 fontsize=12, pad=18)
+
+    buf = io.BytesIO()
+    fig.tight_layout()
+    fig.savefig(buf, format="png", bbox_inches="tight")
+    plt.close(fig)
+    return base64.b64encode(buf.getvalue()).decode("ascii")
+
+
+def _render_prism_chart_b64(clinic_rows: list) -> str:
+    """[폴백] clinic_entries 기반 막대 차트 (PRISM 평가 없을 때)."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib import font_manager
+
+    _setup_korean_font(plt, font_manager)
 
     counter = Counter(r["error_code"] for r in clinic_rows)
     labels = [f"{PRISM_LETTER[c]}\n{c}" for c in PRISM_ORDER]
     values = [counter.get(c, 0) for c in PRISM_ORDER]
-    # PRISM 순서대로: P=빨강(수행), R=인디고(이해), I=인디고, S=인디고, M=빨강
     colors = ["#F97316", "#4F46E5", "#6366F1", "#8B5CF6", "#EF4444"]
 
     fig, ax = plt.subplots(figsize=(8, 3.2), dpi=140)
     bars = ax.bar(labels, values, color=colors, width=0.55)
     ax.set_ylabel("건수", fontsize=10)
-    ax.set_title("PRISM — 최근 4주 오답 5스펙트럼 분광", fontsize=12, pad=10)
+    ax.set_title("PRISM — 최근 4주 오답 5스펙트럼 (정밀 누적)", fontsize=12, pad=10)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.tick_params(axis="x", labelsize=9)
@@ -150,13 +194,27 @@ def _build_html(data: dict, chart_b64: str) -> str:
     today_str = date.today().isoformat()
     week_start = (date.today() - timedelta(days=date.today().weekday())).isoformat()
 
-    # PRISM 이해(RIS) / 수행(PM) 합계
-    counter = Counter(r["error_code"] for r in data["clinic"])
-    ris_total = sum(counter[c] for c in RIS_CODES)
-    pm_total  = sum(counter[c] for c in PM_CODES)
-    total = ris_total + pm_total
-    ris_pct = f"{ris_total/total*100:.0f}%" if total else "—"
-    pm_pct  = f"{pm_total/total*100:.0f}%"  if total else "—"
+    # PRISM 강사 평가 (있으면) — RIS/PM 평균
+    pr = data.get("prism")
+    if pr:
+        ris_avg = (pr["score_r"] + pr["score_i"] + pr["score_s"]) / 3
+        pm_avg  = (pr["score_p"] + pr["score_m"]) / 2
+        ris_label = f"이해 RIS 평균"
+        pm_label  = f"수행 PM 평균"
+        ris_value = f"{ris_avg:.1f}/5"
+        pm_value  = f"{pm_avg:.1f}/5"
+        prism_subtitle = f"강사 평가 · {pr['eval_date']}"
+    else:
+        # 폴백 — clinic_entries 누적 카운트
+        counter = Counter(r["error_code"] for r in data["clinic"])
+        ris_total = sum(counter[c] for c in RIS_CODES)
+        pm_total  = sum(counter[c] for c in PM_CODES)
+        total = ris_total + pm_total
+        ris_label = "이해 RIS (누적)"
+        pm_label  = "수행 PM (누적)"
+        ris_value = f"{ris_total}건 ({ris_total/total*100:.0f}%)" if total else "—"
+        pm_value  = f"{pm_total}건 ({pm_total/total*100:.0f}%)"  if total else "—"
+        prism_subtitle = "클리닉 정밀 누적 (최근 4주)"
 
     # 정량 분포
     grade_counter = Counter(r["quantity_grade"] for r in data["assess_q"]
@@ -266,12 +324,12 @@ def _build_html(data: dict, chart_b64: str) -> str:
     <div><strong>학년/반</strong>{s.get('grade') or '-'}-{s.get('class_name') or '-'}</div>
   </div>
 
-  <h2>PRISM · 최근 4주 오답 5스펙트럼 분광</h2>
+  <h2>PRISM · 5스펙트럼 진단 <span style="font-weight:400;color:#666;font-size:0.7em">— {prism_subtitle}</span></h2>
   <div class="qm-summary">
-    <div class="card"><div class="label">이해 RIS (Reading·Insight·Strategy)</div>
-      <div class="val">{ris_total}건</div><div class="pct">{ris_pct}</div></div>
-    <div class="card m"><div class="label">수행 PM (Precision·Management)</div>
-      <div class="val">{pm_total}건</div><div class="pct">{pm_pct}</div></div>
+    <div class="card"><div class="label">{ris_label}</div>
+      <div class="val">{ris_value}</div></div>
+    <div class="card m"><div class="label">{pm_label}</div>
+      <div class="val">{pm_value}</div></div>
   </div>
   <div class="chart"><img src="data:image/png;base64,{chart_b64}" alt="PRISM chart"/></div>
 
@@ -342,7 +400,11 @@ def main() -> None:
     print(f"  - clinic {len(data['clinic'])} / assess_q {len(data['assess_q'])} / "
           f"preds {len(data['preds'])} / logs {len(data['logs'])}")
 
-    chart_b64 = _render_prism_chart_b64(data["clinic"])
+    # PRISM 평가 있으면 5각형 레이더, 없으면 막대 차트 폴백
+    if data.get("prism"):
+        chart_b64 = _render_prism_radar_b64(data["prism"])
+    else:
+        chart_b64 = _render_prism_chart_b64(data["clinic"])
     html = _build_html(data, chart_b64)
 
     out = Path(args.out)

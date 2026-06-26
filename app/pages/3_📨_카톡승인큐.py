@@ -70,16 +70,34 @@ def build_ai_draft(student_id: int, student_name: str) -> str:
     today = date.today()
     week_start = today - timedelta(days=today.weekday())
 
-    # 최근 4주 PRISM 이해/수행 비율
-    cutoff = (today - timedelta(weeks=4)).isoformat()
-    entries = q(
-        "SELECT error_code FROM clinic_entries "
-        "WHERE student_id = ? AND wrong_date >= ?",
-        (student_id, cutoff),
+    # PRISM 강사 평가 (우선) → 없으면 clinic_entries 누적
+    prism_rows = q(
+        "SELECT eval_date, score_p, score_r, score_i, score_s, score_m "
+        "FROM prism_assessment WHERE student_id = ? "
+        "ORDER BY eval_date DESC, assessment_id DESC LIMIT 1",
+        (student_id,),
     )
-    counter = Counter(e["error_code"] for e in entries)
-    ris_total = sum(counter[c] for c in RIS_CODES)
-    pm_total  = sum(counter[c] for c in PM_CODES)
+    if prism_rows:
+        pr = prism_rows[0]
+        ris_avg = (pr["score_r"] + pr["score_i"] + pr["score_s"]) / 3
+        pm_avg  = (pr["score_p"] + pr["score_m"]) / 2
+        prism_line = (
+            f"· PRISM 강사 평가 ({pr['eval_date']}): "
+            f"이해 RIS {ris_avg:.1f}/5 · 수행 PM {pm_avg:.1f}/5\n"
+        )
+    else:
+        cutoff = (today - timedelta(weeks=4)).isoformat()
+        entries = q(
+            "SELECT error_code FROM clinic_entries "
+            "WHERE student_id = ? AND wrong_date >= ?",
+            (student_id, cutoff),
+        )
+        counter = Counter(e["error_code"] for e in entries)
+        ris_total = sum(counter[c] for c in RIS_CODES)
+        pm_total  = sum(counter[c] for c in PM_CODES)
+        prism_line = (
+            f"· PRISM (최근 4주 누적): 이해 RIS {ris_total}건 / 수행 PM {pm_total}건\n"
+        )
 
     # 직전 자가예측
     pred = q(
@@ -109,7 +127,7 @@ def build_ai_draft(student_id: int, student_name: str) -> str:
         f"· 이번 주 학습 로그: "
         f"{log_summary.get('진도', 0)}진도·{log_summary.get('숙제', 0)}숙제·"
         f"{log_summary.get('시험', 0)}시험\n"
-        f"· PRISM (최근 4주): 이해 RIS {ris_total}건 / 수행 PM {pm_total}건\n"
+        + prism_line
         + gap_line +
         "· 다음 주 과제: [강사 코멘트로 보강 예정]\n"
         "※ 학습 데이터는 AI 로 요약 후 담당 강사가 검수·발송합니다."

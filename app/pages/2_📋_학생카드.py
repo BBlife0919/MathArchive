@@ -169,65 +169,148 @@ with st.expander("기본정보 수정"):
 st.divider()
 
 
-# ── 섹션 2: PRISM ────────────────────────────────────
-st.subheader("2. PRISM — 오답 5스펙트럼 분광")
+# ── 섹션 2: PRISM 강사 임상 평가 ──────────────────────
+st.subheader("2. PRISM — 강사 임상 평가")
 st.caption(
-    "이해(RIS) = 가르침으로, 수행(PM) = 양과 절차로 사라집니다. "
-    "비율이 한쪽으로 치우치면 처방 전략을 바꿔야 합니다."
+    "매주 30초. 숙제 검사 + 평소 인상으로 5영역 결함도를 1~5점 입력. "
+    "1=거의 없음 · 3=보통 · 5=매우 두드러짐"
 )
 
-entries_all = q(
+# ── 입력 폼 ──
+with st.expander("➕ 이번 주 PRISM 평가 입력", expanded=False):
+    with st.form("prism_eval_form"):
+        eval_dt = st.date_input("평가일", value=date.today(), key="prism_eval_dt")
+        pc1, pc2, pc3, pc4, pc5 = st.columns(5)
+        sp = pc1.slider("**P** 계산실수", 1, 5, 3, key="prism_sp",
+                        help="부호·이항·분수 등 기계적 실수")
+        sr = pc2.slider("**R** 조건해석", 1, 5, 3, key="prism_sr",
+                        help="문제 조건·범위 놓침")
+        si = pc3.slider("**I** 개념누락", 1, 5, 3, key="prism_si",
+                        help="공식·정의 모름")
+        ss = pc4.slider("**S** 전략선택", 1, 5, 3, key="prism_ss",
+                        help="접근법 선택 실패")
+        sm = pc5.slider("**M** 시간관리", 1, 5, 3, key="prism_sm",
+                        help="시간 부족·서술형 누락")
+        pnote = st.text_area("강사 메모 (선택)", height=60, key="prism_note",
+                             placeholder="예: 이번 주 단원평가에서 부등호 방향 헷갈리는 패턴 반복")
+        if st.form_submit_button("💾 평가 저장"):
+            exec_commit(
+                """INSERT INTO prism_assessment
+                   (student_id, eval_date, score_p, score_r, score_i, score_s, score_m, note)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                (sid, eval_dt.isoformat(),
+                 int(sp), int(sr), int(si), int(ss), int(sm),
+                 pnote.strip() or None),
+            )
+            st.success("저장됨")
+            st.rerun()
+
+# ── 최신 평가 + 5각형 레이더 ──
+latest_prism = q(
+    "SELECT eval_date, score_p, score_r, score_i, score_s, score_m, note "
+    "FROM prism_assessment WHERE student_id = ? "
+    "ORDER BY eval_date DESC, assessment_id DESC LIMIT 1",
+    (sid,),
+)
+
+if not latest_prism:
+    st.info("아직 PRISM 평가 없음. 위 폼에서 첫 평가를 입력하세요.")
+else:
+    lp = latest_prism[0]
+    scores = [lp["score_p"], lp["score_r"], lp["score_i"], lp["score_s"], lp["score_m"]]
+    avg_ris = (lp["score_r"] + lp["score_i"] + lp["score_s"]) / 3
+    avg_pm  = (lp["score_p"] + lp["score_m"]) / 2
+
+    mc1, mc2, mc3 = st.columns(3)
+    mc1.metric("이해 RIS 평균", f"{avg_ris:.1f}/5",
+               help="Reading + Insight + Strategy")
+    mc2.metric("수행 PM 평균",  f"{avg_pm:.1f}/5",
+               help="Precision + Management")
+    mc3.metric("최근 평가일", lp["eval_date"])
+
+    # 5각형 레이더 차트
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib import font_manager
+    import numpy as np
+
+    # 한글 폰트
+    for f in ("AppleSDGothicNeo.ttc", "AppleGothic.ttf"):
+        for p in ("/System/Library/Fonts/", "/Library/Fonts/"):
+            full = Path(p) / f
+            if full.exists():
+                font_manager.fontManager.addfont(str(full))
+                plt.rcParams["font.family"] = font_manager.FontProperties(fname=str(full)).get_name()
+                break
+
+    categories = ["P 계산실수", "R 조건해석", "I 개념누락", "S 전략선택", "M 시간관리"]
+    values = scores + scores[:1]
+    angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(polar=True))
+    ax.fill(angles, values, color="#4F46E5", alpha=0.25)
+    ax.plot(angles, values, "o-", color="#4F46E5", linewidth=2)
+    ax.set_thetagrids(np.degrees(angles[:-1]), categories, fontsize=10)
+    ax.set_ylim(0, 5)
+    ax.set_yticks([1, 2, 3, 4, 5])
+    ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=8)
+    ax.set_rlabel_position(0)
+    ax.grid(True, alpha=0.5)
+    ax.set_title(f"PRISM 5각형 — {lp['eval_date']}", fontsize=12, pad=20)
+
+    rad1, rad2 = st.columns([0.5, 0.5])
+    with rad1:
+        st.pyplot(fig, use_container_width=True)
+    with rad2:
+        st.markdown("**점수표**")
+        st.markdown(
+            f"- **P** 계산실수: {lp['score_p']}/5\n"
+            f"- **R** 조건해석: {lp['score_r']}/5\n"
+            f"- **I** 개념누락: {lp['score_i']}/5\n"
+            f"- **S** 전략선택: {lp['score_s']}/5\n"
+            f"- **M** 시간관리: {lp['score_m']}/5"
+        )
+        if lp["note"]:
+            st.caption(f"📝 {lp['note']}")
+    plt.close(fig)
+
+# ── 이력 ──
+history = q(
+    "SELECT eval_date, score_p, score_r, score_i, score_s, score_m, note "
+    "FROM prism_assessment WHERE student_id = ? "
+    "ORDER BY eval_date DESC LIMIT 10",
+    (sid,),
+)
+if len(history) > 1:
+    with st.expander(f"📈 최근 평가 이력 ({len(history)}건)"):
+        hist_df = pd.DataFrame([
+            {"날짜": h["eval_date"],
+             "P": h["score_p"], "R": h["score_r"], "I": h["score_i"],
+             "S": h["score_s"], "M": h["score_m"],
+             "메모": (h["note"] or "")[:40]}
+            for h in history
+        ])
+        st.dataframe(hist_df, use_container_width=True, hide_index=True)
+
+# ── 참고: 클리닉 정밀 기록 누적 (보조) ──
+clinic_entries_all = q(
     "SELECT error_code, wrong_date FROM clinic_entries WHERE student_id = ? "
     "ORDER BY wrong_date DESC",
     (sid,),
 )
-
-# 시간 윈도우 토글 (PDF §6 "2~4주 단위 오류 분포")
-prism_window = st.radio(
-    "집계 기간",
-    options=["전체", "최근 4주", "최근 2주"],
-    horizontal=True,
-    key="prism_window",
-)
-if prism_window == "최근 4주":
-    cutoff = (date.today() - timedelta(weeks=4)).isoformat()
-    entries = [e for e in entries_all if (e["wrong_date"] or "") >= cutoff]
-elif prism_window == "최근 2주":
-    cutoff = (date.today() - timedelta(weeks=2)).isoformat()
-    entries = [e for e in entries_all if (e["wrong_date"] or "") >= cutoff]
-else:
-    entries = entries_all
-
-if not entries:
-    if entries_all:
-        st.info(f"선택한 기간({prism_window})에 오답이 없습니다.")
-    else:
-        st.info("아직 클리닉 오답 기록이 없습니다. 클리닉 페이지에서 처방전을 1건 생성하세요.")
-else:
-    counter = Counter(e["error_code"] for e in entries)
-    ris_total = sum(counter[c] for c in RIS_CODES)
-    pm_total  = sum(counter[c] for c in PM_CODES)
-    total = ris_total + pm_total
-
-    cc1, cc2, cc3 = st.columns(3)
-    cc1.metric("이해 RIS", f"{ris_total}건",
-               f"{ris_total/total*100:.0f}%" if total else "-")
-    cc2.metric("수행 PM", f"{pm_total}건",
-               f"{pm_total/total*100:.0f}%" if total else "-")
-    cc3.metric("총 오답", f"{total}건")
-
-    df = pd.DataFrame(
-        [{"PRISM": f"{PRISM_LETTER[code]} · {code}",
-          "건수": counter.get(code, 0),
-          "구분": "이해" if code in RIS_CODES else "수행"}
-         for code in PRISM_ORDER]
-    )
-    st.bar_chart(df.set_index("PRISM")["건수"], height=220)
-
-    with st.expander("선택 기간 내 최근 10건"):
-        for e in entries[:10]:
-            letter = PRISM_LETTER.get(e["error_code"], "?")
-            st.caption(f"· [{letter}] {e['wrong_date']} · {e['error_code']}")
+if clinic_entries_all:
+    with st.expander(f"📂 참고 — 클리닉 정밀 기록 누적 ({len(clinic_entries_all)}건)"):
+        st.caption("클리닉 페이지에서 입력한 오답 1건씩의 누적 분포 (참고용).")
+        counter = Counter(e["error_code"] for e in clinic_entries_all)
+        df = pd.DataFrame(
+            [{"PRISM": f"{PRISM_LETTER[code]} · {code}",
+              "건수": counter.get(code, 0),
+              "구분": "이해" if code in RIS_CODES else "수행"}
+             for code in PRISM_ORDER]
+        )
+        st.bar_chart(df.set_index("PRISM")["건수"], height=180)
 
 st.divider()
 
