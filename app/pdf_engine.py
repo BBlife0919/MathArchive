@@ -289,7 +289,8 @@ def _normalize_math_inner(s: str) -> str:
         body = m.group(1)
         if r"\frac" in body:
             body = body.replace(r"\frac", r"\dfrac")
-            return r"\left(" + body + r"\right)"
+            # \Biggl( \Biggr) 명시 사용 → \left\right 자동 보다 한 단계 더 큰 괄호
+            return r"\Biggl(" + body + r"\Biggr)"
         return m.group(0)
     s = re.sub(r"\\left\(([^()]*?)\\right\)", _dfrac_paren, s, flags=re.DOTALL)
     s = _BARE_FUNC.sub(r"\\\1", s)
@@ -463,7 +464,7 @@ body {
    reset 후 절대값으로 강제하기 때문에 .msupsub 컨테이너에만 적용하면 효과 X.
    자식 모두 !important 로 덮어야 cos^2 / a^2 / 2^{...} 의 지수가 본체 대비
    작아짐. */
-.katex .msupsub, .katex .msupsub * { font-size: 0.7em !important; }
+.katex .msupsub, .katex .msupsub * { font-size: 0.6em !important; }
 .page {
     min-height: 275mm;
     display: flex;
