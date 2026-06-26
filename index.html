@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>매쏠로지 — MATHOLOGY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0a1020;
+    --blue:#2b6fff;
+    --blue-soft:#9ec1ff;
+    --warm:#ffb347;
+    --paper:#f5f8ff;
+    --text:#13203c;
+    --muted:#5f6c87;
+    --line:#e3e9f7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    background:#060b18;color:#fff;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ===== 3D 캔버스 (히어로 배경) ===== */
+  #scene{position:fixed;inset:0;z-index:0;}
+  .vignette{
+    position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:
+      radial-gradient(120% 90% at 75% 30%, rgba(6,11,24,0) 40%, rgba(6,11,24,.55) 100%),
+      linear-gradient(180deg, rgba(6,11,24,.35) 0%, rgba(6,11,24,0) 25%, rgba(6,11,24,0) 60%, rgba(6,11,24,.7) 100%),
+      linear-gradient(90deg, rgba(6,11,24,.55) 0%, rgba(6,11,24,0) 45%);
+  }
+
+  /* ===== 네비 ===== */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 48px;transition:background .3s, padding .3s, box-shadow .3s;
+  }
+  nav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(14px);padding:16px 48px;box-shadow:0 1px 0 var(--line);}
+  .logo{font-weight:800;letter-spacing:.14em;font-size:18px;display:flex;align-items:center;gap:10px;transition:color .3s;}
+  .logo .dot{width:9px;height:9px;border-radius:2px;background:var(--blue);box-shadow:0 0 14px var(--blue);}
+  nav.scrolled .logo{color:var(--ink);}
+  .menu{display:flex;gap:34px;font-size:15px;font-weight:600;color:#dfe7ff;transition:color .3s;}
+  nav.scrolled .menu{color:var(--ink);}
+  .menu a{opacity:.85;transition:opacity .2s;}
+  .menu a:hover{opacity:1;}
+
+  /* ===== 히어로 ===== */
+  .hero-section{position:relative;z-index:5;height:100vh;}
+  .hero{position:absolute;left:48px;top:50%;transform:translateY(-50%);max-width:46vw;}
+  .hero h1{
+    font-weight:800;line-height:1.18;letter-spacing:-.01em;
+    font-size:clamp(40px,5.4vw,84px);text-shadow:0 4px 40px rgba(0,0,0,.45);
+  }
+  .hero h1 .line{display:block;opacity:0;transform:translateY(26px);}
+  .hero h1 .l1{animation:rise .9s .45s cubic-bezier(.2,.7,.2,1) forwards;}
+  .hero h1 .l2{animation:rise .9s .60s cubic-bezier(.2,.7,.2,1) forwards;}
+  .hero h1 .gap{height:.5em;}
+  .hero h1 .l3{animation:rise .9s .82s cubic-bezier(.2,.7,.2,1) forwards;}
+  .hero h1 .l4{animation:rise .9s .97s cubic-bezier(.2,.7,.2,1) forwards;}
+  .hero h1 .accent{color:var(--blue-soft);}
+  .hero .cta{
+    margin-top:38px;display:inline-flex;align-items:center;gap:10px;
+    padding:15px 28px;border-radius:999px;background:var(--blue);color:#fff;font-weight:700;font-size:16px;
+    border:1px solid rgba(255,255,255,.18);box-shadow:0 12px 40px rgba(43,111,255,.45);
+    opacity:0;transform:translateY(18px);animation:rise .9s 1.15s cubic-bezier(.2,.7,.2,1) forwards;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .hero .cta:hover{transform:translateY(-2px);box-shadow:0 16px 50px rgba(43,111,255,.6);}
+  .hero .cta svg{width:18px;height:18px;}
+  .tagline{position:absolute;right:48px;top:54%;text-align:right;font-size:15px;line-height:1.7;color:#cdd9ff;letter-spacing:.02em;opacity:0;animation:fadeUp 1s 1.1s ease forwards;}
+  .scrollhint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-size:12px;letter-spacing:.25em;color:#aab8e6;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 1.5s ease forwards;}
+  .scrollhint .bar{width:1px;height:34px;background:linear-gradient(#aab8e6,transparent);animation:pulse 1.8s ease-in-out infinite;}
+
+  /* ===== 콘텐츠 (불투명, 캔버스를 덮음) ===== */
+  .content{position:relative;z-index:5;background:var(--paper);color:var(--text);}
+
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* 인트로 */
+  .intro{max-width:1100px;margin:0 auto;padding:160px 48px 60px;}
+  .intro .kicker{color:var(--blue);font-weight:700;letter-spacing:.04em;font-size:15px;margin-bottom:18px;}
+  .intro h2{font-size:clamp(30px,4vw,52px);font-weight:800;line-height:1.25;letter-spacing:-.02em;}
+  .intro p{margin-top:24px;font-size:clamp(16px,1.5vw,20px);line-height:1.85;color:var(--muted);max-width:680px;}
+
+  /* 통계 배너 */
+  .stats{max-width:1100px;margin:40px auto 0;padding:60px 48px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .stat .num{font-size:clamp(36px,4.5vw,60px);font-weight:800;color:var(--ink);letter-spacing:-.02em;}
+  .stat .num .plus,.stat .num .unit{color:var(--blue);}
+  .stat .lbl{margin-top:8px;color:var(--muted);font-size:15px;font-weight:600;}
+
+  /* ===== 기능 섹션 (고정 메뉴 + 챕터) ===== */
+  .features{display:flex;gap:64px;max-width:1200px;margin:0 auto;padding:140px 48px 60px;}
+  .feat-nav{width:230px;flex-shrink:0;}
+  .feat-nav ul{position:sticky;top:120px;list-style:none;display:flex;flex-direction:column;gap:26px;}
+  .feat-nav li{font-size:21px;font-weight:700;color:#aeb8d0;cursor:pointer;transition:color .3s, transform .3s;display:flex;align-items:center;gap:12px;}
+  .feat-nav li::before{content:"";width:0;height:2px;background:var(--blue);transition:width .3s;}
+  .feat-nav li.active{color:var(--blue);transform:translateX(4px);}
+  .feat-nav li.active::before{width:20px;}
+  .feat-panels{flex:1;display:flex;flex-direction:column;gap:150px;}
+  .chapter{scroll-margin-top:120px;}
+  .chapter .tag{color:var(--blue);font-weight:700;font-size:14px;letter-spacing:.04em;}
+  .chapter h3{font-size:clamp(26px,3vw,40px);font-weight:800;margin:14px 0 16px;letter-spacing:-.01em;}
+  .chapter p{font-size:17px;line-height:1.85;color:var(--muted);max-width:560px;}
+  .chapter ul.feats{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;list-style:none;}
+  .chapter ul.feats li{font-size:13.5px;font-weight:600;color:var(--ink);background:#eaf0ff;border:1px solid #d8e3ff;padding:7px 14px;border-radius:999px;}
+
+  /* 다이어그램 공통 */
+  .diagram{height:330px;border-radius:22px;overflow:hidden;position:relative;margin-bottom:34px;border:1px solid var(--line);background:linear-gradient(135deg,#eef3ff,#f8faff);box-shadow:0 24px 60px -30px rgba(43,111,255,.35);}
+
+  /* 1) 문제은행 그리드 */
+  .dgm-bank{display:flex;align-items:center;justify-content:center;}
+  .bank-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(18,1fr);grid-auto-rows:1fr;gap:4px;padding:16px;opacity:.55;}
+  .bank-grid span{background:#cdd9f7;border-radius:3px;animation:tile 3s ease-in-out infinite;}
+  .bank-count{position:relative;z-index:2;text-align:center;text-shadow:0 2px 18px #fff;}
+  .bank-count .num{font-size:clamp(40px,6vw,72px);font-weight:800;color:var(--ink);letter-spacing:-.02em;}
+  .bank-count .plus{color:var(--blue);}
+  .bank-count .lbl{margin-top:4px;color:var(--muted);font-weight:700;font-size:15px;}
+
+  /* 2) 시험지 생성 */
+  .dgm-exam{display:flex;align-items:center;justify-content:center;gap:40px;}
+  .exam-pool{display:flex;flex-direction:column;gap:12px;}
+  .exam-pool .q{width:120px;height:26px;border-radius:6px;background:#d4e0ff;position:relative;overflow:hidden;}
+  .exam-pool .q::after{content:"";position:absolute;left:8px;top:8px;width:60%;height:4px;border-radius:2px;background:#9db8ff;}
+  .exam-pool .q.pick{background:var(--blue);animation:pickPulse 3.2s ease-in-out infinite;}
+  .exam-arrow{font-size:30px;color:var(--blue);animation:slideX 1.6s ease-in-out infinite;}
+  .exam-paper{width:150px;height:200px;background:#fff;border-radius:8px;box-shadow:0 18px 40px -16px rgba(43,111,255,.5);padding:16px;display:flex;flex-direction:column;gap:9px;border:1px solid var(--line);}
+  .exam-paper i{display:block;height:8px;border-radius:3px;background:#e6ecfb;transform-origin:left;animation:fillRow 3.2s ease-in-out infinite;}
+  .exam-paper i:nth-child(1){animation-delay:.1s}.exam-paper i:nth-child(2){animation-delay:.4s;width:80%}.exam-paper i:nth-child(3){animation-delay:.7s}.exam-paper i:nth-child(4){animation-delay:1s;width:70%}.exam-paper i:nth-child(5){animation-delay:1.3s}.exam-paper i:nth-child(6){animation-delay:1.6s;width:85%}
+
+  /* 3) 교재 제작 (책) */
+  .dgm-book{display:flex;align-items:center;justify-content:center;perspective:900px;}
+  .book{position:relative;width:160px;height:210px;transform-style:preserve-3d;transform:rotateY(-22deg) rotateX(6deg);animation:bookFloat 5s ease-in-out infinite;}
+  .book .pg{position:absolute;inset:0;background:#fff;border:1px solid var(--line);border-radius:4px 8px 8px 4px;box-shadow:0 10px 24px -12px rgba(0,0,0,.3);}
+  .book .pg:nth-child(1){transform:translateZ(-14px)}.book .pg:nth-child(2){transform:translateZ(-9px)}.book .pg:nth-child(3){transform:translateZ(-4px)}
+  .book .cover{position:absolute;inset:0;border-radius:4px 8px 8px 4px;background:linear-gradient(135deg,var(--blue),#5b8cff);box-shadow:0 18px 40px -14px rgba(43,111,255,.7);display:flex;flex-direction:column;justify-content:flex-end;padding:18px;}
+  .book .cover b{color:#fff;font-size:18px;letter-spacing:.05em}
+  .book .cover s{display:block;width:40px;height:3px;background:rgba(255,255,255,.7);margin-bottom:10px;text-decoration:none}
+
+  /* 4) PRISM 클리닉 (분광) */
+  .dgm-prism{display:flex;align-items:center;justify-content:center;padding:10px;}
+  .dgm-prism svg{width:92%;height:auto;}
+  .dgm-prism .ray{animation:rayGlow 2.6s ease-in-out infinite;}
+  .dgm-prism .beam{animation:rayGlow 2.6s ease-in-out infinite;}
+  .clinic-note{margin-top:16px;font-size:15px;line-height:1.7;color:var(--muted);background:#eef3ff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;max-width:560px;}
+  .clinic-note b{color:var(--ink);}
+
+  /* 5) 수식 엔진 */
+  .dgm-engine{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:24px;}
+  .eng-step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:15px;box-shadow:0 12px 30px -18px rgba(43,111,255,.5);animation:popIn 3.2s ease-in-out infinite;}
+  .eng-step.s2{animation-delay:.5s}.eng-step.s3{animation-delay:1s}
+  .eng-step code{font-family:ui-monospace,Menlo,monospace;color:#7a4bff;font-size:13px;}
+  .eng-step .frac{display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;font-size:20px;color:var(--ink);}
+  .eng-step .frac b{border-bottom:2px solid var(--ink);padding:0 6px;font-weight:600}
+  .eng-arrow{color:var(--blue);font-size:22px;animation:pulse 1.8s ease-in-out infinite;}
+
+  /* CTA */
+  .cta-band{position:relative;z-index:5;background:linear-gradient(135deg,#0b1430,#15235a);color:#fff;text-align:center;padding:130px 48px;overflow:hidden;}
+  .cta-band::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(255,170,80,.35),transparent 60%);top:-160px;left:50%;transform:translateX(-50%);}
+  .cta-band h2{position:relative;font-size:clamp(30px,4.2vw,56px);font-weight:800;letter-spacing:-.02em;}
+  .cta-band p{position:relative;margin:18px auto 36px;color:#c6d3ff;font-size:18px;max-width:520px;}
+  .cta-band .btn{position:relative;display:inline-flex;align-items:center;gap:10px;background:var(--blue);padding:17px 34px;border-radius:999px;font-weight:700;font-size:17px;box-shadow:0 16px 50px rgba(43,111,255,.6);transition:transform .2s;}
+  .cta-band .btn:hover{transform:translateY(-2px);}
+  .cta-band .btn svg{width:18px;height:18px;}
+
+  footer{position:relative;z-index:5;background:#070d1e;color:#8493b8;padding:48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;}
+  footer .logo{color:#fff;}
+
+  @keyframes rise{to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes pulse{0%,100%{opacity:.35;}50%{opacity:1;}}
+  @keyframes tile{0%,100%{opacity:.3;}50%{opacity:1;}}
+  @keyframes slideX{0%,100%{transform:translateX(0);}50%{transform:translateX(8px);}}
+  @keyframes pickPulse{0%,100%{box-shadow:0 0 0 rgba(43,111,255,0);}50%{box-shadow:0 0 18px rgba(43,111,255,.7);}}
+  @keyframes fillRow{0%{transform:scaleX(0);opacity:0;}25%,100%{transform:scaleX(1);opacity:1;}}
+  @keyframes bookFloat{0%,100%{transform:rotateY(-22deg) rotateX(6deg) translateY(0);}50%{transform:rotateY(-14deg) rotateX(6deg) translateY(-10px);}}
+  @keyframes rayGlow{0%,100%{stroke-opacity:.5;}50%{stroke-opacity:1;}}
+  @keyframes popIn{0%,100%{transform:translateY(0);opacity:.7;}50%{transform:translateY(-6px);opacity:1;}}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  @media (max-width:860px){
+    nav{padding:18px 22px;} .menu{display:none;}
+    .hero{left:22px;right:22px;max-width:none;} .tagline{display:none;}
+    .intro,.stats,.features{padding-left:22px;padding-right:22px;}
+    .stats{grid-template-columns:1fr;gap:24px;}
+    .features{flex-direction:column;gap:50px;}
+    .feat-nav{width:auto;} .feat-nav ul{position:static;flex-direction:row;flex-wrap:wrap;gap:14px;}
+    .feat-nav li{font-size:16px;}
+    .feat-panels{gap:90px;}
+  }
+
+  #loader{position:fixed;inset:0;z-index:200;background:#060b18;display:flex;align-items:center;justify-content:center;transition:opacity .6s;}
+  #loader.hide{opacity:0;pointer-events:none;}
+  #loader .spin{width:34px;height:34px;border:3px solid rgba(255,255,255,.15);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;}
+</style>
+</head>
+<body>
+  <div id="loader"><div class="spin"></div></div>
+
+  <canvas id="scene"></canvas>
+  <div class="vignette"></div>
+
+  <nav id="nav">
+    <div class="logo"><span class="dot"></span>MATHOLOGY</div>
+    <div class="menu">
+      <a href="#intro">소개</a>
+      <a href="#features">기술</a>
+      <a href="#start">시작하기</a>
+    </div>
+  </nav>
+
+  <!-- ===== 히어로 ===== -->
+  <section class="hero-section">
+    <div class="hero">
+      <h1>
+        <span class="line l1">기출의 모든 것을</span>
+        <span class="line l2"><span class="accent">한 번의 검색</span>으로</span>
+        <span class="gap"></span>
+        <span class="line l3">시험지가</span>
+        <span class="line l4">완성됩니다</span>
+      </h1>
+      <a class="cta" href="https://matharchive.streamlit.app" target="_blank" rel="noopener">
+        시작하기
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+    <div class="tagline">Build exams in seconds,<br/>powered by 130,000+ problems.</div>
+    <div class="scrollhint"><span>SCROLL</span><span class="bar"></span></div>
+  </section>
+
+  <!-- ===== 콘텐츠 ===== -->
+  <main class="content">
+
+    <section class="intro" id="intro">
+      <div class="reveal">
+        <div class="kicker">WHY MATHOLOGY</div>
+        <h2>더 쉽게, 더 빠르게, 더 정밀하게.</h2>
+        <p>매쏠로지는 단순한 문제 모음이 아닙니다. 13만 개가 넘는 내신 기출을 정교한 데이터 구조로 집대성하고, 검색부터 시험지·교재 제작, 오답 진단까지 한 흐름으로 연결합니다. 선생님이 콘텐츠를 만드는 데 허비하는 시간을 줄여, 교육의 본질에 집중할 수 있도록 돕습니다.</p>
+      </div>
+    </section>
+
+    <section class="stats reveal">
+      <div class="stat"><div class="num"><span class="cnt" data-to="130000">0</span><span class="plus">+</span></div><div class="lbl">집대성된 내신 기출 문제</div></div>
+      <div class="stat"><div class="num"><span class="cnt" data-to="60">0</span><span class="unit">초</span></div><div class="lbl">한 장의 시험지가 완성되는 시간</div></div>
+      <div class="stat"><div class="num"><span class="cnt" data-to="100">0</span><span class="unit">%</span></div><div class="lbl">한글 수식 → LaTeX 자동 조판</div></div>
+    </section>
+
+    <!-- 기능 -->
+    <section class="features" id="features">
+      <aside class="feat-nav">
+        <ul>
+          <li data-target="ch-bank" class="active">문제은행</li>
+          <li data-target="ch-exam">시험지 생성</li>
+          <li data-target="ch-book">교재 제작</li>
+          <li data-target="ch-clinic">PRISM 클리닉</li>
+          <li data-target="ch-engine">수식 엔진</li>
+        </ul>
+      </aside>
+
+      <div class="feat-panels">
+
+        <article class="chapter" id="ch-bank">
+          <div class="diagram dgm-bank reveal">
+            <div class="bank-grid"></div>
+            <div class="bank-count"><div class="num"><span class="cnt" data-to="130000">0</span><span class="plus">+</span></div><div class="lbl">내신 기출 문제</div></div>
+          </div>
+          <div class="reveal">
+            <div class="tag">QUESTION BANK</div>
+            <h3>13만 기출, 한곳에 집대성</h3>
+            <p>전국 학교의 HWPX 기출 파일을 자동 파싱해 문항 단위로 분리하고, 수식·이미지·정답·해설·단원·난이도까지 구조화했습니다. 흩어져 있던 기출이 하나의 검색 가능한 데이터베이스가 됩니다.</p>
+            <ul class="feats"><li>학교·학년·학기·연도</li><li>중단원·난이도</li><li>객관식/주관식</li><li>이미지·해설 포함</li></ul>
+          </div>
+        </article>
+
+        <article class="chapter" id="ch-exam">
+          <div class="diagram dgm-exam reveal">
+            <div class="exam-pool"><div class="q pick"></div><div class="q"></div><div class="q pick"></div><div class="q"></div><div class="q pick"></div></div>
+            <div class="exam-arrow">→</div>
+            <div class="exam-paper"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="reveal">
+            <div class="tag">EXAM BUILDER</div>
+            <h3>클릭 몇 번으로 시험지 완성</h3>
+            <p>조건만 고르면 문항이 자동으로 배치되고, 인쇄용 PDF가 즉시 만들어집니다. 배점·문항 순서·정답지·해설지까지 한 번에. 시험지 한 장 만드는 데 더는 밤을 새울 필요가 없습니다.</p>
+            <ul class="feats"><li>조건 필터 선택</li><li>자동 배치·조판</li><li>정답·해설지 동시 생성</li><li>인쇄용 PDF</li></ul>
+          </div>
+        </article>
+
+        <article class="chapter" id="ch-book">
+          <div class="diagram dgm-book reveal">
+            <div class="book"><div class="pg"></div><div class="pg"></div><div class="pg"></div><div class="cover"><s></s><b>MATHOLOGY</b></div></div>
+          </div>
+          <div class="reveal">
+            <div class="tag">TEXTBOOK ENGINE</div>
+            <h3>나만의 유형서, 자동 조판</h3>
+            <p>문항을 유형별로 묶고 표지·목차·해설까지 갖춘 한 권의 유형서로 자동 조판합니다. 학원·반·학생 맞춤 교재를, 디자이너 없이 PDF 한 번으로.</p>
+            <ul class="feats"><li>유형별 묶음</li><li>표지·목차 자동</li><li>분책 지원</li><li>출판급 조판</li></ul>
+          </div>
+        </article>
+
+        <article class="chapter" id="ch-clinic">
+          <div class="diagram dgm-prism reveal">
+            <svg viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg">
+              <!-- 입사광 -->
+              <line class="beam" x1="20" y1="170" x2="212" y2="170" stroke="#aab8d6" stroke-width="7" stroke-linecap="round"/>
+              <!-- 프리즘 -->
+              <polygon points="250,116 298,180 202,180" fill="rgba(255,255,255,.8)" stroke="#b9c6e6" stroke-width="2"/>
+              <!-- 분광된 5스펙트럼 -->
+              <line class="ray" style="animation-delay:0s"   x1="286" y1="172" x2="520" y2="62"  stroke="#ff5d6c" stroke-width="5" stroke-linecap="round"/>
+              <line class="ray" style="animation-delay:.2s"  x1="286" y1="172" x2="520" y2="108" stroke="#ff8a3d" stroke-width="5" stroke-linecap="round"/>
+              <line class="ray" style="animation-delay:.4s"  x1="286" y1="172" x2="520" y2="154" stroke="#f0b400" stroke-width="5" stroke-linecap="round"/>
+              <line class="ray" style="animation-delay:.6s"  x1="286" y1="172" x2="520" y2="200" stroke="#2f9bff" stroke-width="5" stroke-linecap="round"/>
+              <line class="ray" style="animation-delay:.8s"  x1="286" y1="172" x2="520" y2="246" stroke="#8b6cff" stroke-width="5" stroke-linecap="round"/>
+              <!-- 라벨 -->
+              <text x="536" y="68"  fill="#ff5d6c" font-weight="800" font-size="21">P</text><text x="558" y="68"  fill="#13203c" font-size="15" font-weight="600">계산</text>
+              <text x="536" y="114" fill="#ff8a3d" font-weight="800" font-size="21">R</text><text x="558" y="114" fill="#13203c" font-size="15" font-weight="600">조건</text>
+              <text x="536" y="160" fill="#f0b400" font-weight="800" font-size="21">I</text><text x="558" y="160" fill="#13203c" font-size="15" font-weight="600">개념</text>
+              <text x="536" y="206" fill="#2f9bff" font-weight="800" font-size="21">S</text><text x="558" y="206" fill="#13203c" font-size="15" font-weight="600">전략</text>
+              <text x="536" y="252" fill="#8b6cff" font-weight="800" font-size="21">M</text><text x="558" y="252" fill="#13203c" font-size="15" font-weight="600">시간</text>
+            </svg>
+          </div>
+          <div class="reveal">
+            <div class="tag">PRISM CLINIC</div>
+            <h3>오답을 5가지 빛으로 분광하다</h3>
+            <p>틀린 문제를 하나의 '오답'으로 뭉뚱그리지 않습니다. PRISM은 오답을 <b>계산·조건·개념·전략·시간</b> 다섯 스펙트럼으로 분해해, 학생이 '왜' 틀렸는지를 진단합니다. 점수 뒤에 숨은 진짜 원인이 보입니다.</p>
+            <ul class="feats"><li>P 계산</li><li>R 조건</li><li>I 개념</li><li>S 전략</li><li>M 시간</li></ul>
+            <p class="clinic-note">RIS(조건·개념·전략) = <b>이해</b> 영역 · PM(계산·시간) = <b>수행</b> 영역으로 묶어, 약점이 '이해'인지 '수행'인지까지 짚어냅니다.</p>
+          </div>
+        </article>
+
+        <article class="chapter" id="ch-engine">
+          <div class="diagram dgm-engine reveal">
+            <div class="eng-step s1"><code>{su over a}</code></div>
+            <div class="eng-arrow">→</div>
+            <div class="eng-step s2"><code>\dfrac{x}{a}</code></div>
+            <div class="eng-arrow">→</div>
+            <div class="eng-step s3"><span class="frac"><b>x</b><span>a</span></span></div>
+          </div>
+          <div class="reveal">
+            <div class="tag">MATH ENGINE</div>
+            <h3>한글 수식을 완벽한 활자로</h3>
+            <p>한글 수식편집기 포맷을 LaTeX로 변환하고, 분수·지수·근호·행렬까지 출판물 수준으로 렌더링합니다. 깨진 수식, 어긋난 기호 없이 — 수식이 곧 신뢰입니다.</p>
+            <ul class="feats"><li>HWP 수식 → LaTeX</li><li>토큰 자동 매핑</li><li>정밀 PDF 조판</li></ul>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-band" id="start">
+      <h2>기출의 모든 것을, 지금 시작하세요</h2>
+      <p>13만 문제 위에서, 시험지부터 교재까지. 매쏠로지와 함께라면 준비는 끝났습니다.</p>
+      <a class="btn" href="https://matharchive.streamlit.app" target="_blank" rel="noopener">
+        무료로 시작하기
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </section>
+
+    <footer>
+      <div class="logo">MATHOLOGY</div>
+      <div>© 2026 MATHOLOGY · 내신 기출의 모든 것</div>
+    </footer>
+
+  </main>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#060b18');
+scene.fog = new THREE.Fog('#060b18', 14, 34);
+
+const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 100);
+camera.position.set(0, 0, 16);
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+scene.add(new THREE.AmbientLight(0x6f8bff, 0.4));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(6, 8, 10); scene.add(key);
+const rim = new THREE.DirectionalLight(0x2b6fff, 1.2); rim.position.set(-8, -4, 4); scene.add(rim);
+
+const group = new THREE.Group(); scene.add(group);
+const box = new THREE.BoxGeometry(1,1,1);
+const glassMat = new THREE.MeshPhysicalMaterial({ color:0x9ec4ff, metalness:0, roughness:0.08, transmission:0.92, thickness:1.4, ior:1.4, clearcoat:1, clearcoatRoughness:0.1, envMapIntensity:1.4, transparent:true, opacity:0.96 });
+const solidMat = new THREE.MeshPhysicalMaterial({ color:0x3f74ff, metalness:0.1, roughness:0.35, envMapIntensity:0.9 });
+
+const cubes = [];
+const COLS = 7, ROWS = 5;
+for(let i=0;i<COLS;i++) for(let j=0;j<ROWS;j++){
+  if(Math.random() < 0.32) continue;
+  const m = new THREE.Mesh(box, Math.random()<0.78 ? glassMat : solidMat);
+  m.position.set((i-(COLS-1)/2)*2.5 + (Math.random()-0.5)*0.8, (j-(ROWS-1)/2)*2.5 + (Math.random()-0.5)*0.8, -Math.random()*7 - i*0.4);
+  m.scale.setScalar(1.1 + Math.random()*1.5);
+  m.rotation.set(Math.random()*0.3, Math.random()*0.3, 0);
+  m.userData.float = Math.random()*Math.PI*2; m.userData.amp = 0.15 + Math.random()*0.25;
+  group.add(m); cubes.push(m);
+}
+const glowMat = new THREE.MeshStandardMaterial({ color:0xffb347, emissive:0xff9a2e, emissiveIntensity:2.4, roughness:0.4 });
+const glow = new THREE.Mesh(box, glowMat); glow.position.set(-1.5, 0.6, 2); glow.scale.setScalar(2.4); group.add(glow);
+const glowLight = new THREE.PointLight(0xffae52, 22, 26, 2); glowLight.position.copy(glow.position); scene.add(glowLight);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.9, 0.7, 0.85));
+
+let mx=0,my=0,tmx=0,tmy=0;
+addEventListener('mousemove', e=>{ tmx=(e.clientX/innerWidth-0.5); tmy=(e.clientY/innerHeight-0.5); });
+const clock = new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  mx += (tmx-mx)*0.05; my += (tmy-my)*0.05;
+  group.rotation.y = Math.sin(t*0.08)*0.18 + mx*0.5;
+  group.rotation.x = my*0.3;
+  group.position.x = -mx*1.2; group.position.y = my*0.8;
+  for(const c of cubes){ c.position.y += Math.sin(t*0.6 + c.userData.float)*0.016*c.userData.amp; c.rotation.z += 0.0006; }
+  glowMat.emissiveIntensity = 2.2 + Math.sin(t*1.5)*0.4;
+  composer.render();
+}
+animate();
+addEventListener('resize', ()=>{ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight); });
+setTimeout(()=>document.getElementById('loader').classList.add('hide'), 500);
+</script>
+
+<script>
+// 문제은행 그리드 타일 생성 + 랜덤 딜레이
+const grid = document.querySelector('.bank-grid');
+if(grid){ for(let i=0;i<108;i++){ const s=document.createElement('span'); s.style.animationDelay=(Math.random()*3).toFixed(2)+'s'; grid.appendChild(s); } }
+
+// 스크롤 등장
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+},{threshold:0.18});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// 숫자 카운트업
+function countUp(el){
+  const to = +el.dataset.to; const dur=1400; const start=performance.now();
+  function step(now){
+    const p=Math.min((now-start)/dur,1); const ease=1-Math.pow(1-p,3);
+    el.textContent = Math.floor(to*ease).toLocaleString('ko-KR');
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const cntIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting && !e.target.dataset.done){ e.target.dataset.done='1'; countUp(e.target); } });
+},{threshold:0.6});
+document.querySelectorAll('.cnt').forEach(el=>cntIO.observe(el));
+
+// 좌측 메뉴 활성화 + 네비 스크롤 스타일
+const navEl = document.getElementById('nav');
+const navItems = [...document.querySelectorAll('.feat-nav li')];
+const chapters = navItems.map(li=>document.getElementById(li.dataset.target));
+const chIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      navItems.forEach(li=>li.classList.toggle('active', li.dataset.target===id));
+    }
+  });
+},{rootMargin:'-45% 0px -45% 0px'});
+chapters.forEach(c=>c && chIO.observe(c));
+navItems.forEach(li=>li.addEventListener('click',()=>document.getElementById(li.dataset.target).scrollIntoView({behavior:'smooth'})));
+
+const heroH = ()=>innerHeight*0.6;
+addEventListener('scroll', ()=>{ navEl.classList.toggle('scrolled', scrollY>heroH()); }, {passive:true});
+</script>
+</body>
+</html>
