@@ -249,6 +249,55 @@ _LOOSE_SUP = re.compile(r"\\,\s*(\^|_)")
 _TEXT_BLOCK = re.compile(r"\\(?:text|mathrm|mbox|operatorname)\s*\{[^{}]*\}")
 
 
+def _frac_to_dfrac_in_context(s: str) -> str:
+    """수학식 안에서 다음 컨텍스트의 `\\frac` → `\\dfrac` (재귀):
+       1) `^{...}` 또는 `_{...}` brace 안 (지수/첨자 안 분수가 invisible 되는 케이스)
+       2) `\\frac{...}{...}` 의 분자·분모 brace 안 (복합분수 들쭉날쭉 해소)
+    Brace depth 추적 (escape `\\\\` 무시) — 정규식으로 못 잡는 nested 처리.
+    """
+    n = len(s)
+    out: list[str] = []
+    i = 0
+    def _skip_brace(start: int) -> int:
+        depth = 1
+        j = start
+        while j < n and depth > 0:
+            if s[j] == "\\" and j + 1 < n:
+                j += 2
+                continue
+            if s[j] == "{":
+                depth += 1
+            elif s[j] == "}":
+                depth -= 1
+            j += 1
+        return j
+
+    while i < n:
+        if s.startswith(r"\frac{", i):
+            num_start = i + 6
+            num_end = _skip_brace(num_start)
+            if num_end <= n and num_end - 1 < n and s[num_end - 1] == "}" and num_end < n and s[num_end] == "{":
+                den_start = num_end + 1
+                den_end = _skip_brace(den_start)
+                num_inner = _frac_to_dfrac_in_context(s[num_start:num_end - 1])
+                den_inner = _frac_to_dfrac_in_context(s[den_start:den_end - 1])
+                num_inner = num_inner.replace(r"\frac{", r"\dfrac{")
+                den_inner = den_inner.replace(r"\frac{", r"\dfrac{")
+                out.append(r"\frac{" + num_inner + "}{" + den_inner + "}")
+                i = den_end
+                continue
+        if s[i] in "_^" and i + 1 < n and s[i + 1] == "{":
+            inner_end = _skip_brace(i + 2)
+            inner = _frac_to_dfrac_in_context(s[i + 2:inner_end - 1])
+            inner = inner.replace(r"\frac{", r"\dfrac{")
+            out.append(s[i:i + 2] + inner + "}")
+            i = inner_end
+            continue
+        out.append(s[i])
+        i += 1
+    return "".join(out)
+
+
 def _normalize_math_inner(s: str) -> str:
     """`$...$` 내부 LaTeX 교정: 함수명 백슬래시 보충 + 헐거운 첨자 정리.
 
@@ -265,6 +314,13 @@ def _normalize_math_inner(s: str) -> str:
     # HWP 변환 잔재: ANG ≤ X / ANG <= X / ANG \leq X → \angle X (LE 두 글자가 <= 로 잘못 매핑됨)
     s = re.sub(r"\bANGLE\s+", r"\\angle ", s)
     s = re.sub(r"\bANG\s*(?:≤|<=|\\leq)\s*", r"\\angle ", s)
+    # sin/cos/tan/log/ln 뒤 pi 가 백슬래시 없이 raw 5글자 식별자로 들어간 케이스
+    # ($y=sinpix$ 등): 함수명·그리스·변수 분리
+    s = re.sub(r"\b(sin|cos|tan|sec|csc|cot|log|ln)pi([a-zA-Z])\b", r"\\\1\\pi \2", s)
+    s = re.sub(r"\b(sin|cos|tan|sec|csc|cot|log|ln)pi\b", r"\\\1\\pi", s)
+    # 변수/큰 연산자 + 공백 + 첨자/지수 → 공백 제거 (a _{11}, \sum _{k=1} 등 첨자 분리 방지)
+    s = re.sub(r"(\\(?:sum|prod|int|iint|iiint|oint|coprod|bigcup|bigcap|biguplus|bigvee|bigwedge|bigsqcup|bigodot|bigotimes|bigoplus|lim))\s+(?=[_^])", r"\1", s)
+    s = re.sub(r"([A-Za-z\}\)\]])\s+(?=[_^])", r"\1", s)
     # matrix 환경 안의 단독 `\ ` → `\\` (LaTeX 행 구분) — KaTeX 행렬 일자 노출 방지
     def _fix_mat(m):
         head, body, tail = m.group(1), m.group(2), m.group(3)
@@ -274,25 +330,30 @@ def _normalize_math_inner(s: str) -> str:
                _fix_mat, s, flags=re.DOTALL)
     # 큰 연산자(시그마·적분·곱·합집합 등) 있는 수식 → \displaystyle 자동 prefix
     # KaTeX 인라인 textstyle 에서 시그마 본체가 작고 limits 가 옆에 첨자로 붙는 못생김 방지
-    if re.search(r"\\(sum|prod|int|iint|iiint|oint|bigcup|bigcap|coprod|biguplus|bigvee|bigwedge|bigsqcup|bigodot|bigotimes|bigoplus|lim)\b", s):
+    # NOTE: `\b` 는 `\sum_` 매치 X (m 다음 _ 가 \w 라 경계 없음) → 명시적 부정 lookahead
+    if re.search(r"\\(sum|prod|int|iint|iiint|oint|bigcup|bigcap|coprod|biguplus|bigvee|bigwedge|bigsqcup|bigodot|bigotimes|bigoplus|lim)(?![a-zA-Z])", s):
         if not s.lstrip().startswith("\\displaystyle"):
             s = "\\displaystyle " + s
-    # \dfrac (displaystyle 강제 분수) → \frac (context 자동) — 첨자/지수 안에서
-    # \dfrac 이 displaystyle 크기로 렌더되어 분수만 비정상적으로 커지고
-    # 괄호/중괄호가 자동 확대되는 케이스(log_{1/2}, 2^{(101-2k)/3} 등) 보정
+    # KaTeX inline `$...$` 모드에선 `\displaystyle` 만으로 op-limits 위/아래 보장 X
+    # (브라우저별 동작 차이). `\limits` 명시로 강제 — 시그마/곱 등 뒤에 _/^ 있을 때만.
+    s = re.sub(
+        r"\\(sum|prod|coprod|bigcup|bigcap|biguplus|bigvee|bigwedge|bigsqcup|bigodot|bigotimes|bigoplus)(?=[_^])",
+        r"\\\1\\limits",
+        s,
+    )
+    # HWP 변환 잔재: `\sum_x = a ^{b}` 같이 limits 분리된 경우 → `\sum_{x=a}^{b}` 복구
+    # `\sum_k=2 ^{30}` → `\sum_{k=2}^{30}` 등 (43번 해설 시그마 위/아래 누락 케이스)
+    s = re.sub(
+        r"(\\(?:sum|prod|int|coprod|bigcup|bigcap|biguplus|bigvee|bigwedge|bigsqcup|bigodot|bigotimes|bigoplus)(?:\\limits)?)"
+        r"_([a-zA-Z])\s*=\s*([0-9a-zA-Z]+)\s*\^\{?([^}\s]+)\}?",
+        r"\1_{\2=\3}^{\4}",
+        s,
+    )
+    # 모든 분수는 displaystyle(`\dfrac`)로 통일 — 한글파일/시중 교재 톤 균일성.
+    # `\frac` textstyle 사용 시 복합분수 안쪽 분수가 scriptstyle 자동 축소 → invisible.
+    # 컨텍스트별 부분 강제(어떤건 \dfrac, 어떤건 \frac)는 들쭉날쭉 원인이므로 X.
     s = s.replace(r"\dfrac", r"\frac")
-    # 단, \left( ... \frac ... \right) 같이 _가시 위치 인자_ 안 분수는 \dfrac 직접
-    # 변환 → 분수가 displaystyle 크기로 렌더 + \left \right 가 분수 높이에 맞춰
-    # 자동 확대. f(5/3 π) 같은 케이스 괄호 짧음 해결.
-    # (\displaystyle prefix 만으로는 KaTeX 가 \left \right 사이즈 결정에 반영 X)
-    def _dfrac_paren(m):
-        body = m.group(1)
-        if r"\frac" in body:
-            body = body.replace(r"\frac", r"\dfrac")
-            # \Biggl( \Biggr) 명시 사용 → \left\right 자동 보다 한 단계 더 큰 괄호
-            return r"\Biggl(" + body + r"\Biggr)"
-        return m.group(0)
-    s = re.sub(r"\\left\(([^()]*?)\\right\)", _dfrac_paren, s, flags=re.DOTALL)
+    s = re.sub(r"\\frac(?![a-zA-Z])", r"\\dfrac", s)
     s = _BARE_FUNC.sub(r"\\\1", s)
     s = _LOOSE_SUP.sub(r"\1", s)
     for i, b in enumerate(blocks):
@@ -319,7 +380,40 @@ def _normalize_math_text(text: str) -> str:
         if len(_DOLLAR_RE.findall(line)) % 2 == 1:
             line = line + "$"
         out.append(line)
-    return "\n".join(out)
+    text = "\n".join(out)
+    # 별개 `$..$` 들이 공백으로 이어진 경우(둘 다 의미 있는 식) → 줄바꿈 분리.
+    # 24번 해설 `$=c(...)^2$ $b^3=c^3$ $(b-c)(...)=0$ $\\therefore b=c$` 같이
+    # 별개 식이 같은 줄에 표시되어 이상한 등호 체인이 되는 케이스.
+    SIGS = ("=", "\\frac", "\\sum", "\\int", "\\prod", "\\lim",
+            "\\therefore", "\\because", "\\Rightarrow", "\\Leftrightarrow")
+    def _is_substantive(m):
+        body = m[1:-1].strip()
+        if any(s in body for s in SIGS):
+            return True
+        return len(body) > 8
+    def _split_pair(m):
+        a, b = m.group(1), m.group(3)
+        return (a + "\n" + b) if (_is_substantive(a) and _is_substantive(b)) else m.group(0)
+    prev = None
+    while prev != text:
+        prev = text
+        text = re.sub(r"(\$[^$\n]+\$)([ \t]+)(\$[^$\n]+\$)", _split_pair, text)
+    # 한글 ↔ `$독립식$` 가 공백 없이 직접 붙은 케이스도 줄바꿈.
+    # 25번 (4)(다) `사인법칙을 이용하면$\\frac{BC}{...}=\\frac{AC}{...}$` 같이
+    # 한글 문장 끝에 수식이 바로 이어지는 형태. 독립식 (= or \\frac 등) 만 대상.
+    def _has_sig(body):
+        return any(s in body for s in SIGS) and len(body) > 5
+    def _split_korean_then_math(m):
+        before, dollar = m.group(1), m.group(2)
+        body = dollar[1:-1]
+        return (before + "\n" + dollar) if _has_sig(body) else m.group(0)
+    def _split_math_then_korean(m):
+        dollar, after = m.group(1), m.group(2)
+        body = dollar[1:-1]
+        return (dollar + "\n" + after) if _has_sig(body) else m.group(0)
+    text = re.sub(r"([가-힣])(\$[^$\n]+\$)", _split_korean_then_math, text)
+    text = re.sub(r"(\$[^$\n]+\$)([가-힣])", _split_math_then_korean, text)
+    return text
 
 
 def render_question_body(text: str, images: dict | None = None) -> str:
@@ -464,7 +558,8 @@ body {
    reset 후 절대값으로 강제하기 때문에 .msupsub 컨테이너에만 적용하면 효과 X.
    자식 모두 !important 로 덮어야 cos^2 / a^2 / 2^{...} 의 지수가 본체 대비
    작아짐. */
-.katex .msupsub, .katex .msupsub * { font-size: 0.6em !important; }
+/* 첨자/지수 크기 — KaTeX 기본 0.5em (sizing reset-size*.size3) 그대로 사용.
+   강제 override 시 부모 컨텍스트 이미 작은 상태에서 또 곱해져 invisible(~2pt) 됨. */
 .page {
     min-height: 275mm;
     display: flex;
@@ -2012,6 +2107,9 @@ def _launch_browser(p):
 
 def html_to_pdf_bytes(html: str) -> bytes:
     """HTML을 Playwright+Chromium으로 PDF 바이트 변환."""
+    if os.environ.get("DEBUG_DUMP_HTML"):
+        with open("/tmp/last_book.html", "w") as f:
+            f.write(html)
     with sync_playwright() as p:
         browser = _launch_browser(p)
         page = browser.new_page()

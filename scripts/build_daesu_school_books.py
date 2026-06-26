@@ -65,29 +65,18 @@ def build_one(school: str, all_rows: list):
         divider_footer_sub="이영우 T",
         cover_main_title=school,
         cover_tagline="대수 1학기 기말대비",
-        cover_big_word="FINAL",
+        cover_big_word="기출문제",
         cover_kicker="KERNEL POINT · 2026",
         cover_footer_main=f"{school} Algebra Final · 2026",
-        cover_footer_sub="필수유형으로 끝내는 기말 마무리",
+        cover_footer_sub="기출문제로 마무리",
         page_running_left=f"{school} · KERNEL POINT",
     )
 
-    import fitz
-    src = fitz.open(stream=pdf_bytes, filetype="pdf")
-    out = fitz.open()
-    mat = fitz.Matrix(180 / 72, 180 / 72)
-    for pg in src:
-        if len(pg.get_text().strip()) < 3 and not pg.get_images() and len(pg.get_drawings()) < 3:
-            continue
-        pix = pg.get_pixmap(matrix=mat, alpha=False)
-        npg = out.new_page(width=pg.rect.width, height=pg.rect.height)
-        npg.insert_image(pg.rect, stream=pix.tobytes("jpeg", jpg_quality=82))
-
+    # vector PDF 그대로 저장 — 이미지화 단계 제거 (수식 가독성 + 파일 크기).
     book_dir = Path.home() / "클로드교재"
     book_dir.mkdir(exist_ok=True)
     out_path = book_dir / f"{school} 대수 1학기 기말 KERNEL POINT.pdf"
-    out.save(str(out_path), garbage=4, deflate=True)
-    out.close(); src.close()
+    out_path.write_bytes(pdf_bytes)
 
     import subprocess
     subprocess.run(["xattr", "-c", str(out_path)], check=False)

@@ -166,29 +166,11 @@ def main():
     vec_path.parent.mkdir(exist_ok=True)
     vec_path.write_bytes(pdf_bytes)
 
-    # Downloads 에는 '뷰어 안전' 래스터화본 — Chromium 의 Type3 폰트 과부하로
-    # Acrobat/Preview 가 렌더 못 하는 문제 회피 (각 페이지 이미지화). 빈 페이지도 제거.
-    import fitz
-    src = fitz.open(stream=pdf_bytes, filetype="pdf")
-    out = fitz.open()
-    mat = fitz.Matrix(180 / 72, 180 / 72)  # 인쇄 품질
-    for pg in src:
-        if len(pg.get_text().strip()) < 3 and not pg.get_images() and len(pg.get_drawings()) < 3:
-            continue  # 빈 페이지 건너뜀
-        pix = pg.get_pixmap(matrix=mat, alpha=False)
-        npg = out.new_page(width=pg.rect.width, height=pg.rect.height)
-        npg.insert_image(pg.rect, stream=pix.tobytes("jpeg", jpg_quality=82))
-    # 다운로드 폴더는 macOS Gatekeeper 가 격리(quarantine)를 적극 붙여 뷰어에서 빈 화면이
-    # 뜨므로, 다운로드 밖 전용 폴더(~/클로드교재)에 저장. (다운로드 폴더엔 ~/클로드교재 로 가는
-    # 심볼릭 링크가 있어 한 번 클릭으로 진입 가능)
+    # vector PDF 그대로 저장 — 이미지화 단계 제거 (수식 가독성 통일).
     book_dir = Path.home() / "클로드교재"
     book_dir.mkdir(exist_ok=True)
     out_path = book_dir / "대수 1학기 기말 KERNEL POINT.pdf"
-    # ⚠ 저장 옵션은 단순하게 유지할 것. gs 재증류·clean=True 를 넣었더니 Acrobat 에서
-    # 1페이지부터 빈 화면(렌더 실패)이 떴음. 단순 garbage+deflate 본은 Acrobat 에서
-    # 정상 표시됨(닫을 때 뜨는 '저장' 프롬프트는 Acrobat 특성이니 저장 말고 닫으면 됨).
-    out.save(str(out_path), garbage=4, deflate=True)
-    out.close(); src.close()
+    out_path.write_bytes(pdf_bytes)
 
     # macOS 격리/기본앱 확장속성 제거. 진짜 원인이 이거였음: Acrobat 으로 한 번 열면
     # com.apple.quarantine(악성코드 미확인) + OpenWith=Acrobat 속성이 파일에 붙어

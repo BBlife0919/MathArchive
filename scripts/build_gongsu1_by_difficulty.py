@@ -150,22 +150,11 @@ def main():
     vec_path.parent.mkdir(exist_ok=True)
     vec_path.write_bytes(pdf_bytes)
 
-    import fitz
-    src = fitz.open(stream=pdf_bytes, filetype="pdf")
-    out = fitz.open()
-    mat = fitz.Matrix(180 / 72, 180 / 72)
-    for pg in src:
-        if len(pg.get_text().strip()) < 3 and not pg.get_images() and len(pg.get_drawings()) < 3:
-            continue
-        pix = pg.get_pixmap(matrix=mat, alpha=False)
-        npg = out.new_page(width=pg.rect.width, height=pg.rect.height)
-        npg.insert_image(pg.rect, stream=pix.tobytes("jpeg", jpg_quality=82))
-
+    # vector PDF 그대로 저장 — 이미지화 단계 제거 (수식 가독성 통일).
     book_dir = Path.home() / "클로드교재"
     book_dir.mkdir(exist_ok=True)
     out_path = book_dir / f"공수1 1학기 기말 KERNEL POINT {diff}.pdf"
-    out.save(str(out_path), garbage=4, deflate=True)
-    out.close(); src.close()
+    out_path.write_bytes(pdf_bytes)
     import subprocess as _sp
     _sp.run(["xattr", "-c", str(out_path)], check=False)
     print(f"[4/4] {out_path} ({out_path.stat().st_size/1024/1024:.0f}MB)")
