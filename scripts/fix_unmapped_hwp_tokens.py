@@ -142,6 +142,41 @@ REPLACE = [
     (re.compile(r"\bsup\s+(\d+)\b"), r"^{\1}"),
     # int from A to B → \int_{A}^{B}  (적분 한계: `int from 0 to x` → `\int_{0}^{x}`)
     (re.compile(r"\bint\s+from\s+(\S+)\s+to\s+(\S+)"), r"\\int_{\1}^{\2}"),
+    # ANG/ang 단독 → \angle (이미 \angle\b 매핑 있다면 idempotent)
+    (re.compile(r"(?<![A-Za-z\\])ANG(?![A-Za-z])"), r"\\angle"),
+    (re.compile(r"(?<![A-Za-z\\])ang(?![A-Za-z])"), r"\\angle"),
+    # TRIANG/triang 단독 → \triangle
+    (re.compile(r"(?<![A-Za-z\\])TRIANG(?![A-Za-z])"), r"\\triangle"),
+    (re.compile(r"(?<![A-Za-z\\])triang(?![A-Za-z])"), r"\\triangle"),
+    # SMALLPROD/smallprod → \prod
+    (re.compile(r"(?<![A-Za-z\\])SMALLPROD(?![A-Za-z])"), r"\\prod"),
+    (re.compile(r"(?<![A-Za-z\\])smallprod(?![A-Za-z])"), r"\\prod"),
+    # BAR 단독 → \overline (이미 bar{X} 매핑은 별도)
+    (re.compile(r"(?<![A-Za-z\\])BAR(?![A-Za-z])"), r"\\overline"),
+    # ARROW 단독 → \to
+    (re.compile(r"(?<![A-Za-z\\])ARROW(?![A-Za-z])"), r"\\to"),
+    # SEARROW → \searrow (남동 화살표)
+    (re.compile(r"(?<![A-Za-z\\])SEARROW(?![A-Za-z])"), r"\\searrow"),
+    (re.compile(r"(?<![A-Za-z\\])NEARROW(?![A-Za-z])"), r"\\nearrow"),
+    (re.compile(r"(?<![A-Za-z\\])SWARROW(?![A-Za-z])"), r"\\swarrow"),
+    (re.compile(r"(?<![A-Za-z\\])NWARROW(?![A-Za-z])"), r"\\nwarrow"),
+    # LSUB 단독 → _ (subscript). 안전을 위해 다음 글자 매칭만.
+    (re.compile(r"(?<![A-Za-z\\])LSUB(?=[A-Za-z0-9])"), r"_"),
+    # trig + variable 분리 (sinx → \sin x, cosA → \cos A, lnx → \ln x)
+    (re.compile(r"(?<![A-Za-z\\])sin([A-Za-z])(?![A-Za-z])"), r"\\sin \1"),
+    (re.compile(r"(?<![A-Za-z\\])cos([A-Za-z])(?![A-Za-z])"), r"\\cos \1"),
+    (re.compile(r"(?<![A-Za-z\\])tan([A-Za-z])(?![A-Za-z])"), r"\\tan \1"),
+    (re.compile(r"(?<![A-Za-z\\])sec([A-Za-z])(?![A-Za-z])"), r"\\sec \1"),
+    (re.compile(r"(?<![A-Za-z\\])csc([A-Za-z])(?![A-Za-z])"), r"\\csc \1"),
+    (re.compile(r"(?<![A-Za-z\\])cot([A-Za-z])(?![A-Za-z])"), r"\\cot \1"),
+    (re.compile(r"(?<![A-Za-z\\])ln([A-Za-z])(?![A-Za-z])"), r"\\ln \1"),
+    (re.compile(r"(?<![A-Za-z\\])log([A-Za-z])(?![A-Za-z])"), r"\\log \1"),
+    # trig + theta (costheta, sintheta) — theta 명시
+    (re.compile(r"(?<![A-Za-z\\])sintheta(?![A-Za-z])"), r"\\sin\\theta"),
+    (re.compile(r"(?<![A-Za-z\\])costheta(?![A-Za-z])"), r"\\cos\\theta"),
+    (re.compile(r"(?<![A-Za-z\\])tantheta(?![A-Za-z])"), r"\\tan\\theta"),
+    # pix → \pi x (pi + variable)
+    (re.compile(r"(?<![A-Za-z\\])pi([A-Za-z])(?![A-Za-z])"), r"\\pi \1"),
 ]
 
 # 영어 단어와 충돌 위험 있는 토큰 — 수식 ($...$) 안에서만 치환
