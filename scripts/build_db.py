@@ -324,6 +324,38 @@ def main():
         for name, err in errors:
             print(f"  {name[:50]}: {err}", file=sys.stderr)
 
+    # 새로 적재된 행에 HWP 토큰 자동 변환 적용 (lim/INF/sup/sin x/cos x 등)
+    # 매번 수동으로 fix_unmapped 돌릴 필요 없게.
+    if processed > 0:
+        print("\n[자동] HWP 토큰 변환 적용 중...", file=sys.stderr)
+        try:
+            from fix_unmapped_hwp_tokens import fix_text
+            cur = conn.cursor()
+            total_upd = 0
+            for table, col, pk in [
+                ("questions", "question_text", "question_id"),
+                ("solutions", "solution_text", "solution_id"),
+            ]:
+                cur.execute(f"SELECT {pk},{col} FROM {table}")
+                upd = 0
+                for pkv, txt in cur.fetchall():
+                    if not txt:
+                        continue
+                    new = fix_text(txt)
+                    if new != txt:
+                        cur.execute(
+                            f"UPDATE {table} SET {col}=? WHERE {pk}=?",
+                            (new, pkv),
+                        )
+                        upd += 1
+                print(f"  {table}: {upd}행 변환", file=sys.stderr)
+                total_upd += upd
+            conn.commit()
+            print(f"  합계: {total_upd}행", file=sys.stderr)
+        except Exception as e:
+            print(f"  [자동 fix 실패] {type(e).__name__}: {e}",
+                  file=sys.stderr)
+
     # 통계 출력
     print_stats(conn)
     conn.close()

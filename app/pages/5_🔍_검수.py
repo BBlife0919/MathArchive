@@ -888,8 +888,28 @@ with nuc2:
                  use_container_width=True,
                  disabled=not unknown_tokens):
         with st.spinner(f"미상 {len(unknown_tokens)}개 무시 처리 중..."):
+            # Batch — 단일 INSERT VALUES (...), (...), ... 로 SQL 1회만 왕복.
+            # 토큰별 호출(800×400ms≈5분) → 1회 호출(<1초) 로 단축.
+            conn = _get_db_connection()
+            placeholders = ",".join("?" * len(unknown_tokens))
+            try:
+                conn.execute(
+                    f"DELETE FROM user_token_mappings "
+                    f"WHERE token IN ({placeholders})",
+                    tuple(unknown_tokens),
+                )
+            except Exception:
+                pass
+            values_sql = ",".join(["(?, ?, ?)"] * len(unknown_tokens))
+            params = []
             for t in unknown_tokens:
-                apply_user_mapping(t, "ignore", "")
+                params += [t, "ignore", ""]
+            _exec_write(
+                conn,
+                f"INSERT INTO user_token_mappings (token, action, latex) "
+                f"VALUES {values_sql}",
+                tuple(params),
+            )
         _show_result_banner(
             "남은 미상 전체 무시 완료",
             f"- 무시 처리: **{len(unknown_tokens)}개 토큰**\n"
