@@ -279,8 +279,19 @@ def _normalize_math_inner(s: str) -> str:
             s = "\\displaystyle " + s
     # \dfrac (displaystyle 강제 분수) → \frac (context 자동) — 첨자/지수 안에서
     # \dfrac 이 displaystyle 크기로 렌더되어 분수만 비정상적으로 커지고
-    # 괄호/중괄호가 자동 확대되는 케이스(log_{1/2}, 2^{(101-2k)/3}, f(5π/3) 등) 일괄 보정
+    # 괄호/중괄호가 자동 확대되는 케이스(log_{1/2}, 2^{(101-2k)/3} 등) 보정
     s = s.replace(r"\dfrac", r"\frac")
+    # 단, \left( ... \frac ... \right) 같이 _가시 위치 인자_ 안 분수는 \dfrac 직접
+    # 변환 → 분수가 displaystyle 크기로 렌더 + \left \right 가 분수 높이에 맞춰
+    # 자동 확대. f(5/3 π) 같은 케이스 괄호 짧음 해결.
+    # (\displaystyle prefix 만으로는 KaTeX 가 \left \right 사이즈 결정에 반영 X)
+    def _dfrac_paren(m):
+        body = m.group(1)
+        if r"\frac" in body:
+            body = body.replace(r"\frac", r"\dfrac")
+            return r"\left(" + body + r"\right)"
+        return m.group(0)
+    s = re.sub(r"\\left\(([^()]*?)\\right\)", _dfrac_paren, s, flags=re.DOTALL)
     s = _BARE_FUNC.sub(r"\\\1", s)
     s = _LOOSE_SUP.sub(r"\1", s)
     for i, b in enumerate(blocks):
@@ -448,6 +459,11 @@ body {
 .katex, .q-body .katex {
     font-size: 11pt !important;
 }
+/* 첨자/지수 — KaTeX 내부 .sizing.reset-size*.size* 클래스가 font-size 를
+   reset 후 절대값으로 강제하기 때문에 .msupsub 컨테이너에만 적용하면 효과 X.
+   자식 모두 !important 로 덮어야 cos^2 / a^2 / 2^{...} 의 지수가 본체 대비
+   작아짐. */
+.katex .msupsub, .katex .msupsub * { font-size: 0.7em !important; }
 .page {
     min-height: 275mm;
     display: flex;
