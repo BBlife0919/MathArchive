@@ -5,3 +5,5 @@ markdown==3.10.2
 psycopg2-binary>=2.9.10
 bcrypt>=4.0.0
 extra-streamlit-components>=0.1.71
+matplotlib>=3.8.0
+numpy>=1.26.0
