@@ -226,7 +226,7 @@ else:
                help="Reading + Insight + Strategy")
     mc2.metric("수행 PM 평균",  f"{avg_pm:.1f}/5",
                help="Precision + Management")
-    mc3.metric("최근 평가일", lp["eval_date"])
+    mc3.metric("최근 평가일", str(lp["eval_date"]))
 
     # 5각형 레이더 차트
     import matplotlib
