@@ -24,7 +24,7 @@ from clinic_logic import (
     list_pending_retries,
 )
 
-st.set_page_config(page_title="🏥 수학 클리닉", page_icon="🏥", layout="wide")
+st.set_page_config(page_title="🏥 클리닉 — MATHOLOGY", page_icon="🏥", layout="wide")
 
 from auth_ui import require_auth, render_user_menu_in_sidebar
 require_auth()
@@ -116,7 +116,7 @@ st.subheader("📝 오답 입력 → 처방전 생성")
 # 문제 출처 모드 선택
 source_mode = st.radio(
     "문제 출처",
-    ["📚 DB 검색 (매쓰아카이브 적재 문제)", "✏️ 외부 문제 (학교 내신지·시판 교재)"],
+    ["📚 DB 검색 (MATHOLOGY 적재 문제)", "✏️ 외부 문제 (학교 내신지·시판 교재)"],
     horizontal=True,
     key="src_mode",
     help="DB 검색은 인출 3문항 자동 추출 + 처방전 PDF 가능. 외부 문제는 클리닉 기록만 저장.",

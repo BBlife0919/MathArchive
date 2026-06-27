@@ -18,7 +18,7 @@ import streamlit as st
 from db import get_connection as _get_db_connection, is_cloud
 import curriculum as _curr
 
-PAGE_TITLE = "MathArchive by 이영우"
+PAGE_TITLE = "MATHOLOGY"
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
 DIFF_VALID = ["하", "중", "상", "킬"]
 EXAM_TYPE_KO = {"a": "중간", "b": "기말"}
@@ -724,16 +724,16 @@ def main():
     )
     st.markdown(
         f"""
-        <meta property="og:title" content="Math Archive · Directed by 이영우" />
-        <meta property="og:description" content="120,000+ Questions · Infinite Possibilities" />
+        <meta property="og:title" content="MATHOLOGY · Directed by YOUNGWOO LEE" />
+        <meta property="og:description" content="130,000+ Questions · Infinite Possibilities" />
         <meta property="og:image" content="{_OG_IMAGE}" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://matharchive.streamlit.app" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Math Archive · Directed by 이영우" />
-        <meta name="twitter:description" content="120,000+ Questions · Infinite Possibilities" />
+        <meta name="twitter:title" content="MATHOLOGY · Directed by YOUNGWOO LEE" />
+        <meta name="twitter:description" content="130,000+ Questions · Infinite Possibilities" />
         <meta name="twitter:image" content="{_OG_IMAGE}" />
         """,
         unsafe_allow_html=True,
@@ -744,7 +744,7 @@ def main():
     from auth_ui import require_auth, render_user_menu_in_sidebar
     require_auth()
 
-    st.title("📐 MathArchive by 이영우")
+    st.title("📐 MATHOLOGY")
 
     # 세션 상태 초기화
     if "selected_ids" not in st.session_state:
@@ -1260,7 +1260,7 @@ def main():
                 if mode == "book":
                     show_kicker = st.toggle(
                         "상단 라벨 표시", value=True,
-                        help="제목 위에 작은 포인트 텍스트 (예: '#01 MATH ARCHIVE')"
+                        help="제목 위에 작은 포인트 텍스트 (예: '#01 MATHOLOGY')"
                     )
                     if show_kicker:
                         kc1, kc2 = st.columns([0.35, 0.65])
@@ -1271,8 +1271,8 @@ def main():
                             )
                         with kc2:
                             kicker_text = st.text_input(
-                                "브랜드", value="MATH ARCHIVE",
-                                placeholder="예: MATH ARCHIVE, EUM ACADEMY",
+                                "브랜드", value="MATHOLOGY",
+                                placeholder="예: MATHOLOGY, EUM ACADEMY",
                             )
                         kicker_mark = kicker_mark.strip() or None
                         kicker_text = kicker_text.strip() or None

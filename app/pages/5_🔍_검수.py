@@ -236,7 +236,7 @@ def lookup_token(token: str):
     return (None, "")
 
 
-st.set_page_config(page_title="검수 — MathArchive", page_icon="🔍", layout="wide")
+st.set_page_config(page_title="검수 — MATHOLOGY", page_icon="🔍", layout="wide")
 
 # Auth optional
 try:

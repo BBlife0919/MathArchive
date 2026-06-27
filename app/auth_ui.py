@@ -128,19 +128,19 @@ def _render_pending_page() -> None:
 
 _LANDING_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Cormorant+Garamond:ital,wght@1,500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg: #0b1830;
+  --bg: #060b18;
   --bg-soft: #0c2156;
   --bg-card: rgba(28, 52, 110, 0.45);
-  --accent: #4cc4ff;
-  --accent-strong: #7ddcff;
-  --gold: #d2af6e;
-  --gold-light: #f0cd87;
-  --text: #e9ecf8;
-  --text-soft: #a6b2d4;
-  --border: rgba(125, 220, 255, 0.22);
+  --accent: #5b8cff;
+  --accent-strong: #9ec1ff;
+  --gold: #9ec1ff;
+  --gold-light: #cdddff;
+  --text: #eaf0ff;
+  --text-soft: #aab8e6;
+  --border: rgba(110, 150, 255, 0.28);
 }
 
 /* 본 페이지 자체 푸른 다크 */
@@ -167,7 +167,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .math-bg span {
   position: absolute;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Pretendard', serif;
   font-style: italic;
   color: var(--accent);
   white-space: nowrap;
@@ -197,18 +197,18 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .hero .eyebrow {
   display: inline-block;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   letter-spacing: 0.45em;
   font-size: 15px; font-weight: 700;
   color: var(--gold);
-  border: 1px solid rgba(210, 175, 110, 0.4);
+  border: 1px solid rgba(110, 150, 255, 0.4);
   padding: 9px 24px;
   border-radius: 999px;
   margin-bottom: 32px;
   text-transform: uppercase;
 }
 .hero h1 {
-  font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+  font-family: 'Pretendard', 'Pretendard', sans-serif;
   font-weight: 900;
   font-size: clamp(36px, 5.4vw, 64px);
   line-height: 1.1;
@@ -223,7 +223,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   background-clip: text;
 }
 .hero .sub {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-weight: 600;
   font-size: clamp(20px, 2.0vw, 26px);
   color: var(--text);
@@ -237,7 +237,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
 
 /* 섹션 헤딩 */
 .section-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-weight: 700;
   font-size: 18px;
   letter-spacing: 0.5em;
@@ -284,9 +284,9 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .feature-circle.highlight:hover {
   transform: translate(-50%, -50%) scale(1.22);
-  border-color: rgba(240, 205, 135, 0.9);
-  box-shadow: 0 24px 60px rgba(210, 175, 110, 0.4),
-              0 0 50px rgba(210, 175, 110, 0.22);
+  border-color: rgba(158, 193, 255, 0.9);
+  box-shadow: 0 24px 60px rgba(110, 150, 255, 0.4),
+              0 0 50px rgba(110, 150, 255, 0.22);
 }
 .feature-circle .icon {
   font-size: 38px;
@@ -294,7 +294,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   line-height: 1;
 }
 .feature-circle h3 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-weight: 800;
   font-size: 19px;
   letter-spacing: 0.12em;
@@ -307,7 +307,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   text-indent: 0.12em;
 }
 .feature-circle .sub-ko {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-weight: 600;
   font-size: 14px;
   color: var(--text);
@@ -317,7 +317,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   text-align: center;
 }
 .feature-circle p {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-size: 14px;
   line-height: 1.55;
   color: var(--text-soft);
@@ -327,11 +327,11 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .feature-circle.highlight {
   background:
-    radial-gradient(ellipse at top, rgba(210, 175, 110, 0.30) 0%, transparent 60%),
-    linear-gradient(135deg, rgba(210, 175, 110, 0.10) 0%, rgba(76, 196, 255, 0.08) 100%);
-  border-color: rgba(210, 175, 110, 0.6);
-  box-shadow: 0 0 60px rgba(210, 175, 110, 0.18),
-              inset 0 0 40px rgba(210, 175, 110, 0.05);
+    radial-gradient(ellipse at top, rgba(110, 150, 255, 0.30) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(110, 150, 255, 0.10) 0%, rgba(76, 196, 255, 0.08) 100%);
+  border-color: rgba(110, 150, 255, 0.6);
+  box-shadow: 0 0 60px rgba(110, 150, 255, 0.18),
+              inset 0 0 40px rgba(110, 150, 255, 0.05);
 }
 .feature-circle.highlight h3 {
   color: var(--gold-light);
@@ -344,7 +344,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   content: "FEATURED";
   position: absolute;
   top: 16%;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-size: 9px;
   letter-spacing: 0.32em;
   color: var(--gold);
@@ -376,8 +376,8 @@ header[data-testid="stHeader"] { background: transparent !important; }
   padding: 40px 24px 30px;
   margin: 30px auto 10px;
   max-width: 760px;
-  border-top: 1px solid rgba(210, 175, 110, 0.25);
-  border-bottom: 1px solid rgba(210, 175, 110, 0.25);
+  border-top: 1px solid rgba(110, 150, 255, 0.25);
+  border-bottom: 1px solid rgba(110, 150, 255, 0.25);
   flex-wrap: wrap;
 }
 .profile-photo {
@@ -388,7 +388,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .profile-text { text-align: left; }
 .profile-text .directed {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Pretendard', serif;
   font-style: italic;
   font-size: 16px;
   color: var(--gold);
@@ -396,7 +396,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   margin-bottom: 4px;
 }
 .profile-text .name {
-  font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+  font-family: 'Pretendard', 'Pretendard', sans-serif;
   font-weight: 800;
   font-size: 30px;
   color: var(--text);
@@ -404,7 +404,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   letter-spacing: 0.02em;
 }
 .profile-text .role {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-size: 11px;
   letter-spacing: 0.42em;
   color: var(--text-soft);
@@ -417,7 +417,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   margin: 30px 0 16px;
 }
 .auth-area-title .lead {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-size: 12px;
   letter-spacing: 0.5em;
   color: var(--gold);
@@ -431,7 +431,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
   border-bottom: 1px solid rgba(76, 196, 255, 0.18) !important;
 }
 .stTabs [data-baseweb="tab"] {
-  font-family: 'Noto Sans KR', sans-serif !important;
+  font-family: 'Pretendard', sans-serif !important;
   font-weight: 600 !important;
   color: var(--text-soft) !important;
 }
@@ -469,7 +469,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
 .footer {
   position: relative; z-index: 1;
   text-align: center;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-size: 10.5px;
   letter-spacing: 0.32em;
   color: var(--text-soft);
@@ -516,14 +516,75 @@ _MATH_BG = """
 # Streamlit 의 기본 "Running fn()..." 디버그 토스트도 영구 숨김.
 _AUTHED_GLOBAL_CSS = """
 <style>
-.stApp,
-[data-testid="stAppViewContainer"],
-[data-testid="stHeader"] {
-  background: #0b1830 !important;
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --m-ink:#0a1020; --m-blue:#2b6fff; --m-blue-d:#1c54e0; --m-blue-soft:#9ec1ff;
+  --m-text:#16223c; --m-muted:#5c6a86; --m-line:#e4e9f5; --m-paper:#f6f8fe;
 }
-[data-testid="stSidebar"] > div:first-child {
-  background: linear-gradient(180deg, #0e2040 0%, #0b1830 100%) !important;
+
+/* ── 전역 폰트: Pretendard (랜딩과 통일) */
+html, body, .stApp, .stApp *:not(.katex):not(.katex *){
+  font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Pretendard',sans-serif;
 }
+/* 머티리얼 아이콘 폰트 보존 — 전역 폰트 override 로 아이콘 ligature 깨짐 방지 */
+[data-testid="stIconMaterial"],
+.material-icons, .material-icons-outlined, .material-icons-round, .material-icons-sharp,
+[class*="material-symbols"]{
+  font-family:'Material Symbols Rounded','Material Symbols Outlined',
+    'Material Symbols Sharp','Material Icons' !important;
+}
+
+/* ── 라이트 톤 (가독성 우선) */
+.stApp, [data-testid="stAppViewContainer"]{ background:var(--m-paper) !important; }
+[data-testid="stHeader"]{ background:transparent !important; }
+[data-testid="stMain"]{ color:var(--m-text); }
+
+/* 사이드바 라이트 */
+[data-testid="stSidebar"] > div:first-child{
+  background:#ffffff !important; border-right:1px solid var(--m-line) !important;
+}
+
+/* 제목 */
+[data-testid="stMain"] h1,[data-testid="stMain"] h2,[data-testid="stMain"] h3{
+  color:var(--m-ink) !important; font-weight:800 !important; letter-spacing:-.01em;
+}
+
+/* 본문 가독성 */
+[data-testid="stMain"] p,[data-testid="stMain"] li{ color:var(--m-text); line-height:1.7; }
+
+/* 버튼 — 블루 프라이머리 */
+.stButton button,.stFormSubmitButton button,.stDownloadButton button{
+  border-radius:10px !important; font-weight:700 !important;
+  border:1px solid var(--m-line) !important;
+  transition:transform .15s, box-shadow .15s !important;
+}
+.stButton button[kind="primary"],.stFormSubmitButton button,.stDownloadButton button{
+  background:var(--m-blue) !important; color:#fff !important; border:none !important;
+  box-shadow:0 8px 22px -10px rgba(43,111,255,.6) !important;
+}
+.stButton button[kind="primary"]:hover,.stFormSubmitButton button:hover,
+.stDownloadButton button:hover{
+  transform:translateY(-1px); box-shadow:0 12px 28px -10px rgba(43,111,255,.78) !important;
+}
+
+/* 입력 */
+.stTextInput input,.stTextArea textarea,.stNumberInput input{
+  border-radius:10px !important; border:1px solid var(--m-line) !important;
+}
+.stTextInput input:focus,.stTextArea textarea:focus,.stNumberInput input:focus{
+  border-color:var(--m-blue) !important; box-shadow:0 0 0 3px rgba(43,111,255,.15) !important;
+}
+
+/* 탭 */
+.stTabs [aria-selected="true"]{ color:var(--m-blue) !important; font-weight:700 !important; }
+.stTabs [data-baseweb="tab-highlight"]{ background:var(--m-blue) !important; }
+
+/* 확장/지표/표 카드화 */
+[data-testid="stExpander"]{ border:1px solid var(--m-line) !important; border-radius:12px !important; background:#fff !important; }
+[data-testid="stMetric"]{ background:#fff; border:1px solid var(--m-line); border-radius:12px; padding:14px 16px; }
+[data-testid="stDataFrame"]{ border-radius:12px !important; overflow:hidden; }
+
 [data-testid="stStatusWidget"],
 [data-testid="stConnectionStatus"],
 [data-testid="stToast"],
@@ -544,7 +605,7 @@ _AUTHED_GLOBAL_CSS = """
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: 'Montserrat', 'Noto Sans KR', -apple-system, sans-serif;
+  font-family: 'Pretendard', 'Pretendard', -apple-system, sans-serif;
   color: #e9ecf8;
   /* 기본 60s 보이고 1s fade out — 페이지 마지막에 도착하는
      "entry loader dismiss" CSS 가 더 빠른 fade-out 으로 덮어씀.
@@ -556,18 +617,18 @@ _AUTHED_GLOBAL_CSS = """
 .entry-loader .brand {
   font-size: 18px;
   letter-spacing: 0.5em;
-  color: #d2af6e;
+  color: #9ec1ff;
   margin-bottom: 28px;
   font-weight: 700;
-  border: 1px solid rgba(210,175,110,0.45);
+  border: 1px solid rgba(158,193,255,0.5);
   padding: 10px 28px;
   border-radius: 999px;
 }
 .entry-loader h2 {
   font-size: clamp(40px, 5.6vw, 72px);
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: -0.01em;
-  background: linear-gradient(135deg, #4cc4ff 0%, #f0cd87 100%);
+  background: linear-gradient(135deg, #5b8cff 0%, #9ec1ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -594,7 +655,7 @@ _AUTHED_GLOBAL_CSS = """
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, #4cc4ff 50%, transparent);
+  background: linear-gradient(90deg, transparent, #5b8cff 50%, transparent);
   animation: entryShimmer 0.95s linear infinite;
 }
 @keyframes entryShimmer {
@@ -609,9 +670,9 @@ _AUTHED_GLOBAL_CSS = """
 
 _ENTRY_LOADER_HTML = """
 <div class="entry-loader">
-<div class="brand">MATH ARCHIVE</div>
-<h2>Entering the Archive</h2>
-<div class="sub">120,000+ Questions · Infinite Possibilities</div>
+<div class="brand">MATHOLOGY</div>
+<h2>Entering MATHOLOGY</h2>
+<div class="sub">130,000+ Questions · Infinite Possibilities</div>
 <div class="bar"></div>
 </div>
 """
@@ -637,31 +698,31 @@ _JS_ENTRY_LOADER = """
       #0b1830;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    font-family: 'Montserrat', 'Noto Sans KR', -apple-system, sans-serif;
+    font-family: 'Pretendard', 'Pretendard', -apple-system, sans-serif;
     color: #e9ecf8;
     transition: opacity 0.5s ease-out;
     pointer-events: none;
   `;
   overlay.innerHTML = `
-    <div style="font-size:18px; letter-spacing:0.5em; color:#d2af6e;
+    <div style="font-size:18px; letter-spacing:0.5em; color:#9ec1ff;
                 margin-bottom:28px; font-weight:700;
-                border:1px solid rgba(210,175,110,0.45);
-                padding:10px 28px; border-radius:999px;">MATH ARCHIVE</div>
-    <h2 style="font-size:clamp(40px,5.6vw,72px); font-weight:900;
+                border:1px solid rgba(158,193,255,0.5);
+                padding:10px 28px; border-radius:999px;">MATHOLOGY</div>
+    <h2 style="font-size:clamp(40px,5.6vw,72px); font-weight:800;
                letter-spacing:-0.01em;
-               background:linear-gradient(135deg,#4cc4ff 0%,#f0cd87 100%);
+               background:linear-gradient(135deg,#5b8cff 0%,#9ec1ff 100%);
                -webkit-background-clip:text; -webkit-text-fill-color:transparent;
                background-clip:text; margin:0 0 14px; text-align:center;">
-      Entering the Archive
+      Entering MATHOLOGY
     </h2>
     <div style="font-size:20px; letter-spacing:0.3em; color:#a6b2d4;
                 margin-bottom:40px; font-weight:500; text-transform:uppercase;">
-      120,000+ Questions · Infinite Possibilities
+      130,000+ Questions · Infinite Possibilities
     </div>
     <div style="width:240px; height:2px; background:rgba(125,220,255,0.15);
                 position:relative; overflow:hidden; border-radius:2px;">
       <div id="mathdb-shimmer" style="position:absolute; inset:0;
-                  background:linear-gradient(90deg,transparent,#4cc4ff 50%,transparent);"></div>
+                  background:linear-gradient(90deg,transparent,#5b8cff 50%,transparent);"></div>
     </div>
     <style>
       @keyframes mathdb-shimmer-anim {
@@ -736,10 +797,10 @@ f"""
 <section class="hero fade-in">
 <div class="eyebrow">Mathematics · Data · Design</div>
 <h1>All-in-One Mathematics Library<br>
-<span class="grad">Math Archive</span>
+<span class="grad">MATHOLOGY</span>
 </h1>
 <p class="sub">
-<span class="num">120,000+</span> Questions · Infinite Possibilities
+<span class="num">130,000+</span> Questions · Infinite Possibilities
 </p>
 </section>
 <div class="section-title fade-in d1">Core Capabilities</div>
@@ -754,7 +815,7 @@ f"""
 <div class="icon">📚</div>
 <h3>Massive Data</h3>
 <span class="sub-ko">방대한 문항 데이터</span>
-<p>고1~고3 전문항 120,000개.</p>
+<p>고1~고3 전문항 130,000개.</p>
 </div>
 <div class="feature-circle" style="--x:83%; --y:22%; --d:220px;">
 <div class="icon">∑</div>
@@ -770,9 +831,9 @@ f"""
 </div>
 <div class="feature-circle" style="--x:78%; --y:80%; --d:225px;">
 <div class="icon">🩺</div>
-<h3>Personal Clinic</h3>
-<span class="sub-ko">학생 맞춤 클리닉</span>
-<p>취약점 · 인출 · 분산 복습 · 전이.</p>
+<h3>PRISM Clinic</h3>
+<span class="sub-ko">오답 5스펙트럼 진단</span>
+<p>계산·조건·개념·전략·시간으로 분해.</p>
 </div>
 </div>
 <div class="profile-wrap fade-in d3">
@@ -813,7 +874,7 @@ def _render_auth_gate_page() -> None:
             _render_forgot_form()
 
     st.markdown(
-        '<div class="footer">© Math Archive · Directed by 이영우</div>',
+        '<div class="footer">© MATHOLOGY · Directed by YOUNGWOO LEE</div>',
         unsafe_allow_html=True,
     )
 

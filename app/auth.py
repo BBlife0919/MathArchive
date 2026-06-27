@@ -140,7 +140,7 @@ def _send_admin_signup_notice(new_name: str, new_username: str, new_email: str) 
 
     gmail_user = _get_secret("GMAIL_USER")
     gmail_pw = _get_secret("GMAIL_APP_PASSWORD")
-    from_name = _get_secret("SMTP_FROM_NAME", "MathArchive")
+    from_name = _get_secret("SMTP_FROM_NAME", "MATHOLOGY")
     admin_email = _get_secret("ADMIN_EMAIL", "ywl0919@naver.com")
     base_url = (_get_secret("APP_BASE_URL", "http://localhost:8501") or "").rstrip("/")
 
@@ -176,7 +176,7 @@ def _send_admin_signup_notice(new_name: str, new_username: str, new_email: str) 
     )
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"[MathArchive] 새 가입 신청 — {new_name} ({new_username})"
+    msg["Subject"] = f"[MATHOLOGY] 새 가입 신청 — {new_name} ({new_username})"
     msg["From"]    = formataddr((from_name, gmail_user))
     msg["To"]      = admin_email
     msg.attach(MIMEText(text, "plain", "utf-8"))
@@ -473,7 +473,7 @@ def _send_reset_email(to_email: str, name: str, username: str, token: str) -> No
 
     gmail_user = _get_secret("GMAIL_USER")
     gmail_pw = _get_secret("GMAIL_APP_PASSWORD")
-    from_name = _get_secret("SMTP_FROM_NAME", "MathArchive")
+    from_name = _get_secret("SMTP_FROM_NAME", "MATHOLOGY")
     base_url = (_get_secret("APP_BASE_URL", "http://localhost:8501") or "").rstrip("/")
     if not gmail_user or not gmail_pw:
         raise RuntimeError("GMAIL_USER / GMAIL_APP_PASSWORD 미설정")
@@ -484,7 +484,7 @@ def _send_reset_email(to_email: str, name: str, username: str, token: str) -> No
     reset_url = f"{base_url}/?reset_token={token}"
     html = f"""\
     <div style="font-family: sans-serif; line-height: 1.6;">
-      <h2>MathArchive 계정 안내</h2>
+      <h2>MATHOLOGY 계정 안내</h2>
       <p>{name} 님,</p>
       <p>등록하신 아이디는 <b>{username}</b> 입니다.</p>
       <p>비밀번호를 재설정하려면 아래 링크를 클릭하세요 (1시간 안 유효):</p>
@@ -505,7 +505,7 @@ def _send_reset_email(to_email: str, name: str, username: str, token: str) -> No
     )
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = "[MathArchive] 아이디 안내 및 비밀번호 재설정"
+    msg["Subject"] = "[MATHOLOGY] 아이디 안내 및 비밀번호 재설정"
     msg["From"]    = formataddr((from_name, gmail_user))
     msg["To"]      = to_email
     msg.attach(MIMEText(text, "plain", "utf-8"))
@@ -615,7 +615,7 @@ def _send_approval_email(to_email: str, name: str, username: str) -> None:
 
     gmail_user = _get_secret("GMAIL_USER")
     gmail_pw = _get_secret("GMAIL_APP_PASSWORD")
-    from_name = _get_secret("SMTP_FROM_NAME", "MathArchive")
+    from_name = _get_secret("SMTP_FROM_NAME", "MATHOLOGY")
     base_url = (_get_secret("APP_BASE_URL", "http://localhost:8501") or "").rstrip("/")
     if not gmail_user or not gmail_pw:
         raise RuntimeError("GMAIL_USER / GMAIL_APP_PASSWORD 미설정")
@@ -623,12 +623,12 @@ def _send_approval_email(to_email: str, name: str, username: str) -> None:
 
     html = f"""\
     <div style="font-family: sans-serif; line-height: 1.6;">
-      <h2>🎉 MathArchive 가입 승인 완료</h2>
+      <h2>🎉 MATHOLOGY 가입 승인 완료</h2>
       <p>{name} 님,</p>
       <p>가입 신청이 승인되었습니다. 이제 아이디 <b>{username}</b> 로 로그인해서 이용하실 수 있어요.</p>
       <p><a href="{base_url}" style="background:#4f46e5;color:white;padding:10px 18px;
             text-decoration:none;border-radius:6px;display:inline-block">
-        MathArchive 들어가기
+        MATHOLOGY 들어가기
       </a></p>
       <p style="color:#666;font-size:12px;">
         문의 사항이 있으면 답장으로 회신주세요.
@@ -637,13 +637,13 @@ def _send_approval_email(to_email: str, name: str, username: str) -> None:
     """
     text = (
         f"{name} 님,\n\n"
-        f"MathArchive 가입 신청이 승인되었습니다.\n"
+        f"MATHOLOGY 가입 신청이 승인되었습니다.\n"
         f"아이디 {username} 로 로그인해서 이용하세요.\n\n"
         f"링크: {base_url}\n"
     )
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = "[MathArchive] 가입 승인 완료 — 이제 로그인하실 수 있어요"
+    msg["Subject"] = "[MATHOLOGY] 가입 승인 완료 — 이제 로그인하실 수 있어요"
     msg["From"]    = formataddr((from_name, gmail_user))
     msg["To"]      = to_email
     msg.attach(MIMEText(text, "plain", "utf-8"))
