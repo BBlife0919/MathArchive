@@ -4,6 +4,20 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>매쏠로지 — MATHOLOGY</title>
+<meta name="description" content="내신 기출의 모든 것 · 130,000+ 문제로 시험지부터 교재까지. MATHOLOGY." />
+<!-- 공유 미리보기 (카톡·페이스북·트위터 등) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="MATHOLOGY" />
+<meta property="og:title" content="MATHOLOGY · 내신 기출의 모든 것" />
+<meta property="og:description" content="130,000+ 문제 · 시험지부터 교재까지. Directed by YOUNGWOO LEE" />
+<meta property="og:image" content="https://bblife0919.github.io/MathArchive/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://bblife0919.github.io/MathArchive/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="MATHOLOGY · 내신 기출의 모든 것" />
+<meta name="twitter:description" content="130,000+ 문제 · 시험지부터 교재까지." />
+<meta name="twitter:image" content="https://bblife0919.github.io/MathArchive/og.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700;800&display=swap" rel="stylesheet" />
@@ -151,6 +165,10 @@
   .dgm-prism .beam{animation:rayGlow 2.6s ease-in-out infinite;}
   .clinic-note{margin-top:16px;font-size:15px;line-height:1.7;color:var(--muted);background:#eef3ff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;max-width:560px;}
   .clinic-note b{color:var(--ink);}
+  .prism-legend{margin-top:22px;display:flex;flex-direction:column;gap:11px;list-style:none;}
+  .prism-legend li{font-size:16px;font-weight:700;color:var(--ink);display:flex;align-items:baseline;gap:9px;}
+  .prism-legend li b{font-size:19px;width:16px;display:inline-block;text-align:center;}
+  .prism-legend li span{font-weight:500;color:var(--muted);font-size:15px;}
 
   /* 5) 수식 엔진 */
   .dgm-engine{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:24px;}
@@ -313,25 +331,31 @@
               <!-- 프리즘 -->
               <polygon points="250,116 298,180 202,180" fill="rgba(255,255,255,.8)" stroke="#b9c6e6" stroke-width="2"/>
               <!-- 분광된 5스펙트럼 -->
-              <line class="ray" style="animation-delay:0s"   x1="286" y1="172" x2="520" y2="62"  stroke="#ff5d6c" stroke-width="5" stroke-linecap="round"/>
-              <line class="ray" style="animation-delay:.2s"  x1="286" y1="172" x2="520" y2="108" stroke="#ff8a3d" stroke-width="5" stroke-linecap="round"/>
-              <line class="ray" style="animation-delay:.4s"  x1="286" y1="172" x2="520" y2="154" stroke="#f0b400" stroke-width="5" stroke-linecap="round"/>
-              <line class="ray" style="animation-delay:.6s"  x1="286" y1="172" x2="520" y2="200" stroke="#2f9bff" stroke-width="5" stroke-linecap="round"/>
-              <line class="ray" style="animation-delay:.8s"  x1="286" y1="172" x2="520" y2="246" stroke="#8b6cff" stroke-width="5" stroke-linecap="round"/>
-              <!-- 라벨 -->
-              <text x="536" y="68"  fill="#ff5d6c" font-weight="800" font-size="21">P</text><text x="558" y="68"  fill="#13203c" font-size="15" font-weight="600">계산</text>
-              <text x="536" y="114" fill="#ff8a3d" font-weight="800" font-size="21">R</text><text x="558" y="114" fill="#13203c" font-size="15" font-weight="600">조건</text>
-              <text x="536" y="160" fill="#f0b400" font-weight="800" font-size="21">I</text><text x="558" y="160" fill="#13203c" font-size="15" font-weight="600">개념</text>
-              <text x="536" y="206" fill="#2f9bff" font-weight="800" font-size="21">S</text><text x="558" y="206" fill="#13203c" font-size="15" font-weight="600">전략</text>
-              <text x="536" y="252" fill="#8b6cff" font-weight="800" font-size="21">M</text><text x="558" y="252" fill="#13203c" font-size="15" font-weight="600">시간</text>
+              <line class="ray" style="animation-delay:0s"   x1="286" y1="172" x2="430" y2="62"  stroke="#ff5d6c" stroke-width="5" stroke-linecap="round"/>
+              <line class="ray" style="animation-delay:.2s"  x1="286" y1="172" x2="430" y2="108" stroke="#ff8a3d" stroke-width="5" stroke-linecap="round"/>
+              <line class="ray" style="animation-delay:.4s"  x1="286" y1="172" x2="430" y2="154" stroke="#f0b400" stroke-width="5" stroke-linecap="round"/>
+              <line class="ray" style="animation-delay:.6s"  x1="286" y1="172" x2="430" y2="200" stroke="#2f9bff" stroke-width="5" stroke-linecap="round"/>
+              <line class="ray" style="animation-delay:.8s"  x1="286" y1="172" x2="430" y2="246" stroke="#8b6cff" stroke-width="5" stroke-linecap="round"/>
+              <!-- 라벨: 글자 + 영단어 -->
+              <text x="446" y="69"  fill="#ff5d6c" font-weight="800" font-size="22">P</text><text x="470" y="69"  fill="#13203c" font-size="16" font-weight="600">Precision</text>
+              <text x="446" y="115" fill="#ff8a3d" font-weight="800" font-size="22">R</text><text x="470" y="115" fill="#13203c" font-size="16" font-weight="600">Reading</text>
+              <text x="446" y="161" fill="#f0b400" font-weight="800" font-size="22">I</text><text x="470" y="161" fill="#13203c" font-size="16" font-weight="600">Inclusion</text>
+              <text x="446" y="207" fill="#2f9bff" font-weight="800" font-size="22">S</text><text x="470" y="207" fill="#13203c" font-size="16" font-weight="600">Strategy</text>
+              <text x="446" y="253" fill="#8b6cff" font-weight="800" font-size="22">M</text><text x="470" y="253" fill="#13203c" font-size="16" font-weight="600">Management</text>
             </svg>
           </div>
           <div class="reveal">
             <div class="tag">PRISM CLINIC</div>
             <h3>오답을 5가지 빛으로 분광하다</h3>
-            <p>틀린 문제를 하나의 '오답'으로 뭉뚱그리지 않습니다. PRISM은 오답을 <b>계산·조건·개념·전략·시간</b> 다섯 스펙트럼으로 분해해, 학생이 '왜' 틀렸는지를 진단합니다. 점수 뒤에 숨은 진짜 원인이 보입니다.</p>
-            <ul class="feats"><li>P 계산</li><li>R 조건</li><li>I 개념</li><li>S 전략</li><li>M 시간</li></ul>
-            <p class="clinic-note">RIS(조건·개념·전략) = <b>이해</b> 영역 · PM(계산·시간) = <b>수행</b> 영역으로 묶어, 약점이 '이해'인지 '수행'인지까지 짚어냅니다.</p>
+            <p>틀린 문제를 하나의 '오답'으로 뭉뚱그리지 않습니다. PRISM은 오답을 <b>계산정확성·조건해석·개념내재·전략선택·시간관리</b> 다섯 스펙트럼으로 분해해, 학생이 '왜' 틀렸는지를 진단합니다. 점수 뒤에 숨은 진짜 원인이 보입니다.</p>
+            <ul class="prism-legend">
+              <li><b style="color:#ff5d6c">P</b> Precision<span>· 계산정확성</span></li>
+              <li><b style="color:#ff8a3d">R</b> Reading<span>· 조건해석</span></li>
+              <li><b style="color:#f0b400">I</b> Inclusion<span>· 개념 내재</span></li>
+              <li><b style="color:#2f9bff">S</b> Strategy<span>· 전략선택</span></li>
+              <li><b style="color:#8b6cff">M</b> Management<span>· 시간관리</span></li>
+            </ul>
+            <p class="clinic-note">RIS(조건해석·개념내재·전략선택) = <b>이해</b> 영역 · PM(계산정확성·시간관리) = <b>수행</b> 영역으로 묶어, 약점이 '이해'인지 '수행'인지까지 짚어냅니다.</p>
           </div>
         </article>
 
