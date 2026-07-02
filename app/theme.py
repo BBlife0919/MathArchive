@@ -28,12 +28,26 @@ _THEME_CSS = """
     --line: #e3e9f7;
 }
 
-/* 전역 폰트 */
-html, body, [class*="css"], .stApp,
+/* 전역 폰트 — KaTeX 수식은 자체 폰트 유지 (문제/선지 폰트 절대 건드리지 말 것) */
+html, body, .stApp,
 .stMarkdown, .stMarkdown p, .stMarkdown li,
-[data-testid="stAppViewContainer"] * {
+h1, h2, h3, h4, h5, h6,
+.stButton, .stButton button,
+.stTextInput, .stSelectbox, .stMultiSelect,
+[data-testid="stWidgetLabel"],
+[data-testid="stCaptionContainer"] {
     font-family: 'Pretendard Variable', 'Pretendard',
         -apple-system, 'Apple SD Gothic Neo', sans-serif !important;
+}
+
+/* KaTeX 는 자체 폰트 (KaTeX_Main/_Math/_AMS) 로 복구 — 사용자 명시 요청 */
+.katex, .katex *,
+.katex-html, .katex-html *,
+.katex-display, .katex-display * {
+    font-family: KaTeX_Main, KaTeX_Math, KaTeX_Size1,
+        KaTeX_Size2, KaTeX_Size3, KaTeX_Size4, KaTeX_AMS,
+        KaTeX_Caligraphic, KaTeX_Fraktur, KaTeX_SansSerif,
+        KaTeX_Script, KaTeX_Typewriter, 'Times New Roman', serif !important;
 }
 
 .stApp {
