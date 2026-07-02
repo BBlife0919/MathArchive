@@ -263,6 +263,21 @@ code, pre {
 [data-testid="stToolbar"] {
     background: transparent !important;
 }
+
+/* 로그인 페이지 등에서 뒤에 붙은 3D 큐브 배경 강제 hide */
+#mathology-cube-bg,
+canvas#scene,
+.cube-veil,
+.math-bg {
+    display: none !important;
+}
+
+/* stApp 배경 라이트 강제 (다크 gradient override) */
+.stApp,
+[data-testid="stAppViewContainer"] {
+    background: var(--paper) !important;
+    background-image: none !important;
+}
 </style>
 """
 
