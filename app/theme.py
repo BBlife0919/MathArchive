@@ -121,8 +121,10 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 600 !important;
 }
 
-/* ── 버튼 ─────────────────────────────────── */
-.stButton button {
+/* ── 버튼 (파랑 X, 검정/화이트 톤) ────────── */
+/* Streamlit 버전에 따라 kind attribute 대소문자·이름 다름 → 여러 selector */
+.stButton button,
+.stButton > button {
     border-radius: 10px !important;
     font-weight: 600 !important;
     letter-spacing: -0.01em !important;
@@ -132,19 +134,28 @@ h1, h2, h3, h4, h5, h6,
     padding: 0.55rem 1rem !important;
     transition: background 0.15s, border-color 0.15s !important;
 }
-.stButton button:hover {
-    background: #eef3ff !important;
-    border-color: var(--blue-soft) !important;
+.stButton button:hover,
+.stButton > button:hover {
+    background: #f1f4fb !important;
+    border-color: #c9d3ea !important;
     color: var(--ink) !important;
 }
-.stButton button[kind="primary"] {
+/* Primary — 검정 톤 (파랑 X) */
+.stButton button[kind="primary"],
+.stButton button[data-testid="baseButton-primary"],
+button[kind="primary"],
+button[data-testid="baseButton-primary"] {
     background: var(--ink) !important;
     color: #ffffff !important;
     border: 1px solid var(--ink) !important;
 }
-.stButton button[kind="primary"]:hover {
-    background: var(--blue) !important;
-    border-color: var(--blue) !important;
+.stButton button[kind="primary"]:hover,
+.stButton button[data-testid="baseButton-primary"]:hover,
+button[kind="primary"]:hover,
+button[data-testid="baseButton-primary"]:hover {
+    background: #1a2544 !important;
+    border-color: #1a2544 !important;
+    color: #ffffff !important;
 }
 
 /* Download 버튼도 같은 스타일 */
@@ -229,12 +240,26 @@ hr {
     color: var(--text) !important;
 }
 [data-testid="stSidebar"] .stButton button {
-    background: var(--ink) !important;
-    color: #ffffff !important;
-    border-color: var(--ink) !important;
+    background: #ffffff !important;
+    color: var(--ink) !important;
+    border: 1px solid var(--line) !important;
 }
 [data-testid="stSidebar"] .stButton button:hover {
-    background: var(--blue) !important;
+    background: #f1f4fb !important;
+    color: var(--ink) !important;
+    border-color: #c9d3ea !important;
+}
+/* 사이드바 primary — 검정 (해제 버튼 등 secondary 는 위 흰색) */
+[data-testid="stSidebar"] .stButton button[kind="primary"],
+[data-testid="stSidebar"] button[kind="primary"] {
+    background: var(--ink) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--ink) !important;
+}
+[data-testid="stSidebar"] .stButton button[kind="primary"]:hover,
+[data-testid="stSidebar"] button[kind="primary"]:hover {
+    background: #1a2544 !important;
+    color: #ffffff !important;
 }
 
 /* ── Radio ────────────────────────────────── */
