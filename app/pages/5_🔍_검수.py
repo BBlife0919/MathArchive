@@ -238,6 +238,9 @@ def lookup_token(token: str):
 
 st.set_page_config(page_title="검수 — MATHOLOGY", page_icon="🔍", layout="wide")
 
+from theme import apply_theme
+apply_theme()
+
 # Auth optional
 try:
     import auth

@@ -31,6 +31,9 @@ from db import get_connection as _get_db_connection  # noqa: E402
 
 st.set_page_config(page_title="📋 학생 카드 — MATHOLOGY", page_icon="📋", layout="wide")
 
+from theme import apply_theme
+apply_theme()
+
 from auth_ui import require_auth, render_user_menu_in_sidebar  # noqa: E402
 require_auth()
 render_user_menu_in_sidebar()
