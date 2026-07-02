@@ -143,14 +143,18 @@ _LANDING_CSS = """
   --border: rgba(110, 150, 255, 0.28);
 }
 
-/* 본 페이지 자체 푸른 다크 */
-.stApp {
+/* 뒤 3D 큐브 캔버스가 비치도록 앱 배경 투명 (WebGL 실패 시 body 다크가 fallback) */
+html, body { background: #060b18 !important; }
+.stApp { background: transparent !important; }
+#mathology-cube-bg { opacity: 0.6; }
+/* 큐브 위 가독성 베일 — 폼/텍스트 영역을 살짝 어둡게 */
+.cube-veil {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse at top, #163074 0%, transparent 55%),
-    radial-gradient(ellipse at bottom right, rgba(76, 196, 255, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom left, rgba(40, 90, 200, 0.10) 0%, transparent 55%),
-    var(--bg) !important;
+    radial-gradient(ellipse at 50% 60%, rgba(6,11,24,.80) 0%, rgba(6,11,24,.42) 34%, transparent 66%),
+    linear-gradient(180deg, rgba(6,11,24,.5) 0%, transparent 22%, transparent 68%, rgba(6,11,24,.72) 100%);
 }
+.block-container { position: relative; z-index: 1; }
 /* 사이드바 영역 전부 숨김 — 와일드카드 + 명시 셀렉터 보강 */
 /* 로그인 페이지에선 사이드바 컨테이너만 숨김 — 자식은 자동 비표시 */
 section[data-testid="stSidebar"],
@@ -772,6 +776,84 @@ def _inject_js_entry_loader() -> None:
     components.html(_JS_ENTRY_LOADER, height=0)
 
 
+# ── 로그인 화면 3D 큐브 배경 (랜딩 히어로와 동일 비주얼, 살짝) ─────
+# entry loader 와 동일 기법: iframe(height=0) 안 module script 가
+# parent.document 에 <canvas> 를 fixed 로 붙이고 Three.js 로 렌더.
+# 가드로 rerun 시 중복 생성 방지. WebGL 실패해도 body 다크가 fallback.
+_CUBE_BG_HTML = """
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{margin:0}</style>
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
+</script></head><body>
+<script type="module">
+const doc = window.parent.document;
+if (!doc.getElementById('mathology-cube-bg')) {
+  const canvas = doc.createElement('canvas');
+  canvas.id = 'mathology-cube-bg';
+  canvas.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;';
+  doc.body.appendChild(canvas);
+  const THREE = await import('three');
+  const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
+  const { EffectComposer } = await import('three/addons/postprocessing/EffectComposer.js');
+  const { RenderPass } = await import('three/addons/postprocessing/RenderPass.js');
+  const { UnrealBloomPass } = await import('three/addons/postprocessing/UnrealBloomPass.js');
+  const W = () => window.parent.innerWidth, H = () => window.parent.innerHeight;
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+  renderer.setPixelRatio(Math.min(window.parent.devicePixelRatio,2));
+  renderer.setSize(W(), H(), false);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#060b18');
+  scene.fog = new THREE.Fog('#060b18', 14, 36);
+  const camera = new THREE.PerspectiveCamera(50, W()/H(), 0.1, 100); camera.position.set(0,0,16);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.add(new THREE.AmbientLight(0x6f8bff, 0.4));
+  const k = new THREE.DirectionalLight(0xffffff, 1.4); k.position.set(6,8,10); scene.add(k);
+  const rl = new THREE.DirectionalLight(0x2b6fff, 1.1); rl.position.set(-8,-4,4); scene.add(rl);
+  const group = new THREE.Group(); scene.add(group);
+  const box = new THREE.BoxGeometry(1,1,1);
+  const glass = new THREE.MeshPhysicalMaterial({color:0x9ec4ff,metalness:0,roughness:0.08,transmission:0.92,thickness:1.4,ior:1.4,clearcoat:1,clearcoatRoughness:0.1,envMapIntensity:1.3,transparent:true,opacity:0.9});
+  const solid = new THREE.MeshPhysicalMaterial({color:0x3f74ff,metalness:0.1,roughness:0.35,envMapIntensity:0.9});
+  const cubes = []; const COLS=7, ROWS=5;
+  for(let i=0;i<COLS;i++) for(let j=0;j<ROWS;j++){
+    if(Math.random()<0.4) continue;
+    const m = new THREE.Mesh(box, Math.random()<0.78?glass:solid);
+    m.position.set((i-(COLS-1)/2)*2.6+(Math.random()-0.5)*0.8,(j-(ROWS-1)/2)*2.6+(Math.random()-0.5)*0.8,-Math.random()*7-i*0.4);
+    m.scale.setScalar(1.0+Math.random()*1.4); m.rotation.set(Math.random()*0.3,Math.random()*0.3,0);
+    m.userData.f = Math.random()*Math.PI*2; m.userData.a = 0.15+Math.random()*0.25;
+    group.add(m); cubes.push(m);
+  }
+  const glowMat = new THREE.MeshStandardMaterial({color:0xffb347,emissive:0xff9a2e,emissiveIntensity:2.0,roughness:0.4});
+  const glow = new THREE.Mesh(box, glowMat); glow.position.set(3.0,0.6,2); glow.scale.setScalar(2.1); group.add(glow);
+  const glowL = new THREE.PointLight(0xffae52, 16, 26, 2); glowL.position.copy(glow.position); scene.add(glowL);
+  const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(W(),H()), 0.7, 0.7, 0.85));
+  let mx=0,my=0,tx=0,ty=0;
+  window.parent.addEventListener('mousemove', e=>{ tx=(e.clientX/W()-0.5); ty=(e.clientY/H()-0.5); });
+  const clock = new THREE.Clock();
+  function tick(){
+    requestAnimationFrame(tick);
+    const t = clock.getElapsedTime();
+    mx += (tx-mx)*0.05; my += (ty-my)*0.05;
+    group.rotation.y = Math.sin(t*0.07)*0.16 + mx*0.4; group.rotation.x = my*0.25;
+    group.position.x = -mx*1.0; group.position.y = my*0.7;
+    for(const c of cubes){ c.position.y += Math.sin(t*0.6+c.userData.f)*0.016*c.userData.a; c.rotation.z += 0.0005; }
+    glowMat.emissiveIntensity = 1.9 + Math.sin(t*1.4)*0.35;
+    composer.render();
+  }
+  tick();
+  window.parent.addEventListener('resize', ()=>{ camera.aspect=W()/H(); camera.updateProjectionMatrix(); renderer.setSize(W(),H(),false); composer.setSize(W(),H()); });
+}
+</script></body></html>
+"""
+
+
+def _inject_cube_background() -> None:
+    """로그인 화면 뒤에 3D 큐브 배경 렌더 (parent.document 에 fixed canvas)."""
+    components.html(_CUBE_BG_HTML, height=0)
+
+
 def _render_landing_hero() -> None:
     """헤로 + 카드 + 프로필 — 로그인 폼 위에 얹는 마케팅 영역.
 
@@ -793,7 +875,7 @@ def _render_landing_hero() -> None:
     st.markdown(
 f"""
 {_LANDING_CSS}
-{_MATH_BG}
+<div class="cube-veil"></div>
 <section class="hero fade-in">
 <div class="eyebrow">Mathematics · Data · Design</div>
 <h1>All-in-One Mathematics Library<br>
@@ -849,6 +931,7 @@ f"""
 
 
 def _render_auth_gate_page() -> None:
+    _inject_cube_background()
     _render_landing_hero()
 
     st.markdown(
