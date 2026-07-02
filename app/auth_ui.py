@@ -833,7 +833,7 @@ f"""
 <div class="icon">🩺</div>
 <h3>PRISM Clinic</h3>
 <span class="sub-ko">오답 5스펙트럼 진단</span>
-<p>계산·조건·개념·전략·시간으로 분해.</p>
+<p>계산정확성·조건해석·개념내재·전략선택·시간관리.</p>
 </div>
 </div>
 <div class="profile-wrap fade-in d3">
