@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from db import get_connection as _get_db_connection, is_cloud
 from clinic_logic import (
     ERROR_CODES,
+    ERROR_CODE_DISPLAY,
     find_similar_questions,
     compute_retry_schedule,
     insert_clinic_entry,
@@ -161,8 +162,11 @@ if is_db_mode:
             qrow = options[picked]
             wrong_qid = qrow["question_id"]
 
-        error_code = st.selectbox("오류코드", ERROR_CODES,
-                                  help="틀린 이유 5분류. 학생이 직접 고르게 하세요.")
+        error_code = st.selectbox(
+            "PRISM 오류코드", ERROR_CODES,
+            format_func=lambda c: ERROR_CODE_DISPLAY.get(c, c),
+            help="P 계산정확성 · R 조건해석 · I 개념내재 · S 전략선택 · M 시간관리",
+        )
         keyword = st.text_input(
             "키워드 (학생 작성)", placeholder="예: 인수정리 적용 후 조립제법 단계 빼먹음"
         )

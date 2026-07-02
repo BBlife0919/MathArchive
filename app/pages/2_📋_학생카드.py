@@ -40,11 +40,12 @@ st.caption("한 명 = 한 장. 진도·PRISM·자가예측·보호자 연락이 
 
 
 # ── PRISM — 오답 5스펙트럼 분광 ─────────────────────────
-# P: Precision   계산실수        (수행 — 양·절차로 사라짐)
-# R: Reading     조건해석실패    (이해 — 가르침으로 사라짐)
-# I: Insight     개념누락        (이해)
-# S: Strategy    전략선택실패    (이해)
-# M: Management  시간관리        (수행)
+# 랜딩 표기는 긍정형 (계산정확성 등). DB error_code 값은 그대로 유지.
+# P: Precision   계산실수 → 계산정확성   (수행 — 양·절차로 사라짐)
+# R: Reading     조건해석실패 → 조건해석 (이해 — 가르침으로 사라짐)
+# I: Inclusion   개념누락 → 개념내재     (이해)  (2026-07-01 Insight→Inclusion)
+# S: Strategy    전략선택실패 → 전략선택 (이해)
+# M: Management  시간관리                (수행)
 PRISM_LETTER = {
     "계산실수":       "P",
     "조건해석실패":   "R",
@@ -106,10 +107,10 @@ with st.sidebar:
     st.divider()
     st.caption(
         "PRISM 5스펙트럼:\n"
-        "- **P** 계산실수 (Precision)\n"
-        "- **R** 조건해석실패 (Reading)\n"
-        "- **I** 개념누락 (Insight)\n"
-        "- **S** 전략선택실패 (Strategy)\n"
+        "- **P** 계산정확성 (Precision)\n"
+        "- **R** 조건해석 (Reading)\n"
+        "- **I** 개념내재 (Inclusion)\n"
+        "- **S** 전략선택 (Strategy)\n"
         "- **M** 시간관리 (Management)\n"
         "→ 이해(RIS) vs 수행(PM)"
     )
@@ -181,16 +182,16 @@ with st.expander("➕ 이번 주 PRISM 평가 입력", expanded=False):
     with st.form("prism_eval_form"):
         eval_dt = st.date_input("평가일", value=date.today(), key="prism_eval_dt")
         pc1, pc2, pc3, pc4, pc5 = st.columns(5)
-        sp = pc1.slider("**P** 계산실수", 1, 5, 3, key="prism_sp",
-                        help="부호·이항·분수 등 기계적 실수")
+        sp = pc1.slider("**P** 계산정확성", 1, 5, 3, key="prism_sp",
+                        help="부호·이항·분수 등 기계적 실수 (Precision)")
         sr = pc2.slider("**R** 조건해석", 1, 5, 3, key="prism_sr",
-                        help="문제 조건·범위 놓침")
-        si = pc3.slider("**I** 개념누락", 1, 5, 3, key="prism_si",
-                        help="공식·정의 모름")
+                        help="문제 조건·범위 놓침 (Reading)")
+        si = pc3.slider("**I** 개념내재", 1, 5, 3, key="prism_si",
+                        help="공식·정의 내재화 부족 (Inclusion)")
         ss = pc4.slider("**S** 전략선택", 1, 5, 3, key="prism_ss",
-                        help="접근법 선택 실패")
+                        help="접근법 선택 실패 (Strategy)")
         sm = pc5.slider("**M** 시간관리", 1, 5, 3, key="prism_sm",
-                        help="시간 부족·서술형 누락")
+                        help="시간 부족·서술형 누락 (Management)")
         pnote = st.text_area("강사 메모 (선택)", height=60, key="prism_note",
                              placeholder="예: 이번 주 단원평가에서 부등호 방향 헷갈리는 패턴 반복")
         if st.form_submit_button("💾 평가 저장"):
@@ -244,7 +245,7 @@ else:
                 plt.rcParams["font.family"] = font_manager.FontProperties(fname=str(full)).get_name()
                 break
 
-    categories = ["P 계산실수", "R 조건해석", "I 개념누락", "S 전략선택", "M 시간관리"]
+    categories = ["P 계산정확성", "R 조건해석", "I 개념내재", "S 전략선택", "M 시간관리"]
     values = scores + scores[:1]
     angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
     angles += angles[:1]
@@ -266,9 +267,9 @@ else:
     with rad2:
         st.markdown("**점수표**")
         st.markdown(
-            f"- **P** 계산실수: {lp['score_p']}/5\n"
+            f"- **P** 계산정확성: {lp['score_p']}/5\n"
             f"- **R** 조건해석: {lp['score_r']}/5\n"
-            f"- **I** 개념누락: {lp['score_i']}/5\n"
+            f"- **I** 개념내재: {lp['score_i']}/5\n"
             f"- **S** 전략선택: {lp['score_s']}/5\n"
             f"- **M** 시간관리: {lp['score_m']}/5"
         )

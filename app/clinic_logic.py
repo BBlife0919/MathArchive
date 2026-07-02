@@ -12,6 +12,16 @@ ERROR_CODES = [
 ]
 # 신규 코드 추가 시 app/pages/2_📋_학생카드.py 의 PRISM_LETTER / RIS_CODES / PM_CODES 동시 갱신.
 
+# PRISM 랜딩 표기 (긍정형). DB 저장값은 위 error_code 를 그대로 유지.
+# I: Inclusion (개념 내재) — 2026-07-01 Insight 에서 교체
+ERROR_CODE_DISPLAY = {
+    "계산실수":     "P · 계산정확성",
+    "조건해석실패": "R · 조건해석",
+    "개념누락":     "I · 개념내재",
+    "전략선택실패": "S · 전략선택",
+    "시간관리":     "M · 시간관리",
+}
+
 DIFF_NEXT = {"하": "중", "중": "상", "상": "킬"}
 
 

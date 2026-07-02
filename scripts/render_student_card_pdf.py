@@ -28,6 +28,11 @@ PRISM_LETTER = {
     "계산실수": "P", "조건해석실패": "R", "개념누락": "I",
     "전략선택실패": "S", "시간관리": "M",
 }
+# 랜딩 표기 (긍정형). DB error_code 는 위의 원본 유지.
+PRISM_DISPLAY = {
+    "계산실수": "계산정확성", "조건해석실패": "조건해석", "개념누락": "개념내재",
+    "전략선택실패": "전략선택", "시간관리": "시간관리",
+}
 PRISM_ORDER = ["계산실수", "조건해석실패", "개념누락", "전략선택실패", "시간관리"]
 RIS_CODES = {"개념누락", "조건해석실패", "전략선택실패"}   # 이해
 PM_CODES  = {"계산실수", "시간관리"}                       # 수행
@@ -130,7 +135,7 @@ def _render_prism_radar_b64(prism_row: dict) -> str:
 
     _setup_korean_font(plt, font_manager)
 
-    categories = ["P 계산실수", "R 조건해석", "I 개념누락", "S 전략선택", "M 시간관리"]
+    categories = ["P 계산정확성", "R 조건해석", "I 개념내재", "S 전략선택", "M 시간관리"]
     scores = [prism_row["score_p"], prism_row["score_r"], prism_row["score_i"],
               prism_row["score_s"], prism_row["score_m"]]
     values = scores + scores[:1]
@@ -165,7 +170,7 @@ def _render_prism_chart_b64(clinic_rows: list) -> str:
     _setup_korean_font(plt, font_manager)
 
     counter = Counter(r["error_code"] for r in clinic_rows)
-    labels = [f"{PRISM_LETTER[c]}\n{c}" for c in PRISM_ORDER]
+    labels = [f"{PRISM_LETTER[c]}\n{PRISM_DISPLAY[c]}" for c in PRISM_ORDER]
     values = [counter.get(c, 0) for c in PRISM_ORDER]
     colors = ["#F97316", "#4F46E5", "#6366F1", "#8B5CF6", "#EF4444"]
 
