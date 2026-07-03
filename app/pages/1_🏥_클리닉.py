@@ -188,8 +188,11 @@ else:
         key="ext_label",
         help="DB에 없는 문제. 어디서 나온 문제인지 학생이 식별 가능하게 적기.",
     )
-    error_code = st.selectbox("오류코드", ERROR_CODES,
-                              help="틀린 이유 5분류. 학생이 직접 고르게 하세요.")
+    error_code = st.selectbox(
+        "PRISM 오류코드", ERROR_CODES,
+        format_func=lambda c: ERROR_CODE_DISPLAY.get(c, c),
+        help="P 계산정확성 · R 조건해석 · I 개념내재 · S 전략선택 · M 시간관리",
+    )
     keyword = st.text_input(
         "키워드 (학생 작성)", placeholder="예: 부등호 방향 헷갈림"
     )

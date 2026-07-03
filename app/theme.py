@@ -55,36 +55,37 @@ h1, h2, h3, h4, h5, h6,
     color: var(--text) !important;
 }
 
-/* ── 헤딩 위계 ────────────────────────────── */
+/* ── 헤딩 위계 (컴팩트) ─────────────────────── */
 [data-testid="stMain"] h1 {
-    font-size: 30px !important;
+    font-size: 26px !important;
     font-weight: 800 !important;
     letter-spacing: -0.03em !important;
     color: var(--ink) !important;
     line-height: 1.25 !important;
-    margin-top: 0.5rem !important;
-    margin-bottom: 1.2rem !important;
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.6rem !important;
 }
 [data-testid="stMain"] h2 {
-    font-size: 22px !important;
-    font-weight: 800 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     color: var(--ink) !important;
-    margin-top: 2.2rem !important;
-    margin-bottom: 0.9rem !important;
+    margin-top: 1.6rem !important;
+    margin-bottom: 0.5rem !important;
 }
 [data-testid="stMain"] h3 {
-    font-size: 16px !important;
+    font-size: 14.5px !important;
     font-weight: 700 !important;
     letter-spacing: -0.01em !important;
     color: var(--ink) !important;
-    margin-top: 1.4rem !important;
-    margin-bottom: 0.6rem !important;
+    margin-top: 1.0rem !important;
+    margin-bottom: 0.4rem !important;
 }
 [data-testid="stMain"] .stCaption,
 [data-testid="stMain"] [data-testid="stCaptionContainer"] {
     color: var(--muted) !important;
-    font-size: 13.5px !important;
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
 }
 
 /* ── 입력 컴포넌트 라이트화 (다크 강제 해제) ─ */
@@ -125,13 +126,14 @@ h1, h2, h3, h4, h5, h6,
 /* Streamlit 버전에 따라 kind attribute 대소문자·이름 다름 → 여러 selector */
 .stButton button,
 .stButton > button {
-    border-radius: 10px !important;
+    border-radius: 8px !important;
     font-weight: 600 !important;
+    font-size: 13.5px !important;
     letter-spacing: -0.01em !important;
     border: 1px solid var(--line) !important;
     background: #ffffff !important;
     color: var(--ink) !important;
-    padding: 0.55rem 1rem !important;
+    padding: 0.4rem 0.85rem !important;
     transition: background 0.15s, border-color 0.15s !important;
 }
 .stButton button:hover,
@@ -199,22 +201,56 @@ button[data-testid="baseButton-primary"]:hover {
 [data-testid="stExpander"] {
     background: #ffffff !important;
     border: 1px solid var(--line) !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 2px rgba(10, 16, 32, 0.03) !important;
 }
 [data-testid="stExpander"] summary {
     color: var(--ink) !important;
     font-weight: 600 !important;
+    font-size: 13.5px !important;
+    padding: 8px 12px !important;
+}
+[data-testid="stExpander"] [data-testid="stExpanderDetails"] {
+    padding: 4px 12px 12px 12px !important;
 }
 [data-testid="stVerticalBlockBorderWrapper"] {
     background: #ffffff !important;
     border: 1px solid var(--line) !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
+}
+
+/* ── Metric 카드 (컴팩트) ───────────────────── */
+[data-testid="stMetric"] {
+    background: #ffffff !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    box-shadow: 0 1px 2px rgba(10, 16, 32, 0.03) !important;
+}
+[data-testid="stMetricLabel"] {
+    font-size: 11px !important;
+    color: var(--muted) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 4px !important;
+}
+[data-testid="stMetricValue"] {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--ink) !important;
+    line-height: 1.2 !important;
+}
+[data-testid="stMetricDelta"] {
+    font-size: 11.5px !important;
+    color: var(--muted) !important;
 }
 
 /* ── Divider ──────────────────────────────── */
 hr {
     border-color: var(--line) !important;
-    margin: 1.5rem 0 !important;
+    margin: 1.0rem 0 !important;
 }
 
 /* ── Tab ──────────────────────────────────── */
@@ -281,11 +317,17 @@ code, pre {
     font-size: 13px !important;
 }
 
-/* ── 여백 (breathing room) ────────────────── */
+/* ── 여백 (breathing room, 컴팩트) ────────── */
 [data-testid="stMain"] .block-container {
-    padding-top: 2.5rem !important;
-    padding-bottom: 4rem !important;
-    max-width: 1200px !important;
+    padding-top: 1.6rem !important;
+    padding-bottom: 3rem !important;
+    max-width: 1180px !important;
+}
+
+/* ── 안내 박스 크기 축소 ───────────────────── */
+[data-testid="stAlert"] {
+    padding: 10px 14px !important;
+    font-size: 13.5px !important;
 }
 
 /* Streamlit 기본 라벨 */
