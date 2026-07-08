@@ -55,6 +55,71 @@ SCHOOLS = [
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
 
 
+def diagonal_cover_html(diff: str) -> str:
+    """사선 편집형 표지 (평면좌표 좌표모티프 + Black Han Sans)."""
+    graphic = '''
+    <svg class="motif" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
+      <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M40 0H0V40" fill="none" stroke="#cdd6e8" stroke-width="1"/>
+      </pattern></defs>
+      <rect x="0" y="0" width="600" height="600" fill="url(#grid)"/>
+      <line x1="0" y1="360" x2="600" y2="360" stroke="#9fb0d4" stroke-width="2.5"/>
+      <line x1="240" y1="0" x2="240" y2="600" stroke="#9fb0d4" stroke-width="2.5"/>
+      <path d="M40 540 Q240 40 440 540" fill="none" stroke="#4560a8" stroke-width="4"/>
+      <line x1="60" y1="120" x2="560" y2="560" stroke="#4560a8" stroke-width="4"/>
+      <circle cx="360" cy="250" r="120" fill="none" stroke="#4560a8" stroke-width="4"/>
+    </svg>'''
+    return f'''<!doctype html><html><head><meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;600;700;900&display=swap');
+@page {{ size: A4; margin: 0; }}
+* {{ margin:0; padding:0; box-sizing:border-box; }}
+html,body {{ width:210mm; height:297mm; }}
+.cover {{ position:relative; width:210mm; height:297mm; overflow:hidden;
+  background:#f4f1ea; font-family:'Gothic A1', sans-serif; color:#1b1c22; }}
+.motif {{ position:absolute; right:-95mm; bottom:-70mm; width:310mm; height:310mm;
+  opacity:.18; transform:rotate(-8deg); }}
+.hero {{ position:absolute; top:78mm; left:20mm;
+  transform:rotate(-27deg); transform-origin:left center; }}
+.kicker {{ font-family:'Gothic A1'; font-weight:700; font-size:12pt; letter-spacing:.28em;
+  color:#3a4a86; margin-bottom:3mm; margin-left:2mm; }}
+.title {{ font-family:'Black Han Sans', sans-serif; font-size:96pt; line-height:.92;
+  color:#1b1c22; letter-spacing:-.01em; }}
+.rule {{ width:66mm; height:2.4pt; background:#c8342b; margin:5mm 0 4mm 2mm; }}
+.tagline {{ font-family:'Gothic A1'; font-weight:600; font-size:12.5pt; letter-spacing:.02em;
+  color:#4a4d59; margin-left:2mm; max-width:120mm; }}
+.bottom {{ position:absolute; right:22mm; bottom:40mm; text-align:right;
+  transform:rotate(-27deg); transform-origin:right center; }}
+.subject {{ font-family:'Gothic A1'; font-weight:900; font-size:30pt; color:#1b1c22; }}
+.level {{ display:inline-block; margin-top:6mm;
+  font-family:'Gothic A1'; font-weight:700; font-size:14pt; letter-spacing:.08em;
+  color:#c8342b; border:2pt solid #c8342b; border-radius:999px; padding:2.8mm 9mm; }}
+.byline {{ font-family:'Gothic A1'; font-weight:600; font-size:12pt; color:#3a3c46; margin-top:8mm; }}
+.byline b {{ font-weight:900; color:#1b1c22; font-size:14pt; }}
+.tick {{ position:absolute; width:15mm; height:15mm; border:2pt solid #26315e; }}
+.t1 {{ top:12mm; left:12mm; border-right:none; border-bottom:none; }}
+.t2 {{ bottom:12mm; right:12mm; border-left:none; border-top:none; }}
+.foot {{ position:absolute; left:14mm; bottom:12mm; font-family:'Gothic A1';
+  font-weight:700; font-size:8.5pt; letter-spacing:.24em; color:#3a4a86; }}
+</style></head>
+<body><div class="cover">
+  {graphic}
+  <span class="tick t1"></span><span class="tick t2"></span>
+  <div class="hero">
+    <div class="kicker">2학기 중간대비</div>
+    <div class="title">평면좌표</div>
+    <div class="rule"></div>
+    <div class="tagline">공통수학2 · 도형의 방정식 내신기출</div>
+  </div>
+  <div class="bottom">
+    <div class="subject">공통수학2</div><br>
+    <span class="level">난이도 {diff}</span>
+    <div class="byline">심재룡 <b>T</b></div>
+  </div>
+  <div class="foot">MATHOLOGY · 2026</div>
+</div></body></html>'''
+
+
 def fetch_rows() -> list[dict]:
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -145,6 +210,17 @@ def build_one(diff: str, all_rows: list[dict]):
         cover_footer_sub=f"2학기 중간대비 · 공통수학2 평면좌표 · 난이도 {diff}",
         page_running_left=f"공통수학2 평면좌표 · {diff}",
     )
+
+    # 기본 표지(1p)를 사선 커스텀 표지로 교체 (PyMuPDF)
+    import fitz
+    from pdf_engine import html_to_pdf_bytes
+    cover_bytes = html_to_pdf_bytes(diagonal_cover_html(diff))
+    book = fitz.open(stream=pdf_bytes, filetype="pdf")
+    cover = fitz.open(stream=cover_bytes, filetype="pdf")
+    book.delete_page(0)                     # 기본 표지 제거
+    book.insert_pdf(cover, start_at=0)      # 커스텀 표지 맨 앞 삽입
+    pdf_bytes = book.tobytes()
+    book.close(); cover.close()
 
     book_dir = Path.home() / "클로드교재"
     book_dir.mkdir(exist_ok=True)
