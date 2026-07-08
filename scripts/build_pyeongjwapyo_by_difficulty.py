@@ -54,18 +54,18 @@ SCHOOLS = [
 
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
 
-# 본문 크롬 요소만 표지와 동일한 Gothic A1(헤비 포스터 고딕)로 통일.
+# 본문 크롬 요소를 표지 제목 "평면좌표" 폰트(Black Han Sans)와 동일하게 통일.
 # ── 문제 본문(.q-body)·선지(.q-choices)·KaTeX(.katex) 는 절대 제외 (폰트 불가침 규칙).
 CHROME_FONT_CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
 .bp-head-left, .bp-head-right, .bp-head-right .roman,
 .bp-page .bp-head-left, .bp-page .bp-head-right, .bp-page .bp-head-right .roman,
 .bp-side-part, .bp-side-letter, .bp-side-roman, .bp-side-vertical,
 .bp-page .bp-side .bp-side-part, .bp-page .bp-side .bp-side-letter,
-.kp-source, .kp-num, .kp-checks, .cb, .kp-label, .kp-memo-label,
+.kp-source, .kp-num, .kp-checks, .cb, .kp-label, .kp-line, .kp-memo-label,
 .cd-chapter-label, .cd-meta-top, .cd-big-num, .cd-major, .cd-major-roman,
 .cd-section-label, .cd-section-title, .cd-footer-title, .cd-footer-sub {
-  font-family: 'Gothic A1', sans-serif !important;
+  font-family: 'Black Han Sans', sans-serif !important;
 }
 """
 
