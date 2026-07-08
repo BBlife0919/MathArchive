@@ -326,9 +326,11 @@ header[data-testid="stHeader"] { background: transparent !important; }
   line-height: 1.6;
   color: var(--muted);
   margin: 0;
-  max-width: 88%;
+  max-width: 92%;
   text-align: center;
   font-weight: 500;
+  word-break: keep-all;   /* 한국어 어절 단위로 줄바꿈 (홀로 남는 글자 방지) */
+  overflow-wrap: break-word;
 }
 
 /* highlight — 중앙 대형 카드: 파란 그라디언트 배경 + 흰 텍스트 (image #40 톤) */
@@ -363,18 +365,24 @@ header[data-testid="stHeader"] { background: transparent !important; }
 .feature-circle.highlight p {
   color: rgba(255, 255, 255, 0.88) !important;
   font-size: 14px;
-  max-width: 82%;
+  max-width: 88%;
   font-weight: 500;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
+/* FEATURED 배지 — 아이콘 위쪽에서 아이콘 겹침 방지. 카드 최상단 좁게. */
 .feature-circle.highlight::after {
   content: "FEATURED";
   position: absolute;
-  top: 18%;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
   font-size: 9px;
   letter-spacing: 0.4em;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 700;
+  text-indent: 0.4em;
 }
 
 /* 모바일: 산포 해제 → 세로 스택 */
