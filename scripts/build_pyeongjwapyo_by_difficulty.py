@@ -123,28 +123,27 @@ def build_one(diff: str, all_rows: list[dict]):
         return
 
     overrides = {r["question_id"]: "full" for r in rows}
-    logo_path = APP / "assets" / "eum_logo.png"
 
     from pdf_engine import generate_book_pdf
     pdf_bytes = generate_book_pdf(
         rows,
         title="평면좌표",
-        subtitle=f"공통수학2 · 도형의 방정식 · 난이도 {diff}",
+        subtitle="공통수학2 평면좌표",
         include_source=True,
         overrides=overrides,
-        logo_path=str(logo_path) if logo_path.exists() else None,
+        logo_path=None,                       # 이음학원 로고 제거
         kicker_mark=None,
         kicker_text=None,
-        divider_meta_top=f"공통수학2 · 평면좌표 · 난이도 {diff}",
-        divider_footer_title=f"공통수학2 · 평면좌표 · 난이도 {diff}",
-        divider_footer_sub="이영우 T",
-        cover_main_title="평면좌표",
-        cover_tagline=f"공통수학2 · 도형의 방정식 · 난이도 {diff}",
-        cover_big_word=diff,
-        cover_kicker="MATH ARCHIVE · 2026",
-        cover_footer_main=f"Gongsu 2 · Coordinate Geometry · {diff}",
-        cover_footer_sub=f"난이도 {diff} 기출문제집",
-        page_running_left=f"평면좌표 · {diff}",
+        divider_meta_top=f"공통수학2 평면좌표 · 난이도 {diff}",
+        divider_footer_title=f"공통수학2 평면좌표 · 난이도 {diff}",
+        divider_footer_sub="심재룡 T",
+        cover_main_title="2학기 중간대비",     # 표지 제목
+        cover_tagline="공통수학2 평면좌표",     # 그 밑
+        cover_big_word=f"난이도 {diff}",        # 그 밑 (큰 워드)
+        cover_kicker="MATHOLOGY · 2026",
+        cover_footer_main="MATHOLOGY · 2026",
+        cover_footer_sub=f"2학기 중간대비 · 공통수학2 평면좌표 · 난이도 {diff}",
+        page_running_left=f"공통수학2 평면좌표 · {diff}",
     )
 
     book_dir = Path.home() / "클로드교재"

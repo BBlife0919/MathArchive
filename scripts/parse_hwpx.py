@@ -24,6 +24,9 @@ import zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from strip_review_notes import strip_review_notes  # 오검/벌점 편집메모 제거
+
 # ── 네임스페이스 ──────────────────────────────────────────────
 NS_SEC = "{http://www.hancom.co.kr/hwpml/2011/section}"
 NS_PAR = "{http://www.hancom.co.kr/hwpml/2011/paragraph}"
@@ -1740,6 +1743,10 @@ def _extract_questions_from_xml(section_root, watermark_images, debug=False):
         inline_watermark = re.compile(r"\$\s*bold\s*\{\s*\\?mathrm\s*\{\s*NGD\s*\}\s*\}?\s*\}?\s*\$")
         question_text = inline_watermark.sub("", question_text)
         solution_text = inline_watermark.sub("", solution_text)
+
+        # 오검/편집오검/벌점 채점메모 블록 제거 (본문 뒤 꼬리 주석)
+        question_text = strip_review_notes(question_text)
+        solution_text = strip_review_notes(solution_text)
 
         # 저작권/프리앰블/편집메모 필터
         junk_pattern = re.compile(
