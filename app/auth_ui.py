@@ -288,11 +288,14 @@ header[data-testid="stHeader"] { background: transparent !important; }
   z-index: 2;
 }
 .feature-circle .icon {
-  font-size: 32px;
-  margin-bottom: 12px;
-  line-height: 1;
+  width: 38px; height: 38px;
+  margin-bottom: 14px;
   color: var(--accent);
-  filter: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.feature-circle .icon svg {
+  width: 100%; height: 100%;
+  display: block;
 }
 .feature-circle h3 {
   font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
@@ -342,7 +345,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .feature-circle.highlight .icon {
   color: #ffffff;
-  font-size: 44px;
+  width: 52px; height: 52px;
 }
 .feature-circle.highlight h3 {
   color: rgba(255, 255, 255, 0.85) !important;
@@ -829,31 +832,41 @@ f"""
 <div class="section-title fade-in d1">Core Capabilities</div>
 <div class="feature-scatter fade-in d2">
 <div class="feature-circle highlight" style="--x:50%; --y:42%; --d:320px;">
-<div class="icon">⚡</div>
+<div class="icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+</div>
 <h3>Rapid Forge</h3>
 <span class="sub-ko">교재 · 시험지 즉시 제작</span>
 <p>단 몇 번의 클릭으로 출판 품질 PDF 빌드.</p>
 </div>
 <div class="feature-circle" style="--x:17%; --y:20%; --d:230px;">
-<div class="icon">📚</div>
+<div class="icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+</div>
 <h3>Massive Data</h3>
 <span class="sub-ko">방대한 문항 데이터</span>
 <p>고1~고3 전문항 130,000개.</p>
 </div>
 <div class="feature-circle" style="--x:83%; --y:22%; --d:220px;">
-<div class="icon">∑</div>
+<div class="icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4l7 8-7 8h16"/></svg>
+</div>
 <h3>LaTeX Engine</h3>
 <span class="sub-ko">완벽한 수식 렌더링</span>
 <p>HWP → KaTeX 무손실 변환.</p>
 </div>
 <div class="feature-circle" style="--x:22%; --y:82%; --d:235px;">
-<div class="icon">🎯</div>
+<div class="icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9v5l4 2v-7l8-9z"/></svg>
+</div>
 <h3>Smart Filter</h3>
 <span class="sub-ko">정교한 추출 엔진</span>
 <p>학교 · 단원 · 난이도 다차원 검색.</p>
 </div>
 <div class="feature-circle" style="--x:78%; --y:80%; --d:225px;">
-<div class="icon">🩺</div>
+<div class="icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5a4 4 0 0 0 4 4v0a4 4 0 0 0 4-4V3"/><path d="M7 12v3a5 5 0 0 0 5 5v0a5 5 0 0 0 5-5v-3"/><circle cx="17" cy="9" r="2"/></svg>
+</div>
 <h3>PRISM Clinic</h3>
 <span class="sub-ko">오답 5스펙트럼 진단</span>
 <p>계산정확성·조건해석·개념내재·전략선택·시간관리.</p>
