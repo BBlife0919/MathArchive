@@ -198,55 +198,55 @@ header[data-testid="stHeader"] { background: transparent !important; }
   padding: 70px 0 50px;
   text-align: center;
 }
+/* eyebrow — 파란 pill (소개페이지 톤) */
 .hero .eyebrow {
   display: inline-block;
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
   letter-spacing: 0.45em;
-  font-size: 15px; font-weight: 700;
-  color: var(--gold);
-  border: 1px solid rgba(110, 150, 255, 0.4);
-  padding: 9px 24px;
+  font-size: 13px; font-weight: 700;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  background: #ffffff;
+  padding: 9px 26px;
   border-radius: 999px;
-  margin-bottom: 32px;
+  margin-bottom: 34px;
   text-transform: uppercase;
 }
+/* h1 — 소개페이지의 거대 헤딩 톤 (800 weight, -0.02em 자간, ink 색) */
 .hero h1 {
-  font-family: 'Pretendard', 'Pretendard', sans-serif;
-  font-weight: 900;
-  font-size: clamp(36px, 5.4vw, 64px);
-  line-height: 1.1;
-  margin: 0 0 18px;
-  letter-spacing: -0.02em;
-  color: var(--text) !important;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  font-weight: 800;
+  font-size: clamp(38px, 5.4vw, 64px);
+  line-height: 1.15;
+  margin: 0 0 22px;
+  letter-spacing: -0.03em;
+  color: var(--ink) !important;
 }
 .hero h1 .grad {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--gold-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent) !important;
+  -webkit-text-fill-color: var(--accent);
 }
 .hero .sub {
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 600;
-  font-size: clamp(20px, 2.0vw, 26px);
-  color: var(--text);
-  letter-spacing: 0.04em;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.0vw, 28px);
+  color: var(--ink);
+  letter-spacing: -0.01em;
 }
 .hero .sub .num {
-  color: var(--gold-light);
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  color: var(--accent);
+  font-weight: 800;
 }
 
-/* 섹션 헤딩 */
+/* 섹션 헤딩 — 소개페이지의 kicker 톤 */
 .section-title {
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 13px;
   letter-spacing: 0.5em;
-  color: var(--gold);
+  color: var(--accent);
   text-align: center;
-  margin: 64px 0 36px;
+  margin: 72px 0 40px;
   text-transform: uppercase;
 }
 
@@ -258,16 +258,16 @@ header[data-testid="stHeader"] { background: transparent !important; }
   margin: 0 auto 60px;
   max-width: 1020px;
 }
+/* feature-circle — 라이트 흰 카드, 얇은 border, 소프트 shadow (소개페이지 톤) */
 .feature-circle {
   position: absolute;
   border-radius: 50%;
-  background: var(--bg-card);
+  background: #ffffff;
   border: 1px solid var(--border);
-  backdrop-filter: blur(8px);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   text-align: center;
-  padding: 24px;
+  padding: 26px;
   box-sizing: border-box;
   transition: transform 0.35s ease, border-color 0.35s ease,
               box-shadow 0.35s ease;
@@ -277,82 +277,101 @@ header[data-testid="stHeader"] { background: transparent !important; }
   top: var(--y, 50%);
   transform: translate(-50%, -50%);
   cursor: default;
+  box-shadow: 0 4px 20px rgba(43, 111, 255, 0.06),
+              0 1px 3px rgba(10, 16, 32, 0.04);
 }
 .feature-circle:hover {
-  transform: translate(-50%, -50%) scale(1.28);
-  border-color: rgba(76, 196, 255, 0.85);
-  box-shadow: 0 24px 60px rgba(76, 196, 255, 0.32),
-              0 0 40px rgba(76, 196, 255, 0.18);
+  transform: translate(-50%, -50%) scale(1.06);
+  border-color: var(--accent);
+  box-shadow: 0 12px 40px rgba(43, 111, 255, 0.16),
+              0 2px 8px rgba(10, 16, 32, 0.06);
   z-index: 2;
 }
-.feature-circle.highlight:hover {
-  transform: translate(-50%, -50%) scale(1.22);
-  border-color: rgba(158, 193, 255, 0.9);
-  box-shadow: 0 24px 60px rgba(110, 150, 255, 0.4),
-              0 0 50px rgba(110, 150, 255, 0.22);
-}
 .feature-circle .icon {
-  font-size: 38px;
+  font-size: 32px;
   margin-bottom: 12px;
   line-height: 1;
+  color: var(--accent);
+  filter: none;
 }
 .feature-circle h3 {
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
   font-weight: 800;
-  font-size: 19px;
-  letter-spacing: 0.12em;
-  color: #dce8ff !important;
-  text-shadow: 0 1px 12px rgba(0,0,0,0.5);
-  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  color: var(--accent) !important;
+  text-shadow: none;
+  margin: 0 0 10px;
   text-transform: uppercase;
   line-height: 1.2;
   text-align: center;
-  /* 트레일링 letter-spacing 보정 — text-align:center 시 시각적 좌측 치우침 제거 */
-  text-indent: 0.12em;
+  text-indent: 0.32em;
 }
 .feature-circle .sub-ko {
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--text);
-  letter-spacing: 0.02em;
-  margin-bottom: 12px;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
   display: block;
   text-align: center;
 }
 .feature-circle p {
-  font-family: 'Pretendard', sans-serif;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--text-soft);
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
   margin: 0;
-  max-width: 84%;
+  max-width: 88%;
   text-align: center;
+  font-weight: 500;
 }
+
+/* highlight — 중앙 대형 카드: 파란 그라디언트 배경 + 흰 텍스트 (image #40 톤) */
 .feature-circle.highlight {
-  background:
-    radial-gradient(ellipse at top, rgba(110, 150, 255, 0.30) 0%, transparent 60%),
-    linear-gradient(135deg, rgba(110, 150, 255, 0.10) 0%, rgba(76, 196, 255, 0.08) 100%);
-  border-color: rgba(110, 150, 255, 0.6);
-  box-shadow: 0 0 60px rgba(110, 150, 255, 0.18),
-              inset 0 0 40px rgba(110, 150, 255, 0.05);
+  background: linear-gradient(135deg, var(--accent) 0%, #4d85ff 100%);
+  border: none;
+  box-shadow: 0 20px 50px rgba(43, 111, 255, 0.28),
+              0 4px 12px rgba(43, 111, 255, 0.15);
+}
+.feature-circle.highlight:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+  box-shadow: 0 24px 60px rgba(43, 111, 255, 0.35),
+              0 6px 16px rgba(43, 111, 255, 0.2);
+}
+.feature-circle.highlight .icon {
+  color: #ffffff;
+  font-size: 44px;
 }
 .feature-circle.highlight h3 {
-  color: #ffffff !important;
-  font-size: 26px;
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
 }
-.feature-circle.highlight .icon { font-size: 50px; }
-.feature-circle.highlight .sub-ko { font-size: 16px; }
-.feature-circle.highlight p { font-size: 15px; max-width: 86%; }
+.feature-circle.highlight .sub-ko {
+  color: #ffffff !important;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+.feature-circle.highlight p {
+  color: rgba(255, 255, 255, 0.88) !important;
+  font-size: 14px;
+  max-width: 82%;
+  font-weight: 500;
+}
 .feature-circle.highlight::after {
   content: "FEATURED";
   position: absolute;
-  top: 16%;
-  font-family: 'Pretendard', sans-serif;
+  top: 18%;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
   font-size: 9px;
-  letter-spacing: 0.32em;
-  color: var(--gold);
-  opacity: 0.85;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 700;
 }
 
 /* 모바일: 산포 해제 → 세로 스택 */
