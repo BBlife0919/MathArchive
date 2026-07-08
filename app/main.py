@@ -1643,14 +1643,33 @@ def main():
                 st.markdown("#### 📄 PDF 미리보기")
                 _pdf_bytes_for_preview = st.session_state.get("preview_pdf_bytes")
                 if _pdf_bytes_for_preview:
-                    import base64 as _b64m
-                    _b64 = _b64m.b64encode(_pdf_bytes_for_preview).decode()
-                    st.markdown(
-                        f'<iframe src="data:application/pdf;base64,{_b64}#zoom=page-width" '
-                        f'width="100%" height="820" '
-                        f'style="border:1px solid #d0d4dc;border-radius:8px;background:#fafafa;"></iframe>',
-                        unsafe_allow_html=True,
-                    )
+                    # data:application/pdf iframe 은 네이버 웨일·일부 브라우저에서
+                    # ERR_BLOCKED_BY_CLIENT 로 차단됨. PyMuPDF 로 첫 페이지 PNG
+                    # 렌더 후 st.image 로 표시. 나머지 페이지는 다운로드로 확인.
+                    try:
+                        import fitz  # PyMuPDF
+                        _doc = fitz.open(stream=_pdf_bytes_for_preview,
+                                         filetype="pdf")
+                        _pages_shown = min(3, len(_doc))
+                        for _i in range(_pages_shown):
+                            _pix = _doc[_i].get_pixmap(
+                                matrix=fitz.Matrix(1.6, 1.6)
+                            )
+                            st.image(
+                                _pix.tobytes("png"),
+                                use_container_width=True,
+                            )
+                        if len(_doc) > _pages_shown:
+                            st.caption(
+                                f"미리보기: 앞 {_pages_shown} 페이지 / 전체 "
+                                f"{len(_doc)} 페이지. 나머지는 좌측 다운로드로 확인."
+                            )
+                        _doc.close()
+                    except Exception as _e:
+                        st.warning(
+                            f"미리보기 렌더 실패 ({type(_e).__name__}). "
+                            "좌측 다운로드 버튼으로 확인해주세요."
+                        )
                 else:
                     st.info(
                         "좌측 옵션을 입력하면 자동 생성됩니다. "
