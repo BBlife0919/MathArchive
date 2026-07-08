@@ -131,26 +131,25 @@ _LANDING_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg: #060b18;
-  --bg-soft: #0c2156;
-  --bg-card: rgba(28, 52, 110, 0.45);
-  --accent: #5b8cff;
-  --accent-strong: #9ec1ff;
-  --gold: #9ec1ff;
-  --gold-light: #cdddff;
-  --text: #eaf0ff;
-  --text-soft: #aab8e6;
-  --border: rgba(110, 150, 255, 0.28);
+  /* 소개페이지(landing) 팔레트와 통일 — 2026-07 라이트 톤 */
+  --bg: #f5f8ff;
+  --bg-soft: #ffffff;
+  --bg-card: #ffffff;
+  --accent: #2b6fff;
+  --accent-strong: #1a4fd4;
+  --gold: #2b6fff;
+  --gold-light: #9ec1ff;
+  --text: #0a1020;
+  --text-soft: #5f6c87;
+  --border: #e3e9f7;
+  --ink: #0a1020;
+  --muted: #5f6c87;
 }
 
-/* 본 페이지 자체 푸른 다크 (랜딩·Entering 과 동일 톤) */
+/* 소개페이지와 동일한 페이퍼 배경 */
 .stApp {
-  background:
-    radial-gradient(ellipse at 50% 8%, #16306e 0%, transparent 52%),
-    radial-gradient(ellipse at bottom right, rgba(91,140,255,0.12) 0%, transparent 50%),
-    var(--bg) !important;
+  background: var(--bg) !important;
 }
-/* Streamlit 기본 흰 컨테이너가 .stApp 다크를 덮지 않도록 투명화 */
 html, body { background: var(--bg) !important; }
 [data-testid="stAppViewContainer"],
 [data-testid="stMain"],
