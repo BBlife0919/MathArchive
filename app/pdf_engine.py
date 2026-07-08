@@ -2014,7 +2014,8 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      cover_tagline: str | None = None,
                      cover_footer_main: str | None = None,
                      cover_footer_sub: str | None = None,
-                     page_running_left: str | None = None) -> str:
+                     page_running_left: str | None = None,
+                     extra_css: str = "") -> str:
     """교재 HTML: 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설."""
     logo_uri = _logo_data_uri(logo_path)
     # 디바이더 메타 디폴트
@@ -2071,6 +2072,10 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
         '</section>'
     )
     body = "\n".join(body_parts + [qa_html, sol_html])
+    if extra_css:
+        # 본문/선지/KaTeX 는 건드리지 않고 크롬 요소만 재정의하는 스코프 CSS.
+        # 메인 <style> 뒤(문서 후미)에 와서 동일 선택자를 오버라이드.
+        body += f'\n<style>{extra_css}</style>'
     return _HTML_WRAP.format(
         title=_html.escape(title), css=_CSS, body=body,
         body_class="book-summit",
@@ -2263,7 +2268,8 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       cover_tagline: str | None = None,
                       cover_footer_main: str | None = None,
                       cover_footer_sub: str | None = None,
-                      page_running_left: str | None = None) -> bytes:
+                      page_running_left: str | None = None,
+                      extra_css: str = "") -> bytes:
     """교재 PDF 생성. 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
@@ -2279,5 +2285,6 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         cover_footer_main=cover_footer_main,
         cover_footer_sub=cover_footer_sub,
         page_running_left=page_running_left,
+        extra_css=extra_css,
     )
     return html_to_pdf_bytes(html)

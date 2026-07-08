@@ -54,6 +54,21 @@ SCHOOLS = [
 
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
 
+# 본문 크롬 요소만 표지와 동일한 Gothic A1(헤비 포스터 고딕)로 통일.
+# ── 문제 본문(.q-body)·선지(.q-choices)·KaTeX(.katex) 는 절대 제외 (폰트 불가침 규칙).
+CHROME_FONT_CSS = """
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800;900&display=swap');
+.bp-head-left, .bp-head-right, .bp-head-right .roman,
+.bp-page .bp-head-left, .bp-page .bp-head-right, .bp-page .bp-head-right .roman,
+.bp-side-part, .bp-side-letter, .bp-side-roman, .bp-side-vertical,
+.bp-page .bp-side .bp-side-part, .bp-page .bp-side .bp-side-letter,
+.kp-source, .kp-num, .kp-checks, .cb, .kp-label, .kp-memo-label,
+.cd-chapter-label, .cd-meta-top, .cd-big-num, .cd-major, .cd-major-roman,
+.cd-section-label, .cd-section-title, .cd-footer-title, .cd-footer-sub {
+  font-family: 'Gothic A1', sans-serif !important;
+}
+"""
+
 
 def diagonal_cover_html(diff: str) -> str:
     """사선 편집형 표지 (평면좌표 좌표모티프 + Black Han Sans)."""
@@ -209,6 +224,7 @@ def build_one(diff: str, all_rows: list[dict]):
         cover_footer_main="MATHOLOGY · 2026",
         cover_footer_sub=f"2학기 중간대비 · 공통수학2 평면좌표 · 난이도 {diff}",
         page_running_left=f"공통수학2 평면좌표 · {diff}",
+        extra_css=CHROME_FONT_CSS,
     )
 
     # 기본 표지(1p)를 사선 커스텀 표지로 교체 (PyMuPDF)
