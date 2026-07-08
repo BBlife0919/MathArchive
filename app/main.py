@@ -1087,7 +1087,9 @@ def main():
                         else:
                             flag_problem(qid)
                         st.rerun()
-                    # 추가/제거 버튼
+                    # 체크박스 (즉시 담기 X, 하단 [담기] 버튼으로 일괄 적용)
+                    # rerun 폭주 방지 → 카드 렌더링 훨씬 가벼움.
+                    # 이미 담긴 문항은 오른쪽에 ❌ 표시 (즉시 제거 유지).
                     if is_selected:
                         if head_cols[2].button(
                             "❌", key=f"rm_{qid}",
@@ -1097,14 +1099,13 @@ def main():
                             st.session_state.mini_test_active = False
                             st.rerun()
                     else:
-                        if head_cols[2].button(
-                            "➕", key=f"add_{qid}",
-                            use_container_width=True, help="시험지에 추가",
-                            type="primary",
-                        ):
-                            st.session_state.selected_ids.add(qid)
-                            st.session_state.mini_test_active = False
-                            st.rerun()
+                        _pend_key = f"pending_pick_{qid}"
+                        head_cols[2].checkbox(
+                            "담기", key=_pend_key,
+                            label_visibility="collapsed",
+                            value=st.session_state.get(_pend_key, False),
+                            help="체크 후 하단 [선택 담기] 버튼 클릭",
+                        )
 
                     # 문제 텍스트
                     qtext = row["question_text"]
@@ -1149,8 +1150,35 @@ def main():
                     with grid_cols[1]:
                         _render_problem_card(page_list[i + 1])
 
-            # 하단 페이지 네비게이션 (스크롤 후에도 이동 가능)
+            # 하단 페이지 네비 앞 — [선택 담기] 일괄 적용 버튼
+            # 체크박스 방식이라 한 번에 여러 문항을 담을 수 있음. 매 클릭마다
+            # rerun 하는 ➕ 방식보다 훨씬 빠름.
+            _pending_ids = [
+                int(k.replace("pending_pick_", ""))
+                for k, v in st.session_state.items()
+                if k.startswith("pending_pick_") and v
+            ]
             st.markdown("---")
+            if _pending_ids:
+                _pc1, _pc2 = st.columns([0.7, 0.3])
+                with _pc1:
+                    st.caption(f"체크된 문항 **{len(_pending_ids)}개** · "
+                               f"[선택 담기] 클릭하면 시험지에 일괄 추가")
+                with _pc2:
+                    if st.button(
+                        f"✅ 선택 담기 ({len(_pending_ids)})",
+                        type="primary", use_container_width=True,
+                        key="apply_pending_picks",
+                    ):
+                        for _qid in _pending_ids:
+                            st.session_state.selected_ids.add(_qid)
+                            # pending state 초기화 (다음 rerun 에서 체크 해제)
+                            st.session_state.pop(f"pending_pick_{_qid}", None)
+                        st.session_state.mini_test_active = False
+                        st.toast(f"✅ {len(_pending_ids)}문항 담김")
+                        st.rerun()
+                st.markdown("---")
+
             _render_pagination("bot")
 
     # ── 탭 2: 시험지 미리보기 ────────────────────────────────
@@ -1643,27 +1671,57 @@ def main():
                 st.markdown("#### 📄 PDF 미리보기")
                 _pdf_bytes_for_preview = st.session_state.get("preview_pdf_bytes")
                 if _pdf_bytes_for_preview:
-                    # data:application/pdf iframe 은 네이버 웨일·일부 브라우저에서
-                    # ERR_BLOCKED_BY_CLIENT 로 차단됨. PyMuPDF 로 첫 페이지 PNG
-                    # 렌더 후 st.image 로 표시. 나머지 페이지는 다운로드로 확인.
+                    # data:application/pdf iframe 은 네이버 웨일 등에서
+                    # ERR_BLOCKED_BY_CLIENT. PyMuPDF 로 한 페이지씩 PNG 렌더 +
+                    # ◀ ▶ 네비게이션.
                     try:
                         import fitz  # PyMuPDF
                         _doc = fitz.open(stream=_pdf_bytes_for_preview,
                                          filetype="pdf")
-                        _pages_shown = min(3, len(_doc))
-                        for _i in range(_pages_shown):
-                            _pix = _doc[_i].get_pixmap(
-                                matrix=fitz.Matrix(1.6, 1.6)
+                        _total_pages = len(_doc)
+                        # 현재 페이지 (session_state, 범위 밖이면 clamp)
+                        _pp_key = "preview_page_idx"
+                        if _pp_key not in st.session_state:
+                            st.session_state[_pp_key] = 0
+                        _cur = min(
+                            max(0, st.session_state[_pp_key]),
+                            _total_pages - 1,
+                        )
+                        st.session_state[_pp_key] = _cur
+
+                        # 네비게이션 바
+                        _nav_c1, _nav_c2, _nav_c3 = st.columns(
+                            [0.2, 0.6, 0.2]
+                        )
+                        with _nav_c1:
+                            if st.button("◀", key="pv_prev",
+                                         use_container_width=True,
+                                         disabled=(_cur <= 0)):
+                                st.session_state[_pp_key] = _cur - 1
+                                st.rerun()
+                        with _nav_c2:
+                            st.markdown(
+                                f'<div style="text-align:center;'
+                                f'padding:6px 0;color:var(--muted);'
+                                f'font-weight:600;font-size:13px">'
+                                f'{_cur + 1} / {_total_pages}</div>',
+                                unsafe_allow_html=True,
                             )
-                            st.image(
-                                _pix.tobytes("png"),
-                                use_container_width=True,
-                            )
-                        if len(_doc) > _pages_shown:
-                            st.caption(
-                                f"미리보기: 앞 {_pages_shown} 페이지 / 전체 "
-                                f"{len(_doc)} 페이지. 나머지는 좌측 다운로드로 확인."
-                            )
+                        with _nav_c3:
+                            if st.button("▶", key="pv_next",
+                                         use_container_width=True,
+                                         disabled=(_cur >= _total_pages - 1)):
+                                st.session_state[_pp_key] = _cur + 1
+                                st.rerun()
+
+                        # 현재 페이지만 렌더
+                        _pix = _doc[_cur].get_pixmap(
+                            matrix=fitz.Matrix(1.8, 1.8)
+                        )
+                        st.image(
+                            _pix.tobytes("png"),
+                            use_container_width=True,
+                        )
                         _doc.close()
                     except Exception as _e:
                         st.warning(
