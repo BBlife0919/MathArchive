@@ -54,19 +54,21 @@ SCHOOLS = [
 
 DIFF_ORDER = {"하": 0, "중": 1, "상": 2, "킬": 3}
 
-# 본문 크롬 요소를 표지 고딕 계열(Gothic A1)로 폰트만 통일 — 굵기는 일반(400)로
-# 낮춰 과도한 볼드 제거. ── 문제 본문(.q-body)·선지(.q-choices)·KaTeX 는 제외.
+# 내지/본문 크롬을 '대수 필수유형 FINAL' 참고본과 동일 폰트로 통일.
+# Cafe24 Ssurround(단원명·크롬 전반) + Paperlogy 9 Black(큰숫자·로마자).
+# ── 문제 본문(.q-body)·선지(.q-choices)·KaTeX 는 제외 (폰트 불가침).
 CHROME_FONT_CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700&display=swap');
 .bp-head-left, .bp-head-right, .bp-head-right .roman,
 .bp-page .bp-head-left, .bp-page .bp-head-right, .bp-page .bp-head-right .roman,
 .bp-side-part, .bp-side-letter, .bp-side-roman, .bp-side-vertical,
 .bp-page .bp-side .bp-side-part, .bp-page .bp-side .bp-side-letter,
-.kp-source, .kp-num, .kp-checks, .cb, .kp-label, .kp-line, .kp-memo-label,
-.cd-chapter-label, .cd-meta-top, .cd-big-num, .cd-major, .cd-major-roman,
+.kp-source, .kp-checks, .cb, .kp-label, .kp-line, .kp-memo-label,
+.cd-chapter-label, .cd-meta-top, .cd-major,
 .cd-section-label, .cd-section-title, .cd-footer-title, .cd-footer-sub {
-  font-family: 'Gothic A1', sans-serif !important;
-  font-weight: 600 !important;
+  font-family: 'Cafe24 Ssurround Bold', 'Cafe24Ssurround', sans-serif !important;
+}
+.cd-big-num, .cd-major-roman, .kp-num {
+  font-family: 'Paperlogy 9 Black', sans-serif !important;
 }
 """
 
