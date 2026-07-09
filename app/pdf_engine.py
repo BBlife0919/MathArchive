@@ -543,9 +543,10 @@ body {
     color: #111;
     -webkit-font-smoothing: antialiased;
 }
-/* 본문 한글: 나눔고딕 10pt */
+/* 본문 한글: 함초롬바탕(평가원 폰트) — 로컬은 설치본, 서버(클라우드)는 나눔명조 폴백.
+   수식(KaTeX)은 자체 폰트라 영향 없음(불가침). */
 .q-body, .slot .q-body, .q-choices .choice {
-    font-family: 'NanumGothic', 'Nanum Gothic', '나눔고딕', 'Pretendard', sans-serif;
+    font-family: 'HCR Batang', 'HCRBatang', '함초롬바탕', 'Nanum Myeongjo', 'NanumMyeongjo', '나눔명조', serif;
     font-size: 10pt;
 }
 /* 수식(KaTeX) — 컨테이너에만 사이즈 적용. `.katex *` 로 자식까지 강제하면
