@@ -934,6 +934,8 @@ def main():
                     if picks:
                         st.session_state.selected_ids = set(picks)
                         st.session_state.mini_test_active = True
+                        # 미니테스트는 시험지 모드 강제 — 이전에 book 눌러놨어도 exam 으로.
+                        st.session_state.build_mode = "exam"
                         st.success(
                             f"{len(picks)}문항 자동 선택됨 → '시험지 미리보기' 탭에서 PDF 생성"
                         )
@@ -970,21 +972,32 @@ def main():
         # Why: 단원 여러 개로 교재 만들 때 카드별 +버튼 누르기 비효율.
         # 필터 좁힌 뒤 한 번에 selected_ids 에 담고 교재 모드로 즉시 이동.
         if total > 0:
-            bulk_cols = st.columns([3, 2])
+            bulk_cols = st.columns([2, 1.4, 1.4])
             with bulk_cols[1]:
                 if st.button(
-                    f"📚 검색 결과 전체({total}문항) → 교재로",
+                    f"📝 전체({total}) → 시험지",
+                    use_container_width=True,
+                    help="현재 필터의 모든 문항을 시험지 모드로 묶기.",
+                ):
+                    st.session_state.selected_ids = {
+                        r["question_id"] for r in all_meta
+                    }
+                    st.session_state.build_mode = "exam"
+                    st.session_state.mini_test_active = False
+                    st.toast(f"✅ {total}문항 → 시험지 미리보기 탭", icon="📝")
+                    st.rerun()
+            with bulk_cols[2]:
+                if st.button(
+                    f"📚 전체({total}) → 교재",
                     use_container_width=True, type="primary",
-                    help="현재 필터의 모든 문항을 교재로 묶기. "
-                         "정렬은 단원순(curriculum) + 난이도 오름차순 자동.",
+                    help="현재 필터의 모든 문항을 교재 모드로 묶기.",
                 ):
                     st.session_state.selected_ids = {
                         r["question_id"] for r in all_meta
                     }
                     st.session_state.build_mode = "book"
                     st.session_state.mini_test_active = False
-                    st.toast(f"✅ {total}문항 선택 → '시험지 미리보기' 탭 클릭",
-                              icon="📚")
+                    st.toast(f"✅ {total}문항 → 시험지 미리보기 탭", icon="📚")
                     st.rerun()
 
         # ── 페이지 윈도우 & 네비게이션 헬퍼 ────────────────────
@@ -1676,15 +1689,34 @@ def main():
                     # ◀ ▶ 네비게이션.
                     try:
                         import fitz  # PyMuPDF
-                        _doc = fitz.open(stream=_pdf_bytes_for_preview,
-                                         filetype="pdf")
-                        _total_pages = len(_doc)
-                        # 현재 페이지 (session_state, 범위 밖이면 clamp)
+                        import hashlib as _hl
+                        # PDF 지문 — 바뀌면 캐시 무효화
+                        _fp = _hl.md5(_pdf_bytes_for_preview).hexdigest()
+                        _cache_key = "preview_pngs_v2"
+                        _cache_fp_key = "preview_pngs_fp"
+                        # 캐시 miss 면 전체 페이지 한번에 PNG 로 미리 렌더 (한 번만).
+                        # 이후 ◀▶ 클릭 시 캐시 hit → 즉시 표시.
+                        if (st.session_state.get(_cache_fp_key) != _fp
+                                or _cache_key not in st.session_state):
+                            _doc = fitz.open(
+                                stream=_pdf_bytes_for_preview,
+                                filetype="pdf",
+                            )
+                            _pngs = []
+                            for _i in range(len(_doc)):
+                                _pix = _doc[_i].get_pixmap(
+                                    matrix=fitz.Matrix(1.8, 1.8)
+                                )
+                                _pngs.append(_pix.tobytes("png"))
+                            _doc.close()
+                            st.session_state[_cache_key] = _pngs
+                            st.session_state[_cache_fp_key] = _fp
+                            st.session_state["preview_page_idx"] = 0
+                        _pngs = st.session_state[_cache_key]
+                        _total_pages = len(_pngs)
                         _pp_key = "preview_page_idx"
-                        if _pp_key not in st.session_state:
-                            st.session_state[_pp_key] = 0
                         _cur = min(
-                            max(0, st.session_state[_pp_key]),
+                            max(0, st.session_state.get(_pp_key, 0)),
                             _total_pages - 1,
                         )
                         st.session_state[_pp_key] = _cur
@@ -1714,15 +1746,8 @@ def main():
                                 st.session_state[_pp_key] = _cur + 1
                                 st.rerun()
 
-                        # 현재 페이지만 렌더
-                        _pix = _doc[_cur].get_pixmap(
-                            matrix=fitz.Matrix(1.8, 1.8)
-                        )
-                        st.image(
-                            _pix.tobytes("png"),
-                            use_container_width=True,
-                        )
-                        _doc.close()
+                        # 캐시된 PNG 즉시 표시 (렌더 X)
+                        st.image(_pngs[_cur], use_container_width=True)
                     except Exception as _e:
                         st.warning(
                             f"미리보기 렌더 실패 ({type(_e).__name__}). "

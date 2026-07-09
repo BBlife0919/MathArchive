@@ -706,7 +706,7 @@ _ENTRY_LOADER_HTML = """
 <div class="entry-loader">
 <div class="brand">MATHOLOGY</div>
 <h2>Entering MATHOLOGY</h2>
-<div class="sub">130,000+ Questions · Infinite Possibilities</div>
+<div class="sub">140,000+ Questions · Infinite Possibilities</div>
 <div class="bar"></div>
 </div>
 """
@@ -751,7 +751,7 @@ _JS_ENTRY_LOADER = """
     </h2>
     <div style="font-size:20px; letter-spacing:0.3em; color:#a6b2d4;
                 margin-bottom:40px; font-weight:500; text-transform:uppercase;">
-      130,000+ Questions · Infinite Possibilities
+      140,000+ Questions · Infinite Possibilities
     </div>
     <div style="width:240px; height:2px; background:rgba(125,220,255,0.15);
                 position:relative; overflow:hidden; border-radius:2px;">
@@ -834,7 +834,7 @@ f"""
 <span class="grad">MATHOLOGY</span>
 </h1>
 <p class="sub">
-<span class="num">130,000+</span> Questions · Infinite Possibilities
+<span class="num">140,000+</span> Questions · Infinite Possibilities
 </p>
 </section>
 <div class="section-title fade-in d1">Core Capabilities</div>
@@ -853,7 +853,7 @@ f"""
 </div>
 <h3>Massive Data</h3>
 <span class="sub-ko">방대한 문항 데이터</span>
-<p>고1~고3 전문항 130,000개.</p>
+<p>고1~고3 전문항 140,000개.</p>
 </div>
 <div class="feature-circle" style="--x:83%; --y:22%; --d:220px;">
 <div class="icon">
