@@ -360,6 +360,24 @@ canvas#scene,
     background-image: none !important;
 }
 
+/* ── 문제 카드 컴팩트 (3열 대응) ─────────────── */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    padding: 8px 10px !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] .stMarkdown,
+[data-testid="stVerticalBlockBorderWrapper"] .stMarkdown p {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] .stCaption,
+[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCaptionContainer"] {
+    font-size: 11px !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] .stButton button {
+    padding: 0.28rem 0.55rem !important;
+    font-size: 11.5px !important;
+}
+
 /* ── 사이드바 nav 아이콘 (얇은 line SVG · 로그인페이지 톤 통일) ── */
 /* 파일명에서 이모지 제거 후 CSS ::before 로 SVG 삽입.
    순서: 매쏠로지(home) / 클리닉 / 학생카드 / 카톡승인큐 / 검수 / 관리자 */

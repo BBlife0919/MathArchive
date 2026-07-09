@@ -1168,15 +1168,14 @@ def main():
                     if is_selected:
                         st.caption("선택됨")
 
-            # 2열 그리드 — 한 줄에 문제 2개씩 (한 화면에 ~6문제)
+            # 3열 그리드 — 컴팩트. 한 화면에 9~12 카드 노출.
             page_list = list(page_results)
-            for i in range(0, len(page_list), 2):
-                grid_cols = st.columns(2, gap="small")
-                with grid_cols[0]:
-                    _render_problem_card(page_list[i])
-                if i + 1 < len(page_list):
-                    with grid_cols[1]:
-                        _render_problem_card(page_list[i + 1])
+            for i in range(0, len(page_list), 3):
+                grid_cols = st.columns(3, gap="small")
+                for j in range(3):
+                    if i + j < len(page_list):
+                        with grid_cols[j]:
+                            _render_problem_card(page_list[i + j])
 
             # 하단 페이지 네비 앞 — [선택 담기] 일괄 적용 버튼
             # 체크박스 방식이라 한 번에 여러 문항을 담을 수 있음. 매 클릭마다
