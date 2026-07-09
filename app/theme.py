@@ -359,6 +359,52 @@ canvas#scene,
     background: var(--paper) !important;
     background-image: none !important;
 }
+
+/* ── 사이드바 nav 아이콘 (얇은 line SVG · 로그인페이지 톤 통일) ── */
+/* 파일명에서 이모지 제거 후 CSS ::before 로 SVG 삽입.
+   순서: 매쏠로지(home) / 클리닉 / 학생카드 / 카톡승인큐 / 검수 / 관리자 */
+[data-testid="stSidebarNav"] ul li a::before,
+[data-testid="stSidebarNavItems"] li a::before {
+    content: '';
+    display: inline-block;
+    width: 17px; height: 17px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    vertical-align: -3px;
+    opacity: 0.85;
+}
+/* 1) 매쏠로지 (home) */
+[data-testid="stSidebarNav"] ul li:nth-child(1) a::before,
+[data-testid="stSidebarNavItems"] li:nth-child(1) a::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1020' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12L12 3l9 9'/><path d='M5 10v11h5v-6h4v6h5V10'/></svg>");
+}
+/* 2) 클리닉 (heart-pulse) */
+[data-testid="stSidebarNav"] ul li:nth-child(2) a::before,
+[data-testid="stSidebarNavItems"] li:nth-child(2) a::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1020' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/><path d='M3.5 12h4l2-4 4 8 2-4h4'/></svg>");
+}
+/* 3) 학생카드 (id-card) */
+[data-testid="stSidebarNav"] ul li:nth-child(3) a::before,
+[data-testid="stSidebarNavItems"] li:nth-child(3) a::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1020' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='4' width='20' height='16' rx='2'/><circle cx='9' cy='11' r='2.5'/><path d='M14 10h5M14 14h5M4.5 17c.7-2 2.7-3 4.5-3s3.8 1 4.5 3'/></svg>");
+}
+/* 4) 카톡승인큐 (envelope) */
+[data-testid="stSidebarNav"] ul li:nth-child(4) a::before,
+[data-testid="stSidebarNavItems"] li:nth-child(4) a::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1020' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='M22 7l-10 7L2 7'/></svg>");
+}
+/* 5) 검수 (magnifier) */
+[data-testid="stSidebarNav"] ul li:nth-child(5) a::before,
+[data-testid="stSidebarNavItems"] li:nth-child(5) a::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1020' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='7'/><path d='M21 21l-4.3-4.3'/></svg>");
+}
+/* 6) 관리자 (settings gear) */
+[data-testid="stSidebarNav"] ul li:nth-child(6) a::before,
+[data-testid="stSidebarNavItems"] li:nth-child(6) a::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1020' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='3'/><path d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z'/></svg>");
+}
 </style>
 """
 
