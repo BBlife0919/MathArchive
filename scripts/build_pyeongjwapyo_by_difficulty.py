@@ -13,6 +13,7 @@ usage: python3 build_pyeongjwapyo_by_difficulty.py [상|중|하|all]
 from __future__ import annotations
 
 import json
+import os
 import re
 import sqlite3
 import subprocess
@@ -78,7 +79,10 @@ CHROME_FONT_CSS = """
   text-align: left !important;
   word-break: keep-all !important;
   overflow-wrap: break-word !important;
+  font-family: __BODY_FONT__ !important;  /* 본문 한글 폰트 (수식은 KaTeX 그대로) */
+  font-size: 10pt !important;
 }
+/* 수식(KaTeX)은 font-family 안 건드림 — 평가원 수식 그대로 유지 (불가침) */
 .slot.book-kp .q-body .katex { white-space: nowrap !important; }
 /* 배점은 통째로(안 쪼개짐), 배점/단서 우측정렬 트레일러 */
 .slot.book-kp .q-body .q-pts { white-space: nowrap !important; }
@@ -92,6 +96,18 @@ CHROME_FONT_CSS = """
 }
 .slot.book-kp .cond-box .bogi-hdr { margin: 0 0 0.2em 0; }
 """
+
+# 본문 한글 폰트 프리셋 (env PREVIEW_FONT 로 선택; 기본 나눔명조).
+# 수식(KaTeX)·선지 수식은 어느 경우든 그대로.
+_FONT_PRESETS = {
+    "나눔명조": "'NanumMyeongjo', 'Nanum Myeongjo', '나눔명조', serif",
+    "애플명조": "'AppleMyungjo', 'Apple Myungjo', serif",
+    "함초롬바탕": "'HCR Batang', '함초롬바탕', 'HCR Batang LVT', 'NanumMyeongjo', serif",
+    "나눔고딕": "'NanumGothic', 'Nanum Gothic', '나눔고딕', 'Pretendard', sans-serif",
+}
+_PREVIEW_FONT = os.environ.get("PREVIEW_FONT")
+_FONT_KEY = _PREVIEW_FONT if _PREVIEW_FONT in _FONT_PRESETS else "함초롬바탕"  # 기본=평가원 함초롬바탕
+CHROME_FONT_CSS = CHROME_FONT_CSS.replace("__BODY_FONT__", _FONT_PRESETS[_FONT_KEY])
 
 # ── 본문 조판 전처리 (문자열 변환) ─────────────────────────
 _MATH_RE = re.compile(r"\$[^$\n]+?\$")
@@ -415,7 +431,8 @@ def build_one(diff: str, all_rows: list[dict]):
 
     book_dir = Path.home() / "클로드교재"
     book_dir.mkdir(exist_ok=True)
-    out_path = book_dir / f"공통수학2 평면좌표 {diff}.pdf"
+    tag = f" [미리보기-{_FONT_KEY}]" if _PREVIEW_FONT else ""
+    out_path = book_dir / f"공통수학2 평면좌표 {diff}{tag}.pdf"
     out_path.write_bytes(pdf_bytes)
     subprocess.run(["xattr", "-c", str(out_path)], check=False)
     print(f"  [OK] {out_path} ({out_path.stat().st_size/1024/1024:.1f}MB)")
