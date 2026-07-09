@@ -1918,6 +1918,88 @@ def _render_solution_items(questions: list[dict], include_source: bool,
     return f'<div class="solutions-flow">{"".join(items)}</div>'
 
 
+_DIAGONAL_COVER_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;600;700;900&display=swap');
+.dcov-page { position:relative; width:210mm; height:297mm; overflow:hidden;
+  background:#f4f1ea; font-family:'Gothic A1', sans-serif; color:#1b1c22;
+  page-break-after: always; box-sizing: border-box; }
+.dcov-motif { position:absolute; right:-95mm; bottom:-70mm; width:310mm;
+  height:310mm; opacity:.18; transform:rotate(-8deg); }
+.dcov-hero { position:absolute; top:78mm; left:20mm;
+  transform:rotate(-27deg); transform-origin:left center; }
+.dcov-kicker { font-family:'Gothic A1'; font-weight:700; font-size:12pt;
+  letter-spacing:.28em; color:#3a4a86; margin-bottom:3mm; margin-left:2mm; }
+.dcov-title { font-family:'Black Han Sans', sans-serif; font-size:96pt;
+  line-height:.92; color:#1b1c22; letter-spacing:-.01em; }
+.dcov-rule { width:66mm; height:2.4pt; background:#c8342b; margin:5mm 0 4mm 2mm; }
+.dcov-tagline { font-family:'Gothic A1'; font-weight:600; font-size:12.5pt;
+  letter-spacing:.02em; color:#4a4d59; margin-left:2mm; max-width:120mm; }
+.dcov-bottom { position:absolute; right:22mm; bottom:40mm; text-align:right;
+  transform:rotate(-27deg); transform-origin:right center; }
+.dcov-subject { font-family:'Gothic A1'; font-weight:900; font-size:30pt; color:#1b1c22; }
+.dcov-level { display:inline-block; margin-top:6mm;
+  font-family:'Gothic A1'; font-weight:700; font-size:14pt; letter-spacing:.08em;
+  color:#c8342b; border:2pt solid #c8342b; border-radius:999px; padding:2.8mm 9mm; }
+.dcov-byline { font-family:'Gothic A1'; font-weight:600; font-size:12pt;
+  color:#3a3c46; margin-top:8mm; }
+.dcov-tick { position:absolute; width:15mm; height:15mm; border:2pt solid #26315e; }
+.dcov-t1 { top:12mm; left:12mm; border-right:none; border-bottom:none; }
+.dcov-t2 { bottom:12mm; right:12mm; border-left:none; border-top:none; }
+.dcov-foot { position:absolute; left:14mm; bottom:12mm; font-family:'Gothic A1';
+  font-weight:700; font-size:8.5pt; letter-spacing:.24em; color:#3a4a86; }
+</style>
+"""
+
+
+def _render_book_cover_diagonal(
+    title_main: str = "평면좌표",
+    kicker_top: str = "2학기 중간대비",
+    tagline: str = "공통수학2 · 도형의 방정식 내신기출",
+    subject: str = "공통수학2",
+    level: str = "난이도 상",
+    instructor: str = "심재룡 T",
+    footer_left: str = "MATHOLOGY · 2026",
+) -> str:
+    """대각선 편집형 표지 — 좌표축 그래프 배경 + 사선 대형 한글 제목."""
+    def esc(s): return _html.escape(s or "")
+    graphic = (
+        '<svg class="dcov-motif" viewBox="0 0 600 600" '
+        'preserveAspectRatio="xMidYMid meet">'
+        '<defs><pattern id="dgrid" width="40" height="40" '
+        'patternUnits="userSpaceOnUse">'
+        '<path d="M40 0H0V40" fill="none" stroke="#cdd6e8" stroke-width="1"/>'
+        '</pattern></defs>'
+        '<rect x="0" y="0" width="600" height="600" fill="url(#dgrid)"/>'
+        '<line x1="0" y1="360" x2="600" y2="360" stroke="#9fb0d4" stroke-width="2.5"/>'
+        '<line x1="240" y1="0" x2="240" y2="600" stroke="#9fb0d4" stroke-width="2.5"/>'
+        '<path d="M40 540 Q240 40 440 540" fill="none" stroke="#4560a8" stroke-width="4"/>'
+        '<line x1="60" y1="120" x2="560" y2="560" stroke="#4560a8" stroke-width="4"/>'
+        '<circle cx="360" cy="250" r="120" fill="none" stroke="#4560a8" stroke-width="4"/>'
+        '</svg>'
+    )
+    return (
+        _DIAGONAL_COVER_CSS +
+        '<section class="dcov-page">'
+        f'{graphic}'
+        '<span class="dcov-tick dcov-t1"></span>'
+        '<span class="dcov-tick dcov-t2"></span>'
+        '<div class="dcov-hero">'
+        f'<div class="dcov-kicker">{esc(kicker_top)}</div>'
+        f'<div class="dcov-title">{esc(title_main)}</div>'
+        '<div class="dcov-rule"></div>'
+        f'<div class="dcov-tagline">{esc(tagline)}</div>'
+        '</div>'
+        '<div class="dcov-bottom">'
+        f'<div class="dcov-subject">{esc(subject)}</div><br>'
+        f'<span class="dcov-level">{esc(level)}</span>'
+        f'<div class="dcov-byline">{esc(instructor)}</div>'
+        '</div>'
+        f'<div class="dcov-foot">{esc(footer_left)}</div>'
+        '</section>'
+    )
+
+
 def _render_book_cover(
     title_main: str,
     title_mid: str = "",
@@ -2015,24 +2097,42 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      cover_footer_main: str | None = None,
                      cover_footer_sub: str | None = None,
                      page_running_left: str | None = None,
+                     cover_style: str = "final",
+                     dcov_subject: str | None = None,
+                     dcov_level: str | None = None,
                      extra_css: str = "",
                      extra_js: str = "") -> str:
-    """교재 HTML: 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설."""
+    """교재 HTML: 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설.
+
+    cover_style: 'final' (기본, KERNEL POINT 스타일) | 'diagonal' (평면좌표 스타일)
+    dcov_subject/dcov_level: diagonal 스타일 전용 필드 (subject·level)
+    """
     logo_uri = _logo_data_uri(logo_path)
     # 디바이더 메타 디폴트
     if divider_footer_title is None:
         divider_footer_title = title
-    # 표지 (책 가장 앞)
-    cover_html = _render_book_cover(
-        title_main=cover_main_title or title,
-        title_mid=cover_tagline or subtitle or "",
-        big_word=cover_big_word or "FINAL",
-        instructor=divider_footer_sub or "이영우 T",
-        kicker_top=cover_kicker or "MATH WORKBOOK · 2026",
-        footer_left_main=cover_footer_main or "Algebra Final Workbook · 2026",
-        footer_left_sub=cover_footer_sub or "필수유형으로 끝내는 기말 마무리",
-        logo_uri=logo_uri,
-    )
+    # 표지 (책 가장 앞) — 스타일 분기
+    if cover_style == "diagonal":
+        cover_html = _render_book_cover_diagonal(
+            title_main=cover_main_title or title,
+            kicker_top=cover_kicker or "2학기 중간대비",
+            tagline=cover_tagline or subtitle or "",
+            subject=dcov_subject or "공통수학",
+            level=dcov_level or "난이도 상",
+            instructor=divider_footer_sub or "이영우 T",
+            footer_left=cover_footer_main or "MATHOLOGY · 2026",
+        )
+    else:
+        cover_html = _render_book_cover(
+            title_main=cover_main_title or title,
+            title_mid=cover_tagline or subtitle or "",
+            big_word=cover_big_word or "FINAL",
+            instructor=divider_footer_sub or "이영우 T",
+            kicker_top=cover_kicker or "MATH WORKBOOK · 2026",
+            footer_left_main=cover_footer_main or "Algebra Final Workbook · 2026",
+            footer_left_sub=cover_footer_sub or "필수유형으로 끝내는 기말 마무리",
+            logo_uri=logo_uri,
+        )
     # 챕터별 그룹화 → (major_no, section_no, letter, major, minor, qs) 시퀀스
     sections = _build_chapter_sections(questions)
     body_parts: list[str] = [cover_html]
@@ -2282,6 +2382,9 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       cover_tagline: str | None = None,
                       cover_footer_main: str | None = None,
                       cover_footer_sub: str | None = None,
+                      cover_style: str = "final",
+                      dcov_subject: str | None = None,
+                      dcov_level: str | None = None,
                       page_running_left: str | None = None,
                       extra_css: str = "",
                       extra_js: str = "") -> bytes:
@@ -2299,6 +2402,9 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         cover_tagline=cover_tagline,
         cover_footer_main=cover_footer_main,
         cover_footer_sub=cover_footer_sub,
+        cover_style=cover_style,
+        dcov_subject=dcov_subject,
+        dcov_level=dcov_level,
         page_running_left=page_running_left,
         extra_css=extra_css,
         extra_js=extra_js,

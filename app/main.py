@@ -1302,7 +1302,73 @@ def main():
                 divider_meta_top = None
                 divider_footer_title = None
                 divider_footer_sub = None
+                # 표지 스타일 & 커스텀 필드 (교재 모드 전용)
+                cover_style = "final"
+                cover_kicker = None
+                cover_big_word = None
+                cover_footer_main = None
+                cover_footer_sub = None
+                dcov_subject = None
+                dcov_level = None
                 if mode == "book":
+                    with st.expander("🎨 표지 스타일 & 커스텀", expanded=True):
+                        cover_style = st.selectbox(
+                            "표지 스타일",
+                            options=["final", "diagonal"],
+                            format_func=lambda k: {
+                                "final": "FINAL — MATH WORKBOOK (기본)",
+                                "diagonal": "평면좌표 — 사선 편집형",
+                            }.get(k, k),
+                            key="cover_style_sel",
+                        )
+                        if cover_style == "final":
+                            cc1, cc2 = st.columns(2)
+                            with cc1:
+                                cover_kicker = st.text_input(
+                                    "상단 kicker (MATH WORKBOOK · 2026)",
+                                    value="MATH WORKBOOK · 2026",
+                                    key="cover_kicker_input",
+                                ).strip() or None
+                                cover_big_word = st.text_input(
+                                    "가운데 큰 워드 (FINAL)",
+                                    value="FINAL",
+                                    key="cover_bigword_input",
+                                ).strip() or None
+                            with cc2:
+                                cover_footer_main = st.text_input(
+                                    "좌하단 메인 문구",
+                                    value="Algebra Final Workbook · 2026",
+                                    key="cover_fmain_input",
+                                ).strip() or None
+                                cover_footer_sub = st.text_input(
+                                    "좌하단 부제",
+                                    value="필수유형으로 끝내는 기말 마무리",
+                                    key="cover_fsub_input",
+                                ).strip() or None
+                        else:  # diagonal
+                            dc1, dc2 = st.columns(2)
+                            with dc1:
+                                cover_kicker = st.text_input(
+                                    "상단 kicker (좌측 상단)",
+                                    value="2학기 중간대비",
+                                    key="dcov_kicker_input",
+                                ).strip() or None
+                                dcov_subject = st.text_input(
+                                    "우측 대과목명 (공통수학2)",
+                                    value="공통수학2",
+                                    key="dcov_subject_input",
+                                ).strip() or None
+                            with dc2:
+                                dcov_level = st.text_input(
+                                    "우측 배지 (난이도 상)",
+                                    value="난이도 상",
+                                    key="dcov_level_input",
+                                ).strip() or None
+                                cover_footer_main = st.text_input(
+                                    "좌하단 문구 (MATHOLOGY · 2026)",
+                                    value="MATHOLOGY · 2026",
+                                    key="dcov_foot_input",
+                                ).strip() or None
                     show_kicker = st.toggle(
                         "상단 라벨 표시", value=True,
                         help="제목 위에 작은 포인트 텍스트 (예: '#01 MATHOLOGY')"
@@ -1577,6 +1643,13 @@ def main():
                                 divider_meta_top=divider_meta_top,
                                 divider_footer_title=divider_footer_title,
                                 divider_footer_sub=divider_footer_sub,
+                                cover_style=cover_style,
+                                cover_kicker=cover_kicker,
+                                cover_big_word=cover_big_word,
+                                cover_footer_main=cover_footer_main,
+                                cover_footer_sub=cover_footer_sub,
+                                dcov_subject=dcov_subject,
+                                dcov_level=dcov_level,
                             )
                             fname = "book.pdf"
                         st.download_button(
