@@ -759,24 +759,24 @@ def main():
 
     # ── 사이드바: 필터 ────────────────────────────────────────
     with st.sidebar:
-        st.header("🔍 문제 필터")
+        st.header("문제 필터")
 
         # ── 빠른 검색 (타이핑 → 버튼 클릭 시 적용) ───────────────
         # 입력 중에는 검색 안 함 (rerun 폭주 방지). 버튼 클릭 시만.
         quick_input = st.text_input(
-            "⚡ 빠른 검색",
+            "빠른 검색",
             placeholder="예: 수도여고 2023 1학기 기말",
             key="quick_q_input",
             help="공백 구분. 학교명·년도·학기·중간/기말 자동 인식.",
         )
         qbc1, qbc2 = st.columns([0.65, 0.35])
         with qbc1:
-            if st.button("🔍 검색", use_container_width=True,
+            if st.button("검색", use_container_width=True,
                          type="primary", key="quick_apply"):
                 st.session_state["quick_active"] = quick_input.strip()
                 st.rerun()
         with qbc2:
-            if st.button("✖ 해제", use_container_width=True,
+            if st.button("해제", use_container_width=True,
                          key="quick_clear"):
                 st.session_state["quick_active"] = ""
                 st.rerun()
@@ -851,9 +851,9 @@ def main():
         keyword = st.text_input("키워드 검색", placeholder="문제 텍스트 검색...")
 
         st.divider()
-        st.subheader(f"📋 시험지 ({len(st.session_state.selected_ids)}문항)")
+        st.subheader(f"시험지 ({len(st.session_state.selected_ids)}문항)")
 
-        if st.button("🗑️ 시험지 초기화", use_container_width=True):
+        if st.button("️ 시험지 초기화", use_container_width=True):
             st.session_state.selected_ids = set()
             st.session_state.mini_test_active = False
             st.rerun()
@@ -889,14 +889,14 @@ def main():
     )
 
     # 탭 구성
-    tab_list, tab_preview = st.tabs(["📝 문제 목록", "📄 시험지 미리보기"])
+    tab_list, tab_preview = st.tabs(["문제 목록", "시험지 미리보기"])
 
     # ── 탭 1: 문제 목록 ──────────────────────────────────────
     with tab_list:
         total = len(all_meta)
 
         # 미니테스트 프리셋 — 워밍업/총복습용 15분 컷
-        with st.expander("🎯 미니테스트 자동 생성 (15분 컷, 6~8문항)"):
+        with st.expander("미니테스트 자동 생성 (15분 컷, 6~8문항)"):
             st.caption(
                 "현재 필터(단원/난이도/학교 등) 안에서 난이도 비중에 맞춰 랜덤 추출합니다. "
                 "워밍업 인출 퀴즈·총복습 미니 모의에 활용."
@@ -909,7 +909,7 @@ def main():
                     "쉬운 문제 비중 (%)", 0, 100, 40, step=10, key="mini_easy_pct",
                     help="‘하’ 난이도 비중. 나머지는 ‘중’ 위주로 뽑습니다.",
                 )
-            if st.button("🎲 미니테스트 자동 생성",
+            if st.button("미니테스트 자동 생성",
                          use_container_width=True, type="primary"):
                 if not all_meta:
                     st.warning("필터 조건에 맞는 문제가 없습니다. 사이드바를 확인하세요.")
@@ -975,7 +975,7 @@ def main():
             bulk_cols = st.columns([2, 1.4, 1.4])
             with bulk_cols[1]:
                 if st.button(
-                    f"📝 전체({total}) → 시험지",
+                    f"전체({total}) → 시험지",
                     use_container_width=True,
                     help="현재 필터의 모든 문항을 시험지 모드로 묶기.",
                 ):
@@ -984,11 +984,11 @@ def main():
                     }
                     st.session_state.build_mode = "exam"
                     st.session_state.mini_test_active = False
-                    st.toast(f"✅ {total}문항 → 시험지 미리보기 탭", icon="📝")
+                    st.toast(f"{total}문항 → 시험지 미리보기 탭", icon="")
                     st.rerun()
             with bulk_cols[2]:
                 if st.button(
-                    f"📚 전체({total}) → 교재",
+                    f"전체({total}) → 교재",
                     use_container_width=True, type="primary",
                     help="현재 필터의 모든 문항을 교재 모드로 묶기.",
                 ):
@@ -997,7 +997,7 @@ def main():
                     }
                     st.session_state.build_mode = "book"
                     st.session_state.mini_test_active = False
-                    st.toast(f"✅ {total}문항 → 시험지 미리보기 탭", icon="📚")
+                    st.toast(f"{total}문항 → 시험지 미리보기 탭", icon="")
                     st.rerun()
 
         # ── 페이지 윈도우 & 네비게이션 헬퍼 ────────────────────
@@ -1078,7 +1078,7 @@ def main():
                     )
                     points_str = f"{row['points']}점" if row["points"] else ""
                     subj_badge = " `서술형`" if row["is_subjective"] else ""
-                    err_badge = " ⚠️오류" if row["error_note"] else ""
+                    err_badge = " 오류" if row["error_note"] else ""
 
                     meta_line = (
                         f"**{format_meta(row, short=True)}** · "
@@ -1102,10 +1102,10 @@ def main():
                         st.rerun()
                     # 체크박스 (즉시 담기 X, 하단 [담기] 버튼으로 일괄 적용)
                     # rerun 폭주 방지 → 카드 렌더링 훨씬 가벼움.
-                    # 이미 담긴 문항은 오른쪽에 ❌ 표시 (즉시 제거 유지).
+                    # 이미 담긴 문항은 오른쪽에 표시 (즉시 제거 유지).
                     if is_selected:
                         if head_cols[2].button(
-                            "❌", key=f"rm_{qid}",
+                            "", key=f"rm_{qid}",
                             use_container_width=True, help="선택 제거",
                         ):
                             st.session_state.selected_ids.discard(qid)
@@ -1151,7 +1151,7 @@ def main():
                             st.caption("해설 없음")
 
                     if is_selected:
-                        st.caption("✅ 선택됨")
+                        st.caption("선택됨")
 
             # 2열 그리드 — 한 줄에 문제 2개씩 (한 화면에 ~6문제)
             page_list = list(page_results)
@@ -1165,7 +1165,7 @@ def main():
 
             # 하단 페이지 네비 앞 — [선택 담기] 일괄 적용 버튼
             # 체크박스 방식이라 한 번에 여러 문항을 담을 수 있음. 매 클릭마다
-            # rerun 하는 ➕ 방식보다 훨씬 빠름.
+            # rerun 하는 방식보다 훨씬 빠름.
             _pending_ids = [
                 int(k.replace("pending_pick_", ""))
                 for k, v in st.session_state.items()
@@ -1179,7 +1179,7 @@ def main():
                                f"[선택 담기] 클릭하면 시험지에 일괄 추가")
                 with _pc2:
                     if st.button(
-                        f"✅ 선택 담기 ({len(_pending_ids)})",
+                        f"선택 담기 ({len(_pending_ids)})",
                         type="primary", use_container_width=True,
                         key="apply_pending_picks",
                     ):
@@ -1188,7 +1188,7 @@ def main():
                             # pending state 초기화 (다음 rerun 에서 체크 해제)
                             st.session_state.pop(f"pending_pick_{_qid}", None)
                         st.session_state.mini_test_active = False
-                        st.toast(f"✅ {len(_pending_ids)}문항 담김")
+                        st.toast(f"{len(_pending_ids)}문항 담김")
                         st.rerun()
                 st.markdown("---")
 
@@ -1199,7 +1199,7 @@ def main():
         selected_ids = st.session_state.selected_ids
 
         if not selected_ids:
-            st.info("문제 목록에서 ➕ 버튼으로 문제를 추가해주세요.")
+            st.info("문제 목록에서 버튼으로 문제를 추가해주세요.")
         else:
             # 선택된 문제 조회
             placeholders = ",".join("?" * len(selected_ids))
@@ -1240,12 +1240,12 @@ def main():
                 st.divider()
                 b1, b2 = st.columns(2)
                 with b1:
-                    if st.button("📝 시험지 만들기", use_container_width=True,
+                    if st.button("시험지 만들기", use_container_width=True,
                                  type="primary"):
                         st.session_state.build_mode = "exam"
                         st.rerun()
                 with b2:
-                    if st.button("📚 교재 생성", use_container_width=True,
+                    if st.button("교재 생성", use_container_width=True,
                                  help="준비 중 — Phase 3에서 지원 예정"):
                         st.session_state.build_mode = "book"
                         st.rerun()
@@ -1311,7 +1311,7 @@ def main():
                 dcov_subject = None
                 dcov_level = None
                 if mode == "book":
-                    with st.expander("🎨 표지 스타일 & 커스텀", expanded=True):
+                    with st.expander("표지 스타일 & 커스텀", expanded=True):
                         cover_style = st.selectbox(
                             "표지 스타일",
                             options=["final", "diagonal"],
@@ -1388,7 +1388,7 @@ def main():
                         kicker_mark = kicker_mark.strip() or None
                         kicker_text = kicker_text.strip() or None
 
-                    with st.expander("📑 챕터 디바이더 메타", expanded=True):
+                    with st.expander("챕터 디바이더 메타", expanded=True):
                         st.caption(
                             "각 소단원 시작 페이지(디바이더) 의 우상단/좌하단 라벨. "
                             "비워두면 책 제목 사용."
@@ -1424,7 +1424,7 @@ def main():
                 inner_design_key = None
                 if mode == "exam":
                     use_design = st.toggle(
-                        "🎨 표지+내지 디자인 사용 (학교 시험지 양식)",
+                        "표지+내지 디자인 사용 (학교 시험지 양식)",
                         value=False,
                         key="use_designed_exam",
                         help="ON: 표지 + 내지 디자인 적용 / OFF: 기본 시험지 양식",
@@ -1445,7 +1445,7 @@ def main():
                                 key="inner_design_key",
                             )
 
-                        with st.expander("📝 시험지 정보 입력",
+                        with st.expander("시험지 정보 입력",
                                          expanded=True):
                             # 학년도/학기/회차/학년
                             r1 = st.columns(4)
@@ -1653,7 +1653,7 @@ def main():
                             )
                             fname = "book.pdf"
                         st.download_button(
-                            "📥 PDF 다운로드",
+                            "PDF 다운로드",
                             data=pdf_data,
                             file_name=fname,
                             mime="application/pdf",
@@ -1692,7 +1692,7 @@ def main():
                             caption_parts.append(f"난이도: {row['difficulty']}")
                             st.caption(" · ".join(caption_parts))
                         with h_col2:
-                            layout_label = "📄 단 전체" if current == "full" else "📐 반 단"
+                            layout_label = "단 전체" if current == "full" else "📐 반 단"
                             help_txt = (
                                 "이 문제가 단의 절반(2문제 공존) vs 단 하나 통째로(1문제 전용)"
                             )
@@ -1738,7 +1738,7 @@ def main():
                                         row["question_id"])
 
                         # 제거 버튼
-                        if st.button(f"❌ {i}번 제거", key=f"prev_rm_{row['question_id']}"):
+                        if st.button(f"{i}번 제거", key=f"prev_rm_{row['question_id']}"):
                             st.session_state.selected_ids.discard(row["question_id"])
                             st.rerun()
 
@@ -1754,7 +1754,7 @@ def main():
                     st.code("  ".join(answers))
 
             with col_preview:
-                st.markdown("#### 📄 PDF 미리보기")
+                st.markdown("#### PDF 미리보기")
                 _pdf_bytes_for_preview = st.session_state.get("preview_pdf_bytes")
                 if _pdf_bytes_for_preview:
                     # data:application/pdf iframe 은 네이버 웨일 등에서

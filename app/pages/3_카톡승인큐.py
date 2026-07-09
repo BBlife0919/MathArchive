@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from db import get_connection as _get_db_connection  # noqa: E402
 
-st.set_page_config(page_title="📨 승인 큐 — MATHOLOGY", page_icon="📨", layout="wide")
+st.set_page_config(page_title="승인 큐 — MATHOLOGY", page_icon="", layout="wide")
 
 from theme import apply_theme
 apply_theme()
@@ -37,7 +37,7 @@ if not auth.is_admin():
     st.error("관리자 전용 페이지입니다.")
     st.stop()
 
-st.title("📨 카톡 승인 큐")
+st.title("카톡 승인 큐")
 st.caption(
     "AI 가 학생별 데이터로 draft 를 만들고, 강사가 1문장 추가 후 승인하면 "
     "금요일 17시 cron 이 솔라피로 발송합니다. (PDF §7-3 하이브리드 강제)"
@@ -204,7 +204,7 @@ else:
                 height=80,
             )
             bc1, bc2, _ = st.columns([1, 1, 4])
-            if bc1.button("✅ 승인", key=f"approve_{d['queue_id']}", type="primary"):
+            if bc1.button("승인", key=f"approve_{d['queue_id']}", type="primary"):
                 if not note.strip():
                     st.error("강사 코멘트가 비어있어 승인할 수 없습니다 (PDF §7-3 룰).")
                 else:
@@ -224,7 +224,7 @@ else:
             )
             if confirm_del:
                 if st.button(
-                    "🗑 삭제 실행", key=f"del_{d['queue_id']}",
+                    "삭제 실행", key=f"del_{d['queue_id']}",
                 ):
                     exec_commit(
                         "DELETE FROM kakao_send_queue WHERE queue_id = ?",
@@ -286,7 +286,7 @@ logs = q(
 if logs:
     df_log = pd.DataFrame([{
         "queue_id": l["queue_id"],
-        "상태": "✅ 발송" if l["status"] == "sent" else "❌ 실패",
+        "상태": "발송" if l["status"] == "sent" else "실패",
         "학생": l["student_name"],
         "전화번호": l["target_phone"],
         "발송 시각": l["sent_at"] or "-",

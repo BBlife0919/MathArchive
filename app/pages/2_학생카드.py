@@ -29,7 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from db import get_connection as _get_db_connection  # noqa: E402
 
-st.set_page_config(page_title="📋 학생 카드 — MATHOLOGY", page_icon="📋", layout="wide")
+st.set_page_config(page_title="학생 카드 — MATHOLOGY", page_icon="", layout="wide")
 
 from theme import apply_theme
 apply_theme()
@@ -38,7 +38,7 @@ from auth_ui import require_auth, render_user_menu_in_sidebar  # noqa: E402
 require_auth()
 render_user_menu_in_sidebar()
 
-st.title("📋 학생 카드")
+st.title("학생 카드")
 st.caption("한 명 = 한 장. 진도·PRISM·자가예측·보호자 연락이 한 화면에 누적됩니다.")
 
 
@@ -119,7 +119,7 @@ with st.sidebar:
     )
 
     st.divider()
-    with st.expander("📄 학생용 양식 다운로드", expanded=False):
+    with st.expander("학생용 양식 다운로드", expanded=False):
         st.caption("매번 같은 양식을 인쇄해서 학생에게 나눠주세요.")
         tpl_dir = Path(__file__).resolve().parent.parent.parent / "output" / "student_templates"
         for fname, label in [
@@ -138,7 +138,7 @@ with st.sidebar:
                     use_container_width=True,
                 )
             else:
-                st.caption(f"⚠️ {fname} 미생성 — `python scripts/build_student_templates.py` 실행 필요")
+                st.caption(f"{fname} 미생성 — `python scripts/build_student_templates.py` 실행 필요")
 
 student = next(s for s in students if s["student_id"] == sid)
 
@@ -181,7 +181,7 @@ st.caption(
 )
 
 # ── 입력 폼 ──
-with st.expander("➕ 이번 주 PRISM 평가 입력", expanded=False):
+with st.expander("이번 주 PRISM 평가 입력", expanded=False):
     with st.form("prism_eval_form"):
         eval_dt = st.date_input("평가일", value=date.today(), key="prism_eval_dt")
         pc1, pc2, pc3, pc4, pc5 = st.columns(5)
@@ -277,7 +277,7 @@ else:
             f"- **M** 시간관리: {lp['score_m']}/5"
         )
         if lp["note"]:
-            st.caption(f"📝 {lp['note']}")
+            st.caption(f"{lp['note']}")
     plt.close(fig)
 
 # ── 이력 ──
@@ -323,7 +323,7 @@ st.divider()
 st.subheader("3. 자가예측 격차 — 메타인지 추적")
 st.caption("시험 전 자가예측 점수와 실제 점수의 차이. 격차가 크면 자기평가 능력이 약합니다.")
 
-with st.expander("➕ 자가예측 기록 추가", expanded=False):
+with st.expander("자가예측 기록 추가", expanded=False):
     with st.form("add_self_predict"):
         sp_date = st.date_input("시험일", value=date.today(), key="sp_date")
         sp_title = st.text_input("시험명", placeholder="예: 인수분해 단원평가")
@@ -394,7 +394,7 @@ st.divider()
 st.subheader("4. 학습 로그 — 진도·숙제·시험")
 st.caption("Walk-Run-Fly 트랙 운영을 위해 계획(planned) vs 실제(actual)를 함께 기록합니다.")
 
-with st.expander("➕ 학습 로그 추가", expanded=False):
+with st.expander("학습 로그 추가", expanded=False):
     with st.form("add_progress"):
         lp_date = st.date_input("일자", value=date.today(), key="lp_date")
         lp_cat = st.selectbox("카테고리", ["진도", "숙제", "시험"])
@@ -494,7 +494,7 @@ with st.expander("📘 평가 가이드 (각 항목 의미 + 운영법)", expand
 
 GRADE_OPTIONS = ["A", "B", "C", "D"]
 
-with st.expander("➕ 정량 평가 (매일)", expanded=False):
+with st.expander("정량 평가 (매일)", expanded=False):
     with st.form("add_assess_quant"):
         aq_date = st.date_input("평가일", value=date.today(), key="aq_date")
         aq_grade = st.radio(
@@ -517,7 +517,7 @@ with st.expander("➕ 정량 평가 (매일)", expanded=False):
             st.success("저장됨")
             st.rerun()
 
-with st.expander("➕ 정성 평가 (월 2회 · 4항목)", expanded=False):
+with st.expander("정성 평가 (월 2회 · 4항목)", expanded=False):
     with st.form("add_assess_qual"):
         al_date = st.date_input("평가일", value=date.today(), key="al_date")
         sl1 = st.slider(
@@ -587,7 +587,7 @@ if latest_qual:
     pq3.metric("교재 표시",       f"{lq['textbook_marking']}/5")
     pq4.metric("2차 풀이 이유",   f"{lq['second_solve_reason']}/5")
     if lq["note"]:
-        st.caption(f"📝 {lq['note']}")
+        st.caption(f"{lq['note']}")
 
 st.divider()
 
@@ -596,7 +596,7 @@ st.divider()
 st.subheader("6. 관리 로그 — 보호자·출결·메모")
 st.caption("학부모 신뢰의 핵심. 모든 연락/결석/특이사항을 1줄씩 누적합니다.")
 
-with st.expander("➕ 관리 로그 추가", expanded=False):
+with st.expander("관리 로그 추가", expanded=False):
     with st.form("add_log"):
         ml_date = st.date_input("일자", value=date.today(), key="ml_date")
         ml_type = st.selectbox("유형", LOG_TYPES)

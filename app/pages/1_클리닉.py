@@ -25,7 +25,7 @@ from clinic_logic import (
     list_pending_retries,
 )
 
-st.set_page_config(page_title="🏥 클리닉 — MATHOLOGY", page_icon="🏥", layout="wide")
+st.set_page_config(page_title="클리닉 — MATHOLOGY", page_icon="", layout="wide")
 
 from theme import apply_theme
 apply_theme()
@@ -34,7 +34,7 @@ from auth_ui import require_auth, render_user_menu_in_sidebar
 require_auth()
 render_user_menu_in_sidebar()
 
-st.title("🏥 수학 클리닉")
+st.title("수학 클리닉")
 st.caption(
     "오답 1건 → 즉시 인출 3문항 + D+3/7/14/30 재도전 처방전. "
     "스테이플러 묶음에 끼워넣어 점수 엔진을 가동하세요."
@@ -96,7 +96,7 @@ with st.sidebar:
         st.info("등록된 학생이 없습니다. 아래 폼에서 추가하세요.")
         selected_student_id = None
 
-    with st.expander("➕ 신규 학생 등록"):
+    with st.expander("신규 학생 등록"):
         with st.form("new_student"):
             new_name = st.text_input("이름")
             new_school = st.text_input("학교", placeholder="예: 광명북중")
@@ -115,17 +115,17 @@ if selected_student_id is None:
     st.warning("좌측 사이드바에서 학생을 등록/선택하세요.")
     st.stop()
 
-st.subheader("📝 오답 입력 → 처방전 생성")
+st.subheader("오답 입력 → 처방전 생성")
 
 # 문제 출처 모드 선택
 source_mode = st.radio(
     "문제 출처",
-    ["📚 DB 검색 (MATHOLOGY 적재 문제)", "✏️ 외부 문제 (학교 내신지·시판 교재)"],
+    ["DB 검색 (MATHOLOGY 적재 문제)", "외부 문제 (학교 내신지·시판 교재)"],
     horizontal=True,
     key="src_mode",
     help="DB 검색은 인출 3문항 자동 추출 + 처방전 PDF 가능. 외부 문제는 클리닉 기록만 저장.",
 )
-is_db_mode = source_mode.startswith("📚")
+is_db_mode = source_mode.startswith("")
 
 qrow = None
 wrong_qid = None
@@ -135,7 +135,7 @@ if is_db_mode:
     c1, c2 = st.columns([0.45, 0.55])
     with c1:
         kw = st.text_input(
-            "🔍 검색어 (학교명·단원·키워드)",
+            "검색어 (학교명·단원·키워드)",
             placeholder="예: 광명북 / 이차함수 / 인수분해",
             key="search_kw",
         )
@@ -214,7 +214,7 @@ if st.button(btn_label, type="primary", use_container_width=True, disabled=not c
         similar_qids = find_similar_questions(conn, int(wrong_qid))
         if len(similar_qids) < 3:
             st.error(
-                f"⚠️ 인출 문항이 {len(similar_qids)}개만 추출됨 — "
+                f"인출 문항이 {len(similar_qids)}개만 추출됨 — "
                 f"같은 단원의 풀이 가능 문제가 부족합니다. "
                 f"처방전 생성을 중단합니다. (chapter: {qrow['chapter']})"
             )
@@ -234,9 +234,9 @@ if st.button(btn_label, type="primary", use_container_width=True, disabled=not c
         prescribed_qids=similar_qids,
         external_label=(external_label.strip() if not is_db_mode else None),
     )
-    st.success(f"✅ 클리닉 엔트리 저장됨 (entry_id={entry_id})")
+    st.success(f"클리닉 엔트리 저장됨 (entry_id={entry_id})")
     if not is_db_mode:
-        st.caption(f"📌 외부 문제 — {external_label}")
+        st.caption(f"외부 문제 — {external_label}")
         st.markdown("**📅 재도전 스케줄**")
         st.markdown(
             f"- D+3 ({schedule['d3']})  ☐\n"
@@ -284,7 +284,7 @@ if st.button(btn_label, type="primary", use_container_width=True, disabled=not c
             subtitle=rx_subtitle,
         )
         st.download_button(
-            "📥 처방전 PDF 다운로드",
+            "처방전 PDF 다운로드",
             data=pdf_data,
             file_name=f"prescription_{student_name}_{wrong_dt}.pdf",
             mime="application/pdf",
@@ -293,7 +293,7 @@ if st.button(btn_label, type="primary", use_container_width=True, disabled=not c
     except Exception as e:
         st.error(f"PDF 생성 실패: {type(e).__name__}: {e}")
 
-    st.markdown("**📋 인출 3문항 (자동 추출)**")
+    st.markdown("**인출 3문항 (자동 추출)**")
     for qid in similar_qids:
         meta = query(
             "SELECT school, question_number, difficulty FROM questions WHERE question_id = ?",

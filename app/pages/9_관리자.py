@@ -18,7 +18,7 @@ import auth
 from auth_ui import require_auth, render_user_menu_in_sidebar
 
 
-st.set_page_config(page_title="관리자 — MATHOLOGY", page_icon="⚙️", layout="wide")
+st.set_page_config(page_title="관리자 — MATHOLOGY", page_icon="️", layout="wide")
 
 from theme import apply_theme
 apply_theme()
@@ -26,19 +26,19 @@ apply_theme()
 require_auth()
 
 if not auth.is_admin():
-    st.error("⛔ 이 페이지는 관리자 전용입니다.")
+    st.error("이 페이지는 관리자 전용입니다.")
     st.stop()
 
 render_user_menu_in_sidebar()
 
 
 # ── 헤더 ────────────────────────────────────────────────────────────────────
-st.title("⚙️ 관리자")
+st.title("️ 관리자")
 st.caption("회원 승인 대기열, 권한 관리, 회원 목록")
 
 
 # ── 승인 대기열 ─────────────────────────────────────────────────────────────
-st.subheader("📋 가입 승인 대기")
+st.subheader("가입 승인 대기")
 pending = auth.list_pending_users()
 
 if not pending:
@@ -80,11 +80,11 @@ else:
             cols[1].caption(u["email"])
             badges = []
             if u["approved"]:
-                badges.append("✅ 승인")
+                badges.append("승인")
             else:
-                badges.append("⏳ 대기")
+                badges.append("대기")
             if u["is_admin"]:
-                badges.append("⚙️ admin")
+                badges.append("️ admin")
             cols[2].markdown(" · ".join(badges))
             cols[3].caption(str(u["created_at"])[:10])
 

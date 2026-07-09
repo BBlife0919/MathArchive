@@ -236,7 +236,7 @@ def lookup_token(token: str):
     return (None, "")
 
 
-st.set_page_config(page_title="검수 — MATHOLOGY", page_icon="🔍", layout="wide")
+st.set_page_config(page_title="검수 — MATHOLOGY", page_icon="", layout="wide")
 
 from theme import apply_theme
 apply_theme()
@@ -247,7 +247,7 @@ try:
     from auth_ui import require_auth, render_user_menu_in_sidebar
     require_auth()
     if not auth.is_admin():
-        st.error("⛔ 이 페이지는 관리자 전용입니다.")
+        st.error("이 페이지는 관리자 전용입니다.")
         st.stop()
     render_user_menu_in_sidebar()
 except ImportError:
@@ -626,7 +626,7 @@ def apply_user_mapping(token: str, action: str, latex: str = "") -> dict:
 # ─────────────────────────────────────────────────────────
 # UI
 # ─────────────────────────────────────────────────────────
-st.title("🔍 검수")
+st.title("검수")
 st.caption("이 페이지에서 모든 처리 가능. 클릭 한 번이면 끝.")
 
 
@@ -640,9 +640,9 @@ def _show_result_banner(title: str, body: str, kind: str = "success"):
 @st.dialog("처리 결과")
 def _audit_result_dialog(title: str, body: str, kind: str):
     if kind == "success":
-        st.success(f"### ✅ {title}")
+        st.success(f"### {title}")
     elif kind == "warning":
-        st.warning(f"### ⚠️ {title}")
+        st.warning(f"### {title}")
     else:
         st.info(f"### ℹ️ {title}")
     st.markdown(body)
@@ -681,11 +681,11 @@ def _force_rescan():
 
 
 if "audit_bare_words" not in st.session_state:
-    with st.spinner("⏳ DB 전체 스캔 중... (첫 진입 시 1~2분)"):
+    with st.spinner("DB 전체 스캔 중... (첫 진입 시 1~2분)"):
         st.session_state.audit_bare_words = run_bare_word_detection()
 
 if "audit_struct" not in st.session_state:
-    with st.spinner("⏳ 구조 무결성 검사 중..."):
+    with st.spinner("구조 무결성 검사 중..."):
         st.session_state.audit_struct = run_structural_scan()
 
 bare_words_cached = st.session_state.audit_bare_words
@@ -723,7 +723,7 @@ st.subheader("🔤 누락 HWP 토큰")
 hdr_cols = st.columns([6, 1])
 hdr_cols[0].caption("수식 안에서 백슬래시 없이 등장하는 단어. "
                     "각 행에서 처리 방식을 선택하고 [적용]을 누르세요.")
-if hdr_cols[1].button("🔄 다시 스캔", use_container_width=True):
+if hdr_cols[1].button("다시 스캔", use_container_width=True):
     _force_rescan()
     st.rerun()
 
@@ -732,7 +732,7 @@ bare_words = bare_words_cached
 # 신규 표시
 new_count = sum(1 for w, _ in bare_words if w not in last_words)
 if new_count:
-    st.warning(f"⚠️ 지난 실행 이후 새로 등장한 토큰 {new_count}개")
+    st.warning(f"지난 실행 이후 새로 등장한 토큰 {new_count}개")
 
 # 토큰별 처리 UI
 ACTION_LABELS = {
@@ -747,7 +747,7 @@ ACTION_LABELS = {
 # 슬라이더로 자르지 않는다.
 visible_tokens = bare_words
 if visible_tokens:
-    st.info(f"📋 현재 누락 토큰 **{len(visible_tokens)}개** — 한 번에 처리하세요")
+    st.info(f"현재 누락 토큰 **{len(visible_tokens)}개** — 한 번에 처리하세요")
 
 # 도형 라벨 자동 인식: 영문자 2~6글자 묶음 (대문자 또는 소문자만)
 def _is_geometry_label(token: str) -> bool:
@@ -772,7 +772,7 @@ def _is_geometry_label(token: str) -> bool:
 # 페이지네이션과 무관하게 항상 _전체_ bare_words 를 대상으로 적용.
 toolbar = st.columns([4, 3])
 
-if toolbar[0].button("🚀 한 방 처리 (사전+패턴+도형+그리스, 전체)",
+if toolbar[0].button("한 방 처리 (사전+패턴+도형+그리스, 전체)",
                      use_container_width=True, type="primary"):
     with st.spinner("자동 처리 중..."):
         n_mapped = 0
@@ -824,15 +824,15 @@ if toolbar[0].button("🚀 한 방 처리 (사전+패턴+도형+그리스, 전�
             body += "**무시 예시:** " + ", ".join(ignored_examples) + "\n\n"
         body += (
             "다음 단계: 표에 남은 미상 토큰은 dropdown 으로 수동 처리 → "
-            "**[✅ 미상 dropdown 일괄 적용]** → **[📌 베이스라인 저장]**."
+            "**[미상 dropdown 일괄 적용]** → **[베이스라인 저장]**."
         )
         _show_result_banner("한 방 처리 완료", body)
-        st.toast(f"✅ {total_done}개 처리 · {remaining}개 남음")
+        st.toast(f"{total_done}개 처리 · {remaining}개 남음")
     _force_rescan()
     st.rerun()
 
 # 미상 dropdown 일괄 적용 — 사용자가 수동으로 선택한 처리만
-if toolbar[1].button("✅ 미상 dropdown 일괄 적용",
+if toolbar[1].button("미상 dropdown 일괄 적용",
                      use_container_width=True):
     n_done = 0
     n_affected = 0
@@ -853,7 +853,7 @@ if toolbar[1].button("✅ 미상 dropdown 일괄 적용",
             "dropdown 에서 처리 방식을 선택한 토큰이 없습니다.",
             kind="warning",
         )
-        st.toast("⚠️ 선택된 처리가 없습니다")
+        st.toast("선택된 처리가 없습니다")
     else:
         remaining = max(0, len(bare_words) - n_done)
         _show_result_banner(
@@ -861,15 +861,15 @@ if toolbar[1].button("✅ 미상 dropdown 일괄 적용",
             f"- 처리 토큰: **{n_done}개**\n"
             f"- DB 변경: **{n_affected}건**\n"
             f"- 남은 미상 토큰: **{remaining}개**\n\n"
-            "다음 단계: **📌 베이스라인 저장**.",
+            "다음 단계: **베이스라인 저장**.",
         )
-        st.toast(f"✅ {n_done}개 처리 · {remaining}개 남음")
+        st.toast(f"{n_done}개 처리 · {remaining}개 남음")
         _force_rescan()
     st.rerun()
 
 st.caption(
-    "💡 **권장 순서**: ① **[🚀 한 방 처리]** → ② 남은 미상 토큰은 표에서 "
-    "dropdown 처리 → ③ **[✅ 미상 dropdown 일괄 적용]** → ④ **[📌 베이스라인 저장]**"
+    "**권장 순서**: ① **[한 방 처리]** → ② 남은 미상 토큰은 표에서 "
+    "dropdown 처리 → ③ **[미상 dropdown 일괄 적용]** → ④ **[베이스라인 저장]**"
 )
 
 # ─── 남은 미상 전체 무시 (한 방 정리) ─────────────────────
@@ -881,13 +881,13 @@ unknown_tokens = [
 nuc1, nuc2 = st.columns([3, 2])
 with nuc1:
     st.markdown(
-        f"**❓ 남은 미상 토큰: {len(unknown_tokens)}개**  \n"
+        f"**남은 미상 토큰: {len(unknown_tokens)}개**  \n"
         "사전·패턴·도형 라벨 어디에도 안 잡힌 토큰입니다. "
         "대부분 OCR·파싱 오류로 생긴 잡문자라 그냥 무시해도 안전합니다 "
         "(무시는 DB 변경 X — 후회해도 user_token_mappings 에서 row 삭제하면 복원)."
     )
 with nuc2:
-    if st.button("🧹 남은 미상 전체 무시 (한 방 정리)",
+    if st.button("남은 미상 전체 무시 (한 방 정리)",
                  use_container_width=True,
                  disabled=not unknown_tokens):
         with st.spinner(f"미상 {len(unknown_tokens)}개 무시 처리 중..."):
@@ -920,11 +920,11 @@ with nuc2:
             "- 다음 검수부터 표에서 자동 제외됩니다.\n\n"
             "되돌리려면 `user_token_mappings` 테이블에서 해당 row 삭제.",
         )
-        st.toast(f"✅ 미상 {len(unknown_tokens)}개 모두 무시 처리")
+        st.toast(f"미상 {len(unknown_tokens)}개 모두 무시 처리")
         _force_rescan()
         st.rerun()
 
-with st.expander("❓ 미상 토큰이란? · 처리 가이드"):
+with st.expander("미상 토큰이란? · 처리 가이드"):
     st.markdown(
         """
 **미상 토큰** = 사전(SYMBOL_MAP)에도 없고 패턴 인식기(영문 변수 묶음·도형 라벨 등)에도 매칭 안 된 토큰. 즉 자동으로 판단 못 한 것.
@@ -935,7 +935,7 @@ with st.expander("❓ 미상 토큰이란? · 처리 가이드"):
 - **의미 없는 표시 글자** (HWP 스타일 토글 등) → 처리 방식: `삭제` — 본문에서 제거
 - **모르겠으면** → 그냥 두기. 다음에 사전이 업데이트되면 자동 매핑됨
 
-**팁**: 미상이 너무 많으면 [📌 베이스라인 저장] 후 그대로 두세요. 다음 검수 때 "새로 등장한 토큰" 만 강조됩니다.
+**팁**: 미상이 너무 많으면 [베이스라인 저장] 후 그대로 두세요. 다음 검수 때 "새로 등장한 토큰" 만 강조됩니다.
         """
     )
 
@@ -1025,7 +1025,7 @@ hdr[3].markdown("**LaTeX (매핑 시만)**")
 
 for token, count in page_tokens:
     is_new = token not in last_words
-    badge = " 🆕" if is_new else ""
+    badge = " " if is_new else ""
     cols = st.columns([2, 1.5, 2.5, 2.8])
     cols[0].markdown(f"`{token}` ({count}건){badge}")
 
@@ -1035,18 +1035,18 @@ for token, count in page_tokens:
     if rec_action == "map":
         cols[1].markdown(f"📘 `{rec_latex}`")
     elif rec_action == "remove":
-        cols[1].markdown("🗑 제거")
+        cols[1].markdown("제거")
     elif rec_action == "ignore":
         cols[1].markdown("🚫 무시")
     elif is_geo:
         cols[1].markdown("🔤 변수")
     else:
-        cols[1].markdown("❓ 미상")
+        cols[1].markdown("미상")
 
     has_rec = rec_action is not None or is_geo
     if has_rec:
         # 추천 있는 행: 한 방 처리 버튼이 자동 적용 → UI 단순화
-        cols[2].caption("🚀 [한 방 처리]로 자동 적용")
+        cols[2].caption("[한 방 처리]로 자동 적용")
         cols[3].caption("—")
     else:
         # 미상 행: dropdown + LaTeX 로 수동 처리
@@ -1072,7 +1072,7 @@ _render_token_pagination("bot")
 st.divider()
 
 # ─── 결과 저장 ─────────────────────────────────────────
-if st.button("📌 이번 결과 저장 (베이스라인 갱신)"):
+if st.button("이번 결과 저장 (베이스라인 갱신)"):
     _save_run({
         "timestamp": datetime.now().isoformat(),
         "bare_words": bare_words,
@@ -1115,12 +1115,12 @@ else:
     fc1, fc2 = st.columns([3, 2])
     with fc1:
         st.markdown(
-            f"**🚀 한 방 처리**: 모든 신고({len(flagged_rows)}건)에 "
+            f"**한 방 처리**: 모든 신고({len(flagged_rows)}건)에 "
             "자동 복구(구조+토큰) 적용 후 처리완료 마킹. "
             "결과는 처리 후 검색 페이지에서 확인."
         )
     with fc2:
-        if st.button("🧹 신고함 한 방 처리 (전체)",
+        if st.button("신고함 한 방 처리 (전체)",
                      use_container_width=True, type="primary"):
             from fix_nested_boxes import fix_text as fix_nested
             from fix_unmapped_hwp_tokens import fix_text as fix_tokens
@@ -1152,7 +1152,7 @@ else:
                 "복구된 내용은 검색 페이지에서 확인하세요. "
                 "여전히 이상하면 다시 신고하면 됩니다.",
             )
-            st.toast(f"✅ 신고 {n_fixed}건 처리 (실패 {n_failed})")
+            st.toast(f"신고 {n_fixed}건 처리 (실패 {n_failed})")
             st.rerun()
 
     st.divider()
