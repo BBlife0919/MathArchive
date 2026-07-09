@@ -1,3 +1,4 @@
 fonts-nanum
 chromium
 chromium-driver
+fontconfig

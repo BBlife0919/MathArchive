@@ -2189,7 +2189,41 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
 
 # ── Playwright 실행 ──────────────────────────────────────
 import os
+import shutil
 import subprocess
+
+_FONTS_INSTALLED = False
+
+
+def _ensure_bundled_fonts():
+    """번들 폰트(app/assets/fonts/*.ttf)를 사용자 폰트 경로에 설치.
+
+    Streamlit Cloud(Linux)엔 함초롬바탕이 없으므로, 번들한 서브셋을 ~/.fonts 에
+    복사하고 fc-cache 로 등록 → Chromium 이 이름으로 인식. 로컬 macOS 는 이미
+    설치돼 있어 무해(미사용). 첫 렌더 1회만 실행, 실패해도 렌더 진행.
+    """
+    global _FONTS_INSTALLED
+    if _FONTS_INSTALLED:
+        return
+    _FONTS_INSTALLED = True
+    try:
+        src_dir = Path(__file__).resolve().parent / "assets" / "fonts"
+        ttfs = list(src_dir.glob("*.ttf")) + list(src_dir.glob("*.otf"))
+        if not ttfs:
+            return
+        dest = Path.home() / ".fonts"
+        dest.mkdir(parents=True, exist_ok=True)
+        changed = False
+        for f in ttfs:
+            target = dest / f.name
+            if not target.exists() or target.stat().st_size != f.stat().st_size:
+                shutil.copy2(f, target)
+                changed = True
+        if changed and shutil.which("fc-cache"):
+            subprocess.run(["fc-cache", "-f", str(dest)], check=False,
+                           capture_output=True, timeout=60)
+    except Exception:
+        pass
 
 
 def _launch_browser(p):
@@ -2217,6 +2251,7 @@ def _launch_browser(p):
 
 def html_to_pdf_bytes(html: str) -> bytes:
     """HTML을 Playwright+Chromium으로 PDF 바이트 변환."""
+    _ensure_bundled_fonts()   # 함초롬바탕 등 번들 폰트 서버 설치 (1회)
     if os.environ.get("DEBUG_DUMP_HTML"):
         with open("/tmp/last_book.html", "w") as f:
             f.write(html)
