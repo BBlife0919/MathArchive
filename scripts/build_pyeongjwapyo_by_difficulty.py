@@ -193,41 +193,44 @@ window.__typeset = function () {
           if (pts) w.appendChild(pts);
           return w;
         };
-        // 보기/조건 박스가 있고, 박스 뒤에 실제 문제텍스트가 없으면 → 배점 항상 박스 위
+        // 보기/조건 박스가 있고 박스 뒤에 문제텍스트가 없으면 → 배점은 stem(박스 앞)에 속함.
+        // 배점을 박스 바로 앞으로 이동(인라인)한 뒤, 아래 공통 fit-로직으로 판정.
         var box = body.querySelector('.cond-box');
-        var moveAboveBox = false;
         if (box) {
-          moveAboveBox = true;
+          var onlyAfter = true;
           for (var n = box.nextSibling; n; n = n.nextSibling) {
-            if (n.nodeType === 3 && n.textContent.trim()) { moveAboveBox = false; break; }
-            if (n.nodeType === 1 && !/q-(cond|pts|trailer)/.test(n.className)) { moveAboveBox = false; break; }
+            if (n.nodeType === 3 && n.textContent.trim()) { onlyAfter = false; break; }
+            if (n.nodeType === 1 && !/q-(cond|pts|trailer)/.test(n.className)) { onlyAfter = false; break; }
+          }
+          if (onlyAfter) {
+            var frag = document.createDocumentFragment();
+            frag.appendChild(document.createTextNode(' '));
+            if (cond) frag.appendChild(cond);
+            if (cond && pts) frag.appendChild(document.createTextNode(' '));
+            if (pts) frag.appendChild(pts);
+            body.insertBefore(frag, box);
           }
         }
-        if (moveAboveBox) {
-          body.insertBefore(buildTrailer(), box);
-        } else {
-          // 인라인이 마지막 줄에 들어가면 그대로. 넘칠 때만, 트레일러가 1줄이면 우측정렬.
-          var Lfull = lc(body), saved = [];
-          [cond, pts].forEach(function (e) { if (e) { saved.push([e, e.style.display]); e.style.display = 'none'; } });
-          var Lbase = lc(body);
-          saved.forEach(function (d) { d[0].style.display = d[1]; });
-          if (Lfull > Lbase) {
-            var probe = document.createElement('div');
-            probe.style.cssText = 'visibility:hidden;position:absolute;left:-9999px;width:' + body.clientWidth + 'px';
-            if (cond) probe.appendChild(cond.cloneNode(true));
-            if (cond && pts) probe.appendChild(document.createTextNode(' '));
-            if (pts) probe.appendChild(pts.cloneNode(true));
-            document.body.appendChild(probe);
-            var T = lc(probe);
-            document.body.removeChild(probe);
-            if (T <= 1) {   // 짧으면 개행+우측정렬 — 원래 흐름 위치에 삽입(끝 X)
-              var anchor = cond || pts;
-              var mk = document.createComment('t');
-              anchor.parentNode.insertBefore(mk, anchor);
-              var w = buildTrailer();
-              mk.parentNode.replaceChild(w, mk);
-            }
-            // 2줄 이상이면 인라인 유지 (아무것도 안 함)
+        // 공통 fit-로직: 인라인이 마지막 줄에 들어가면 그대로. 넘칠 때만, 트레일러 1줄이면
+        // 원래 흐름 위치(마커)에 개행+우측정렬. 2줄 이상이면 인라인 유지.
+        var Lfull = lc(body), saved = [];
+        [cond, pts].forEach(function (e) { if (e) { saved.push([e, e.style.display]); e.style.display = 'none'; } });
+        var Lbase = lc(body);
+        saved.forEach(function (d) { d[0].style.display = d[1]; });
+        if (Lfull > Lbase) {
+          var probe = document.createElement('div');
+          probe.style.cssText = 'visibility:hidden;position:absolute;left:-9999px;width:' + body.clientWidth + 'px';
+          if (cond) probe.appendChild(cond.cloneNode(true));
+          if (cond && pts) probe.appendChild(document.createTextNode(' '));
+          if (pts) probe.appendChild(pts.cloneNode(true));
+          document.body.appendChild(probe);
+          var T = lc(probe);
+          document.body.removeChild(probe);
+          if (T <= 1) {   // 짧으면 개행+우측정렬 — 원래 흐름 위치에 삽입(끝 X)
+            var anchor = cond || pts;
+            var mk = document.createComment('t');
+            anchor.parentNode.insertBefore(mk, anchor);
+            mk.parentNode.replaceChild(buildTrailer(), mk);
           }
         }
       }
