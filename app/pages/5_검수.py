@@ -1092,7 +1092,7 @@ if st.button("이번 결과 저장 (베이스라인 갱신)"):
 st.divider()
 
 # ─── 신고함 ─────────────────────────────────────────
-st.subheader("🚩 신고함")
+st.subheader("신고함")
 st.caption("검색·시험지에서 사용자가 직접 신고한 문항.")
 
 conn = _get_db_connection()

@@ -677,7 +677,7 @@ def generate_pdf(
 def main():
     st.set_page_config(
         page_title=PAGE_TITLE,
-        page_icon="📐",
+        page_icon="",
         layout="wide",
         initial_sidebar_state="expanded",
     )
@@ -748,7 +748,16 @@ def main():
     from auth_ui import require_auth, render_user_menu_in_sidebar
     require_auth()
 
-    st.title("📐 MATHOLOGY")
+    st.markdown(
+        '<h1 style="display:flex;align-items:center;gap:10px;'
+        'font-weight:800;letter-spacing:-0.03em;margin:0 0 12px 0;'
+        'color:var(--ink,#0a1020)">'
+        '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" '
+        'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" '
+        'stroke-linejoin="round"><polygon points="12 2 22 20 2 20"/></svg>'
+        'MATHOLOGY</h1>',
+        unsafe_allow_html=True,
+    )
 
     # 세션 상태 초기화
     if "selected_ids" not in st.session_state:
@@ -1071,10 +1080,16 @@ def main():
                 is_selected = qid in st.session_state.selected_ids
 
                 with st.container(border=True):
-                    # 헤더 정보 + 액션 버튼 (한 줄)
-                    diff_emoji = {"하": "🟢", "중": "🟡",
-                                  "상": "🔴", "킬": "💀"}.get(
-                        row["difficulty"], "⚪"
+                    # 난이도 텍스트 배지 (컬러 원 이모지 대신 얇은 border 배지)
+                    diff_txt = row["difficulty"] or "?"
+                    diff_color = {"하": "#10b981", "중": "#f59e0b",
+                                  "상": "#ef4444", "킬": "#0a1020"}.get(
+                        diff_txt, "#94a3b8")
+                    diff_badge = (
+                        f'<span style="display:inline-block;padding:1px 8px;'
+                        f'border-radius:999px;background:{diff_color}1a;'
+                        f'color:{diff_color};font-weight:700;font-size:11px;'
+                        f'letter-spacing:0.02em">{diff_txt}</span>'
                     )
                     points_str = f"{row['points']}점" if row["points"] else ""
                     subj_badge = " `서술형`" if row["is_subjective"] else ""
@@ -1082,16 +1097,16 @@ def main():
 
                     meta_line = (
                         f"**{format_meta(row, short=True)}** · "
-                        f"{diff_emoji} · `{row['chapter']}` · "
+                        f"{diff_badge} · `{row['chapter']}` · "
                         f"{points_str}{subj_badge}{err_badge}"
                     )
                     head_cols = st.columns([3, 1, 1])
-                    head_cols[0].markdown(meta_line)
-                    # 신고 버튼
+                    head_cols[0].markdown(meta_line, unsafe_allow_html=True)
+                    # 신고 버튼 — 얇은 line SVG flag
                     flagged = is_flagged(qid)
-                    flag_icon = "🚩" if not flagged else "🚩✓"
+                    flag_label = "신고됨" if flagged else "신고"
                     if head_cols[1].button(
-                        flag_icon, key=f"flag_{qid}",
+                        flag_label, key=f"flag_{qid}",
                         use_container_width=True,
                         help="신고됨 토글" if flagged else "오류 신고",
                     ):
@@ -1692,7 +1707,7 @@ def main():
                             caption_parts.append(f"난이도: {row['difficulty']}")
                             st.caption(" · ".join(caption_parts))
                         with h_col2:
-                            layout_label = "단 전체" if current == "full" else "📐 반 단"
+                            layout_label = "단 전체" if current == "full" else "반 단"
                             help_txt = (
                                 "이 문제가 단의 절반(2문제 공존) vs 단 하나 통째로(1문제 전용)"
                             )
