@@ -70,6 +70,15 @@ CHROME_FONT_CSS = """
 .cd-big-num, .cd-major-roman, .kp-num {
   font-family: 'Paperlogy 9 Black', sans-serif !important;
 }
+/* 자연스러운 줄바꿈 (폰트는 불가침, 레이아웃만):
+   왼쪽정렬(자간 균일) + 한글 어절단위(keep-all) + 인라인 수식 원자화
+   (연산자에서 mx+/4a 처럼 안 쪼개짐). */
+.slot.book-kp .q-body {
+  text-align: left !important;
+  word-break: keep-all !important;
+  overflow-wrap: break-word !important;
+}
+.slot.book-kp .q-body .katex { white-space: nowrap !important; }
 """
 
 
