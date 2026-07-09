@@ -991,15 +991,47 @@ def require_auth() -> None:
         )
 
 
+_SVG_USER = (
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" '
+    'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" '
+    'stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px">'
+    '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>'
+    '<circle cx="12" cy="7" r="4"/></svg>'
+)
+_SVG_GEAR = (
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" '
+    'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" '
+    'stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px">'
+    '<circle cx="12" cy="12" r="3"/>'
+    '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06'
+    'a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09'
+    'A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83'
+    'l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09'
+    'A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83'
+    'l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09'
+    'a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83'
+    'l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4'
+    'h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>'
+)
+
+
 def render_user_menu_in_sidebar() -> None:
     """로그인 상태일 때 사이드바 하단에 사용자 정보 + 로그아웃 표시."""
     u = auth.current_user()
     if not u:
         return
     st.sidebar.markdown("---")
-    st.sidebar.caption(f"👤 **{u['name']}** ({u['username']})")
+    st.sidebar.markdown(
+        f'<div style="color:var(--muted,#5f6c87);font-size:13px;'
+        f'padding:4px 0">{_SVG_USER}<b>{u["name"]}</b> ({u["username"]})</div>',
+        unsafe_allow_html=True,
+    )
     if u.get("is_admin"):
-        st.sidebar.caption("⚙️ 관리자")
+        st.sidebar.markdown(
+            f'<div style="color:var(--muted,#5f6c87);font-size:13px;'
+            f'padding:4px 0">{_SVG_GEAR}관리자</div>',
+            unsafe_allow_html=True,
+        )
     if st.sidebar.button("로그아웃", use_container_width=True, key="sidebar_logout"):
         auth.logout()
         st.rerun()

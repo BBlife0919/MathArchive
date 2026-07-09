@@ -67,7 +67,7 @@ else:
 
 
 # ── 전체 회원 ───────────────────────────────────────────────────────────────
-st.subheader("👥 전체 회원")
+st.subheader("전체 회원")
 all_users = auth.list_all_users()
 
 if not all_users:

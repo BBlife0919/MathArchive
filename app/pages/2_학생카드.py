@@ -95,7 +95,7 @@ def list_students():
 students = list_students()
 
 with st.sidebar:
-    st.header("👤 학생")
+    st.header("학생")
     if not students:
         st.warning("등록된 학생이 없습니다. 클리닉 페이지에서 먼저 등록하세요.")
         st.stop()

@@ -82,7 +82,7 @@ def create_student(name: str, school: str, grade: int, class_name: str) -> int:
 
 # ── 사이드바: 학생 선택/등록 ────────────────────────────
 with st.sidebar:
-    st.header("👤 학생")
+    st.header("학생")
     students = list_students()
 
     if students:
