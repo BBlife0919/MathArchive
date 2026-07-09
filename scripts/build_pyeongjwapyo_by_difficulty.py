@@ -13,6 +13,7 @@ usage: python3 build_pyeongjwapyo_by_difficulty.py [상|중|하|all]
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 import subprocess
 import sys
@@ -79,6 +80,121 @@ CHROME_FONT_CSS = """
   overflow-wrap: break-word !important;
 }
 .slot.book-kp .q-body .katex { white-space: nowrap !important; }
+/* 배점은 통째로(안 쪼개짐), 배점/단서 우측정렬 트레일러 */
+.slot.book-kp .q-body .q-pts { white-space: nowrap !important; }
+.slot.book-kp .q-body .nb { white-space: nowrap !important; }
+.slot.book-kp .q-body .q-trailer {
+  display: block !important; text-align: right !important; margin-top: 0.5mm !important;
+}
+/* 보기/조건 박스 항목 내어쓰기: 마커(ㄱ./(가))는 왼쪽, 줄넘김된 글자는 텍스트에 맞춤 */
+.slot.book-kp .cond-box .bogi-item {
+  padding-left: 1.5em; text-indent: -1.5em; margin: 0.15em 0;
+}
+.slot.book-kp .cond-box .bogi-hdr { margin: 0 0 0.2em 0; }
+"""
+
+# ── 본문 조판 전처리 (문자열 변환) ─────────────────────────
+_MATH_RE = re.compile(r"\$[^$\n]+?\$")
+_SUBQ_RE = re.compile(r"\s*(\((?:\d{1,2}|[가-힣])\))(?=\s)")   # (1)(2)/(가)(나) 소문제
+_COND_RE = re.compile(r"(\(단[,\s][^()]*\))")                  # 단서조항 (단, ~)
+_PTS_RE = re.compile(r"(\[[^\[\]]*점[^\[\]]*\])")              # 배점 [ …점 ]
+
+
+def _stash_math(s):
+    ms = []
+    def f(m):
+        ms.append(m.group(0)); return f"\x01{len(ms)-1}\x02"
+    return _MATH_RE.sub(f, s), ms
+
+
+def _restore_math(s, ms):
+    for i, m in enumerate(ms):
+        s = s.replace(f"\x01{i}\x02", m)
+    return s
+
+
+_PH_JOSA = re.compile(r"(\x01\d+\x02)([가-힣]+)")   # (수식placeholder)(조사)
+
+
+def _typeset_stem(seg: str) -> str:
+    seg, ms = _stash_math(seg)
+    # 수식 + 바로 뒤 한글(조사/어미)을 nowrap 묶기 → "y=2x+1|과", "y=mx+n|일" 고아 방지.
+    # 수식과 조사 사이 U+2060(WORD JOINER): 엔진의 `$식$+한글 → \n삽입` 정규식이
+    # 매치 못하게(과잉 줄바꿈 차단) + 줄바꿈 금지. 앞에도 span'>' 가 있어 한글+식 분리도 차단.
+    seg = _PH_JOSA.sub('<span class="nb">\\1⁠\\2</span>', seg)
+    seg = _SUBQ_RE.sub(r"\n\n\1", seg)          # 소문제 앞 빈 줄
+    seg = re.sub(r"\n{2,}", "\x00", seg)         # 문단/소문제 구분 보존
+    seg = re.sub(r"[ \t]*\n[ \t]*", " ", seg)    # 나머지 하드 \n → 공백(리플로우)
+    seg = seg.replace("\x00", "\n\n")
+    seg = _COND_RE.sub(r'<span class="q-cond">\1</span>', seg)   # 단서 감싸기
+    seg = _PTS_RE.sub(r'<span class="q-pts">\1</span>', seg)     # 배점 감싸기
+    return _restore_math(seg, ms)
+
+
+def typeset_body(text: str | None) -> str:
+    """실제 출판물식 조판: 하드 줄바꿈 리플로우 + 소문제 빈 줄 +
+    단서/배점 마킹(후처리 JS가 우측정렬). <<BOX>> 내부는 건드리지 않음."""
+    if not text:
+        return text or ""
+    out = []
+    for seg in re.split(r"(<<BOX_START>>.*?<<BOX_END>>)", text, flags=re.DOTALL):
+        out.append(seg if seg.startswith("<<BOX_START>>") else _typeset_stem(seg))
+    return "".join(out)
+
+
+# ── 렌더 후 레이아웃 후처리 (Chromium 측정) ───────────────
+TYPESET_JS = r"""
+window.__typeset = function () {
+  document.querySelectorAll('.slot.book-kp').forEach(function (slot) {
+    // (1) 선지: 줄바꿈된 선지가 있으면 3열 → 2열(2/2/1)
+    var ch = slot.querySelector('.q-choices');
+    if (ch && ch.classList.contains('cols3')) {
+      var lh = parseFloat(getComputedStyle(ch).lineHeight) || 16, wrapped = false;
+      ch.querySelectorAll('.choice').forEach(function (it) {
+        if (it.offsetHeight > lh * 1.45) wrapped = true;
+      });
+      if (wrapped) { ch.classList.remove('cols3'); ch.classList.add('cols2'); }
+    }
+    // (1b) 보기/조건 박스: ㄱㄴㄷ·(가)(나)·①② 항목을 내어쓰기(hanging indent)
+    slot.querySelectorAll('.cond-box').forEach(function (box) {
+      var host = box.querySelector('p') || box;
+      var segs = host.innerHTML.split(/<br\s*\/?>/i);
+      var marker = /^\s*(?:[ㄱ-ㅎ]\s*[.·ㆍ]|\([가-힣0-9]+\)|[①-⑳])/;
+      var header = /보\s*기|조\s*건/;
+      var items = [], cur = null;
+      segs.forEach(function (s) {
+        var plain = s.replace(/<[^>]+>/g, '').trim();
+        if (!plain) return;
+        if (marker.test(plain)) { cur = { m: true, html: s }; items.push(cur); }
+        else if (header.test(plain)) { items.push({ m: false, html: s }); cur = null; }
+        else if (cur) { cur.html += ' ' + s; }
+        else { items.push({ m: false, html: s }); }
+      });
+      if (items.some(function (i) { return i.m; })) {
+        host.innerHTML = items.map(function (i) {
+          return i.m ? '<div class="bogi-item">' + i.html + '</div>'
+                     : '<div class="bogi-hdr">' + i.html + '</div>';
+        }).join('');
+      }
+    });
+    // (2) 배점/단서: 본문이 여러 줄이면 우측정렬 트레일러로 이동
+    var body = slot.querySelector('.q-body');
+    if (body) {
+      var lh2 = parseFloat(getComputedStyle(body).lineHeight) || 16;
+      var multiline = body.offsetHeight > lh2 * 1.6;
+      var pts = body.querySelector('.q-pts');
+      var cond = body.querySelector('.q-cond');
+      if (multiline && (pts || cond)) {
+        var w = document.createElement('div');
+        w.className = 'q-trailer';
+        if (cond) w.appendChild(cond);
+        if (cond && pts) w.appendChild(document.createTextNode(' '));
+        if (pts) w.appendChild(pts);
+        body.appendChild(w);
+      }
+    }
+  });
+};
 """
 
 
@@ -216,6 +332,10 @@ def build_one(diff: str, all_rows: list[dict]):
 
     overrides = {r["question_id"]: "full" for r in rows}
 
+    # 본문 조판 전처리 (리플로우·소문제·단서/배점 마킹)
+    for r in rows:
+        r["question_text"] = typeset_body(r.get("question_text"))
+
     from pdf_engine import generate_book_pdf
     pdf_bytes = generate_book_pdf(
         rows,
@@ -237,6 +357,7 @@ def build_one(diff: str, all_rows: list[dict]):
         cover_footer_sub=f"2학기 중간대비 · 공통수학2 평면좌표 · 난이도 {diff}",
         page_running_left=f"공통수학2 평면좌표 · {diff}",
         extra_css=CHROME_FONT_CSS,
+        extra_js=TYPESET_JS,
     )
 
     # 기본 표지(1p)를 사선 커스텀 표지로 교체 (PyMuPDF)

@@ -2015,7 +2015,8 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      cover_footer_main: str | None = None,
                      cover_footer_sub: str | None = None,
                      page_running_left: str | None = None,
-                     extra_css: str = "") -> str:
+                     extra_css: str = "",
+                     extra_js: str = "") -> str:
     """교재 HTML: 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설."""
     logo_uri = _logo_data_uri(logo_path)
     # 디바이더 메타 디폴트
@@ -2076,6 +2077,9 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
         # 본문/선지/KaTeX 는 건드리지 않고 크롬 요소만 재정의하는 스코프 CSS.
         # 메인 <style> 뒤(문서 후미)에 와서 동일 선택자를 오버라이드.
         body += f'\n<style>{extra_css}</style>'
+    if extra_js:
+        # 레이아웃 후처리 스크립트. window.__typeset 을 정의하면 render 시 호출됨.
+        body += f'\n<script>{extra_js}</script>'
     return _HTML_WRAP.format(
         title=_html.escape(title), css=_CSS, body=body,
         body_class="book-summit",
@@ -2129,6 +2133,16 @@ def html_to_pdf_bytes(html: str) -> bytes:
             page.wait_for_function("document.fonts && document.fonts.ready",
                                     timeout=8000)
             page.evaluate("document.fonts.ready")
+        except Exception:
+            pass
+        # 레이아웃 후처리 (선지 열/배점 정렬/내어쓰기 등) — 정의돼 있으면 실행.
+        # 측정이 인쇄(A4) 레이아웃과 일치하도록 뷰포트/미디어를 인쇄 기준으로.
+        # __typeset 미정의(일반 교재)면 뷰포트도 안 건드림 → 무영향.
+        try:
+            if page.evaluate("typeof window.__typeset === 'function'"):
+                page.set_viewport_size({"width": 718, "height": 1047})  # A4 - 10mm 마진
+                page.emulate_media(media="print")
+                page.evaluate("window.__typeset()")
         except Exception:
             pass
         pdf_bytes = page.pdf(
@@ -2269,7 +2283,8 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       cover_footer_main: str | None = None,
                       cover_footer_sub: str | None = None,
                       page_running_left: str | None = None,
-                      extra_css: str = "") -> bytes:
+                      extra_css: str = "",
+                      extra_js: str = "") -> bytes:
     """교재 PDF 생성. 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
@@ -2286,5 +2301,6 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         cover_footer_sub=cover_footer_sub,
         page_running_left=page_running_left,
         extra_css=extra_css,
+        extra_js=extra_js,
     )
     return html_to_pdf_bytes(html)
