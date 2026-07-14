@@ -34,10 +34,14 @@ from auth_ui import require_auth, render_user_menu_in_sidebar
 require_auth()
 render_user_menu_in_sidebar()
 
-st.title("수학 클리닉")
-st.caption(
-    "오답 1건 → 즉시 인출 3문항 + D+3/7/14/30 재도전 처방전. "
-    "스테이플러 묶음에 끼워넣어 점수 엔진을 가동하세요."
+from theme import page_header
+page_header(
+    title="수학 클리닉",
+    subtitle=(
+        "오답 1건 → 즉시 인출 3문항 + D+3/7/14/30 재도전 처방전. "
+        "PRISM 5스펙트럼(P·R·I·S·M) 진단으로 오답을 정복 궤도에 올립니다."
+    ),
+    kicker="MATHOLOGY · 클리닉",
 )
 
 

@@ -38,8 +38,15 @@ from auth_ui import require_auth, render_user_menu_in_sidebar  # noqa: E402
 require_auth()
 render_user_menu_in_sidebar()
 
-st.title("학생 카드")
-st.caption("한 명 = 한 장. 진도·PRISM·자가예측·보호자 연락이 한 화면에 누적됩니다.")
+from theme import page_header
+page_header(
+    title="학생 카드",
+    subtitle=(
+        "한 명 = 한 장. 진도 · PRISM 진단 · 자가예측 · 보호자 연락이 "
+        "한 화면에 누적되고, 상담·컨설팅 시 바로 꺼내 씁니다."
+    ),
+    kicker="MATHOLOGY · 학생 카드",
+)
 
 
 # ── PRISM — 오답 5스펙트럼 분광 ─────────────────────────

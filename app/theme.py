@@ -434,31 +434,78 @@ def apply_theme() -> None:
 
 def page_header(title: str, subtitle: str | None = None,
                 kicker: str | None = None) -> None:
-    """페이지 상단 헤더 — 이모지 없이 kicker + h1 + 부제 구조.
+    """페이지 상단 헤더 — 파스텔 pill kicker + h1 + subtitle (프로토타입 톤).
 
-    landing 의 chapter 헤더와 동일한 톤:
     ```
-    QUESTION BANK          ← kicker (blue, 작음)
-    13만 기출, 한곳에 집대성  ← h1
-    설명 문장...            ← subtitle (muted)
+    ● QUESTION BANK    ← kicker pill (파스텔 blue 배경, 파란 텍스트)
+    큰 헤딩...          ← h1 (800, -0.03em)
+    설명 문장...        ← subtitle (muted, 1.7 line-height)
     ```
     """
     parts = []
     if kicker:
         parts.append(
-            f'<div style="color:var(--blue);font-weight:700;'
-            f'letter-spacing:0.04em;font-size:13px;'
-            f'margin-bottom:6px;text-transform:uppercase">{kicker}</div>'
+            f'<div style="display:inline-flex;align-items:center;gap:6px;'
+            f'background:rgba(43,111,255,0.10);color:var(--accent,#2b6fff);'
+            f'font-weight:700;font-size:11.5px;letter-spacing:0.14em;'
+            f'padding:5px 12px;border-radius:999px;margin-bottom:14px;'
+            f'text-transform:uppercase">'
+            f'<span style="width:5px;height:5px;border-radius:50%;'
+            f'background:var(--accent,#2b6fff)"></span>{kicker}</div>'
         )
     parts.append(
         f'<h1 style="font-size:30px;font-weight:800;'
         f'letter-spacing:-0.03em;color:var(--ink);'
-        f'margin:0 0 10px 0;line-height:1.25">{title}</h1>'
+        f'margin:0 0 10px 0;line-height:1.2">{title}</h1>'
     )
     if subtitle:
         parts.append(
-            f'<p style="color:var(--muted);font-size:15px;'
-            f'line-height:1.75;margin:0 0 24px 0;max-width:680px">'
+            f'<p style="color:var(--muted);font-size:14.5px;'
+            f'line-height:1.7;margin:0 0 24px 0;max-width:720px">'
             f'{subtitle}</p>'
         )
     st.markdown("".join(parts), unsafe_allow_html=True)
+
+
+def numbered_section(n: int, title: str, subtitle: str | None = None) -> None:
+    """번호 원 배지 + 섹션 제목 + subtitle (프로토타입 톤).
+
+    ```
+    [1] 수집 — 강사 화면
+        채점 끝나고 반당 5분. 개인별 입력 없음.
+    ```
+    """
+    sub_html = (
+        f'<div style="color:var(--muted,#5f6c87);font-size:13px;'
+        f'margin-top:2px;line-height:1.55">{subtitle}</div>'
+        if subtitle else ''
+    )
+    st.markdown(
+        f'<div style="display:flex;align-items:flex-start;gap:12px;'
+        f'margin:36px 0 16px 0">'
+        f'<div style="flex-shrink:0;width:26px;height:26px;'
+        f'border-radius:50%;background:rgba(43,111,255,0.10);'
+        f'color:var(--accent,#2b6fff);font-weight:800;font-size:13px;'
+        f'display:flex;align-items:center;justify-content:center;'
+        f'letter-spacing:-0.02em">{n}</div>'
+        f'<div><div style="font-weight:800;font-size:17px;'
+        f'letter-spacing:-0.02em;color:var(--ink,#0a1020);'
+        f'line-height:1.3">{title}</div>{sub_html}</div>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def kicker_pill(text: str, color: str = "#2b6fff") -> str:
+    """작은 라이트 pill (필터 태그 등). HTML 문자열 반환.
+
+    ```
+    반 월금반 · 교재 자체교재 · 범위 p.22~27
+    ```
+    """
+    return (
+        f'<span style="display:inline-block;background:rgba(43,111,255,0.08);'
+        f'color:{color};font-weight:600;font-size:12px;'
+        f'padding:3px 10px;border-radius:999px;margin-right:6px;'
+        f'letter-spacing:-0.01em">{text}</span>'
+    )

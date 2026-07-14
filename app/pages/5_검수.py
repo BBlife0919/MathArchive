@@ -626,8 +626,15 @@ def apply_user_mapping(token: str, action: str, latex: str = "") -> dict:
 # ─────────────────────────────────────────────────────────
 # UI
 # ─────────────────────────────────────────────────────────
-st.title("검수")
-st.caption("이 페이지에서 모든 처리 가능. 클릭 한 번이면 끝.")
+from theme import page_header
+page_header(
+    title="검수 · 데이터 무결성",
+    subtitle=(
+        "누락 토큰 · 구조 오류 · 신고함을 한 화면에서 자동 진단하고 "
+        "클릭 한 번으로 일괄 처리합니다."
+    ),
+    kicker="MATHOLOGY · 검수",
+)
 
 
 def _show_result_banner(title: str, body: str, kind: str = "success"):

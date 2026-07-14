@@ -748,15 +748,15 @@ def main():
     from auth_ui import require_auth, render_user_menu_in_sidebar
     require_auth()
 
-    st.markdown(
-        '<h1 style="display:flex;align-items:center;gap:10px;'
-        'font-weight:800;letter-spacing:-0.03em;margin:0 0 12px 0;'
-        'color:var(--ink,#0a1020)">'
-        '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" '
-        'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" '
-        'stroke-linejoin="round"><polygon points="12 2 22 20 2 20"/></svg>'
-        'MATHOLOGY</h1>',
-        unsafe_allow_html=True,
+    # 프로토타입 톤 헤더 — kicker pill + 큰 h1 + subtitle
+    from theme import page_header
+    page_header(
+        title="문제은행 · 시험지 · 교재 제작",
+        subtitle=(
+            "13만+ 내신 기출을 검색·필터하고, 클릭 몇 번으로 출판 품질 PDF 를 뽑아냅니다. "
+            "미니테스트·클리닉 처방전까지 하나의 흐름으로 이어집니다."
+        ),
+        kicker="MATHOLOGY · 문제은행",
     )
 
     # 세션 상태 초기화

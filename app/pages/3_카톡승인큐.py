@@ -37,10 +37,14 @@ if not auth.is_admin():
     st.error("관리자 전용 페이지입니다.")
     st.stop()
 
-st.title("카톡 승인 큐")
-st.caption(
-    "AI 가 학생별 데이터로 draft 를 만들고, 강사가 1문장 추가 후 승인하면 "
-    "금요일 17시 cron 이 솔라피로 발송합니다. (PDF §7-3 하이브리드 강제)"
+from theme import page_header
+page_header(
+    title="카톡 승인 큐",
+    subtitle=(
+        "AI 가 학생별 데이터로 draft 를 만들고, 강사가 1문장 추가 후 승인하면 "
+        "금요일 17시 cron 이 솔라피로 자동 발송합니다."
+    ),
+    kicker="MATHOLOGY · 카톡 승인",
 )
 
 RIS_CODES = {"개념누락", "조건해석실패", "전략선택실패"}   # PRISM 이해
