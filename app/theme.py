@@ -360,22 +360,31 @@ canvas#scene,
     background-image: none !important;
 }
 
-/* ── 문제 카드 컴팩트 (3열 대응) ─────────────── */
+/* ── 문제 카드 컴팩트 (3열 대응) — 헤더 한 줄 유지 ─── */
 [data-testid="stVerticalBlockBorderWrapper"] {
-    padding: 8px 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 2px rgba(10, 16, 32, 0.04) !important;
 }
 [data-testid="stVerticalBlockBorderWrapper"] .stMarkdown,
 [data-testid="stVerticalBlockBorderWrapper"] .stMarkdown p {
-    font-size: 12.5px !important;
+    font-size: 12px !important;
     line-height: 1.5 !important;
 }
 [data-testid="stVerticalBlockBorderWrapper"] .stCaption,
 [data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCaptionContainer"] {
-    font-size: 11px !important;
+    font-size: 10.5px !important;
 }
 [data-testid="stVerticalBlockBorderWrapper"] .stButton button {
-    padding: 0.28rem 0.55rem !important;
-    font-size: 11.5px !important;
+    padding: 0.22rem 0.4rem !important;
+    font-size: 11px !important;
+    white-space: nowrap !important;
+    min-width: 0 !important;
+}
+/* 페이지 네비 버튼 컴팩트 */
+[data-testid="stMain"] .stButton button:has-text("◀"),
+[data-testid="stMain"] .stButton button:has-text("▶") {
+    padding: 0.3rem 0.5rem !important;
 }
 
 /* ── 사이드바 nav 아이콘 (얇은 line SVG · 로그인페이지 톤 통일) ── */

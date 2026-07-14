@@ -1095,12 +1095,20 @@ def main():
                     subj_badge = " `서술형`" if row["is_subjective"] else ""
                     err_badge = " 오류" if row["error_note"] else ""
 
+                    # 헤더 한 줄 강제 (3열 카드에서 wrap 되지 않게)
+                    _chap = row['chapter'] or ''
+                    _chap_short = _chap if len(_chap) <= 6 else _chap[:5] + '…'
                     meta_line = (
-                        f"**{format_meta(row, short=True)}** · "
-                        f"{diff_badge} · `{row['chapter']}` · "
-                        f"{points_str}{subj_badge}{err_badge}"
+                        f'<div style="font-size:10.5px;line-height:1.4;'
+                        f'white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'
+                        f'<b>{format_meta(row, short=True)}</b> · '
+                        f'{diff_badge} · '
+                        f'<span style="color:#5f6c87">{_chap_short}</span> · '
+                        f'<span style="color:#5f6c87">{points_str}</span>'
+                        f'{subj_badge}{err_badge}'
+                        f'</div>'
                     )
-                    head_cols = st.columns([3, 1, 1])
+                    head_cols = st.columns([3.2, 1, 0.9])
                     head_cols[0].markdown(meta_line, unsafe_allow_html=True)
                     # 신고 버튼 — 얇은 line SVG flag
                     flagged = is_flagged(qid)
