@@ -311,6 +311,20 @@ def _normalize_math_inner(s: str) -> str:
         return f"\x00B{len(blocks) - 1}\x00"
 
     s = _TEXT_BLOCK.sub(_stash, s)
+    # HWP 변환 잔재: raw 'to' 마커 제거.
+    # (실제 \to 명령은 백슬래시 있어서 영향 X)
+    # `} to}` `} to$` `} to ` 케이스
+    s = re.sub(r"\}\s+to\s*(?=[\}\$\s])", "}", s)
+    # `}to` (공백 없이 붙은 경우)
+    s = re.sub(r"\}to\b(?![a-zA-Z])", "}", s)
+    # 숫자 뒤 raw 'to' — 조사 위치의 raw 마커. 삭제.
+    s = re.sub(r"(\d)\s*to\b(?![a-zA-Z])", r"\1", s)
+    # 문자·사분면 등 한글 앞 raw 'to' — `1to사분면` 케이스
+    s = re.sub(r"(\d|[a-zA-Z\}\)])to(?=[가-힣])", r"\1", s)
+    # HWP 변환 잔재: `\overline{...\pm...}` — 선분 PM 을 \pm(±)로 오변환.
+    # `\overline{\pm}` `\overline{\mathrm{\pm}}` → `\overline{PM}` 복구.
+    s = re.sub(r"\\overline\{\s*\\mathrm\{\s*\\pm\s*\}\s*\}", r"\\overline{PM}", s)
+    s = re.sub(r"\\overline\{\s*\\pm\s*\}", r"\\overline{PM}", s)
     # HWP 변환 잔재: ANG ≤ X / ANG <= X / ANG \leq X → \angle X (LE 두 글자가 <= 로 잘못 매핑됨)
     s = re.sub(r"\bANGLE\s+", r"\\angle ", s)
     s = re.sub(r"\bANG\s*(?:≤|<=|\\leq)\s*", r"\\angle ", s)
@@ -1286,48 +1300,50 @@ h2.exam-subtitle {
     font-weight: 900;
     margin-right: 3pt;
 }
-/* 우측 인덱스 — PART 박스 (어둠) + 알파벳 박스 (골드) */
+/* 우측 인덱스 — 회색 세로 사이드바 + 세로 챕터명 + 파란 로마숫자 배지
+   (참고: /Users/youngwoolee/클로드교재/대수_1학기기말_필수유형FINAL.pdf) */
 .bp-page .bp-side {
     position: absolute;
-    top: 22mm;
-    right: 2mm;
-    width: 10mm;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 8mm;
+    background: #e5e9f0;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 2mm;
+    align-items: center;
     z-index: 5;
 }
 .bp-page .bp-side .bp-side-part {
-    background: #1e293b;
-    color: #ffffff;
-    font-size: 9pt;
+    /* 세로 챕터명 (예: "삼각함수") — 상단 1/3 지점, 세로 텍스트 */
+    margin-top: 28mm;
+    font-family: 'Pretendard', 'NanumGothic', sans-serif;
+    font-size: 10pt;
     font-weight: 800;
-    letter-spacing: 4pt;
-    padding: 10mm 0;
+    letter-spacing: 3pt;
+    color: #0a1020;
     writing-mode: vertical-rl;
     text-orientation: mixed;
     text-align: center;
-    width: 10mm;
+    padding: 6mm 0;
 }
 .bp-page .bp-side .bp-side-letter {
-    background: #c8a96a;
+    /* 파란 로마숫자 배지 — 챕터명 아래 살짝 */
+    margin-top: 6mm;
+    background: #2b6fff;
     color: #ffffff;
-    font-size: 22pt;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18pt;
     font-weight: 900;
-    width: 10mm;
-    height: 14mm;
+    letter-spacing: -0.5pt;
+    width: 8mm;
+    height: 10mm;
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
 }
-.bp-page .bp-side .bp-side-tail {
-    width: 1.2pt;
-    margin: 0 auto;
-    background: #c8a96a;
-    flex: 1;
-    min-height: 50mm;
-}
+.bp-page .bp-side .bp-side-tail { display: none; }
 
 /* 새 교재 슬롯 — A·01 + 1차/2차/3차/OX + KEY POINT + MEMO */
 .slot.book-kp {
@@ -1420,6 +1436,8 @@ h2.exam-subtitle {
 .slot.book-kp .q-choices.cols3 .choice { flex: 0 0 calc(33.333% - 2.2mm); }
 /* 선지가 길 때 2/2/1 배열 (한 줄에 2개) */
 .slot.book-kp .q-choices.cols2 .choice { flex: 0 0 calc(50% - 1.6mm); }
+/* 2열도 넘칠 만큼 긴 선지는 1열 5행 배열 */
+.slot.book-kp .q-choices.cols1 .choice { flex: 0 0 100%; }
 .slot.book-kp .q-choices .choice {
     white-space: normal;
     overflow-wrap: break-word;
@@ -2071,13 +2089,21 @@ def _render_book_page_head(running_left: str, part_no: int,
     )
 
 
-def _render_book_page_side(part_no: int, letter: str) -> str:
-    """본문 페이지 우측 인덱스 바 (PART {n} 어둠박스 + 알파벳 골드박스)."""
+def _render_book_page_side(part_no: int, letter: str,
+                            chapter_name: str = "") -> str:
+    """본문 페이지 우측 인덱스 (회색 세로 사이드바 + 챕터명 + 로마숫자 배지).
+
+    참고: /Users/youngwoolee/클로드교재/대수_1학기기말_필수유형FINAL.pdf
+    - part_no: 대단원 번호 (I, II, III, ...) 로 변환
+    - chapter_name: 세로 텍스트 (예: "삼각함수")
+    - letter 인자는 하위호환 위해 남기지만 사용 안 함
+    """
+    roman = ROMAN_NUMERALS[part_no - 1] if 0 < part_no <= len(ROMAN_NUMERALS) \
+        else str(part_no)
     return (
         '<aside class="bp-side">'
-        f'<div class="bp-side-part">PART {part_no}</div>'
-        f'<div class="bp-side-letter">{_html.escape(letter)}</div>'
-        '<div class="bp-side-tail"></div>'
+        f'<div class="bp-side-part">{_html.escape(chapter_name)}</div>'
+        f'<div class="bp-side-letter">{_html.escape(roman)}</div>'
         '</aside>'
     )
 
@@ -2149,7 +2175,7 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
         # 매 페이지 헤더/우측 인덱스 클로저
         def _hdr(idx_, total_, _p=major_no, _m=major):
             return _render_book_page_head(running_left, _p, _m)
-        side = _render_book_page_side(major_no, letter)
+        side = _render_book_page_side(major_no, letter, chapter_name=major)
         # 슬롯 번호는 소단원(letter)마다 1부터 다시 시작 (A·01, A·02, ..., B·01)
         body_html, _ = _problem_pages_html(
             ch_qs, include_source, overrides, "",
