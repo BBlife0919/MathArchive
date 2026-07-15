@@ -1108,11 +1108,11 @@ def main():
                         f'{subj_badge}{err_badge}'
                         f'</div>'
                     )
-                    head_cols = st.columns([3.2, 1, 0.9])
+                    head_cols = st.columns([5, 0.6, 0.6])
                     head_cols[0].markdown(meta_line, unsafe_allow_html=True)
                     # 신고 버튼 — 얇은 line SVG flag
                     flagged = is_flagged(qid)
-                    flag_label = "신고됨" if flagged else "신고"
+                    flag_label = "⚑" if not flagged else "⚑·"
                     if head_cols[1].button(
                         flag_label, key=f"flag_{qid}",
                         use_container_width=True,

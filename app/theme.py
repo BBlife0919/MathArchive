@@ -28,14 +28,23 @@ _THEME_CSS = """
     --line: #e3e9f7;
 }
 
-/* 전역 폰트 — KaTeX 수식은 자체 폰트 유지 (문제/선지 폰트 절대 건드리지 말 것) */
+/* 전역 폰트 — KaTeX 수식은 자체 폰트 유지 (문제/선지 폰트 절대 건드리지 말 것)
+   나머지 모든 UI 요소를 Pretendard Variable 로 통일 */
 html, body, .stApp,
 .stMarkdown, .stMarkdown p, .stMarkdown li,
-h1, h2, h3, h4, h5, h6,
+h1, h2, h3, h4, h5, h6, p, span, div, li, a, label,
 .stButton, .stButton button,
-.stTextInput, .stSelectbox, .stMultiSelect,
+.stDownloadButton, .stDownloadButton button,
+.stFormSubmitButton, .stFormSubmitButton button,
+.stTextInput, .stNumberInput, .stTextArea, .stDateInput, .stTimeInput,
+.stSelectbox, .stMultiSelect, .stRadio, .stCheckbox,
+.stTabs, [data-baseweb="tab"], [data-baseweb="tab-list"],
+[data-testid="stExpander"], [data-testid="stExpander"] *,
 [data-testid="stWidgetLabel"],
-[data-testid="stCaptionContainer"] {
+[data-testid="stCaptionContainer"],
+[data-testid="stAlert"], [data-testid="stAlert"] *,
+[data-testid="stMetric"], [data-testid="stMetric"] *,
+[data-testid="stSidebar"], [data-testid="stSidebar"] * {
     font-family: 'Pretendard Variable', 'Pretendard',
         -apple-system, 'Apple SD Gothic Neo', sans-serif !important;
 }
@@ -360,31 +369,49 @@ canvas#scene,
     background-image: none !important;
 }
 
-/* ── 문제 카드 컴팩트 (3열 대응) — 헤더 한 줄 유지 ─── */
+/* ── 문제 카드 컴팩트 (3열 대응) ─────────────── */
+/* 사용자 요청: 한글 10pt, 숫자/수식 11pt */
 [data-testid="stVerticalBlockBorderWrapper"] {
     padding: 10px 12px !important;
     border-radius: 10px !important;
     box-shadow: 0 1px 2px rgba(10, 16, 32, 0.04) !important;
 }
 [data-testid="stVerticalBlockBorderWrapper"] .stMarkdown,
-[data-testid="stVerticalBlockBorderWrapper"] .stMarkdown p {
-    font-size: 12px !important;
+[data-testid="stVerticalBlockBorderWrapper"] .stMarkdown p,
+[data-testid="stVerticalBlockBorderWrapper"] .stMarkdown li {
+    font-size: 10pt !important;      /* 한글 */
     line-height: 1.5 !important;
+}
+/* 카드 안 KaTeX 수식만 11pt */
+[data-testid="stVerticalBlockBorderWrapper"] .katex {
+    font-size: 11pt !important;
 }
 [data-testid="stVerticalBlockBorderWrapper"] .stCaption,
 [data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCaptionContainer"] {
-    font-size: 10.5px !important;
+    font-size: 10pt !important;
 }
 [data-testid="stVerticalBlockBorderWrapper"] .stButton button {
-    padding: 0.22rem 0.4rem !important;
-    font-size: 11px !important;
+    padding: 0.2rem 0.35rem !important;
+    font-size: 12px !important;
     white-space: nowrap !important;
     min-width: 0 !important;
+    height: 28px !important;
+    line-height: 1 !important;
 }
-/* 페이지 네비 버튼 컴팩트 */
-[data-testid="stMain"] .stButton button:has-text("◀"),
-[data-testid="stMain"] .stButton button:has-text("▶") {
-    padding: 0.3rem 0.5rem !important;
+
+/* 카드 안 expander (정답 · 해설 보기) 크기 축소 */
+[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stExpander"] {
+    box-shadow: none !important;
+    margin-top: 6px !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stExpander"] summary {
+    padding: 5px 10px !important;
+    font-size: 10.5pt !important;
+    font-weight: 600 !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stExpander"]
+[data-testid="stExpanderDetails"] {
+    padding: 6px 10px 8px 10px !important;
 }
 
 /* ── 사이드바 nav 아이콘 (얇은 line SVG · 로그인페이지 톤 통일) ── */
