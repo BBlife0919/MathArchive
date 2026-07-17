@@ -369,20 +369,31 @@ canvas#scene,
     background-image: none !important;
 }
 
-/* ── 문제 카드 컴팩트 (3열 대응) ─────────────── */
-/* 사용자 요청: 한글 10pt, 숫자/수식 11pt */
+/* ── 문제 카드 (교재 렌더 규칙 이식) ─────────────
+   사용자 요청: 문제 본문 한글=NanumGothic 10pt / 수식(KaTeX)=11pt
+   (교재 PDF 의 .slot.book-kp .q-body 폰트 규칙과 통일) */
+
+/* 나눔고딕 웹폰트 로드 (한 번만) */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
 [data-testid="stVerticalBlockBorderWrapper"] {
     padding: 10px 12px !important;
     border-radius: 10px !important;
     box-shadow: 0 1px 2px rgba(10, 16, 32, 0.04) !important;
 }
+
+/* 문제 본문 (카드 안 markdown) — 나눔고딕 10pt */
 [data-testid="stVerticalBlockBorderWrapper"] .stMarkdown,
 [data-testid="stVerticalBlockBorderWrapper"] .stMarkdown p,
-[data-testid="stVerticalBlockBorderWrapper"] .stMarkdown li {
-    font-size: 10pt !important;      /* 한글 */
-    line-height: 1.5 !important;
+[data-testid="stVerticalBlockBorderWrapper"] .stMarkdown li,
+[data-testid="stVerticalBlockBorderWrapper"] .stMarkdown div:not(.katex-html):not(.katex) {
+    font-family: 'Nanum Gothic', 'NanumGothic', 'Apple SD Gothic Neo',
+                 sans-serif !important;
+    font-size: 10pt !important;
+    line-height: 1.6 !important;
 }
-/* 카드 안 KaTeX 수식만 11pt */
+
+/* 카드 안 KaTeX 수식 — 11pt (폰트 자체는 KaTeX 유지) */
 [data-testid="stVerticalBlockBorderWrapper"] .katex {
     font-size: 11pt !important;
 }

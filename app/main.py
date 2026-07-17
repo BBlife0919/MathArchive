@@ -497,11 +497,20 @@ def render_question_content(text: str, file_source: str = "",
                             question_id: int | None = None):
     """문제 텍스트를 Streamlit으로 렌더링한다.
 
-    - <<IMG:imageN>> → st.image()로 실제 이미지 표시 (DB image_path → R2 URL or 로컬)
-    - <<BOX_START>>...<<BOX_END>> → 테두리 박스로 표시
-    - 인라인 수식 $...$ 은 markdown이 자동 렌더링
-    - \\frac → \\dfrac 변환 (display-style 분수)
+    교재 PDF 렌더 규칙과 통일:
+    - pdf_engine._normalize_math_text 로 수식 정규화 (달러 짝 보정, sin→\\sin,
+      행렬 행구분자 등) → 매쏠로지 화면·PDF 렌더 결과 일치
+    - <<IMG:imageN>> → st.image()로 실제 이미지 표시
+    - <<BOX_START>>...<<BOX_END>> → 테두리 박스
+    - $...$ 인라인 수식 → markdown 자동 렌더 (KaTeX)
+    - \\frac → \\dfrac (display-style 분수)
     """
+    # pdf_engine 의 규칙 그대로 적용 (dollar 짝 · sin 등 함수명 · 행렬 등)
+    try:
+        from pdf_engine import _normalize_math_text
+        text = _normalize_math_text(text)
+    except Exception:
+        pass
     text = re.sub(r"\n{3,}", "\n\n", text)
 
     file_stem = Path(file_source).stem if file_source else ""
@@ -609,10 +618,7 @@ def render_question_text(text: str) -> str:
 
 
 def format_choices(choices_json) -> str:
-    """선택지 JSON을 보기 좋게 포맷한다.
-    첫 줄에 ①②③, 둘째 줄에 ④⑤가 위치하도록 선지 3개/2개로 끊어 배치.
-
-    Postgres JSONB 는 이미 list/dict로 디코드되므로 문자열/객체 모두 허용."""
+    """선택지 JSON → 교재 렌더 규칙과 통일 (cols3/cols2 자동 판정)."""
     if not choices_json:
         return ""
     if isinstance(choices_json, str):
@@ -625,20 +631,28 @@ def format_choices(choices_json) -> str:
     if not choices:
         return ""
     circle = {1: "①", 2: "②", 3: "③", 4: "④", 5: "⑤"}
-    # 번호 순 보장
     choices = sorted(choices, key=lambda c: c.get("number", 0))
+    try:
+        from pdf_engine import _normalize_math_text, _choice_col_class
+        normalize = _normalize_math_text
+        col_class = _choice_col_class(choices_json)
+    except Exception:
+        normalize = lambda s: s
+        col_class = "cols3"
     parts = []
     for c in choices:
         num = c.get("number", 0)
-        txt = c.get("text", "")
+        txt = normalize(c.get("text", ""))
         txt = _frac_to_dfrac(txt)
         parts.append(f"{circle.get(num, str(num))} {txt}")
-    # 첫 줄 3개 + 둘째 줄 나머지 (em-space 로 넓은 간격, 줄 사이 빈 줄)
-    # PDF 슬롯의 q-choices flex 간격과 시각적으로 비슷하게.
-    sep = "   "  # em-space 3개 (≈3em 너비)
-    if len(parts) > 3:
-        return sep.join(parts[:3]) + "\n\n" + sep.join(parts[3:])
-    return sep.join(parts)
+    sep = "   "
+    if col_class == "cols2" and len(parts) >= 4:
+        groups = [parts[0:2], parts[2:4], parts[4:]]
+    elif len(parts) > 3:
+        groups = [parts[0:3], parts[3:]]
+    else:
+        groups = [parts]
+    return "\n\n".join(sep.join(g) for g in groups if g)
 
 
 # ── PDF 생성 ──────────────────────────────────────────────────
