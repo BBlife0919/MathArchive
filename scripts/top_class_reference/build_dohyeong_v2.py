@@ -1,5 +1,6 @@
 """도형의 이동 KP 재빌드 v2 — 통번호·전량 이미지 이관·정답 마커 정확도."""
 import sys, os, zipfile, json, base64, glob, importlib, re, io
+from collections import Counter
 sys.path.insert(0, "/Users/youngwoolee/MathDB/app")
 sys.path.insert(0, "/Users/youngwoolee/MathDB/scripts")
 from dotenv import load_dotenv; load_dotenv("/Users/youngwoolee/MathDB/.env")
@@ -57,6 +58,51 @@ for sec_no in range(4):
 
 print(f"[PARSE] 총 {len(all_rows)}문제")
 
+# ── 1.4 선택지 번호 결번 보정
+# 이미지 전용 블록(텍스트 없이 그림 마커 하나만 있는 선택지)이 파서 단계에서
+# 통째로 누락되는 경우가 드물게 있음 — 정답이 결번 번호를 가리키는데 그
+# 선택지 자체가 안 보이는 사고 방지 (예: 92번 정답 ②인데 ②가 목록에 없던 케이스).
+# min~max 사이 빠진 번호를 빈 텍스트로 채워 넣는다.
+gap_fixed = 0
+for q in all_rows:
+    choices = q.get('choices') or []
+    if not choices:
+        continue
+    nums = sorted(c.get('number') for c in choices)
+    have = {c.get('number') for c in choices}
+    missing = set(range(nums[0], nums[-1] + 1)) - have
+    if missing:
+        for m in missing:
+            choices.append({'number': m, 'text': ''})
+        choices.sort(key=lambda c: c.get('number'))
+        gap_fixed += 1
+print(f"[CHOICE-GAP] 결번 보정: {gap_fixed}문제")
+
+# ── 1.5 그림형 통합 선택지 감지 (탑반 HWPX 특화)
+# 원본 문서가 5지선다 그래프/도형 묶음을 그림 1장으로 만들어 각 선택지 뒤에
+# 반복 삽입해놓은 경우 (①②④⑤ 모두 같은 이미지 참조) — 선택지마다 그림이
+# 통째로 5번 반복 렌더되는 문제 발생. 같은 이미지가 선택지 3개 이상에서
+# 반복되면 "통합 그림"으로 보고 본문 끝에 1회만 배치, 선택지에서는 (그 안의
+# 개별 crop 이미지 포함) 전부 제거.
+_IMG_MARKER_PRE = re.compile(r"<<IMG:(image\d+)>>")
+combined_img_fixed = 0
+for q in all_rows:
+    choices = q.get('choices') or []
+    if not choices:
+        continue
+    ref_count = Counter()
+    for c in choices:
+        for ref in set(_IMG_MARKER_PRE.findall(c.get('text', '') or '')):
+            ref_count[ref] += 1
+    combined_ref = next((ref for ref, cnt in ref_count.items() if cnt >= 3), None)
+    if not combined_ref:
+        continue
+    for c in choices:
+        c['text'] = _IMG_MARKER_PRE.sub('', c.get('text', '') or '').strip()
+    q['question_text'] = (q.get('question_text', '') or '') + f"<<IMG:{combined_ref}>>"
+    combined_img_fixed += 1
+print(f"[COMBINED-IMG] 통합 그림 선택지 보정: {combined_img_fixed}문제")
+
 # ── 2. HWPX BinData 이미지 전량 추출 (basename 그대로)
 SRC_IMG = "/tmp/dohyeong_bin_v2"
 os.makedirs(SRC_IMG, exist_ok=True)
@@ -79,7 +125,6 @@ for q in all_rows:
         referenced.update(IMG_MARKER.findall(c.get('text','') or ''))
 
 # 배지 판정: 여러 문제에서 반복 참조되면 배지 (아이콘/워터마크). aspect·크기 병용.
-from collections import Counter
 ref_count = Counter()
 for q in all_rows:
     seen = set()

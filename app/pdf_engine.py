@@ -324,6 +324,19 @@ def _normalize_math_inner(s: str) -> str:
         blocks.append(m.group(0))
         return f"\x00B{len(blocks) - 1}\x00"
 
+    # apostrophe(') 앞뒤에 붙은 \, (HWP 얇은 공백) 정리 — `l\, ' \,:` → `l' :`
+    # 원본이 프라임을 `\,'\, ` 로 감싸서 KaTeX 파싱 실패 → raw 노출되는 케이스.
+    # `\mathrm{...}` 스태시(아래 _TEXT_BLOCK.sub) 전에 처리해야 `}` 문자가
+    # 살아있어 매칭됨(예: `\mathrm{A}\,'` — A′처럼 점 이름을 \mathrm{}로 감싼
+    # 뒤 프라임이 오는 표기가 흔함, 2026-08-01 도형의이동 09번에서 발견).
+    s = re.sub(r"\\,\s*'\s*\\,", "'", s)
+    s = re.sub(r"([a-zA-Z0-9}])\\,\s*'", r"\1'", s)
+    s = re.sub(r"'\s*\\,", "'", s)
+    # HWP 변환 잔재(구버전 파서): prime 이 다음 변수명에 바로 붙어 미변환 노출된
+    # 경우(예: `A'B'C'`가 `A\,primeB\,primeC\,'`로 저장된 구 DB 레코드) 복구.
+    s = re.sub(r"\\,\s*prime(?=[A-Za-z가-힣])", "'", s)
+    s = re.sub(r"(?<![A-Za-z])\bprime(?=[A-Z])", "'", s)
+
     s = _TEXT_BLOCK.sub(_stash, s)
     # HWP 변환 잔재: raw 'to' 마커 제거.
     # (실제 \to 명령은 백슬래시 있어서 영향 X)
@@ -352,11 +365,6 @@ def _normalize_math_inner(s: str) -> str:
     # 유사: ANG → \angle 케이스와 동일 패턴 (`ANGLE`의 LE 두 글자가 <= 로 매핑됨)
     s = re.sub(r"(?<!\\)\bTRIANGLE\s+", r"\\triangle ", s, flags=re.IGNORECASE)
     s = re.sub(r"(?<!\\)\bTRIANG\s*(?:≤|<=|\\leq)\s*", r"\\triangle ", s, flags=re.IGNORECASE)
-    # apostrophe(') 앞뒤에 붙은 \, (HWP 얇은 공백) 정리 — `l\, ' \,:` → `l' :`
-    # 원본이 프라임을 `\,'\, ` 로 감싸서 KaTeX 파싱 실패 → raw 노출되는 케이스
-    s = re.sub(r"\\,\s*'\s*\\,", "'", s)
-    s = re.sub(r"([a-zA-Z0-9])\\,\s*'", r"\1'", s)
-    s = re.sub(r"'\s*\\,", "'", s)
     # HWP 변환 잔재: ANG ≤ X / ANG <= X / ANG \leq X → \angle X (LE 두 글자가 <= 로 잘못 매핑됨)
     s = re.sub(r"(?<!\\)\bANGLE\s+", r"\\angle ", s, flags=re.IGNORECASE)
     s = re.sub(r"(?<!\\)\bANG\s*(?:≤|<=|\\leq)\s*", r"\\angle ", s, flags=re.IGNORECASE)
@@ -2415,6 +2423,77 @@ def html_to_pdf_bytes(html: str) -> bytes:
                 page.evaluate("window.__typeset()")
         except Exception:
             pass
+        # 표지/디바이더 큰 타이틀 자동 축소 — `.bc-title-big`/`.dcov-title`(96pt),
+        # `.cd-section-title`(38pt) 등 고정 폰트인데 긴 단어(예: "WORKBOOK")나
+        # 긴 유형명(예: "점과 도형의 평행이동과 대칭이동")이 페이지 폭을 넘으면
+        # Chromium 인쇄 엔진이 문서 전체를 축소(shrink-to-fit)해버려 본문 폰트까지
+        # 같이 작아지는 사고 발생(2026-08-01 발견). 넘치면 페이지 폭에 맞을 때까지 축소.
+        try:
+            page.evaluate("""
+                () => {
+                  document.querySelectorAll('.bc-title-big, .dcov-title, .cd-section-title, .cd-major').forEach((el) => {
+                    // 음수 letter-spacing 탓에 잉크가 scrollWidth 박스보다 살짝
+                    // 더 번져나가는 경우가 있어 3% 여유를 둠(정확히 안 맞으면
+                    // Chromium 인쇄 엔진이 문서 전체를 미세하게 shrink-to-fit).
+                    const maxWidth = (el.parentElement || document.documentElement).clientWidth * 0.82;
+                    let guard = 0;
+                    while (el.scrollWidth > maxWidth && guard < 40) {
+                      const cur = parseFloat(getComputedStyle(el).fontSize);
+                      el.style.fontSize = (cur * 0.95) + 'px';
+                      guard++;
+                    }
+                  });
+                }
+            """)
+        except Exception:
+            pass
+        # 해설 2단(.sol-item) 등 좁은 컨테이너에서 유난히 긴 중첩 수식(예: 큰
+        # \sqrt{\left\{...\right\}^2+...})이 폭을 넘치는 경우 — 방치하면
+        # Chromium 인쇄 엔진이 "문서 전체"를 shrink-to-fit 해버려 관련 없는
+        # 다른 모든 페이지 본문 폰트까지 같이 작아지는 사고 발생
+        # (2026-08-01 도형의이동 44번 해설에서 발견). 해당 블록의 KaTeX 폰트만
+        # 살짝씩 줄여서 그 블록 안에서 맞추면 다른 페이지는 영향 없음.
+        try:
+            page.evaluate("""
+                () => {
+                  document.querySelectorAll('.sol-item, .q-body, .kp-right').forEach((el) => {
+                    let guard = 0;
+                    while (el.scrollWidth > el.clientWidth + 2 && guard < 20) {
+                      const kts = el.querySelectorAll('.katex');
+                      if (!kts.length) break;
+                      kts.forEach((k) => {
+                        const cur = parseFloat(getComputedStyle(k).fontSize) || 11;
+                        k.style.setProperty('font-size', (cur * 0.95) + 'px', 'important');
+                      });
+                      guard++;
+                    }
+                  });
+                }
+            """)
+        except Exception:
+            pass
+        if os.environ.get("DEBUG_FIND_OVERFLOW"):
+            try:
+                overflows = page.evaluate("""
+                    () => {
+                      const out = [];
+                      document.querySelectorAll('body *').forEach((el) => {
+                        if (el.children.length > 2) return;
+                        const sw = el.scrollWidth, cw = el.clientWidth;
+                        if (sw > cw + 3 && sw > 150 && cw > 5 && el.offsetParent !== null) {
+                          out.push({tag: el.tagName, cls: el.className, sw, cw,
+                                    text: (el.textContent||'').slice(0,60)});
+                        }
+                      });
+                      return out;
+                    }
+                """)
+                import sys as _sys
+                print(f"[DEBUG_FIND_OVERFLOW] {len(overflows)} elements", file=_sys.stderr)
+                for o in overflows[:40]:
+                    print(o, file=_sys.stderr)
+            except Exception as e:
+                print(f"[DEBUG_FIND_OVERFLOW] error: {e}", file=__import__("sys").stderr)
         pdf_bytes = page.pdf(
             format="A4",
             print_background=True,

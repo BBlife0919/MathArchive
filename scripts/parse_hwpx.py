@@ -626,7 +626,13 @@ def hwp_eq_to_latex(script: str) -> str:
     s = re.sub(r"\\boxed\{\s*\}", r"\\square ", s)
 
     # 10) prime → '
-    s = re.sub(r"\bprime\b", "'", s)
+    # HWP 원본은 `A`prime`(백틱 구분자)로 표기하는데, prime 뒤에 다음 변수가
+    # 공백 없이 바로 붙는 경우(예: `A`primeB`primeC`prime` = A'B'C')가 있어
+    # trailing \b 요구 시 매칭 실패 → 문자 그대로 "primeB" 가 노출되는 사고.
+    # 앞의 백틱도 함께 삼켜서 "A`prime" → "A'"(공백 없이) 로 붙임 —
+    # 백틱을 남기면 뒤 단계(14번, `→\,)에서 `\mathrm{A}\,'` 가 되어 KaTeX가
+    # 깨진 텍스트로 렌더(사고 사례: 도형의 이동 09번 A'B'C').
+    s = re.sub(r"`?\bprime", "'", s)
 
     # 11) it (italic) — LaTeX 수학모드 기본이므로 제거
     s = re.sub(r"\bit\s+", "", s)
