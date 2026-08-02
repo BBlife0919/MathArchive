@@ -12,6 +12,7 @@ import json
 import os
 import sqlite3
 import sys
+import unicodedata
 from pathlib import Path
 
 # parse_hwpx 모듈 임포트
@@ -298,7 +299,9 @@ def main():
     errors = []
 
     for i, fname in enumerate(hwpx_files, 1):
-        if fname in existing:
+        # macOS(APFS)는 파일명을 NFD로 반환하는 경우가 있어 DB의 NFC 저장값과
+        # 비교가 어긋나 중복 적재되는 문제가 있었음 → NFC로 정규화 후 비교
+        if unicodedata.normalize("NFC", fname) in existing:
             skipped += 1
             continue
 
