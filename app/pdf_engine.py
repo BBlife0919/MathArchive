@@ -2423,22 +2423,41 @@ def html_to_pdf_bytes(html: str) -> bytes:
                 page.evaluate("window.__typeset()")
         except Exception:
             pass
-        # 표지/디바이더 큰 타이틀 자동 축소 — `.bc-title-big`/`.dcov-title`(96pt),
-        # `.cd-section-title`(38pt) 등 고정 폰트인데 긴 단어(예: "WORKBOOK")나
-        # 긴 유형명(예: "점과 도형의 평행이동과 대칭이동")이 페이지 폭을 넘으면
+        # 표지 big word 자동 축소 — `.bc-title-big`/`.dcov-title`(96pt, 줄바꿈 없이
+        # 한 단어) 고정 폰트인데 긴 단어(예: "WORKBOOK")가 페이지 폭을 넘으면
         # Chromium 인쇄 엔진이 문서 전체를 축소(shrink-to-fit)해버려 본문 폰트까지
-        # 같이 작아지는 사고 발생(2026-08-01 발견). 넘치면 페이지 폭에 맞을 때까지 축소.
+        # 같이 작아지는 사고 발생(2026-08-01 발견). 부모 폭 기준 82% 여유 필요
+        # (음수 letter-spacing 탓에 잉크가 scrollWidth 박스보다 더 번져나감 — 실측
+        # 확인된 값, 3% 여유로는 부족했음).
         try:
             page.evaluate("""
                 () => {
-                  document.querySelectorAll('.bc-title-big, .dcov-title, .cd-section-title, .cd-major').forEach((el) => {
-                    // 음수 letter-spacing 탓에 잉크가 scrollWidth 박스보다 살짝
-                    // 더 번져나가는 경우가 있어 3% 여유를 둠(정확히 안 맞으면
-                    // Chromium 인쇄 엔진이 문서 전체를 미세하게 shrink-to-fit).
+                  document.querySelectorAll('.bc-title-big, .dcov-title').forEach((el) => {
                     const maxWidth = (el.parentElement || document.documentElement).clientWidth * 0.82;
                     let guard = 0;
                     while (el.scrollWidth > maxWidth && guard < 40) {
                       const cur = parseFloat(getComputedStyle(el).fontSize);
+                      el.style.fontSize = (cur * 0.95) + 'px';
+                      guard++;
+                    }
+                  });
+                }
+            """)
+        except Exception:
+            pass
+        # 디바이더 유형명(.cd-section-title/.cd-major) 자동 축소 — 이 요소는
+        # 줄바꿈이 되므로(위 big word 와 다름) 부모 폭과 비교하면 항상 "넘치는 것
+        # 처럼" 오판정됨(자기 자신의 자연폭이 항상 부모폭의 82%를 넘어서 매 페이지
+        # 불필요하게 축소되는 사고 발생 — 2026-08-03 발견, 38pt가 4.9pt까지
+        # 줄어듦). 반드시 자기 자신의 scrollWidth vs clientWidth 로 "진짜 줄바꿈
+        # 불가 오버플로우"만 잡아야 함(.sol-item 과 동일 패턴).
+        try:
+            page.evaluate("""
+                () => {
+                  document.querySelectorAll('.cd-section-title, .cd-major').forEach((el) => {
+                    let guard = 0;
+                    while (el.scrollWidth > el.clientWidth + 2 && guard < 20) {
+                      const cur = parseFloat(getComputedStyle(el).fontSize) || 38;
                       el.style.fontSize = (cur * 0.95) + 'px';
                       guard++;
                     }
