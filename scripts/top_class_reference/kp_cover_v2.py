@@ -26,7 +26,7 @@ body {{ margin:0; padding:0; width:{CW}pt; height:{CH}pt; position:relative; bac
   flex-direction:row; align-items:flex-start; justify-content:center; gap:20pt; }}
 .big-word .col {{ display:flex; flex-direction:column; align-items:center; }}
 .big-word .col span {{ font-family:'Paperlogy 9 Black', sans-serif; font-size:46pt; color:#16171b;
-  line-height:1.25; letter-spacing:-0.5pt; }}
+  line-height:1.25; letter-spacing:0; }}
 .rule {{ position:absolute; left:50pt; right:50pt; top:672pt; height:1pt; background:#d8dade; }}
 .footer {{ position:absolute; left:50pt; right:50pt; top:686pt; display:flex; align-items:center; }}
 .footer .instructor {{ flex:1; text-align:center; font-size:15pt; font-weight:700; color:#16171b; }}
