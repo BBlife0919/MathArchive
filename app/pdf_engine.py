@@ -1752,12 +1752,18 @@ def _group_by_chapter(questions: list[dict]) -> list[tuple[str, list[dict]]]:
 
 def _build_chapter_sections(
     questions: list[dict],
+    major_hint: str | None = None,
 ) -> list[tuple[int, int, str, str, str, list[dict]]]:
     """문제 리스트를 (major_no, section_no, letter, major, minor, qs) 시퀀스로.
 
     major_no = 대단원 번호 (PART 1, PART 2 ...).
     section_no = 같은 대단원 안 소단원 번호 (대단원 바뀌면 다시 1).
     letter = 같은 대단원 안 소단원 알파벳 ('A', 'B', 'C' ...).
+    major_hint: 지정하면 curriculum 역매핑 대신 이 값을 major 로 고정 사용.
+        "유형 NN · 긴 제목" 처럼 chapter 가 curriculum 의 중단원명과 다른
+        합성 라벨(탑반 유형별 다이바이더)일 때, 매핑 실패로 chapter 원문
+        그대로가 major 가 되어 우측 세로 사이드바에 긴 문자열이 한 글자씩
+        쌓여 깨지는 문제 방지 (2026-08-05 발견).
     """
     groups = _group_by_chapter(questions)
     out: list[tuple[int, int, str, str, str, list[dict]]] = []
@@ -1765,7 +1771,7 @@ def _build_chapter_sections(
     section_no = 0
     last_major: str | None = None
     for minor, qs in groups:
-        major = _minor_to_major(minor)
+        major = major_hint or _minor_to_major(minor)
         if major != last_major:
             major_no += 1
             section_no = 1
@@ -2240,7 +2246,8 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      dcov_level: str | None = None,
                      extra_css: str = "",
                      extra_js: str = "",
-                     running_numbering: bool = False) -> str:
+                     running_numbering: bool = False,
+                     major_hint: str | None = None) -> str:
     """교재 HTML: 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설.
 
     cover_style: 'final' (기본, KERNEL POINT 스타일) | 'diagonal' (평면좌표 스타일)
@@ -2274,7 +2281,7 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
             logo_uri=logo_uri,
         )
     # 챕터별 그룹화 → (major_no, section_no, letter, major, minor, qs) 시퀀스
-    sections = _build_chapter_sections(questions)
+    sections = _build_chapter_sections(questions, major_hint=major_hint)
     body_parts: list[str] = [cover_html]
     running_left = page_running_left or title or "KERNEL POINT"
     running_slot = 1
@@ -2656,7 +2663,8 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       page_running_left: str | None = None,
                       extra_css: str = "",
                       extra_js: str = "",
-                      running_numbering: bool = False) -> bytes:
+                      running_numbering: bool = False,
+                      major_hint: str | None = None) -> bytes:
     """교재 PDF 생성. 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
@@ -2678,5 +2686,6 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         extra_css=extra_css,
         extra_js=extra_js,
         running_numbering=running_numbering,
+        major_hint=major_hint,
     )
     return html_to_pdf_bytes(html)
