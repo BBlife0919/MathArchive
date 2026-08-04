@@ -25,7 +25,7 @@ body {{ margin:0; padding:0; width:{CW}pt; height:{CH}pt; position:relative; bac
   font-weight:600; color:#8a8f9d; line-height:1.35; }}
 .gradient {{ position:absolute; left:50pt; top:100pt; width:330pt; height:480pt; }}
 .big-word {{ position:absolute; left:400pt; right:50pt; top:220pt; bottom:150pt; display:flex;
-  flex-direction:row; align-items:center; justify-content:center; gap:10pt; }}
+  flex-direction:row; align-items:flex-start; justify-content:center; gap:10pt; }}
 .big-word .col {{ writing-mode:vertical-rl; text-orientation:sideways; }}
 .big-word .col span {{ font-family:'Paperlogy 9 Black', sans-serif; font-size:44pt; color:#16171b;
   letter-spacing:1pt; }}
@@ -37,8 +37,8 @@ body {{ margin:0; padding:0; width:{CW}pt; height:{CH}pt; position:relative; bac
 <div class="subtitle">{subtitle}</div>
 <img class="gradient" src="data:image/png;base64,{_gradient_img}">
 <div class="big-word">
-  <div class="col"><span>KERNEL</span></div>
   <div class="col"><span>POINT</span></div>
+  <div class="col"><span>KERNEL</span></div>
 </div>
 <div class="rule"></div>
 <div class="footer">
