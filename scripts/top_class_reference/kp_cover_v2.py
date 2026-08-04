@@ -23,10 +23,10 @@ body {{ margin:0; padding:0; width:{CW}pt; height:{CH}pt; position:relative; bac
   font-weight:600; color:#8a8f9d; line-height:1.35; }}
 .gradient {{ position:absolute; left:50pt; top:100pt; width:330pt; height:480pt; }}
 .big-word {{ position:absolute; left:400pt; right:50pt; top:150pt; bottom:150pt; display:flex;
-  flex-direction:row; align-items:center; justify-content:space-between; }}
+  flex-direction:row; align-items:flex-start; justify-content:center; gap:20pt; }}
 .big-word .col {{ display:flex; flex-direction:column; align-items:center; }}
-.big-word .col span {{ font-family:'Paperlogy 9 Black', sans-serif; font-size:32pt; color:#16171b;
-  line-height:1.28; letter-spacing:0; }}
+.big-word .col span {{ font-family:'Paperlogy 9 Black', sans-serif; font-size:46pt; color:#16171b;
+  line-height:1.25; letter-spacing:-0.5pt; }}
 .rule {{ position:absolute; left:50pt; right:50pt; top:672pt; height:1pt; background:#d8dade; }}
 .footer {{ position:absolute; left:50pt; right:50pt; top:686pt; display:flex; align-items:center; }}
 .footer .instructor {{ flex:1; text-align:center; font-size:15pt; font-weight:700; color:#16171b; }}
