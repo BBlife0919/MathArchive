@@ -8,6 +8,7 @@ import base64, os
 CW, CH = 595.9199, 842.8800
 
 _paper_black = base64.b64encode(open(os.path.expanduser("~/Library/Fonts/Paperlogy-9Black.ttf"), "rb").read()).decode()
+_cafe24_ssurround = base64.b64encode(open(os.path.expanduser("~/Library/Fonts/Cafe24Ssurround-v2.0.ttf"), "rb").read()).decode()
 _gradient_img = base64.b64encode(open("/Users/youngwoolee/MathDB/app/assets/kp_cover_gradient_shape.png", "rb").read()).decode()
 _eum_logo = base64.b64encode(open("/Users/youngwoolee/MathDB/app/assets/eum_logo.png", "rb").read()).decode()
 
@@ -16,6 +17,7 @@ def kp_cover_v2_html(subtitle: str = "공수2 중간고사대비", instructor: s
     return f"""<!DOCTYPE html><html><head>
 <style>
 @font-face {{ font-family:'Paperlogy 9 Black'; src:url(data:font/ttf;base64,{_paper_black}) format('truetype'); }}
+@font-face {{ font-family:'Cafe24 Ssurround'; src:url(data:font/ttf;base64,{_cafe24_ssurround}) format('truetype'); }}
 @page {{ size: A4; margin: 0; }} * {{ box-sizing: border-box; }}
 body {{ margin:0; padding:0; width:{CW}pt; height:{CH}pt; position:relative; background:#ffffff;
   font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif; }}
@@ -25,8 +27,8 @@ body {{ margin:0; padding:0; width:{CW}pt; height:{CH}pt; position:relative; bac
 .big-word {{ position:absolute; left:400pt; right:50pt; top:220pt; bottom:150pt; display:flex;
   flex-direction:row; align-items:flex-start; justify-content:center; gap:20pt; }}
 .big-word .col {{ display:flex; flex-direction:column; align-items:center; }}
-.big-word .col span {{ font-family:'Paperlogy 9 Black', sans-serif; font-size:46pt; color:#16171b;
-  line-height:1.25; letter-spacing:0; }}
+.big-word .col span {{ font-family:'Cafe24 Ssurround', sans-serif; font-size:46pt; color:#16171b;
+  line-height:0.72; letter-spacing:0; }}
 .rule {{ position:absolute; left:50pt; right:50pt; top:672pt; height:1pt; background:#d8dade; }}
 .footer {{ position:absolute; left:50pt; right:50pt; top:686pt; display:flex; align-items:center; }}
 .footer .instructor {{ flex:1; text-align:center; font-size:15pt; font-weight:700; color:#16171b; }}
