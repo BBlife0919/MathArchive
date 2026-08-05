@@ -1,0 +1,31 @@
+.expander {
+  margin-top: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.expander-summary {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: none;
+  border: none;
+  font-size: 10.5pt;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.expander-caret {
+  color: var(--muted);
+  font-size: 10px;
+  width: 10px;
+}
+
+.expander-body {
+  padding: 6px 10px 8px;
+  border-top: 1px solid var(--line);
+}

@@ -1,0 +1,80 @@
+.ms-field {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.ms-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.ms-trigger {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.ms-trigger:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ms-caret {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.ms-dropdown {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(10, 16, 32, 0.12);
+  padding: 6px;
+}
+
+.ms-clear {
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  border: none;
+  background: none;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+
+.ms-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  font-size: 13px;
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ms-option:hover {
+  background: var(--paper);
+}

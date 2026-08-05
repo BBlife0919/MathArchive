@@ -1,0 +1,24 @@
+.exam-preview {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.exam-preview-list {
+  flex: 1;
+  min-width: 0;
+}
+
+.exam-preview-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .exam-preview {
+    flex-direction: column;
+  }
+  .exam-preview-sidebar {
+    width: 100%;
+  }
+}

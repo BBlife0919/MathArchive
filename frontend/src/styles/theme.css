@@ -1,0 +1,39 @@
+/* 매쏠로지 통합 테마 — app/theme.py 의 팔레트·폰트 규칙을 그대로 이식.
+   주의(폰트 불가침): KaTeX 수식·문제 본문·선지 폰트/크기 규칙은
+   app/theme.py:385-410 값을 그대로 유지한다 — 임의 변경 금지. */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+:root {
+  --ink: #0a1020;
+  --blue: #2b6fff;
+  --blue-soft: #9ec1ff;
+  --paper: #f5f8ff;
+  --text: #13203c;
+  --muted: #5f6c87;
+  --line: #e3e9f7;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system,
+    'Apple SD Gothic Neo', sans-serif;
+}
+
+/* KaTeX 는 자체 폰트 유지 — 전역 폰트 규칙에서 배제 (폰트 불가침 규칙) */
+.katex, .katex * {
+  font-family: KaTeX_Main, KaTeX_Math, KaTeX_Size1, KaTeX_Size2, KaTeX_Size3,
+    KaTeX_Size4, KaTeX_AMS, KaTeX_Caligraphic, KaTeX_Fraktur, KaTeX_SansSerif,
+    KaTeX_Script, KaTeX_Typewriter, 'Times New Roman', serif;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}

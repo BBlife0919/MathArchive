@@ -1,0 +1,55 @@
+.pdf-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  position: sticky;
+  top: 16px;
+}
+
+.pdf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.pdf-field input {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.pdf-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.pdf-subtitle-input {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.pdf-download-btn {
+  margin-top: 6px;
+  padding: 11px 0;
+}
+
+.pdf-error {
+  color: #ef4444;
+  font-size: 12px;
+}
