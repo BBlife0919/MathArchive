@@ -10,6 +10,7 @@ import AdminPage from "./pages/AdminPage";
 import KakaoQueuePage from "./pages/KakaoQueuePage";
 import AuditPage from "./pages/AuditPage";
 import AppShell, { type AppPage } from "./components/layout/AppShell";
+import LoadingScreen from "./components/LoadingScreen";
 import "./styles/theme.css";
 
 function Gate() {
@@ -17,7 +18,7 @@ function Gate() {
   const [page, setPage] = useState<AppPage>("exam");
 
   if (loading) {
-    return <div style={{ padding: 24 }}>불러오는 중...</div>;
+    return <LoadingScreen />;
   }
   if (!user) {
     return <AuthPage />;
