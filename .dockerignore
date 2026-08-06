@@ -1,0 +1,21 @@
+# 배포 컨테이너에는 필요 없는 대용량 디렉터리 — 이미지는 DB의 image_path(R2 URL)로
+# 서빙되고 로컬 images/ 는 개발용 폴백일 뿐이라 24GB를 그대로 올릴 필요 없음.
+images/
+output/*
+!output/student_templates/
+!output/student_templates/**
+db/
+raw/
+parsed/
+
+# 로컬 전용 / 버전관리 메타
+.git/
+.claude/
+frontend/node_modules/
+frontend/dist/
+**/__pycache__/
+**/*.pyc
+.venv/
+venv/
+*.sqlite
+*.bak_review*
