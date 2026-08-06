@@ -14,6 +14,13 @@
   flex-shrink: 0;
 }
 
+.pdf-mode-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
 @media (max-width: 900px) {
   .exam-preview {
     flex-direction: column;

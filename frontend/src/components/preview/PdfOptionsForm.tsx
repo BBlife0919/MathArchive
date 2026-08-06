@@ -1,20 +1,10 @@
 import { useState } from "react";
 import { downloadExamPdf } from "../../api/exam";
+import { triggerDownload } from "../../utils/download";
 import "./PdfOptionsForm.css";
 
 interface Props {
   questionIds: number[];
-}
-
-function triggerDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
 }
 
 export default function PdfOptionsForm({ questionIds }: Props) {
