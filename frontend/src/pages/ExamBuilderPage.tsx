@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import { useSelection } from "../context/SelectionContext";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
 import {
@@ -40,7 +39,6 @@ function buildSearchRequest(state: FilterState, page: number): SearchRequest {
 }
 
 export default function ExamBuilderPage() {
-  const { user, logout } = useAuth();
   const { selectedIds, count, toggle, bulkAdd, replaceAll, clear } = useSelection();
 
   const [tab, setTab] = useState<Tab>("list");
@@ -124,13 +122,7 @@ export default function ExamBuilderPage() {
       />
 
       <main className="exam-builder-main">
-        <header className="exam-builder-header">
-          <h1>문제은행 · 시험지 · 교재 제작</h1>
-          <div className="exam-builder-user">
-            <span>{user?.name}님</span>
-            <button type="button" onClick={() => logout()}>로그아웃</button>
-          </div>
-        </header>
+        <h1 className="exam-builder-title">문제은행 · 시험지 · 교재 제작</h1>
 
         <div className="tab-bar">
           <button

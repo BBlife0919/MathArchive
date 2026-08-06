@@ -27,6 +27,19 @@ def query(sql: str, params=()):
     return get_connection().execute(sql, params).fetchall()
 
 
+def execute_write(sql: str, params=()) -> int:
+    """INSERT/UPDATE 실행. main.py(2_학생카드.py 등)의 exec_commit() 과 동일 패턴
+    — SQLite/Postgres 양쪽에서 동작하도록 commit 은 try/except 로 감싼다
+    (Postgres 커넥션은 autocommit 이라 commit() 호출 자체가 무해하게 no-op)."""
+    conn = get_connection()
+    cur = conn.execute(sql, params)
+    try:
+        conn.commit()
+    except Exception:
+        pass
+    return cur.lastrowid if hasattr(cur, "lastrowid") else 0
+
+
 DIFF_VALID = ["하", "중", "상", "킬"]
 
 # ── 필터 옵션 (main.py:161-204 SQL 그대로, TTL 캐시만 수동 구현) ──────

@@ -1,0 +1,180 @@
+.sc-section {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.sc-section:last-child {
+  border-bottom: none;
+}
+
+.sc-section-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.sc-caption {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.sc-metric-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.sc-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 90px;
+}
+
+.sc-metric span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.sc-metric b {
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.sc-metric small {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.sc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sc-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.sc-form input,
+.sc-form select,
+.sc-form textarea {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text);
+  font-family: inherit;
+}
+
+.sc-form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.sc-form-row label {
+  flex: 1;
+}
+
+.sc-slider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.sc-slider span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.sc-radio-row {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 400;
+}
+
+.sc-radio-row label {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  font-weight: 400;
+}
+
+.sc-chart-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sc-chart-row > * {
+  flex: 1;
+  min-width: 240px;
+}
+
+.sc-score-table p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.sc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.sc-table th, .sc-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sc-table th {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.sc-empty {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.sc-guide {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.sc-guide ul {
+  margin: 4px 0 10px;
+  padding-left: 20px;
+}
+
+.sc-assessment-latest {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.sc-log-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  font-size: 13px;
+}

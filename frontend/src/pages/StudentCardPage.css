@@ -1,0 +1,47 @@
+.student-card-page {
+  display: flex;
+  align-items: flex-start;
+}
+
+.student-card-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  padding: 16px;
+  border-right: 1px solid var(--line);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.student-card-sidebar-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.student-card-sidebar select {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.student-card-template-btn {
+  display: block;
+  text-align: center;
+  padding: 8px 0;
+  margin-top: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.student-card-main {
+  flex: 1;
+  padding: 20px 24px;
+  min-width: 0;
+}

@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 
 import main as legacy_main  # type: ignore  (IMAGE_DIR 재사용 — 로컬 이미지 폴백용)
 
-from .routers import auth, exam, meta, questions
+from .routers import auth, exam, meta, questions, students
 
 app = FastAPI(title="MathDB API")
 
@@ -30,10 +30,18 @@ if legacy_main.IMAGE_DIR.exists():
         name="images",
     )
 
+if students.TEMPLATES_DIR.exists():
+    app.mount(
+        "/static/student_templates",
+        StaticFiles(directory=str(students.TEMPLATES_DIR)),
+        name="student_templates",
+    )
+
 app.include_router(meta.router)
 app.include_router(questions.router)
 app.include_router(auth.router)
 app.include_router(exam.router)
+app.include_router(students.router)
 
 
 @app.get("/api/ping")
