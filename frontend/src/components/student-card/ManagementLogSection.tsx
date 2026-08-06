@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { addManagementLog, type StudentDashboard } from "../../api/students";
+import { todayLocalISO } from "../../utils/date";
 import Expander from "../questions/Expander";
 import "./sections.css";
 
@@ -9,14 +10,13 @@ interface Props {
   onUpdate: (d: StudentDashboard) => void;
 }
 
-const today = () => new Date().toISOString().slice(0, 10);
 const LOG_TYPES = ["보호자", "출결", "메모"] as const;
 const TABS = ["전체", ...LOG_TYPES] as const;
 
 export default function ManagementLogSection({ sid, dashboard, onUpdate }: Props) {
   const { logs } = dashboard;
 
-  const [mlDate, setMlDate] = useState(today());
+  const [mlDate, setMlDate] = useState(todayLocalISO());
   const [mlType, setMlType] = useState<(typeof LOG_TYPES)[number]>("보호자");
   const [summary, setSummary] = useState("");
   const [detail, setDetail] = useState("");

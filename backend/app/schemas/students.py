@@ -14,6 +14,13 @@ class StudentBasic(BaseModel):
     note: Optional[str] = None
 
 
+class CreateStudentRequest(BaseModel):
+    name: str
+    school: Optional[str] = None
+    grade: int = Field(default=1, ge=1, le=6)
+    class_name: Optional[str] = None
+
+
 class PrismScore(BaseModel):
     eval_date: str
     score_p: int

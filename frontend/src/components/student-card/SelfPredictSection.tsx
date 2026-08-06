@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { addSelfPredict, type StudentDashboard } from "../../api/students";
+import { todayLocalISO } from "../../utils/date";
 import Expander from "../questions/Expander";
 import SelfPredictChart from "../charts/SelfPredictChart";
 import "./sections.css";
@@ -10,15 +11,13 @@ interface Props {
   onUpdate: (d: StudentDashboard) => void;
 }
 
-const today = () => new Date().toISOString().slice(0, 10);
-
 export default function SelfPredictSection({ sid, dashboard, onUpdate }: Props) {
   const {
     self_predict_entries, self_predict_chart, self_predict_avg_gap,
     self_predict_over_count, self_predict_under_count,
   } = dashboard;
 
-  const [spDate, setSpDate] = useState(today());
+  const [spDate, setSpDate] = useState(todayLocalISO());
   const [title, setTitle] = useState("");
   const [predicted, setPredicted] = useState(80);
   const [actual, setActual] = useState(70);

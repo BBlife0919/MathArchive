@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from ..deps import require_approved
 from ..schemas.students import (
-    ManagementLogRequest, PrismEvalRequest, ProgressLogRequest,
+    CreateStudentRequest, ManagementLogRequest, PrismEvalRequest, ProgressLogRequest,
     QualitativeAssessmentRequest, QuantityAssessmentRequest, SelfPredictRequest,
     StudentBasic, StudentDashboard, StudentTemplateItem, StudentTemplatesResponse,
     UpdateStudentBasicRequest,
@@ -30,6 +30,15 @@ _TEMPLATE_FILES = [
 @router.get("", response_model=list[StudentBasic])
 def get_students():
     return [StudentBasic(**dict(r)) for r in student_service.list_students()]
+
+
+@router.post("", response_model=StudentBasic)
+def create_student(req: CreateStudentRequest):
+    sid = student_service.create_student(
+        req.name.strip(), (req.school or "").strip() or None,
+        req.grade, (req.class_name or "").strip() or None,
+    )
+    return StudentBasic(**student_service.get_student(sid))
 
 
 @router.get("/templates", response_model=StudentTemplatesResponse)

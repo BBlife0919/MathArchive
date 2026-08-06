@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { addProgress, type StudentDashboard } from "../../api/students";
+import { todayLocalISO } from "../../utils/date";
 import Expander from "../questions/Expander";
 import "./sections.css";
 
@@ -9,12 +10,10 @@ interface Props {
   onUpdate: (d: StudentDashboard) => void;
 }
 
-const today = () => new Date().toISOString().slice(0, 10);
-
 export default function ProgressSection({ sid, dashboard, onUpdate }: Props) {
   const { progress_entries } = dashboard;
 
-  const [logDate, setLogDate] = useState(today());
+  const [logDate, setLogDate] = useState(todayLocalISO());
   const [category, setCategory] = useState<"진도" | "숙제" | "시험">("진도");
   const [chapter, setChapter] = useState("");
   const [title, setTitle] = useState("");

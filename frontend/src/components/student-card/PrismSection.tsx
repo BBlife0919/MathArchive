@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { addPrismEval, type StudentDashboard } from "../../api/students";
+import { todayLocalISO } from "../../utils/date";
 import Expander from "../questions/Expander";
 import PrismRadarChart from "../charts/PrismRadarChart";
 import ClinicBarChart from "../charts/ClinicBarChart";
@@ -11,12 +12,10 @@ interface Props {
   onUpdate: (d: StudentDashboard) => void;
 }
 
-const today = () => new Date().toISOString().slice(0, 10);
-
 export default function PrismSection({ sid, dashboard, onUpdate }: Props) {
   const { latest_prism, avg_ris, avg_pm, prism_history, clinic_error_distribution } = dashboard;
 
-  const [evalDate, setEvalDate] = useState(today());
+  const [evalDate, setEvalDate] = useState(todayLocalISO());
   const [sp, setSp] = useState(3);
   const [sr, setSr] = useState(3);
   const [si, setSi] = useState(3);

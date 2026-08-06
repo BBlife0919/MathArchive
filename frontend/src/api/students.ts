@@ -104,6 +104,15 @@ export function fetchStudents(): Promise<StudentBasic[]> {
   return apiFetch<StudentBasic[]>("/api/students");
 }
 
+export function createStudent(
+  body: { name: string; school: string | null; grade: number; class_name: string | null },
+): Promise<StudentBasic> {
+  return apiFetch<StudentBasic>("/api/students", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
 export function fetchStudentTemplates(): Promise<{ items: StudentTemplateItem[] }> {
   return apiFetch("/api/students/templates");
 }

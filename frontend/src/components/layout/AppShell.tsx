@@ -2,7 +2,13 @@ import type { ReactNode } from "react";
 import { useAuth } from "../../context/AuthContext";
 import "./AppShell.css";
 
-export type AppPage = "exam" | "student-card";
+export type AppPage = "exam" | "student-card" | "clinic";
+
+const NAV_ITEMS: { page: AppPage; label: string }[] = [
+  { page: "exam", label: "문제은행 · 시험지" },
+  { page: "student-card", label: "학생 카드" },
+  { page: "clinic", label: "클리닉" },
+];
 
 interface Props {
   activePage: AppPage;
@@ -18,20 +24,16 @@ export default function AppShell({ activePage, onNavigate, children }: Props) {
       <header className="app-shell-header">
         <nav className="app-shell-nav">
           <span className="app-shell-brand">MATHOLOGY</span>
-          <button
-            type="button"
-            className={activePage === "exam" ? "app-shell-nav-btn active" : "app-shell-nav-btn"}
-            onClick={() => onNavigate("exam")}
-          >
-            문제은행 · 시험지
-          </button>
-          <button
-            type="button"
-            className={activePage === "student-card" ? "app-shell-nav-btn active" : "app-shell-nav-btn"}
-            onClick={() => onNavigate("student-card")}
-          >
-            학생 카드
-          </button>
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.page}
+              type="button"
+              className={activePage === item.page ? "app-shell-nav-btn active" : "app-shell-nav-btn"}
+              onClick={() => onNavigate(item.page)}
+            >
+              {item.label}
+            </button>
+          ))}
         </nav>
         <div className="app-shell-user">
           <span>{user?.name}님</span>

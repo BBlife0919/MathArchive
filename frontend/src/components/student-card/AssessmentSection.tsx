@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   addQualitativeAssessment, addQuantityAssessment, type StudentDashboard,
 } from "../../api/students";
+import { todayLocalISO } from "../../utils/date";
 import Expander from "../questions/Expander";
 import "./sections.css";
 
@@ -11,18 +12,17 @@ interface Props {
   onUpdate: (d: StudentDashboard) => void;
 }
 
-const today = () => new Date().toISOString().slice(0, 10);
 const GRADE_OPTIONS = ["A", "B", "C", "D"] as const;
 
 export default function AssessmentSection({ sid, dashboard, onUpdate }: Props) {
   const { quantity_grade_counts, latest_qualitative } = dashboard;
 
-  const [aqDate, setAqDate] = useState(today());
+  const [aqDate, setAqDate] = useState(todayLocalISO());
   const [aqGrade, setAqGrade] = useState<(typeof GRADE_OPTIONS)[number]>("A");
   const [aqNote, setAqNote] = useState("");
   const [aqSaving, setAqSaving] = useState(false);
 
-  const [alDate, setAlDate] = useState(today());
+  const [alDate, setAlDate] = useState(todayLocalISO());
   const [sl1, setSl1] = useState(3);
   const [sl2, setSl2] = useState(3);
   const [sl3, setSl3] = useState(3);

@@ -11,6 +11,8 @@ from datetime import date, timedelta
 
 from . import db_service
 
+import db as legacy_db  # type: ignore
+
 # app/pages/2_학생카드.py:59-69 그대로
 PRISM_LETTER = {
     "계산실수": "P",
@@ -37,6 +39,33 @@ def list_students() -> list:
         "SELECT student_id, name, school, grade, class_name, note "
         "FROM students ORDER BY school, grade, name"
     )
+
+
+def create_student(name: str, school: str | None, grade: int,
+                   class_name: str | None) -> int:
+    """app/pages/1_클리닉.py:66-84 의 create_student() 그대로 —
+    Postgres(RETURNING)/SQLite(lastrowid) 분기가 필요해 execute_write() 를
+    쓰지 않고 직접 처리한다."""
+    conn = db_service.get_connection()
+    cloud = legacy_db.is_cloud()
+    sql = "INSERT INTO students (name, school, grade, class_name) VALUES (?, ?, ?, ?)"
+    if cloud:
+        sql += " RETURNING student_id"
+    cur = conn.execute(sql, (name, school, grade, class_name))
+    if cloud:
+        sid = cur.fetchone()[0]
+    else:
+        sid = cur.lastrowid
+    if hasattr(conn, "commit"):
+        try:
+            conn.commit()
+        except Exception:
+            pass
+    return sid
+
+
+def get_student(sid: int) -> dict | None:
+    return _student_basic(sid)
 
 
 def _student_basic(sid: int) -> dict | None:

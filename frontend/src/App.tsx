@@ -5,6 +5,7 @@ import AuthPage from "./pages/AuthPage";
 import PendingApprovalPage from "./pages/PendingApprovalPage";
 import ExamBuilderPage from "./pages/ExamBuilderPage";
 import StudentCardPage from "./pages/StudentCardPage";
+import ClinicPage from "./pages/ClinicPage";
 import AppShell, { type AppPage } from "./components/layout/AppShell";
 import "./styles/theme.css";
 
@@ -21,15 +22,23 @@ function Gate() {
   if (!user.approved) {
     return <PendingApprovalPage />;
   }
+
+  let body;
+  if (page === "exam") {
+    body = (
+      <SelectionProvider>
+        <ExamBuilderPage />
+      </SelectionProvider>
+    );
+  } else if (page === "student-card") {
+    body = <StudentCardPage />;
+  } else {
+    body = <ClinicPage />;
+  }
+
   return (
     <AppShell activePage={page} onNavigate={setPage}>
-      {page === "exam" ? (
-        <SelectionProvider>
-          <ExamBuilderPage />
-        </SelectionProvider>
-      ) : (
-        <StudentCardPage />
-      )}
+      {body}
     </AppShell>
   );
 }
