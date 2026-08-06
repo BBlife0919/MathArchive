@@ -34,3 +34,12 @@ def require_approved(
     if not user["approved"]:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "관리자 승인 대기 중입니다.")
     return user
+
+
+def require_admin(
+    session_token: Optional[str] = Cookie(default=None, alias=auth_service.SESSION_COOKIE_NAME),
+) -> dict:
+    user = require_approved(session_token)
+    if not user["is_admin"]:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "관리자 전용 페이지입니다.")
+    return user

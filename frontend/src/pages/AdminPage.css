@@ -1,0 +1,25 @@
+.admin-page {
+  padding: 20px 24px;
+  max-width: 900px;
+}
+
+.admin-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 10px;
+}
+
+.admin-username {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.admin-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}

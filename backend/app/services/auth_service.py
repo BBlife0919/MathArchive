@@ -87,3 +87,41 @@ def request_password_reset(email: str) -> tuple[bool, str]:
 
 def consume_reset_token(token: str, new_password: str) -> tuple[bool, str]:
     return legacy_auth.consume_reset_token(token, new_password)
+
+
+def _iso(v):
+    """다른 서비스와 동일한 함정 — Postgres 는 TIMESTAMPTZ 컬럼을 datetime
+    객체로, SQLite 는 문자열로 반환한다."""
+    return v.isoformat() if hasattr(v, "isoformat") else v
+
+
+def list_pending_users() -> list[dict]:
+    rows = legacy_auth.list_pending_users()
+    for r in rows:
+        r["created_at"] = _iso(r["created_at"])
+    return rows
+
+
+def list_all_users() -> list[dict]:
+    rows = legacy_auth.list_all_users()
+    for r in rows:
+        r["created_at"] = _iso(r["created_at"])
+        r["approved"] = bool(r["approved"])
+        r["is_admin"] = bool(r["is_admin"])
+    return rows
+
+
+def approve_user(user_id: int) -> tuple[bool, str | None]:
+    return legacy_auth.approve_user(user_id)
+
+
+def revoke_user(user_id: int) -> None:
+    legacy_auth.revoke_user(user_id)
+
+
+def delete_user(user_id: int) -> None:
+    legacy_auth.delete_user(user_id)
+
+
+def set_admin(user_id: int, is_admin: bool) -> None:
+    legacy_auth.set_admin(user_id, is_admin)

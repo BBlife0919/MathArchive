@@ -6,6 +6,7 @@ import PendingApprovalPage from "./pages/PendingApprovalPage";
 import ExamBuilderPage from "./pages/ExamBuilderPage";
 import StudentCardPage from "./pages/StudentCardPage";
 import ClinicPage from "./pages/ClinicPage";
+import AdminPage from "./pages/AdminPage";
 import AppShell, { type AppPage } from "./components/layout/AppShell";
 import "./styles/theme.css";
 
@@ -32,8 +33,14 @@ function Gate() {
     );
   } else if (page === "student-card") {
     body = <StudentCardPage />;
-  } else {
+  } else if (page === "clinic") {
     body = <ClinicPage />;
+  } else if (page === "admin" && user.is_admin) {
+    // 관리자가 아니면 탭 자체가 안 보이지만, 방어적으로 한 번 더 체크
+    // (app/pages/9_관리자.py 의 auth.is_admin() 체크와 동일한 취지).
+    body = <AdminPage />;
+  } else {
+    body = <p style={{ padding: 24 }}>이 페이지는 관리자 전용입니다.</p>;
   }
 
   return (
