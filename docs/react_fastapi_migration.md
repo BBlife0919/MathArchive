@@ -50,7 +50,16 @@ React(Vite) 프론트 + FastAPI(Python) 백엔드 단일 구성으로 진행 중
   원본은 프론트에서만 걸었지만 API 레벨(422)에서도 강제하도록 강화. `require_admin` 라우터 전체 게이팅.
   발송 예정일 미입력 검증(프론트+백엔드)도 이번에 추가. AppShell 5번째 탭(admin 전용).
   (`c3a5dae0`, `/근본` 5회 검수 완료)
-- [ ] 검수(HWP 토큰 자동복구 콘솔) — 남은 마지막 페이지, 최대·최고난이도
+- [x] 검수(HWP 토큰 자동복구 콘솔) — `app/pages/5_검수.py`(1215줄) 이관, **2단계 마지막 페이지, 완료**.
+  `HWP_TOKEN_REFERENCE`/`HWP_TOKEN_PATTERNS`/`lookup_token()`/`is_geometry_label()` 전부 그대로 포팅,
+  `scripts/detect_bare_math_words.py`·`fix_nested_boxes.py`·`fix_unmapped_hwp_tokens.py` 순수 함수 재사용.
+  스캔 결과는 모듈 전역 TTL(1800s) 캐시(`@st.cache_data`+`session_state` 조합과 동등). 구조 자동복구/
+  한 방 처리/미상 dropdown 일괄 적용/베이스라인 저장/신고함 처리 전부 API화, AppShell 6번째 탭(admin 전용).
+  (`196f9d95`, `/근본` 5회 검수 완료 — 검증 중 "math" 토큰을 테스트용으로 매핑했다가 실제 조합론 문항
+  본문이 오염된 사고가 있었으나 `question_latex` 백업 컬럼으로 발견·복구함, 아래 "겪은 함정" 참고)
+
+**2단계 전체 완료** — Streamlit 5개 페이지(학생카드/클리닉/관리자/카톡승인큐/검수) 전부 React+FastAPI로
+이관 끝. `app/`(Streamlit)은 전 과정에서 한 줄도 수정하지 않고 병행 운영 중.
 
 ## 부수 발견: 원본에 있던 버그 (backend/에서만 수정, app/은 그대로)
 빠른검색(quick search) 학교 키워드가 DB 어떤 학교와도 매칭 안 될 때, 원본
@@ -81,6 +90,22 @@ TEXT 문자열로 반환한다. Pydantic 응답 스키마를 `str`로 선언한 
 UTC+9) 새벽 00~09시엔 실제로는 오늘인데 어제 날짜가 기본값으로 들어간다.
 `frontend/src/utils/date.ts`의 `todayLocalISO()`(로컬 연/월/일 직접 조합)
 를 항상 쓸 것 — 날짜 `<input>` 기본값을 새로 추가할 때마다 확인.
+
+## 이관 중 겪은 함정: 검수 페이지 "map" 액션의 실콘텐츠 오염 위험
+`audit_service.apply_user_mapping(token, action="map", latex)`은 DB 전체에서
+해당 토큰을 정규식(단어 경계)으로 찾아 **실제 question_text/solution_text/
+choices 텍스트를 치환**한다 — 원본 5_검수.py 로직 그대로. 검증 중 흔한 영단어
+"math"를 테스트 토큰으로 골라 `\sqrt`로 매핑 처리했더니, 실제로는 조합론 문제
+본문("$math$의 4개의 문자를 일렬로 나열...")이었던 qid=156472가
+"$\sqrt$의 4개의 문자를..."로 깨지는 사고가 있었다. `question_latex`/
+`solution_latex` 컬럼(파싱 시점 원본이 보존되는 별도 컬럼, `apply_user_mapping`이
+건드리지 않음)에 원본이 남아있어 발견·복구했다. **앞으로 이 페이지의
+map/remove 액션을 실데이터로 검증할 때는 절대 사전(HWP_TOKEN_REFERENCE)에
+없는 임의 영단어를 고르지 말 것** — 진짜 HWP 깨진 토큰인지 실제 콘텐츠(도형
+라벨·조합론 문자열 등)인지는 "추천" 칸이 비어있으면(미상) 사람이 직접 원문
+맥락을 봐야 판단 가능하다. 검증이 꼭 필요하면 `action="ignore"`(DB 텍스트
+무변경)만 쓰거나, `user_token_mappings`에 존재하지 않는 완전 인공적인
+토큰(예: `__TEST__`)으로만 map/remove 경로를 확인할 것.
 
 ## 로컬 실행 방법
 ```bash
