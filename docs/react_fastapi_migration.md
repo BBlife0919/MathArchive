@@ -41,7 +41,16 @@ React(Vite) 프론트 + FastAPI(Python) 백엔드 단일 구성으로 진행 중
   재정렬하는 `fetch_questions_for_preview` 아님). AppShell 3번째 탭.
   (`b63774a9`, `/근본` 5회 검수 완료 — 실행검수가 실사용 데이터로 재현한 `pending-retries` 500 버그를
   발견해서 직접 수정·재검증함)
-- [ ] 카톡승인큐, 관리자(회원승인), 검수(HWP 토큰 자동복구 콘솔)
+- [x] 관리자(회원승인) — `app/pages/9_관리자.py` 이관. `require_admin` 의존성 신설(`require_approved`
+  체인 위에 `is_admin` 체크 추가). 가입 승인 대기열 + 전체 회원 목록(admin↑/↓·정지·삭제), 본인 계정
+  보호(`is_self`)는 원본과 동일 로직. AppShell 4번째 탭(admin 전용).
+  (`8d878f02`, `/근본` 5회 검수 완료)
+- [x] 카톡 승인 큐 — `app/pages/3_카톡승인큐.py` 이관. `student_service`의 `RIS_CODES`/`PM_CODES`
+  재사용해 AI draft 생성 로직 그대로 포팅. instructor_note(강사 1문장) 미입력 시 승인 차단(PDF §7-3)을
+  원본은 프론트에서만 걸었지만 API 레벨(422)에서도 강제하도록 강화. `require_admin` 라우터 전체 게이팅.
+  발송 예정일 미입력 검증(프론트+백엔드)도 이번에 추가. AppShell 5번째 탭(admin 전용).
+  (`c3a5dae0`, `/근본` 5회 검수 완료)
+- [ ] 검수(HWP 토큰 자동복구 콘솔) — 남은 마지막 페이지, 최대·최고난이도
 
 ## 부수 발견: 원본에 있던 버그 (backend/에서만 수정, app/은 그대로)
 빠른검색(quick search) 학교 키워드가 DB 어떤 학교와도 매칭 안 될 때, 원본
