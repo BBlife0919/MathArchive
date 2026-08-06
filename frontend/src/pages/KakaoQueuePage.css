@@ -1,0 +1,50 @@
+.kakao-page {
+  padding: 20px 24px;
+  max-width: 900px;
+}
+
+.kakao-error-text {
+  color: #c0392b;
+  font-size: 13px;
+  margin: 4px 0 10px;
+}
+
+.kakao-draft-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 10px;
+}
+
+.kakao-draft-card-summary {
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.kakao-draft-body {
+  white-space: pre-wrap;
+  background: var(--panel, #f7f7f8);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  margin: 0;
+}
+
+.kakao-draft-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.kakao-confirm-del {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+}

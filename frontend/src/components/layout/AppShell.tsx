@@ -2,12 +2,13 @@ import type { ReactNode } from "react";
 import { useAuth } from "../../context/AuthContext";
 import "./AppShell.css";
 
-export type AppPage = "exam" | "student-card" | "clinic" | "admin";
+export type AppPage = "exam" | "student-card" | "clinic" | "admin" | "kakao";
 
 const NAV_ITEMS: { page: AppPage; label: string; adminOnly?: boolean }[] = [
   { page: "exam", label: "문제은행 · 시험지" },
   { page: "student-card", label: "학생 카드" },
   { page: "clinic", label: "클리닉" },
+  { page: "kakao", label: "카톡 승인 큐", adminOnly: true },
   { page: "admin", label: "관리자", adminOnly: true },
 ];
 
