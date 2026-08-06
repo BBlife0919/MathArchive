@@ -6,14 +6,18 @@ import PdfOptionsForm from "./PdfOptionsForm";
 import BookOptionsForm from "./BookOptionsForm";
 import "./ExamPreviewPanel.css";
 
-type PdfMode = "exam" | "book";
+export type PdfMode = "exam" | "book";
 
-export default function ExamPreviewPanel() {
+interface Props {
+  pdfMode: PdfMode;
+  onPdfModeChange: (mode: PdfMode) => void;
+}
+
+export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
   const { selectedIds, toggle } = useSelection();
   const [items, setItems] = useState<QuestionCardData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pdfMode, setPdfMode] = useState<PdfMode>("exam");
 
   const ids = Array.from(selectedIds);
 
@@ -54,13 +58,13 @@ export default function ExamPreviewPanel() {
         <div className="pdf-mode-toggle">
           <button
             type="button" className={pdfMode === "exam" ? "tab-btn active" : "tab-btn"}
-            onClick={() => setPdfMode("exam")}
+            onClick={() => onPdfModeChange("exam")}
           >
             시험지 PDF
           </button>
           <button
             type="button" className={pdfMode === "book" ? "tab-btn active" : "tab-btn"}
-            onClick={() => setPdfMode("book")}
+            onClick={() => onPdfModeChange("book")}
           >
             교재 PDF
           </button>

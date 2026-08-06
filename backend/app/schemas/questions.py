@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Literal, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ContentSegment(BaseModel):
@@ -64,3 +64,14 @@ class ByIdsResponse(BaseModel):
 
 class SearchIdsResponse(BaseModel):
     question_ids: list[int]
+
+
+class MiniTestRequest(SearchRequest):
+    # main.py:931-937 슬라이더 범위(문항 수 6~8, 쉬운문제 비중 0~100 10% 단위) 그대로.
+    mini_count: int = Field(default=7, ge=6, le=8)
+    mini_easy_pct: int = Field(default=40, ge=0, le=100)
+
+
+class MiniTestResponse(BaseModel):
+    question_ids: list[int]
+    pool_size: int

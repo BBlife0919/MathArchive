@@ -10,6 +10,7 @@ interface SelectionContextValue {
   count: number;
   toggle: (id: number) => void;
   bulkAdd: (ids: number[]) => void;
+  replaceAll: (ids: number[]) => void;
   clear: () => void;
 }
 
@@ -45,11 +46,17 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     setSelectedIds((prev) => new Set([...prev, ...ids]));
   }, []);
 
+  // main.py의 미니테스트 자동생성처럼 기존 선택을 완전히 대체해야 하는
+  // 경우용 (st.session_state.selected_ids = set(picks) 와 동일한 의미).
+  const replaceAll = useCallback((ids: number[]) => {
+    setSelectedIds(new Set(ids));
+  }, []);
+
   const clear = useCallback(() => setSelectedIds(new Set()), []);
 
   const value = useMemo(
-    () => ({ selectedIds, count: selectedIds.size, toggle, bulkAdd, clear }),
-    [selectedIds, toggle, bulkAdd, clear],
+    () => ({ selectedIds, count: selectedIds.size, toggle, bulkAdd, replaceAll, clear }),
+    [selectedIds, toggle, bulkAdd, replaceAll, clear],
   );
 
   return (

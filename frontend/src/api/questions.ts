@@ -64,6 +64,16 @@ export interface SearchIdsResponse {
   question_ids: number[];
 }
 
+export interface MiniTestRequest extends SearchRequest {
+  mini_count: number;
+  mini_easy_pct: number;
+}
+
+export interface MiniTestResponse {
+  question_ids: number[];
+  pool_size: number;
+}
+
 export function fetchFilters(): Promise<FiltersResponse> {
   return apiFetch<FiltersResponse>("/api/filters");
 }
@@ -86,5 +96,12 @@ export function fetchQuestionsByIds(questionIds: number[]): Promise<ByIdsRespons
   return apiFetch<ByIdsResponse>("/api/questions/by-ids", {
     method: "POST",
     body: JSON.stringify({ question_ids: questionIds }),
+  });
+}
+
+export function generateMiniTest(req: MiniTestRequest): Promise<MiniTestResponse> {
+  return apiFetch<MiniTestResponse>("/api/questions/mini-test", {
+    method: "POST",
+    body: JSON.stringify(req),
   });
 }

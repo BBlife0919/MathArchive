@@ -11,7 +11,8 @@ import FilterSidebar, {
 } from "../components/filters/FilterSidebar";
 import QuestionList from "../components/questions/QuestionList";
 import Pagination from "../components/questions/Pagination";
-import ExamPreviewPanel from "../components/preview/ExamPreviewPanel";
+import MiniTestPanel from "../components/questions/MiniTestPanel";
+import ExamPreviewPanel, { type PdfMode } from "../components/preview/ExamPreviewPanel";
 import "./ExamBuilderPage.css";
 
 const PAGE_SIZE = 15;
@@ -40,9 +41,10 @@ function buildSearchRequest(state: FilterState, page: number): SearchRequest {
 
 export default function ExamBuilderPage() {
   const { user, logout } = useAuth();
-  const { selectedIds, count, toggle, bulkAdd, clear } = useSelection();
+  const { selectedIds, count, toggle, bulkAdd, replaceAll, clear } = useSelection();
 
   const [tab, setTab] = useState<Tab>("list");
+  const [pdfMode, setPdfMode] = useState<PdfMode>("exam");
   const [filters, setFilters] = useState<FiltersResponse | null>(null);
   const [filterState, setFilterState] = useState<FilterState>(EMPTY_FILTER_STATE);
   const [page, setPage] = useState(0);
@@ -102,6 +104,12 @@ export default function ExamBuilderPage() {
     }
   }
 
+  function handleMiniTestGenerated(ids: number[]) {
+    // main.py: 미니테스트는 기존 선택을 대체하고 시험지(exam) 모드를 강제한다.
+    replaceAll(ids);
+    setPdfMode("exam");
+  }
+
   const start = total === 0 ? 0 : page * PAGE_SIZE + 1;
   const end = Math.min(page * PAGE_SIZE + PAGE_SIZE, total);
 
@@ -143,6 +151,7 @@ export default function ExamBuilderPage() {
 
         {!error && tab === "list" && (
           <>
+            <MiniTestPanel filterState={searchDeps} onGenerated={handleMiniTestGenerated} />
             <div className="result-bar">
               <p className="result-caption">
                 {loading ? "검색 중..." : `검색 결과: ${total}문항 · ${start}–${end}번 표시`}
@@ -162,7 +171,9 @@ export default function ExamBuilderPage() {
           </>
         )}
 
-        {!error && tab === "preview" && <ExamPreviewPanel />}
+        {!error && tab === "preview" && (
+          <ExamPreviewPanel pdfMode={pdfMode} onPdfModeChange={setPdfMode} />
+        )}
       </main>
     </div>
   );
