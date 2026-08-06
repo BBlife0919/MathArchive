@@ -30,7 +30,13 @@ React(Vite) 프론트 + FastAPI(Python) 백엔드 단일 구성으로 진행 중
 - [x] 미니테스트 자동생성 — `POST /api/questions/mini-test`(난이도 비중 랜덤추출, 원본과 1:1 알고리즘 일치).
   생성 시 기존 선택을 완전 교체(REPLACE, `SelectionContext.replaceAll`)하고 시험지(exam) PDF 모드 강제.
   (`35a36ea9`, `/근본` 5회 검수 통과)
-- [ ] 관리자/클리닉/학생카드 등 다른 Streamlit 페이지
+- [x] 학생 카드(상담용 대시보드) — `app/pages/2_학생카드.py`(647줄) 6개 섹션(기본정보/PRISM진단/
+  자가예측/학습로그/과제평가/관리로그) 이관. matplotlib 레이더·pandas 시계열 집계는 백엔드에서
+  동일 로직으로 재계산해 recharts로 렌더링. `GET /api/students/{sid}/dashboard`(통합 조회) +
+  쓰기 6종. 최초로 2번째 화면이 생겨 `AppShell`(상단 네비) 도입.
+  (`fda81f85`, `/근본` 5회 검수 완료 — 실행검수 에이전트가 정리 작업 중 타임아웃으로 중단됐으나
+  DB 카운트 직접 대조로 정리 완료 재확인함)
+- [ ] 클리닉(오답 처방전), 카톡승인큐, 관리자(회원승인), 검수(HWP 토큰 자동복구 콘솔)
 
 ## 부수 발견: 원본에 있던 버그 (backend/에서만 수정, app/은 그대로)
 빠른검색(quick search) 학교 키워드가 DB 어떤 학교와도 매칭 안 될 때, 원본
@@ -39,6 +45,16 @@ React(Vite) 프론트 + FastAPI(Python) 백엔드 단일 구성으로 진행 중
 사용자 확인 후 `backend/app/routers/questions.py`의 `_resolve_matching_meta()`
 에서만 수정(학교 매칭 0건이면 조기에 빈 결과 반환) — `app/`(Streamlit)은
 원래 버그 상태 그대로 유지, 손대지 않음.
+
+## 이관 중 겪은 함정: Postgres DATE 컬럼 타입
+psycopg2는 DATE 컬럼을 Python `datetime.date` 객체로 반환하지만 SQLite는
+TEXT 문자열로 반환한다. Pydantic 응답 스키마를 `str`로 선언한 상태에서
+운영 Postgres 실데이터로 테스트하니 `ResponseValidationError`(500)가
+발생 — 로컬 SQLite로만 테스트했다면 못 잡았을 버그. `student_service.py`의
+`_iso(v)` 헬퍼(`v.isoformat() if hasattr(v, "isoformat") else v`)로 날짜
+필드 반환 지점마다 정규화해서 해결. **앞으로 날짜 컬럼을 다루는 신규
+엔드포인트를 만들 때마다 항상 염두에 둘 것** — 로컬 SQLite 테스트만으로는
+이 버그가 재현 안 됨, 반드시 운영 Postgres로 최종 확인 필요.
 
 ## 로컬 실행 방법
 ```bash
