@@ -36,7 +36,12 @@ React(Vite) 프론트 + FastAPI(Python) 백엔드 단일 구성으로 진행 중
   쓰기 6종. 최초로 2번째 화면이 생겨 `AppShell`(상단 네비) 도입.
   (`fda81f85`, `/근본` 5회 검수 완료 — 실행검수 에이전트가 정리 작업 중 타임아웃으로 중단됐으나
   DB 카운트 직접 대조로 정리 완료 재확인함)
-- [ ] 클리닉(오답 처방전), 카톡승인큐, 관리자(회원승인), 검수(HWP 토큰 자동복구 콘솔)
+- [x] 클리닉(오답→처방전) — `app/pages/1_클리닉.py` 이관. `app/clinic_logic.py`(순수 함수) 그대로 재사용.
+  처방전 PDF는 [오답,인출1,인출2,인출3] 순서 보존이 핵심(`fetch_questions_page` 사용, 단원/난이도로
+  재정렬하는 `fetch_questions_for_preview` 아님). AppShell 3번째 탭.
+  (`b63774a9`, `/근본` 5회 검수 완료 — 실행검수가 실사용 데이터로 재현한 `pending-retries` 500 버그를
+  발견해서 직접 수정·재검증함)
+- [ ] 카톡승인큐, 관리자(회원승인), 검수(HWP 토큰 자동복구 콘솔)
 
 ## 부수 발견: 원본에 있던 버그 (backend/에서만 수정, app/은 그대로)
 빠른검색(quick search) 학교 키워드가 DB 어떤 학교와도 매칭 안 될 때, 원본
@@ -45,6 +50,12 @@ React(Vite) 프론트 + FastAPI(Python) 백엔드 단일 구성으로 진행 중
 사용자 확인 후 `backend/app/routers/questions.py`의 `_resolve_matching_meta()`
 에서만 수정(학교 매칭 0건이면 조기에 빈 결과 반환) — `app/`(Streamlit)은
 원래 버그 상태 그대로 유지, 손대지 않음.
+
+`app/clinic_logic.py`의 `list_pending_retries()`도 마찬가지 — Postgres의
+`clinic_entries.prescribed_qids`(jsonb 컬럼)를 psycopg2가 이미 list로
+자동 디코딩해서 주는데 원본이 다시 `json.loads()`를 걸어 실사용 데이터에서
+500 에러가 남. `backend/app/services/clinic_service.py`에 해당 컬럼을 아예
+조회하지 않는 자체 쿼리로 우회, `app/`은 그대로 둠.
 
 ## 이관 중 겪은 함정: Postgres DATE 컬럼 타입
 psycopg2는 DATE 컬럼을 Python `datetime.date` 객체로 반환하지만 SQLite는
@@ -55,6 +66,12 @@ TEXT 문자열로 반환한다. Pydantic 응답 스키마를 `str`로 선언한 
 필드 반환 지점마다 정규화해서 해결. **앞으로 날짜 컬럼을 다루는 신규
 엔드포인트를 만들 때마다 항상 염두에 둘 것** — 로컬 SQLite 테스트만으로는
 이 버그가 재현 안 됨, 반드시 운영 Postgres로 최종 확인 필요.
+
+## 이관 중 겪은 함정: 날짜 입력 기본값에 UTC 쓰지 말 것
+`new Date().toISOString().slice(0, 10)`는 UTC 기준 날짜라, 한국(KST,
+UTC+9) 새벽 00~09시엔 실제로는 오늘인데 어제 날짜가 기본값으로 들어간다.
+`frontend/src/utils/date.ts`의 `todayLocalISO()`(로컬 연/월/일 직접 조합)
+를 항상 쓸 것 — 날짜 `<input>` 기본값을 새로 추가할 때마다 확인.
 
 ## 로컬 실행 방법
 ```bash
