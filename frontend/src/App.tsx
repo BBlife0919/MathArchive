@@ -8,6 +8,7 @@ import StudentCardPage from "./pages/StudentCardPage";
 import ClinicPage from "./pages/ClinicPage";
 import AdminPage from "./pages/AdminPage";
 import KakaoQueuePage from "./pages/KakaoQueuePage";
+import AuditPage from "./pages/AuditPage";
 import AppShell, { type AppPage } from "./components/layout/AppShell";
 import "./styles/theme.css";
 
@@ -43,6 +44,9 @@ function Gate() {
   } else if (page === "kakao" && user.is_admin) {
     // app/pages/3_카톡승인큐.py 의 auth.is_admin() 체크와 동일한 취지의 방어적 재확인.
     body = <KakaoQueuePage />;
+  } else if (page === "audit" && user.is_admin) {
+    // app/pages/5_검수.py 의 auth.is_admin() 체크와 동일한 취지의 방어적 재확인.
+    body = <AuditPage />;
   } else {
     body = <p style={{ padding: 24 }}>이 페이지는 관리자 전용입니다.</p>;
   }

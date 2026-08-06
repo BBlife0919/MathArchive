@@ -1,0 +1,80 @@
+.audit-page {
+  padding: 20px 24px;
+  max-width: 1100px;
+}
+
+.audit-banner {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 10px 0;
+}
+
+.audit-banner-success { border-color: #2e7d32; }
+.audit-banner-warning { border-color: #b8860b; }
+.audit-banner-info { border-color: var(--line); }
+
+.audit-banner p {
+  white-space: pre-wrap;
+  font-size: 13px;
+  margin: 6px 0 10px;
+}
+
+.audit-warning {
+  color: #b8860b;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.audit-info {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 4px 0 10px;
+}
+
+.audit-toolbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.audit-toolbar {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.audit-token-table select,
+.audit-token-table input {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.audit-flag-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 10px;
+}
+
+.audit-flag-preview {
+  white-space: pre-wrap;
+  background: var(--panel, #f7f7f8);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  margin: 6px 0;
+}
+
+.audit-flag-actions {
+  display: flex;
+  gap: 8px;
+}

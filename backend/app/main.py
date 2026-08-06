@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 
 import main as legacy_main  # type: ignore  (IMAGE_DIR 재사용 — 로컬 이미지 폴백용)
 
-from .routers import admin, auth, clinic, exam, kakao, meta, questions, students
+from .routers import admin, audit, auth, clinic, exam, kakao, meta, questions, students
 
 app = FastAPI(title="MathDB API")
 
@@ -45,6 +45,7 @@ app.include_router(students.router)
 app.include_router(clinic.router)
 app.include_router(admin.router)
 app.include_router(kakao.router)
+app.include_router(audit.router)
 
 
 @app.get("/api/ping")
