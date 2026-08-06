@@ -27,8 +27,18 @@ React(Vite) 프론트 + FastAPI(Python) 백엔드 단일 구성으로 진행 중
   `POST /api/exam/book-pdf` + `BookOptionsForm.tsx`. 기존 결과물과 페이지 단위 완전 동일 확인.
   (`7adf09de`, `/근본` 5회 검수 통과). **주의**: `exam_designs.py` 기반 "표지+내지 디자인
   시험지"(`generate_designed_exam_pdf`)는 별개 기능이라 미포함 — 필요시 별도 작업.
-- [ ] 미니테스트 자동생성
+- [x] 미니테스트 자동생성 — `POST /api/questions/mini-test`(난이도 비중 랜덤추출, 원본과 1:1 알고리즘 일치).
+  생성 시 기존 선택을 완전 교체(REPLACE, `SelectionContext.replaceAll`)하고 시험지(exam) PDF 모드 강제.
+  (`35a36ea9`, `/근본` 5회 검수 통과)
 - [ ] 관리자/클리닉/학생카드 등 다른 Streamlit 페이지
+
+## 부수 발견: 원본에 있던 버그 (backend/에서만 수정, app/은 그대로)
+빠른검색(quick search) 학교 키워드가 DB 어떤 학교와도 매칭 안 될 때, 원본
+`app/main.py`가 "필터 없음"으로 오인해 **전체 DB**를 보여주던 버그 발견
+(`main.py:903` 주석은 "결과 0 안내"가 의도였지만 실제로는 그렇게 동작 안 함).
+사용자 확인 후 `backend/app/routers/questions.py`의 `_resolve_matching_meta()`
+에서만 수정(학교 매칭 0건이면 조기에 빈 결과 반환) — `app/`(Streamlit)은
+원래 버그 상태 그대로 유지, 손대지 않음.
 
 ## 로컬 실행 방법
 ```bash
