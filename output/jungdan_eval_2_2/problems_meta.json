@@ -1,0 +1,3720 @@
+[
+  {
+    "label": "001",
+    "local": 1,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 0,
+    "clip": [
+      32.0,
+      138.86241149902344,
+      282.0,
+      384.80926513671875
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      139.86241149902344,
+      51.050567626953125,
+      154.61932373046875
+    ]
+  },
+  {
+    "label": "002",
+    "local": 2,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 0,
+    "clip": [
+      32.0,
+      386.80926513671875,
+      282.0,
+      584.8709716796875
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      387.80926513671875,
+      51.050567626953125,
+      402.566162109375
+    ]
+  },
+  {
+    "label": "003",
+    "local": 3,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 0,
+    "clip": [
+      32.0,
+      586.8709716796875,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      587.8709716796875,
+      51.050567626953125,
+      602.6278686523438
+    ]
+  },
+  {
+    "label": "004",
+    "local": 4,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 0,
+    "clip": [
+      288.0,
+      109.69925689697266,
+      522.0,
+      291.67919921875
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      110.69925689697266,
+      308.91510009765625,
+      125.45616912841797
+    ]
+  },
+  {
+    "label": "005",
+    "local": 5,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 0,
+    "clip": [
+      288.0,
+      293.67919921875,
+      522.0,
+      544.4265747070312
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      294.67919921875,
+      308.91510009765625,
+      309.43609619140625
+    ]
+  },
+  {
+    "label": "006",
+    "local": 6,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 0,
+    "clip": [
+      288.0,
+      546.4265747070312,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      547.4265747070312,
+      308.91510009765625,
+      562.1834716796875
+    ]
+  },
+  {
+    "label": "007",
+    "local": 7,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 1,
+    "clip": [
+      32.0,
+      87.85689544677734,
+      282.0,
+      301.8802795410156
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      88.85689544677734,
+      51.050567626953125,
+      103.61380767822266
+    ]
+  },
+  {
+    "label": "008",
+    "local": 8,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 1,
+    "clip": [
+      32.0,
+      303.8802795410156,
+      282.0,
+      517.9037475585938
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      304.8802795410156,
+      51.050567626953125,
+      319.6371765136719
+    ]
+  },
+  {
+    "label": "009",
+    "local": 9,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 1,
+    "clip": [
+      32.0,
+      519.9037475585938,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      520.9037475585938,
+      51.050567626953125,
+      535.66064453125
+    ]
+  },
+  {
+    "label": "010",
+    "local": 10,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 1,
+    "clip": [
+      288.0,
+      61.694061279296875,
+      522.0,
+      325.5228576660156
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      62.694061279296875,
+      308.9151306152344,
+      77.45097351074219
+    ]
+  },
+  {
+    "label": "011",
+    "local": 11,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 1,
+    "clip": [
+      288.0,
+      327.5228576660156,
+      522.0,
+      509.5028076171875
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      328.5228576660156,
+      308.9151306152344,
+      343.2797546386719
+    ]
+  },
+  {
+    "label": "012",
+    "local": 12,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 1,
+    "clip": [
+      288.0,
+      511.5028076171875,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      512.5028076171875,
+      308.9151306152344,
+      527.2597045898438
+    ]
+  },
+  {
+    "label": "013",
+    "local": 13,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 2,
+    "clip": [
+      32.0,
+      90.25715637207031,
+      282.0,
+      301.0401916503906
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      91.25715637207031,
+      51.05059051513672,
+      106.01406860351562
+    ]
+  },
+  {
+    "label": "014",
+    "local": 14,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 2,
+    "clip": [
+      32.0,
+      303.0401916503906,
+      282.0,
+      536.1456909179688
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      304.0401916503906,
+      51.05059051513672,
+      318.7970886230469
+    ]
+  },
+  {
+    "label": "015",
+    "local": 15,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 2,
+    "clip": [
+      32.0,
+      538.1456909179688,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      539.1456909179688,
+      51.05059051513672,
+      553.902587890625
+    ]
+  },
+  {
+    "label": "016",
+    "local": 16,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 2,
+    "clip": [
+      288.0,
+      90.25715637207031,
+      522.0,
+      432.21441650390625
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      91.25715637207031,
+      308.9151306152344,
+      106.01406860351562
+    ]
+  },
+  {
+    "label": "017",
+    "local": 17,
+    "section_idx": 0,
+    "section_name": "학습자료집 Ⅱ-2",
+    "kind": "jaja",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 2,
+    "clip": [
+      288.0,
+      434.21441650390625,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      435.21441650390625,
+      308.9151306152344,
+      449.9713134765625
+    ]
+  },
+  {
+    "label": "018",
+    "local": 1,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 34,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      339.3119812011719
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      52.90171813964844,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "019",
+    "local": 2,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 34,
+    "clip": [
+      32.0,
+      341.3119812011719,
+      282.0,
+      500.8320007324219
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      342.3119812011719,
+      55.781192779541016,
+      355.2720031738281
+    ]
+  },
+  {
+    "label": "020",
+    "local": 3,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 34,
+    "clip": [
+      32.0,
+      502.8320007324219,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      503.8320007324219,
+      55.54072570800781,
+      516.7919921875
+    ]
+  },
+  {
+    "label": "021",
+    "local": 4,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 34,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      421.031982421875
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "022",
+    "local": 5,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 34,
+    "clip": [
+      288.0,
+      423.031982421875,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      424.031982421875,
+      307.7807312011719,
+      436.99200439453125
+    ]
+  },
+  {
+    "label": "023",
+    "local": 6,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 35,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      283.3919677734375
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      55.781192779541016,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "024",
+    "local": 7,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 35,
+    "clip": [
+      32.0,
+      285.3919677734375,
+      282.0,
+      526.031982421875
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      286.3919677734375,
+      55.78119659423828,
+      299.35198974609375
+    ]
+  },
+  {
+    "label": "025",
+    "local": 8,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 35,
+    "clip": [
+      32.0,
+      528.031982421875,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      529.031982421875,
+      55.54072570800781,
+      541.991943359375
+    ]
+  },
+  {
+    "label": "026",
+    "local": 9,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 35,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      427.1519775390625
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "027",
+    "local": 10,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 35,
+    "clip": [
+      288.0,
+      429.1519775390625,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      430.1519775390625,
+      314.50152587890625,
+      443.11199951171875
+    ]
+  },
+  {
+    "label": "028",
+    "local": 11,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 36,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      363.1919860839844
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      59.26106643676758,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "029",
+    "local": 12,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 36,
+    "clip": [
+      32.0,
+      365.1919860839844,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      366.1919860839844,
+      62.26154327392578,
+      379.1520080566406
+    ]
+  },
+  {
+    "label": "030",
+    "local": 13,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 36,
+    "clip": [
+      288.0,
+      138.39199829101562,
+      522.0,
+      469.27197265625
+    ],
+    "label_bbox": [
+      294.47998046875,
+      139.39199829101562,
+      314.2611083984375,
+      152.35198974609375
+    ]
+  },
+  {
+    "label": "031",
+    "local": 14,
+    "section_idx": 1,
+    "section_name": "사인법칙 ①회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 36,
+    "clip": [
+      288.0,
+      471.27197265625,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      472.27197265625,
+      314.5015563964844,
+      485.23199462890625
+    ]
+  },
+  {
+    "label": "032",
+    "local": 1,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 37,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      332.9519958496094
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      52.90171813964844,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "033",
+    "local": 2,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 37,
+    "clip": [
+      32.0,
+      334.9519958496094,
+      282.0,
+      506.3519592285156
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      335.9519958496094,
+      55.781192779541016,
+      348.9120178222656
+    ]
+  },
+  {
+    "label": "034",
+    "local": 3,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 37,
+    "clip": [
+      32.0,
+      508.3519592285156,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      509.3519592285156,
+      55.54072570800781,
+      522.3119506835938
+    ]
+  },
+  {
+    "label": "035",
+    "local": 4,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 37,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      436.27197265625
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "036",
+    "local": 5,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 37,
+    "clip": [
+      288.0,
+      438.27197265625,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      439.27197265625,
+      307.7807312011719,
+      452.23199462890625
+    ]
+  },
+  {
+    "label": "037",
+    "local": 6,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 38,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      321.9119873046875
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      55.781192779541016,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "038",
+    "local": 7,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 38,
+    "clip": [
+      32.0,
+      323.9119873046875,
+      282.0,
+      550.031982421875
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      324.9119873046875,
+      55.78119659423828,
+      337.87200927734375
+    ]
+  },
+  {
+    "label": "039",
+    "local": 8,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 38,
+    "clip": [
+      32.0,
+      552.031982421875,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      553.031982421875,
+      55.54072570800781,
+      565.991943359375
+    ]
+  },
+  {
+    "label": "040",
+    "local": 9,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 38,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      433.9919738769531
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "041",
+    "local": 10,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 38,
+    "clip": [
+      288.0,
+      435.9919738769531,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      436.9919738769531,
+      314.50152587890625,
+      449.9519958496094
+    ]
+  },
+  {
+    "label": "042",
+    "local": 11,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 39,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      414.7919921875
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      59.26106643676758,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "043",
+    "local": 12,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 39,
+    "clip": [
+      32.0,
+      416.7919921875,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      417.7919921875,
+      62.26154327392578,
+      430.75201416015625
+    ]
+  },
+  {
+    "label": "044",
+    "local": 13,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 39,
+    "clip": [
+      288.0,
+      138.39199829101562,
+      522.0,
+      402.1919860839844
+    ],
+    "label_bbox": [
+      294.47998046875,
+      139.39199829101562,
+      314.2611083984375,
+      152.35198974609375
+    ]
+  },
+  {
+    "label": "045",
+    "local": 14,
+    "section_idx": 2,
+    "section_name": "사인법칙 ②회",
+    "kind": "eval",
+    "chapter_idx": 0,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 39,
+    "clip": [
+      288.0,
+      404.1919860839844,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      405.1919860839844,
+      314.5015563964844,
+      418.1520080566406
+    ]
+  },
+  {
+    "label": "046",
+    "local": 1,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 5,
+    "clip": [
+      32.0,
+      138.86241149902344,
+      282.0,
+      352.88580322265625
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      139.86241149902344,
+      51.050567626953125,
+      154.61932373046875
+    ]
+  },
+  {
+    "label": "047",
+    "local": 2,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 5,
+    "clip": [
+      32.0,
+      354.88580322265625,
+      282.0,
+      568.9092407226562
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      355.88580322265625,
+      51.050567626953125,
+      370.6427001953125
+    ]
+  },
+  {
+    "label": "048",
+    "local": 3,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 5,
+    "clip": [
+      32.0,
+      570.9092407226562,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      571.9092407226562,
+      51.050567626953125,
+      586.6661376953125
+    ]
+  },
+  {
+    "label": "049",
+    "local": 4,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 5,
+    "clip": [
+      288.0,
+      109.69925689697266,
+      522.0,
+      323.72265625
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      110.69925689697266,
+      308.91510009765625,
+      125.45616912841797
+    ]
+  },
+  {
+    "label": "050",
+    "local": 5,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 5,
+    "clip": [
+      288.0,
+      325.72265625,
+      522.0,
+      557.8680419921875
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      326.72265625,
+      308.91510009765625,
+      341.47955322265625
+    ]
+  },
+  {
+    "label": "051",
+    "local": 6,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 5,
+    "clip": [
+      288.0,
+      559.8680419921875,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      560.8680419921875,
+      308.91510009765625,
+      575.6249389648438
+    ]
+  },
+  {
+    "label": "052",
+    "local": 7,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 6,
+    "clip": [
+      32.0,
+      87.85689544677734,
+      282.0,
+      321.4424133300781
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      88.85689544677734,
+      51.050567626953125,
+      103.61380767822266
+    ]
+  },
+  {
+    "label": "053",
+    "local": 8,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 6,
+    "clip": [
+      32.0,
+      323.4424133300781,
+      282.0,
+      553.4275512695312
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      324.4424133300781,
+      51.050567626953125,
+      339.1993103027344
+    ]
+  },
+  {
+    "label": "054",
+    "local": 9,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 6,
+    "clip": [
+      32.0,
+      555.4275512695312,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      556.4275512695312,
+      51.050567626953125,
+      571.1844482421875
+    ]
+  },
+  {
+    "label": "055",
+    "local": 10,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 6,
+    "clip": [
+      288.0,
+      61.694061279296875,
+      522.0,
+      298.9999694824219
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      62.694061279296875,
+      308.9151306152344,
+      77.45097351074219
+    ]
+  },
+  {
+    "label": "056",
+    "local": 11,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 6,
+    "clip": [
+      288.0,
+      300.9999694824219,
+      522.0,
+      550.5472412109375
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      301.9999694824219,
+      308.9151306152344,
+      316.7568664550781
+    ]
+  },
+  {
+    "label": "057",
+    "local": 12,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 6,
+    "clip": [
+      288.0,
+      552.5472412109375,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      553.5472412109375,
+      308.9151306152344,
+      568.3041381835938
+    ]
+  },
+  {
+    "label": "058",
+    "local": 13,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 7,
+    "clip": [
+      32.0,
+      90.13713836669922,
+      282.0,
+      320.12225341796875
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      91.13713836669922,
+      51.05059051513672,
+      105.89405059814453
+    ]
+  },
+  {
+    "label": "059",
+    "local": 14,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 7,
+    "clip": [
+      32.0,
+      322.12225341796875,
+      282.0,
+      536.1456909179688
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      323.12225341796875,
+      51.05059051513672,
+      337.879150390625
+    ]
+  },
+  {
+    "label": "060",
+    "local": 15,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 7,
+    "clip": [
+      32.0,
+      538.1456909179688,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      539.1456909179688,
+      51.05059051513672,
+      553.902587890625
+    ]
+  },
+  {
+    "label": "061",
+    "local": 16,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 7,
+    "clip": [
+      288.0,
+      90.13713836669922,
+      522.0,
+      416.1326599121094
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      91.13713836669922,
+      308.9151306152344,
+      105.89405059814453
+    ]
+  },
+  {
+    "label": "062",
+    "local": 17,
+    "section_idx": 3,
+    "section_name": "학습자료집 Ⅲ-1",
+    "kind": "jaja",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 7,
+    "clip": [
+      288.0,
+      418.1326599121094,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      419.1326599121094,
+      308.9151306152344,
+      433.8895568847656
+    ]
+  },
+  {
+    "label": "063",
+    "local": 1,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 42,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      347.1119689941406
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      52.90171813964844,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "064",
+    "local": 2,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 42,
+    "clip": [
+      32.0,
+      349.1119689941406,
+      282.0,
+      542.2319946289062
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      350.1119689941406,
+      55.781192779541016,
+      363.0719909667969
+    ]
+  },
+  {
+    "label": "065",
+    "local": 3,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 42,
+    "clip": [
+      32.0,
+      544.2319946289062,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      545.2319946289062,
+      55.54072570800781,
+      558.1919555664062
+    ]
+  },
+  {
+    "label": "066",
+    "local": 4,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 42,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      445.8719787597656
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "067",
+    "local": 5,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 42,
+    "clip": [
+      288.0,
+      447.8719787597656,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      448.8719787597656,
+      307.7807312011719,
+      461.8320007324219
+    ]
+  },
+  {
+    "label": "068",
+    "local": 6,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 43,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      334.5119934082031
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      55.781192779541016,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "069",
+    "local": 7,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 43,
+    "clip": [
+      32.0,
+      336.5119934082031,
+      282.0,
+      536.7120361328125
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      337.5119934082031,
+      55.78119659423828,
+      350.4720153808594
+    ]
+  },
+  {
+    "label": "070",
+    "local": 8,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 43,
+    "clip": [
+      32.0,
+      538.7120361328125,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      539.7120361328125,
+      55.54072570800781,
+      552.6719970703125
+    ]
+  },
+  {
+    "label": "071",
+    "local": 9,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 43,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      391.9919738769531
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "072",
+    "local": 10,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 43,
+    "clip": [
+      288.0,
+      393.9919738769531,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      394.9919738769531,
+      314.50152587890625,
+      407.9519958496094
+    ]
+  },
+  {
+    "label": "073",
+    "local": 11,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 44,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      305.83197021484375
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      59.26106643676758,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "074",
+    "local": 12,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 44,
+    "clip": [
+      32.0,
+      307.83197021484375,
+      282.0,
+      525.31201171875
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      308.83197021484375,
+      62.26154327392578,
+      321.7919921875
+    ]
+  },
+  {
+    "label": "075",
+    "local": 13,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 44,
+    "clip": [
+      32.0,
+      527.31201171875,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      528.31201171875,
+      62.021080017089844,
+      541.27197265625
+    ]
+  },
+  {
+    "label": "076",
+    "local": 14,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 44,
+    "clip": [
+      288.0,
+      138.39199829101562,
+      522.0,
+      471.5519714355469
+    ],
+    "label_bbox": [
+      294.47998046875,
+      139.39199829101562,
+      314.5015563964844,
+      152.35198974609375
+    ]
+  },
+  {
+    "label": "077",
+    "local": 15,
+    "section_idx": 4,
+    "section_name": "등차·등비 ①회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 44,
+    "clip": [
+      288.0,
+      473.5519714355469,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      474.5519714355469,
+      314.2611083984375,
+      487.5119934082031
+    ]
+  },
+  {
+    "label": "078",
+    "local": 1,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 45,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      292.3919677734375
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      52.90171813964844,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "079",
+    "local": 2,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 45,
+    "clip": [
+      32.0,
+      294.3919677734375,
+      282.0,
+      527.4719848632812
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      295.3919677734375,
+      55.781192779541016,
+      308.35198974609375
+    ]
+  },
+  {
+    "label": "080",
+    "local": 3,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 45,
+    "clip": [
+      32.0,
+      529.4719848632812,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      530.4719848632812,
+      55.54072570800781,
+      543.4319458007812
+    ]
+  },
+  {
+    "label": "081",
+    "local": 4,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 45,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      396.7919921875
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "082",
+    "local": 5,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 45,
+    "clip": [
+      288.0,
+      398.7919921875,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      399.7919921875,
+      307.7807312011719,
+      412.75201416015625
+    ]
+  },
+  {
+    "label": "083",
+    "local": 6,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 46,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      325.1519775390625
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      55.781192779541016,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "084",
+    "local": 7,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 46,
+    "clip": [
+      32.0,
+      327.1519775390625,
+      282.0,
+      549.1920166015625
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      328.1519775390625,
+      55.78119659423828,
+      341.11199951171875
+    ]
+  },
+  {
+    "label": "085",
+    "local": 8,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 46,
+    "clip": [
+      32.0,
+      551.1920166015625,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      552.1920166015625,
+      55.54072570800781,
+      565.1519775390625
+    ]
+  },
+  {
+    "label": "086",
+    "local": 9,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 46,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      414.6719665527344
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "087",
+    "local": 10,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 46,
+    "clip": [
+      288.0,
+      416.6719665527344,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      417.6719665527344,
+      314.50152587890625,
+      430.6319885253906
+    ]
+  },
+  {
+    "label": "088",
+    "local": 11,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 47,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      291.5519714355469
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      59.26106643676758,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "089",
+    "local": 12,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 47,
+    "clip": [
+      32.0,
+      293.5519714355469,
+      282.0,
+      542.5919799804688
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      294.5519714355469,
+      62.26154327392578,
+      307.5119934082031
+    ]
+  },
+  {
+    "label": "090",
+    "local": 13,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 47,
+    "clip": [
+      32.0,
+      544.5919799804688,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      545.5919799804688,
+      62.021080017089844,
+      558.5519409179688
+    ]
+  },
+  {
+    "label": "091",
+    "local": 14,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 47,
+    "clip": [
+      288.0,
+      138.39199829101562,
+      522.0,
+      443.59197998046875
+    ],
+    "label_bbox": [
+      294.47998046875,
+      139.39199829101562,
+      314.5015563964844,
+      152.35198974609375
+    ]
+  },
+  {
+    "label": "092",
+    "local": 15,
+    "section_idx": 5,
+    "section_name": "등차·등비 ②회",
+    "kind": "eval",
+    "chapter_idx": 1,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 47,
+    "clip": [
+      288.0,
+      445.59197998046875,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      446.59197998046875,
+      314.2611083984375,
+      459.552001953125
+    ]
+  },
+  {
+    "label": "093",
+    "local": 1,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 10,
+    "clip": [
+      32.0,
+      142.94285583496094,
+      282.0,
+      370.04766845703125
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      143.94285583496094,
+      51.050567626953125,
+      158.69976806640625
+    ]
+  },
+  {
+    "label": "094",
+    "local": 2,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 10,
+    "clip": [
+      32.0,
+      372.04766845703125,
+      282.0,
+      578.7503051757812
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      373.04766845703125,
+      51.050567626953125,
+      387.8045654296875
+    ]
+  },
+  {
+    "label": "095",
+    "local": 3,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 10,
+    "clip": [
+      32.0,
+      580.7503051757812,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      581.7503051757812,
+      51.050567626953125,
+      596.5072021484375
+    ]
+  },
+  {
+    "label": "096",
+    "local": 4,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 10,
+    "clip": [
+      288.0,
+      113.89971160888672,
+      522.0,
+      323.9626770019531
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      114.89971160888672,
+      308.91510009765625,
+      129.6566162109375
+    ]
+  },
+  {
+    "label": "097",
+    "local": 5,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 10,
+    "clip": [
+      288.0,
+      325.9626770019531,
+      522.0,
+      536.0256958007812
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      326.9626770019531,
+      308.91510009765625,
+      341.7195739746094
+    ]
+  },
+  {
+    "label": "098",
+    "local": 6,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 10,
+    "clip": [
+      288.0,
+      538.0256958007812,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      539.0256958007812,
+      308.91510009765625,
+      553.7825927734375
+    ]
+  },
+  {
+    "label": "099",
+    "local": 7,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 11,
+    "clip": [
+      32.0,
+      92.77742767333984,
+      282.0,
+      298.63995361328125
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      93.77742767333984,
+      51.050567626953125,
+      108.53433990478516
+    ]
+  },
+  {
+    "label": "100",
+    "local": 8,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 11,
+    "clip": [
+      32.0,
+      300.63995361328125,
+      282.0,
+      531.585205078125
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      301.63995361328125,
+      51.050567626953125,
+      316.3968505859375
+    ]
+  },
+  {
+    "label": "101",
+    "local": 9,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 11,
+    "clip": [
+      32.0,
+      533.585205078125,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      534.585205078125,
+      51.050567626953125,
+      549.3421020507812
+    ]
+  },
+  {
+    "label": "102",
+    "local": 10,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 11,
+    "clip": [
+      288.0,
+      61.694061279296875,
+      522.0,
+      314.0016174316406
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      62.694061279296875,
+      308.9151306152344,
+      77.45097351074219
+    ]
+  },
+  {
+    "label": "103",
+    "local": 11,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 11,
+    "clip": [
+      288.0,
+      316.0016174316406,
+      522.0,
+      532.7853393554688
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      317.0016174316406,
+      308.9151306152344,
+      331.7585144042969
+    ]
+  },
+  {
+    "label": "104",
+    "local": 12,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 11,
+    "clip": [
+      288.0,
+      534.7853393554688,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      535.7853393554688,
+      308.9151306152344,
+      550.542236328125
+    ]
+  },
+  {
+    "label": "105",
+    "local": 13,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 12,
+    "clip": [
+      32.0,
+      126.98112487792969,
+      282.0,
+      333.8037414550781
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      127.98112487792969,
+      51.05059051513672,
+      142.738037109375
+    ]
+  },
+  {
+    "label": "106",
+    "local": 14,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 12,
+    "clip": [
+      32.0,
+      335.8037414550781,
+      282.0,
+      552.4674682617188
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      336.8037414550781,
+      51.05059051513672,
+      351.5606384277344
+    ]
+  },
+  {
+    "label": "107",
+    "local": 15,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 12,
+    "clip": [
+      32.0,
+      554.4674682617188,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      555.4674682617188,
+      51.05059051513672,
+      570.224365234375
+    ]
+  },
+  {
+    "label": "108",
+    "local": 16,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 12,
+    "clip": [
+      288.0,
+      97.93798828125,
+      522.0,
+      323.9626770019531
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      98.93798828125,
+      308.9151306152344,
+      113.69490051269531
+    ]
+  },
+  {
+    "label": "109",
+    "local": 17,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 12,
+    "clip": [
+      288.0,
+      325.9626770019531,
+      522.0,
+      515.7434692382812
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      326.9626770019531,
+      308.9151306152344,
+      341.7195739746094
+    ]
+  },
+  {
+    "label": "110",
+    "local": 18,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 12,
+    "clip": [
+      288.0,
+      517.7434692382812,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      518.7434692382812,
+      308.9151306152344,
+      533.5003662109375
+    ]
+  },
+  {
+    "label": "111",
+    "local": 19,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 13,
+    "clip": [
+      32.0,
+      107.17898559570312,
+      282.0,
+      451.17645263671875
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      108.17898559570312,
+      51.05059051513672,
+      122.93589782714844
+    ]
+  },
+  {
+    "label": "112",
+    "local": 20,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 13,
+    "clip": [
+      32.0,
+      453.17645263671875,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.70229721069336,
+      454.17645263671875,
+      51.05059051513672,
+      468.933349609375
+    ]
+  },
+  {
+    "label": "113",
+    "local": 21,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 13,
+    "clip": [
+      288.0,
+      77.65579223632812,
+      522.0,
+      472.0587158203125
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      78.65579223632812,
+      308.9151306152344,
+      93.41270446777344
+    ]
+  },
+  {
+    "label": "114",
+    "local": 22,
+    "section_idx": 6,
+    "section_name": "학습자료집 Ⅲ-2",
+    "kind": "jaja",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 13,
+    "clip": [
+      288.0,
+      474.0587158203125,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      475.0587158203125,
+      308.9151306152344,
+      489.81561279296875
+    ]
+  },
+  {
+    "label": "115",
+    "local": 1,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 49,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      371.35198974609375
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      52.90171813964844,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "116",
+    "local": 2,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 49,
+    "clip": [
+      32.0,
+      373.35198974609375,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      374.35198974609375,
+      55.781192779541016,
+      387.31201171875
+    ]
+  },
+  {
+    "label": "117",
+    "local": 3,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 49,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      341.59197998046875
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      307.9017333984375,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "118",
+    "local": 4,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 49,
+    "clip": [
+      288.0,
+      343.59197998046875,
+      522.0,
+      546.4320068359375
+    ],
+    "label_bbox": [
+      294.47998046875,
+      344.59197998046875,
+      308.1406555175781,
+      357.552001953125
+    ]
+  },
+  {
+    "label": "119",
+    "local": 5,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 49,
+    "clip": [
+      288.0,
+      548.4320068359375,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      549.4320068359375,
+      307.7807312011719,
+      562.3919677734375
+    ]
+  },
+  {
+    "label": "120",
+    "local": 6,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 50,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      314.23199462890625
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      55.781192779541016,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "121",
+    "local": 7,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 50,
+    "clip": [
+      32.0,
+      316.23199462890625,
+      282.0,
+      553.8720092773438
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      317.23199462890625,
+      55.78119659423828,
+      330.1920166015625
+    ]
+  },
+  {
+    "label": "122",
+    "local": 8,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 50,
+    "clip": [
+      32.0,
+      555.8720092773438,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      556.8720092773438,
+      55.54072570800781,
+      569.8319702148438
+    ]
+  },
+  {
+    "label": "123",
+    "local": 9,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 50,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      451.27197265625
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "124",
+    "local": 10,
+    "section_idx": 7,
+    "section_name": "수열의 합 ①회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 50,
+    "clip": [
+      288.0,
+      453.27197265625,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      454.27197265625,
+      314.50152587890625,
+      467.23199462890625
+    ]
+  },
+  {
+    "label": "125",
+    "local": 1,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 51,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      262.5119934082031
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      52.90171813964844,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "126",
+    "local": 2,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 51,
+    "clip": [
+      32.0,
+      264.5119934082031,
+      282.0,
+      502.0319519042969
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      265.5119934082031,
+      55.781192779541016,
+      278.4720153808594
+    ]
+  },
+  {
+    "label": "127",
+    "local": 3,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 51,
+    "clip": [
+      32.0,
+      504.0319519042969,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      505.0319519042969,
+      55.54072570800781,
+      517.991943359375
+    ]
+  },
+  {
+    "label": "128",
+    "local": 4,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 51,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      429.5519714355469
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "129",
+    "local": 5,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 51,
+    "clip": [
+      288.0,
+      431.5519714355469,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      432.5519714355469,
+      307.7807312011719,
+      445.5119934082031
+    ]
+  },
+  {
+    "label": "130",
+    "local": 6,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 52,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      274.3919677734375
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      55.781192779541016,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "131",
+    "local": 7,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 52,
+    "clip": [
+      32.0,
+      276.3919677734375,
+      282.0,
+      506.2319641113281
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      277.3919677734375,
+      55.78119659423828,
+      290.35198974609375
+    ]
+  },
+  {
+    "label": "132",
+    "local": 8,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 52,
+    "clip": [
+      32.0,
+      508.2319641113281,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      509.2319641113281,
+      55.54072570800781,
+      522.1919555664062
+    ]
+  },
+  {
+    "label": "133",
+    "local": 9,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 52,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      502.7519836425781
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "134",
+    "local": 10,
+    "section_idx": 8,
+    "section_name": "수열의 합 ②회",
+    "kind": "eval",
+    "chapter_idx": 2,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 52,
+    "clip": [
+      288.0,
+      504.7519836425781,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      505.7519836425781,
+      314.50152587890625,
+      518.7119750976562
+    ]
+  },
+  {
+    "label": "135",
+    "local": 1,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 18,
+    "clip": [
+      32.0,
+      138.84324645996094,
+      282.0,
+      356.3232421875
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      139.84324645996094,
+      51.0773811340332,
+      154.6032257080078
+    ]
+  },
+  {
+    "label": "136",
+    "local": 2,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 18,
+    "clip": [
+      32.0,
+      358.3232421875,
+      282.0,
+      577.7232055664062
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      359.3232421875,
+      51.0773811340332,
+      374.083251953125
+    ]
+  },
+  {
+    "label": "137",
+    "local": 3,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 18,
+    "clip": [
+      32.0,
+      579.7232055664062,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      580.7232055664062,
+      51.0773811340332,
+      595.4832153320312
+    ]
+  },
+  {
+    "label": "138",
+    "local": 4,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 18,
+    "clip": [
+      288.0,
+      109.69925689697266,
+      522.0,
+      326.0028991699219
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      110.69925689697266,
+      308.91510009765625,
+      125.45616912841797
+    ]
+  },
+  {
+    "label": "139",
+    "local": 5,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 18,
+    "clip": [
+      288.0,
+      328.0028991699219,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.5668640136719,
+      329.0028991699219,
+      308.91510009765625,
+      343.7597961425781
+    ]
+  },
+  {
+    "label": "140",
+    "local": 6,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 19,
+    "clip": [
+      32.0,
+      87.84325408935547,
+      282.0,
+      321.5232238769531
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      88.84325408935547,
+      51.0773811340332,
+      103.60324096679688
+    ]
+  },
+  {
+    "label": "141",
+    "local": 7,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 19,
+    "clip": [
+      32.0,
+      323.5232238769531,
+      282.0,
+      544.4832153320312
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      324.5232238769531,
+      51.0773811340332,
+      339.2832336425781
+    ]
+  },
+  {
+    "label": "142",
+    "local": 8,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 19,
+    "clip": [
+      32.0,
+      546.4832153320312,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      547.4832153320312,
+      51.0773811340332,
+      562.2432250976562
+    ]
+  },
+  {
+    "label": "143",
+    "local": 9,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 19,
+    "clip": [
+      288.0,
+      61.683258056640625,
+      522.0,
+      345.0432434082031
+    ],
+    "label_bbox": [
+      291.7200012207031,
+      62.683258056640625,
+      309.077392578125,
+      77.44324493408203
+    ]
+  },
+  {
+    "label": "144",
+    "local": 10,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 19,
+    "clip": [
+      288.0,
+      347.0432434082031,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.7200012207031,
+      348.0432434082031,
+      309.0774230957031,
+      362.8032531738281
+    ]
+  },
+  {
+    "label": "145",
+    "local": 11,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 20,
+    "clip": [
+      32.0,
+      88.32325744628906,
+      282.0,
+      381.76324462890625
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      89.32325744628906,
+      51.0774040222168,
+      104.08324432373047
+    ]
+  },
+  {
+    "label": "146",
+    "local": 12,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 20,
+    "clip": [
+      32.0,
+      383.76324462890625,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      384.76324462890625,
+      51.0774040222168,
+      399.52325439453125
+    ]
+  },
+  {
+    "label": "147",
+    "local": 13,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 20,
+    "clip": [
+      288.0,
+      61.683258056640625,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.7200012207031,
+      62.683258056640625,
+      309.0774230957031,
+      77.44324493408203
+    ]
+  },
+  {
+    "label": "148",
+    "local": 14,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 21,
+    "clip": [
+      32.0,
+      107.16325378417969,
+      282.0,
+      456.4032287597656
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      108.16325378417969,
+      51.0774040222168,
+      122.9232406616211
+    ]
+  },
+  {
+    "label": "149",
+    "local": 15,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 21,
+    "clip": [
+      32.0,
+      458.4032287597656,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      33.71999740600586,
+      459.4032287597656,
+      51.0774040222168,
+      474.1632385253906
+    ]
+  },
+  {
+    "label": "150",
+    "local": 16,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 21,
+    "clip": [
+      288.0,
+      77.64325714111328,
+      522.0,
+      457.00323486328125
+    ],
+    "label_bbox": [
+      291.7200012207031,
+      78.64325714111328,
+      309.0774230957031,
+      93.40324401855469
+    ]
+  },
+  {
+    "label": "151",
+    "local": 17,
+    "section_idx": 9,
+    "section_name": "학습자료집 Ⅲ-3",
+    "kind": "jaja",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 21,
+    "clip": [
+      288.0,
+      459.00323486328125,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      291.7200012207031,
+      460.00323486328125,
+      309.0774230957031,
+      474.76324462890625
+    ]
+  },
+  {
+    "label": "152",
+    "local": 1,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 54,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      313.9919738769531
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      52.90171813964844,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "153",
+    "local": 2,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 54,
+    "clip": [
+      32.0,
+      315.9919738769531,
+      282.0,
+      531.4320068359375
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      316.9919738769531,
+      55.781192779541016,
+      329.9519958496094
+    ]
+  },
+  {
+    "label": "154",
+    "local": 3,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 54,
+    "clip": [
+      32.0,
+      533.4320068359375,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      534.4320068359375,
+      55.54072570800781,
+      547.3919677734375
+    ]
+  },
+  {
+    "label": "155",
+    "local": 4,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 54,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      430.031982421875
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "156",
+    "local": 5,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 54,
+    "clip": [
+      288.0,
+      432.031982421875,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      433.031982421875,
+      307.7807312011719,
+      445.99200439453125
+    ]
+  },
+  {
+    "label": "157",
+    "local": 6,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 55,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      345.9119873046875
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      55.781192779541016,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "158",
+    "local": 7,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 55,
+    "clip": [
+      32.0,
+      347.9119873046875,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      348.9119873046875,
+      55.78119659423828,
+      361.87200927734375
+    ]
+  },
+  {
+    "label": "159",
+    "local": 8,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 55,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      598.3920288085938
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      307.78070068359375,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "160",
+    "local": 9,
+    "section_idx": 10,
+    "section_name": "수학적 귀납법 ①회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 55,
+    "clip": [
+      288.0,
+      600.3920288085938,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      601.3920288085938,
+      308.1406555175781,
+      614.3519897460938
+    ]
+  },
+  {
+    "label": "161",
+    "local": 1,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 56,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      301.7519836425781
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      52.90171813964844,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "162",
+    "local": 2,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 56,
+    "clip": [
+      32.0,
+      303.7519836425781,
+      282.0,
+      529.031982421875
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      304.7519836425781,
+      55.781192779541016,
+      317.7120056152344
+    ]
+  },
+  {
+    "label": "163",
+    "local": 3,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 56,
+    "clip": [
+      32.0,
+      531.031982421875,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      532.031982421875,
+      55.54072570800781,
+      544.991943359375
+    ]
+  },
+  {
+    "label": "164",
+    "local": 4,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 56,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      404.59197998046875
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      308.1406555175781,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "165",
+    "local": 5,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 56,
+    "clip": [
+      288.0,
+      406.59197998046875,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      407.59197998046875,
+      307.7807312011719,
+      420.552001953125
+    ]
+  },
+  {
+    "label": "166",
+    "local": 6,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 57,
+    "clip": [
+      32.0,
+      98.6719970703125,
+      282.0,
+      327.4319763183594
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      99.6719970703125,
+      55.781192779541016,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "167",
+    "local": 7,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 57,
+    "clip": [
+      32.0,
+      329.4319763183594,
+      282.0,
+      780.0
+    ],
+    "label_bbox": [
+      42.23999786376953,
+      330.4319763183594,
+      55.78119659423828,
+      343.3919982910156
+    ]
+  },
+  {
+    "label": "168",
+    "local": 8,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 57,
+    "clip": [
+      288.0,
+      98.6719970703125,
+      522.0,
+      455.1119689941406
+    ],
+    "label_bbox": [
+      294.47998046875,
+      99.6719970703125,
+      307.78070068359375,
+      112.63200378417969
+    ]
+  },
+  {
+    "label": "169",
+    "local": 9,
+    "section_idx": 11,
+    "section_name": "수학적 귀납법 ②회",
+    "kind": "eval",
+    "chapter_idx": 3,
+    "src_pdf": "/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf",
+    "src_page": 57,
+    "clip": [
+      288.0,
+      457.1119689941406,
+      522.0,
+      780.0
+    ],
+    "label_bbox": [
+      294.47998046875,
+      458.1119689941406,
+      308.1406555175781,
+      471.0719909667969
+    ]
+  }
+]

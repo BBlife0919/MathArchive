@@ -1,0 +1,16 @@
+{
+  "school": "광명고",
+  "verdicts": [
+    {"q_no": 1, "best_idx": 1, "tb_short": "YBM교과서", "tb_key": "ybm_text", "page": 61, "confidence": "medium", "reason": "Q1=∛(-27)+⁴√64/∛√8의 값은? 같은 거듭제곱근 계산식 '의 값은?' 5지선다 템플릿. 후보 idx1에 동일 구조의 '5√9·5√27+3√250·3√2의 값은?' 문항 포함"},
+    {"q_no": 2, "best_idx": 9, "tb_short": "올림포스", "tb_key": "ollimpos", "page": 47, "confidence": "high", "reason": "Q2='호의 길이가 8π인 부채꼴의 넓이가 32π일 때 중심각' / 후보 idx9에 '호의 길이가 8π인 부채꼴의 넓이가 24일 때 부채꼴의 중심각의 크기' — 숫자만 다른 동일 템플릿(부채꼴 호·넓이→중심각)"},
+    {"q_no": 5, "best_idx": null, "confidence": "none", "reason": "a^x=√2-1 주어졌을 때 (a^3x+a^-3x)/(a^2x+a^-2x) 대칭식 값. 후보 중 같은 템플릿(지수의 대칭식) 없음"},
+    {"q_no": 6, "best_idx": null, "confidence": "none", "reason": "log(1-1/2)+log(1-1/3)+…+log(1-1/100) 망원합 템플릿. 후보 중 log 망원합 문항 없음"},
+    {"q_no": 12, "best_idx": null, "confidence": "none", "reason": "a=81^(log₃32-log₃16), b=log₅{log₃(log₂8)}, c=log₆3+log₆8+log₆9 등 복합 로그 합 a+b+c 템플릿. 후보 중 같은 템플릿 없음"},
+    {"q_no": 14, "best_idx": null, "confidence": "none", "reason": "sinθ+cosθ=3/4일 때 sin³θ+cos³θ. 후보 중 sin+cos 값에서 sin³+cos³(또는 동일 차수 대칭식) 동일 템플릿 없음"},
+    {"q_no": 15, "best_idx": 10, "tb_short": "유형ON1", "tb_key": "yuhyeong_on1", "page": 117, "confidence": "high", "reason": "Q15='sin(3π/2+x)-cos(π-x)+tanx·tan(3π/2-x) 간단히 하면?' / 후보 idx10에 'sin²(-θ)+sin²(π/2+θ)+sin²(π/2-θ)+sin²(π-θ) 간단히 하면?' — 동일한 각변환공식(보각/여각/π/2±) 식 간단히 하기 템플릿"},
+    {"q_no": 16, "best_idx": 2, "tb_short": "YBM교과서", "tb_key": "ybm_text", "page": 85, "confidence": "high", "reason": "Q16=반지름 1 원 위 점 P, x축 수선의 발 H, ∠AOP=θ, tanθ, 삼각형 APH 넓이=n/m √7 / 후보 idx2에 P,H,A,θ,O가 표기된 단위원 그림 + '원점 O와 점 P를 지나는 동경 OP, sin θ, cos θ, tan θ' — 동일 단위원 + 삼각형 APH 템플릿"},
+    {"q_no": 19, "best_idx": null, "confidence": "none", "reason": "3^x=8, 36^y=16일 때 3/x-2/y 서술형. 후보(주로 100발100중 서술형)에 지수 두 등식→1/x 결합 같은 템플릿 없음"},
+    {"q_no": 20, "best_idx": null, "confidence": "none", "reason": "log_4(x²+9x+14) ≤ log_16(x²-10x+25) 부등식 서술형 (다른 밑 + 이차 진수). 후보들은 같은 밑 또는 단일 변수 형태로 1:1 템플릿 일치 없음"},
+    {"q_no": 21, "best_idx": 10, "tb_short": "YBM교과서", "tb_key": "ybm_text", "page": 99, "confidence": "medium", "reason": "Q21=두 함수 g(x)=7-log₂(x+12), f(x)=3sin²x-3cosx+k의 합성 (g∘f)(x) 최솟값 3일 때 최댓값(서술형). 후보 idx10에 '0≤x<2π에서 f(x)=-2cos²x+4sinx+k의 최솟값이 3일 때 최댓값을 구하시오 (단, k는 상수)' — 핵심 동일 템플릿(삼각함수 이차식+상수k, 최솟값 3 조건 → 최댓값). 광명고 문항은 외측 로그 합성 차이만 있음"}
+  ]
+}

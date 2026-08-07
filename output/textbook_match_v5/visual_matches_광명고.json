@@ -1,0 +1,186 @@
+{
+  "school": "광명고",
+  "verdicts": [
+    {
+      "q_no": 1,
+      "best_idx": 1,
+      "tb_short": "YBM교과서",
+      "tb_key": "ybm_text",
+      "page": 61,
+      "confidence": "medium",
+      "reason": "Q1=∛(-27)+⁴√64/∛√8의 값은? 같은 거듭제곱근 계산식 '의 값은?' 5지선다 템플릿. 후보 idx1에 동일 구조의 '5√9·5√27+3√250·3√2의 값은?' 문항 포함"
+    },
+    {
+      "q_no": 2,
+      "best_idx": 9,
+      "tb_short": "올림포스",
+      "tb_key": "ollimpos",
+      "page": 47,
+      "confidence": "high",
+      "reason": "Q2='호의 길이가 8π인 부채꼴의 넓이가 32π일 때 중심각' / 후보 idx9에 '호의 길이가 8π인 부채꼴의 넓이가 24일 때 부채꼴의 중심각의 크기' — 숫자만 다른 동일 템플릿(부채꼴 호·넓이→중심각)"
+    },
+    {
+      "q_no": 3,
+      "q_name": "3",
+      "best_idx": 7,
+      "tb_short": "미래엔교과서",
+      "tb_key": "miraen_text",
+      "page": 79,
+      "confidence": "high",
+      "reason": "'원점 O와 점 P(-√3,1)을 지나는 동경 OP가 나타내는 각의 크기를 θ라 할 때, sin θ, cos θ, tan θ의 값을 구하시오' — 점 좌표만 다르고 동일 템플릿"
+    },
+    {
+      "q_no": 4,
+      "q_name": "4",
+      "best_idx": 4,
+      "tb_short": "유형ON2",
+      "tb_key": "yuhyeong_on2",
+      "page": 72,
+      "confidence": "medium",
+      "reason": "'보기에서 y=cos x에 대한 설명으로 옳은 것만을 있는 대로 고른 것은?' — ㄱ(치역) ㄴ(y축 대칭) ㄷ(cos(x+π)) 형태로 같은 보기형 템플릿 (사인/탄젠트로 확장)"
+    },
+    {
+      "q_no": 5,
+      "best_idx": null,
+      "confidence": "none",
+      "reason": "a^x=√2-1 주어졌을 때 (a^3x+a^-3x)/(a^2x+a^-2x) 대칭식 값. 후보 중 같은 템플릿(지수의 대칭식) 없음"
+    },
+    {
+      "q_no": 6,
+      "best_idx": null,
+      "confidence": "none",
+      "reason": "log(1-1/2)+log(1-1/3)+…+log(1-1/100) 망원합 템플릿. 후보 중 log 망원합 문항 없음"
+    },
+    {
+      "q_no": 7,
+      "q_name": "7",
+      "best_idx": 2,
+      "tb_short": "유형ON1",
+      "tb_key": "yuhyeong_on1",
+      "page": 49,
+      "confidence": "high",
+      "reason": "'함수 f(x)=a^x의 그래프가 두 점 (b,4),(c,12)를 지나므로 ... f(b+c)/f(c-b)의 값' — 같은 템플릿(상수 a, 지수함수 그래프가 두 점 지남)"
+    },
+    {
+      "q_no": 8,
+      "q_name": "8",
+      "best_idx": 2,
+      "tb_short": "올림전국연합",
+      "tb_key": "ollim_jeonguk",
+      "page": 60,
+      "confidence": "medium",
+      "reason": "'부등식 (지수)을 만족시키는 모든 자연수 x의 개수' 템플릿 (지수부등식-치환)"
+    },
+    {
+      "q_no": 9,
+      "q_name": "9",
+      "best_idx": 5,
+      "tb_short": "마더텅수1",
+      "tb_key": "madeotting_su1",
+      "page": 102,
+      "confidence": "medium",
+      "reason": "'방정식 log_?(?)=?+½log_?(?) 만족시키는 실수 x의 값' 로그방정식 템플릿"
+    },
+    {
+      "q_no": 10,
+      "q_name": "10",
+      "best_idx": 6,
+      "tb_short": "YBM교과서",
+      "tb_key": "ybm_text",
+      "page": 51,
+      "confidence": "high",
+      "reason": "'함수 y=log_2 4x의 그래프를 x축의 방향으로 1만큼 평행이동한 그래프가 함수 y=2^(x+1)의 그래프를 x축의 방향으로 a만큼 평행이동한 그래프와 직선 y=x에 대하여 대칭일 때, 상수 a의 값을 구하시오' — 사실상 동일 템플릿(숫자만 다름)"
+    },
+    {
+      "q_no": 11,
+      "q_name": "11",
+      "best_idx": 8,
+      "tb_short": "YBM교과서",
+      "tb_key": "ybm_text",
+      "page": 33,
+      "confidence": "high",
+      "reason": "'log10 2=a, log10 3=b일 때, log5 18을 a, b로 나타내면?' — 'log a, log b 값 주고 다른 log를 a,b로 표현' 동일 템플릿"
+    },
+    {
+      "q_no": 12,
+      "best_idx": null,
+      "confidence": "none",
+      "reason": "a=81^(log₃32-log₃16), b=log₅{log₃(log₂8)}, c=log₆3+log₆8+log₆9 등 복합 로그 합 a+b+c 템플릿. 후보 중 같은 템플릿 없음"
+    },
+    {
+      "q_no": 13,
+      "q_name": "13",
+      "best_idx": 1,
+      "tb_short": "유형ON1",
+      "tb_key": "yuhyeong_on1",
+      "page": 52,
+      "confidence": "high",
+      "reason": "'정의역이 {x|1≤x≤2}인 함수 f(x)={1/3}^(2x-k)의 최댓값은 9, 최솟값 m. k·m의 값을 구하시오' — 정의역·최댓·최솟·상수 곱 동일 템플릿"
+    },
+    {
+      "q_no": 14,
+      "best_idx": null,
+      "confidence": "none",
+      "reason": "sinθ+cosθ=3/4일 때 sin³θ+cos³θ. 후보 중 sin+cos 값에서 sin³+cos³(또는 동일 차수 대칭식) 동일 템플릿 없음"
+    },
+    {
+      "q_no": 15,
+      "best_idx": 10,
+      "tb_short": "유형ON1",
+      "tb_key": "yuhyeong_on1",
+      "page": 117,
+      "confidence": "high",
+      "reason": "Q15='sin(3π/2+x)-cos(π-x)+tanx·tan(3π/2-x) 간단히 하면?' / 후보 idx10에 'sin²(-θ)+sin²(π/2+θ)+sin²(π/2-θ)+sin²(π-θ) 간단히 하면?' — 동일한 각변환공식(보각/여각/π/2±) 식 간단히 하기 템플릿"
+    },
+    {
+      "q_no": 16,
+      "best_idx": 2,
+      "tb_short": "YBM교과서",
+      "tb_key": "ybm_text",
+      "page": 85,
+      "confidence": "high",
+      "reason": "Q16=반지름 1 원 위 점 P, x축 수선의 발 H, ∠AOP=θ, tanθ, 삼각형 APH 넓이=n/m √7 / 후보 idx2에 P,H,A,θ,O가 표기된 단위원 그림 + '원점 O와 점 P를 지나는 동경 OP, sin θ, cos θ, tan θ' — 동일 단위원 + 삼각형 APH 템플릿"
+    },
+    {
+      "q_no": 17,
+      "q_name": "17",
+      "best_idx": 3,
+      "tb_short": "고쟁이",
+      "tb_key": "gojaengi",
+      "page": 19,
+      "confidence": "high",
+      "reason": "'실수 x에 대하여 x의 네제곱근 중 실수인 것의 개수를 f(x), 다섯제곱근 중 실수인 것의 개수를 g(x)' — '제곱근 중 실수인 것의 개수' 함수 정의 동일 템플릿"
+    },
+    {
+      "q_no": 18,
+      "q_name": "18",
+      "best_idx": 3,
+      "tb_short": "수특26",
+      "tb_key": "suteuk26",
+      "page": 49,
+      "confidence": "high",
+      "reason": "'10 이하의 두 자연수 a,b에 대하여 함수 y=a sin x+b (0≤x≤2π)의 그래프가 두 직선 y=2, y=5와 만나는 서로 다른 점의 개수를 각각 m,n이라 할 때, m+n의 값이 최대' — sin 그래프와 두 직선 교점 개수, 정수 a,b의 합 최대/최소 동일 템플릿"
+    },
+    {
+      "q_no": 19,
+      "best_idx": null,
+      "confidence": "none",
+      "reason": "3^x=8, 36^y=16일 때 3/x-2/y 서술형. 후보(주로 100발100중 서술형)에 지수 두 등식→1/x 결합 같은 템플릿 없음"
+    },
+    {
+      "q_no": 20,
+      "best_idx": null,
+      "confidence": "none",
+      "reason": "log_4(x²+9x+14) ≤ log_16(x²-10x+25) 부등식 서술형 (다른 밑 + 이차 진수). 후보들은 같은 밑 또는 단일 변수 형태로 1:1 템플릿 일치 없음"
+    },
+    {
+      "q_no": 21,
+      "best_idx": 10,
+      "tb_short": "YBM교과서",
+      "tb_key": "ybm_text",
+      "page": 99,
+      "confidence": "medium",
+      "reason": "Q21=두 함수 g(x)=7-log₂(x+12), f(x)=3sin²x-3cosx+k의 합성 (g∘f)(x) 최솟값 3일 때 최댓값(서술형). 후보 idx10에 '0≤x<2π에서 f(x)=-2cos²x+4sinx+k의 최솟값이 3일 때 최댓값을 구하시오 (단, k는 상수)' — 핵심 동일 템플릿(삼각함수 이차식+상수k, 최솟값 3 조건 → 최댓값). 광명고 문항은 외측 로그 합성 차이만 있음"
+    }
+  ]
+}

@@ -41,6 +41,13 @@ KP_BORDER = (230/255, 200/255, 140/255)
 PAGE_W = 595.0
 PAGE_H = 842.0
 
+# dest 본문 폰트 목표 — kind 별 일정한 src 본문 크기 가정.
+TARGET_BODY_SIZE = 10.0
+KIND_BODY_SIZE = {
+    "jaja": 9.7,   # Haansoft Dotum
+    "eval": 10.7,  # Dotum
+}
+
 LEFT_MARGIN = 28
 RIGHT_MARGIN = 28
 TOP_MARGIN = 56
@@ -105,12 +112,18 @@ def draw_side_bookmark(page, roman: str, part_no: str):
                    color=GOLD_LIGHT, width=1.2)
 
 
-def draw_cell(page, cell_x0, cell_y0, meta, src_doc_cache):
+def cell_size(meta) -> int:
+    return 1
+
+
+def draw_cell(page, cell_x0, cell_y0, meta, src_doc_cache, span_h: float = None):
     label = meta["label"]
     src_pdf = meta["src_pdf"]
     src_page = meta["src_page"]
     clip = meta["clip"]
     cell_x1 = cell_x0 + COL_W
+    if span_h is None:
+        span_h = ROW_H
 
     # 1) 라벨 + 체크박스 한 줄
     label_y_baseline = cell_y0 + 14
@@ -142,9 +155,24 @@ def draw_cell(page, cell_x0, cell_y0, meta, src_doc_cache):
     cx0, cy0, cx1, cy1 = clip
     src_w = cx1 - cx0
     src_h = cy1 - cy0
-    scale = COL_W / src_w
-    if src_h * scale > PROB_H:
-        scale = PROB_H / src_h
+
+    if src_pdf not in src_doc_cache:
+        src_doc_cache[src_pdf] = fitz.open(src_pdf)
+
+    # 본문 폰트 통일: kind 별 고정 scale (eval=0.935, jaja=1.031)
+    kind = meta.get("kind", "eval")
+    body_src = KIND_BODY_SIZE.get(kind, 10.7)
+    scale_target = TARGET_BODY_SIZE / body_src
+    scale = min(scale_target, COL_W / src_w)
+
+    # 셀 영역: span_h (1셀=ROW_H, 2셀=ROW_H*2+ROW_GAP_Y)
+    avail_h_full = span_h - LABEL_ROW_H - PROB_GAP * 2
+    avail_h_with_kpmemo = avail_h_full - KP_H - MEMO_H - PROB_GAP
+    # KP/MEMO 자리 확보 위해 본문이 avail_h_with_kpmemo 초과 시 scale 축소
+    if src_h * scale > avail_h_with_kpmemo:
+        scale = avail_h_with_kpmemo / src_h
+    draw_kp_memo = True
+
     target_w = src_w * scale
     target_h = src_h * scale
     tx0 = cell_x0
@@ -152,23 +180,52 @@ def draw_cell(page, cell_x0, cell_y0, meta, src_doc_cache):
     tx1 = tx0 + target_w
     ty1 = ty0 + target_h
 
-    if src_pdf not in src_doc_cache:
-        src_doc_cache[src_pdf] = fitz.open(src_pdf)
     page.show_pdf_page(
         fitz.Rect(tx0, ty0, tx1, ty1),
         src_doc_cache[src_pdf], src_page,
         clip=fitz.Rect(cx0, cy0, cx1, cy1),
     )
-    # 원본 라벨 위치 화이트박싱 (클립 좌측 상단)
-    label_cover_w = 20.0 * scale
-    label_cover_h = 14.0 * scale
-    page.draw_rect(
-        fitz.Rect(tx0, ty0, tx0 + label_cover_w, ty0 + label_cover_h),
-        color=(1, 1, 1), fill=(1, 1, 1), overlay=True,
-    )
+    # 원본 라벨 위치 화이트박싱 — extract 단계에서 저장한 정확한 bbox 사용.
+    lb = meta.get("label_bbox")
+    if lb:
+        lx0, ly0, lx1, ly1 = lb
+        # src → dest 좌표 변환 (클립 기준)
+        dx0 = tx0 + (max(lx0, cx0) - cx0) * scale
+        dy0 = ty0 + (max(ly0, cy0) - cy0) * scale
+        dx1 = tx0 + (min(lx1, cx1) - cx0) * scale
+        dy1 = ty0 + (min(ly1, cy1) - cy0) * scale
+        pad = 1.5
+        page.draw_rect(
+            fitz.Rect(dx0 - pad, dy0 - pad, dx1 + pad, dy1 + pad),
+            color=(1, 1, 1), fill=(1, 1, 1), overlay=True,
+        )
+    # [성취기준N-X] 텍스트 마스킹 — jaja 페이지에만 등장
+    src_doc = src_doc_cache[src_pdf]
+    src_page_obj = src_doc[src_page]
+    clip_rect = fitz.Rect(cx0, cy0, cx1, cy1)
+    for blk in src_page_obj.get_text("dict", clip=clip_rect).get("blocks", []):
+        if blk.get("type") != 0:
+            continue
+        for line in blk["lines"]:
+            for sp in line["spans"]:
+                if "HCRDotum-Bold" not in sp["font"]:
+                    continue
+                if "성취기준" not in sp["text"]:
+                    continue
+                bb = sp["bbox"]
+                pad = 1.5
+                dx0 = tx0 + (bb[0] - cx0) * scale - pad
+                dy0 = ty0 + (bb[1] - cy0) * scale - pad
+                dx1 = tx0 + (bb[2] - cx0) * scale + pad
+                dy1 = ty0 + (bb[3] - cy0) * scale + pad
+                page.draw_rect(fitz.Rect(dx0, dy0, dx1, dy1),
+                               color=(1, 1, 1), fill=(1, 1, 1), overlay=True)
 
-    # 3) KEY POINT (얇게)
-    kp_y = cell_y0 + LABEL_ROW_H + PROB_H + PROB_GAP * 2
+    if not draw_kp_memo:
+        return
+
+    # 3) KEY POINT — 본문 바로 아래
+    kp_y = ty1 + PROB_GAP * 2
     kp_rect = fitz.Rect(cell_x0, kp_y, cell_x1, kp_y + KP_H)
     page.draw_rect(kp_rect, color=KP_BORDER, fill=KP_BG, width=0.6)
     text_at(page, cell_x0 + 6, kp_y + 8.5, "KEY POINT",
@@ -205,9 +262,11 @@ def main():
     src_doc_cache: dict[str, fitz.Document] = {}
 
     page_breaks: dict[int, int] = {}
-    i = 0
-    while i < len(problems):
-        ch_idx = problems[i]["chapter_idx"]
+    # CELL_POSITIONS: 0=좌상, 1=우상, 2=좌하, 3=우하
+    # 수직 2셀 쌍: (0,2) 좌측, (1,3) 우측
+    MERGED = "__MERGED__"
+
+    def flush_page(slots, ch_idx):
         ch = CHAPTERS[ch_idx]
         part_no = f"PART {ch_idx + 1:02d}"
         page = out.new_page(width=PAGE_W, height=PAGE_H)
@@ -215,16 +274,61 @@ def main():
             page_breaks[ch_idx] = len(out) - 1
         draw_top_header(page, part_no, ch["short"])
         draw_side_bookmark(page, ch["roman"], part_no)
+        for c in range(4):
+            p = slots[c]
+            if p is None or p is MERGED:
+                continue
+            cx, cy = CELL_POSITIONS[c]
+            # 수직 합쳐진 셀 (c=0 또는 1이고 c+2가 MERGED)
+            if c < 2 and slots[c + 2] is MERGED:
+                span = ROW_H * 2 + ROW_GAP_Y
+            else:
+                span = ROW_H
+            draw_cell(page, cx, cy, p, src_doc_cache, span_h=span)
 
-        # 4개 셀에 차례로 배치 — 챕터 경계에서 끊고 다음 페이지에서 새 챕터
-        for cell in range(4):
-            if i >= len(problems):
-                break
-            if problems[i]["chapter_idx"] != ch_idx:
-                break
-            cx, cy = CELL_POSITIONS[cell]
-            draw_cell(page, cx, cy, problems[i], src_doc_cache)
+    slots: list = [None, None, None, None]
+    cur_ch = None
+    i = 0
+    while i < len(problems):
+        p = problems[i]
+        ch_idx = p["chapter_idx"]
+
+        # 챕터 바뀌면 현재 페이지 flush + 새 챕터
+        if cur_ch is not None and ch_idx != cur_ch:
+            flush_page(slots, cur_ch)
+            slots = [None, None, None, None]
+        cur_ch = ch_idx
+
+        sz = cell_size(p)
+        placed = False
+        if sz == 1:
+            for c in range(4):
+                if slots[c] is None:
+                    slots[c] = p
+                    placed = True
+                    break
+        else:  # sz=2 수직
+            for top, bot in [(0, 2), (1, 3)]:
+                if slots[top] is None and slots[bot] is None:
+                    slots[top] = p
+                    slots[bot] = MERGED
+                    placed = True
+                    break
+
+        if placed:
             i += 1
+            # 페이지 다 차면 flush
+            if all(s is not None for s in slots):
+                flush_page(slots, cur_ch)
+                slots = [None, None, None, None]
+        else:
+            # 페이지 다 차서 못 배치 → flush 후 재시도
+            flush_page(slots, cur_ch)
+            slots = [None, None, None, None]
+
+    # 마지막 페이지
+    if any(s is not None for s in slots):
+        flush_page(slots, cur_ch)
 
     print(f"Chapter page breaks: {page_breaks}")
     out.save(str(OUT_PDF), garbage=4, deflate=True)
@@ -232,6 +336,9 @@ def main():
     out.close()
     for d in src_doc_cache.values():
         d.close()
+    (OUT_DIR / "problems_page_breaks.json").write_text(
+        json.dumps(page_breaks), encoding="utf-8"
+    )
     print(f"[OK] {OUT_PDF}  ({n_pages} pages)")
 
 

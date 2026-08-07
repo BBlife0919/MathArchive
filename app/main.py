@@ -512,6 +512,9 @@ def render_question_content(text: str, file_source: str = "",
     except Exception:
         pass
     text = re.sub(r"\n{3,}", "\n\n", text)
+    # 화면 렌더용 — \dfrac 은 인쇄(교재 PDF) 전용. 화면에서는 \frac (inline)
+    # 이 자연스러움. _frac_to_dfrac 변환을 건너뛰기 위해 이 함수 내에서는
+    # markdown 을 직접 렌더하지 말고 그대로 통과 (아래 로직에서 처리).
 
     file_stem = Path(file_source).stem if file_source else ""
     img_map = _get_image_map(question_id) if question_id else {}
@@ -530,7 +533,7 @@ def render_question_content(text: str, file_source: str = "",
             in_box = False
             content = "".join(box_content).strip()
             if content:
-                content = _frac_to_dfrac(content)
+                # 화면 렌더에서는 \dfrac 유지 안 함 — inline \frac 가 자연스러움
                 lines = [ln.lstrip() for ln in content.split("\n")]
                 content = "\n".join(lines)
                 # `<보기>`/`<조건>` 격자 표 → 단순 세로 나열로 변환
@@ -548,7 +551,7 @@ def render_question_content(text: str, file_source: str = "",
         else:
             stripped = part.strip()
             if stripped:
-                stripped = _frac_to_dfrac(stripped)
+                # 화면 렌더 — \dfrac 변환 skip (인쇄 전용)
                 stripped = _ensure_line_breaks(stripped)
                 st.markdown(stripped)
 

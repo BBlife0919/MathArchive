@@ -162,14 +162,23 @@ def typeset_body(text: str | None) -> str:
 TYPESET_JS = r"""
 window.__typeset = function () {
   document.querySelectorAll('.slot.book-kp').forEach(function (slot) {
-    // (1) 선지: 줄바꿈된 선지가 있으면 3열 → 2열(2/2/1)
+    // (1) 선지 다단 강등: 3열 → 2열(2/2/1) → 1열(5행)
+    // KaTeX 분수(분자/막대/분모)는 line-height 의 ~2.3배 높이라 "wrap" 로 오판정되면
+    // 짧은 분수 5개도 1열로 밀림. 실제 텍스트 줄바꿈만 잡도록 임계값 상향.
     var ch = slot.querySelector('.q-choices');
     if (ch && ch.classList.contains('cols3')) {
       var lh = parseFloat(getComputedStyle(ch).lineHeight) || 16, wrapped = false;
       ch.querySelectorAll('.choice').forEach(function (it) {
-        if (it.offsetHeight > lh * 1.45) wrapped = true;
+        if (it.offsetHeight > lh * 2.6) wrapped = true;
       });
       if (wrapped) { ch.classList.remove('cols3'); ch.classList.add('cols2'); }
+    }
+    if (ch && ch.classList.contains('cols2')) {
+      var lh1 = parseFloat(getComputedStyle(ch).lineHeight) || 16, wrapped1 = false;
+      ch.querySelectorAll('.choice').forEach(function (it) {
+        if (it.offsetHeight > lh1 * 2.6) wrapped1 = true;
+      });
+      if (wrapped1) { ch.classList.remove('cols2'); ch.classList.add('cols1'); }
     }
     // (1b) 보기/조건 박스: ㄱㄴㄷ·(가)(나)·①② 항목을 내어쓰기(hanging indent)
     slot.querySelectorAll('.cond-box').forEach(function (box) {

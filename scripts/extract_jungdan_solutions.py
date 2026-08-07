@@ -29,9 +29,9 @@ META_JSON = OUT_DIR / "solutions_meta.json"
 
 # 컬럼 경계 — 단원 배지/우측 데코 점선 제거.
 COL_LEFT_X0 = 32.0
-COL_LEFT_X1 = 283.0
-COL_RIGHT_X0 = 297.0
-COL_RIGHT_X1 = 538.0
+COL_LEFT_X1 = 282.0
+COL_RIGHT_X0 = 288.0
+COL_RIGHT_X1 = 522.0
 COL_BOTTOM_Y = 780.0
 
 X_OK_LEFT = (20.0, 55.0)
@@ -226,6 +226,7 @@ def main():
                 "src_pdf": str(SRC_PDF),
                 "src_page": page_idx,
                 "clip": [col_x0, y_top, col_x1, y_bot],
+                "label_bbox": [rect.x0, rect.y0, rect.x1, rect.y1],
             })
 
     print("section coverage:")

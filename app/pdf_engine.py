@@ -43,7 +43,7 @@ def format_source(q: dict, include_difficulty: bool = False) -> str:
     return " ".join(parts)
 
 
-def format_choices(choices_json, book_mode: bool = False) -> str:
+def format_choices(choices_json, book_mode: bool = False, images: dict | None = None) -> str:
     if not choices_json:
         return ""
     if isinstance(choices_json, str):
@@ -55,15 +55,29 @@ def format_choices(choices_json, book_mode: bool = False) -> str:
         choices = choices_json
     if not choices:
         return ""
-    # 선지 번호가 1부터 시작하지 않으면 잘못 파싱된 조각 → 숨김 (서술형 등)
+    # 선지 번호 sanity: 1도 없고 2도 없으면(3+만 있음) 잘못된 조각 → 숨김
+    # (기존엔 1 없으면 무조건 숨김이었으나, ①만 파싱 실패한 케이스에서 ②~⑤ 사라짐)
     nums = [c.get("number") for c in choices if isinstance(c, dict) and c.get("number")]
-    if nums and 1 not in nums:
+    if nums and 1 not in nums and 2 not in nums:
         return ""
     circle = {1: "①", 2: "②", 3: "③", 4: "④", 5: "⑤"}
+    imgs = images or {}
+
+    def _sub_img(m):
+        ref = m.group(1)
+        url = imgs.get(ref)
+        if url:
+            return f'<img class="c-img" src="{_html.escape(url, quote=True)}" alt="">'
+        return '<span class="q-img-missing">[그림]</span>'
 
     def _ct(c):
-        # 선지 text도 본문과 동일한 수식 정규화 (행렬 행 구분자 등)
-        return _normalize_math_text(c.get("text", "") or "")
+        # 선지 text 도 본문과 동일한 수식 정규화 + `$..$` 안 `<>&` HTML escape
+        # ($1/6 < m < 3$ 처럼 부등호가 있는 수식이 태그로 오인되어 raw 노출되는 것 방지)
+        text = _normalize_math_text(c.get("text", "") or "")
+        text = _with_math_protected(text, lambda s: s)
+        # 선지 안 <<IMG:imageN>> 마커 → 실제 <img> 로 치환 (탑반 교재 그림 이관)
+        text = re.sub(r"<<IMG:(image\d+)>>", _sub_img, text)
+        return text
 
     if book_mode:
         # 가로 flex — .q-choices 의 gap으로 간격 조정
@@ -91,15 +105,15 @@ def _choice_col_class(choices_json) -> str:
 
     def vlen(t):
         t = t or ""
-        # 분수/루트/적분 등은 시각적으로 넓어 가중치
+        # 분수/루트/적분 등은 시각적으로 넓어 가중치 (짧은 분수는 3열 유지되게 완화)
         wide = len(re.findall(r"\\d?frac|\\sqrt|\\sum|\\int|\\lim", t))
         s = re.sub(r"\\[a-zA-Z]+|[${}\\^_~\\\\]|\s", "", t)
         # 한글·쉼표·부등호는 폭 가중치 (한 줄 못 들어가는 케이스 방지)
         han = len(re.findall(r"[ㄱ-ㅎ가-힣]", t))
         punct = t.count(",") + t.count("≤") + t.count("≥")
-        return len(s) + wide * 4 + han * 1 + punct * 1
+        return len(s) + wide * 2 + han * 1 + punct * 1
 
-    return "cols2" if max(vlen(c.get("text", "")) for c in choices) > 10 else "cols3"
+    return "cols2" if max(vlen(c.get("text", "")) for c in choices) > 12 else "cols3"
 
 
 # ── HTML-safe 변환 (수식 보호) ────────────────────────────
@@ -154,7 +168,7 @@ def _render_box_content(body: str) -> str:
     return rendered
 
 
-_BOGI_HDR = re.compile(r"<\s*보\s*기\s*>")
+_BOGI_HDR = re.compile(r"[<\[]\s*보\s*기\s*[>\]]")
 _BOGI_ITEM = re.compile(r"^\s*([ㄱ-ㅎ])\s*[.ㆍ]")
 _HANGUL_IDX = {c: i for i, c in enumerate("ㄱㄴㄷㄹㅁㅂㅅㅇ")}
 
@@ -227,7 +241,7 @@ def _normalize_boxes(text: str) -> str:
     flat = re.sub(r"<<BOX_START>>(.*?)<<BOX_END>>", _fix_box, flat, flags=re.DOTALL)
 
     # 3) 박스 끝난 뒤 같은 <보기> 블록이 plain 으로 반복되면 제거 (박스 밖 중복)
-    flat = re.sub(r"(<<BOX_END>>)\s*<\s*보\s*기\s*>.*?(?=<<BOX_START>>|$)",
+    flat = re.sub(r"(<<BOX_END>>)\s*[<\[]\s*보\s*기\s*[>\]].*?(?=<<BOX_START>>|$)",
                   r"\1", flat, flags=re.DOTALL)
     return flat
 
@@ -325,9 +339,37 @@ def _normalize_math_inner(s: str) -> str:
     # `\overline{\pm}` `\overline{\mathrm{\pm}}` → `\overline{PM}` 복구.
     s = re.sub(r"\\overline\{\s*\\mathrm\{\s*\\pm\s*\}\s*\}", r"\\overline{PM}", s)
     s = re.sub(r"\\overline\{\s*\\pm\s*\}", r"\\overline{PM}", s)
+    # `\to` 명령어 뒤에 알파벳/한글이 공백 없이 붙어 `\toa` `\tob` 로 잘못 파싱되는 케이스
+    # (예: `x \toa` → `x \to a`)
+    s = re.sub(r"\\to(?=[a-zA-Z0-9\\])", r"\\to ", s)
+    # `\lim_x\to0-` → `\lim_{x \to 0-}` : 리미트 subscript 가 brace 없이 붙은 케이스
+    s = re.sub(
+        r"\\lim_([a-zA-Z])\s*\\to\s*([0-9a-zA-Z\+\-\∞\\]+)",
+        r"\\lim_{\1 \\to \2}",
+        s,
+    )
+    # HWP 변환 잔재: `TRIANG ≤ ABC` = 삼각형(△) 명령이 `TRIANG` + `\leq` 로 오변환
+    # 유사: ANG → \angle 케이스와 동일 패턴 (`ANGLE`의 LE 두 글자가 <= 로 매핑됨)
+    s = re.sub(r"(?<!\\)\bTRIANGLE\s+", r"\\triangle ", s, flags=re.IGNORECASE)
+    s = re.sub(r"(?<!\\)\bTRIANG\s*(?:≤|<=|\\leq)\s*", r"\\triangle ", s, flags=re.IGNORECASE)
+    # apostrophe(') 앞뒤에 붙은 \, (HWP 얇은 공백) 정리 — `l\, ' \,:` → `l' :`
+    # 원본이 프라임을 `\,'\, ` 로 감싸서 KaTeX 파싱 실패 → raw 노출되는 케이스
+    s = re.sub(r"\\,\s*'\s*\\,", "'", s)
+    s = re.sub(r"([a-zA-Z0-9])\\,\s*'", r"\1'", s)
+    s = re.sub(r"'\s*\\,", "'", s)
     # HWP 변환 잔재: ANG ≤ X / ANG <= X / ANG \leq X → \angle X (LE 두 글자가 <= 로 잘못 매핑됨)
-    s = re.sub(r"\bANGLE\s+", r"\\angle ", s)
-    s = re.sub(r"\bANG\s*(?:≤|<=|\\leq)\s*", r"\\angle ", s)
+    s = re.sub(r"(?<!\\)\bANGLE\s+", r"\\angle ", s, flags=re.IGNORECASE)
+    s = re.sub(r"(?<!\\)\bANG\s*(?:≤|<=|\\leq)\s*", r"\\angle ", s, flags=re.IGNORECASE)
+    # `\mathrm{ang} \leq APB` → `\angle APB` (파서가 소문자 `ang` 을 mathrm 로 감쌈)
+    s = re.sub(r"\\mathrm\{\s*ang\s*\}\s*(?:≤|<=|\\leq)\s*", r"\\angle ", s, flags=re.IGNORECASE)
+    s = re.sub(r"\\mathrm\{\s*triang\s*\}\s*(?:≤|<=|\\leq)\s*", r"\\triangle ", s, flags=re.IGNORECASE)
+    # HWP 변환 잔재: BAR{AP} / bar{AP} → \overline{AP} (선분 표기 실패)
+    s = re.sub(r"(?<!\\)\bBAR\{([^}]+)\}", r"\\overline{\1}", s, flags=re.IGNORECASE)
+    # HWP 변환 잔재: ROOT{...} / SQRT{...} → \sqrt{...}
+    s = re.sub(r"(?<!\\)\bROOT\{([^}]+)\}", r"\\sqrt{\1}", s, flags=re.IGNORECASE)
+    s = re.sub(r"(?<!\\)\bSQRT\{([^}]+)\}", r"\\sqrt{\1}", s, flags=re.IGNORECASE)
+    # HWP 변환 잔재: OVER{a}{b} → \dfrac{a}{b}
+    s = re.sub(r"\bOVER\{([^}]+)\}\{([^}]+)\}", r"\\dfrac{\1}{\2}", s, flags=re.IGNORECASE)
     # sin/cos/tan/log/ln 뒤 pi 가 백슬래시 없이 raw 5글자 식별자로 들어간 케이스
     # ($y=sinpix$ 등): 함수명·그리스·변수 분리
     s = re.sub(r"\b(sin|cos|tan|sec|csc|cot|log|ln)pi([a-zA-Z])\b", r"\\\1\\pi \2", s)
@@ -435,24 +477,37 @@ def render_question_body(text: str, images: dict | None = None) -> str:
 
     images: {'image3': url, ...} 가 주어지면 `<<IMG:imageN>>` 를 실제 <img> 로
     임베드. 없으면(또는 해당 ref 없으면) '[그림]' placeholder 표시.
+
+    이미지 배치 정책: HWPX 파서가 그림을 문단 중간에 삽입해 "오른쪽 그림"의
+    '오'와 '른쪽' 사이에 그림이 끼는 케이스 방지 → IMG 마커를 텍스트에서
+    제거하고 본문 끝에 몰아서 배치 (본문 밑 / 선지 위).
     """
     text = text or ""
     images = images or {}
+    img_refs: list[str] = []
+
+    def _img_grab(m):
+        img_refs.append(m.group(1))
+        return ""  # 원위치 삭제
+
+    text = re.sub(r"<<IMG:(image\d+)>>", _img_grab, text)
+    # 중복 제거 (순서 유지)
+    seen_refs, ordered = set(), []
+    for r in img_refs:
+        if r not in seen_refs:
+            seen_refs.add(r); ordered.append(r)
+    # 렌더 완료 후 본문 끝에 붙일 이미지 HTML
+    trailing_imgs = "".join(
+        (f'<img class="q-img" src="{_html.escape(images[r], quote=True)}" alt="">'
+         if r in images
+         else '<span class="q-img-missing">[그림]</span>')
+        for r in ordered
+    )
+    # 이하 기존 파이프라인 (수식·박스 처리) 은 IMG 자리표시자 없이 그대로 진행
     img_restore: dict[str, str] = {}
-
     def _img_ph(m):
-        ref = m.group(1)
-        key = f"@XIMGX{len(img_restore)}@"
-        url = images.get(ref)
-        if url:
-            img_restore[key] = (
-                f'<img class="q-img" src="{_html.escape(url, quote=True)}" alt="">'
-            )
-        else:
-            img_restore[key] = '<span class="q-img-missing">[그림]</span>'
-        return key
-
-    text = re.sub(r"<<IMG:(image\d+)>>", _img_ph, text)
+        # (남아있는 IMG 마커는 이제 없음 — 위에서 이미 제거)
+        return ""
     text = re.sub(r"\n{2,}", "\n\n", text)
     text = _normalize_boxes(text)
     text = _normalize_math_text(text)
@@ -480,6 +535,8 @@ def render_question_body(text: str, images: dict | None = None) -> str:
     html = re.sub(r'(</div>)(?:\s*<br>){2,}', r'\1<br>', html)
     for key, tag in img_restore.items():
         html = html.replace(key, tag)
+    if trailing_imgs:
+        html = html.rstrip() + f'<div class="q-imgs">{trailing_imgs}</div>'
     return html
 
 
@@ -1280,25 +1337,44 @@ h2.exam-subtitle {
 /* ── 본문 페이지 (image #210, #211 스타일) ─── */
 .bp-page .bp-head {
     border-bottom: 1pt solid #cbd5e1;
-    padding: 0 0 2mm 0;
+    padding: 0 92pt 2mm 0;   /* 우측에 답지 페이지 오버레이 자리 확보 */
     margin: 0 0 6mm 0;
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
 }
 .bp-page .bp-head-left {
     color: #0f172a;
     font-weight: 800;
-    font-size: 12pt;
-    letter-spacing: 1.5pt;
+    font-size: 9pt;
+    letter-spacing: 1pt;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .bp-page .bp-head-right {
     color: #0f172a;
     font-weight: 800;
-    font-size: 11pt;
-    letter-spacing: 0.5pt;
+    font-size: 8.5pt;
+    letter-spacing: 0.3pt;
+    white-space: nowrap;
+    max-width: 220pt;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .bp-page .bp-head-right .roman {
     color: #0f172a;
     font-weight: 900;
     margin-right: 3pt;
+}
+.bp-page .bp-head-answer {
+    color: #c73a2b;
+    font-weight: 800;
+    font-size: 8.5pt;
+    letter-spacing: 0.2pt;
+    margin-left: 10pt;
 }
 /* 우측 인덱스 — 회색 세로 사이드바 + 세로 챕터명 + 파란 로마숫자 배지
    (참고: /Users/youngwoolee/클로드교재/대수_1학기기말_필수유형FINAL.pdf) */
@@ -1457,6 +1533,26 @@ h2.exam-subtitle {
     margin: 3mm auto;
     object-fit: contain;
 }
+.q-imgs {
+    display: block;
+    margin: 3mm 0 3mm;
+    text-align: center;
+}
+.q-imgs .q-img {
+    display: inline-block;
+    margin: 2mm 3mm;
+    max-height: 60mm;
+    max-width: 92%;
+    vertical-align: middle;
+}
+.c-img {
+    display: inline-block;
+    max-width: 100%;
+    max-height: 22mm;
+    vertical-align: middle;
+    object-fit: contain;
+    margin: 0 1mm;
+}
 .q-img-missing { color: #b00; font-size: 9pt; }
 .img-check {
     margin: 2mm 0;
@@ -1604,6 +1700,17 @@ def _render_chapter_divider(
         f'<img class="cd-logo-bottom" src="{logo_uri}" alt="logo">'
         if logo_uri else '<span></span>'
     )
+    # 대분류(major)와 소분류(minor)가 같으면 중복이므로 minor 만 표시
+    if (major_name or "").strip() == (minor_name or "").strip():
+        major_html = ""
+    else:
+        major_html = (
+            f'<h2 class="cd-major">'
+            f'<span class="cd-major-roman">{roman}.</span>'
+            f'{_html.escape(major_name)}'
+            f'</h2>'
+            '<div class="cd-major-rule"></div>'
+        )
     return (
         '<section class="page chapter-divider">'
         '<div class="cd-header">'
@@ -1612,11 +1719,7 @@ def _render_chapter_divider(
         '</div>'
         f'<div class="cd-big-num">{major_no:02d}</div>'
         '<div class="cd-body">'
-        f'<h2 class="cd-major">'
-        f'<span class="cd-major-roman">{roman}.</span>'
-        f'{_html.escape(major_name)}'
-        f'</h2>'
-        '<div class="cd-major-rule"></div>'
+        f'{major_html}'
         f'<span class="cd-section-label">SECTION · {section_no}</span>'
         f'<h1 class="cd-section-title">{_html.escape(minor_name)}</h1>'
         '</div>'
@@ -1680,7 +1783,7 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
     if q.get("img_check"):
         body_html += ('<div class="img-check">⚠ 그림 확인 필요 — 원본이 여러 그림을 '
                       '한 이미지로 합쳐 저장한 문항입니다.</div>')
-    choices_html = format_choices(q.get("choices"), book_mode=include_difficulty)
+    choices_html = format_choices(q.get("choices"), book_mode=include_difficulty, images=q.get("images"))
 
     if include_difficulty:
         # 출처 메타 (image #211 처럼 슬롯 우측 본문 위 한 줄)
@@ -2128,11 +2231,13 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      dcov_subject: str | None = None,
                      dcov_level: str | None = None,
                      extra_css: str = "",
-                     extra_js: str = "") -> str:
+                     extra_js: str = "",
+                     running_numbering: bool = False) -> str:
     """교재 HTML: 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설.
 
     cover_style: 'final' (기본, KERNEL POINT 스타일) | 'diagonal' (평면좌표 스타일)
     dcov_subject/dcov_level: diagonal 스타일 전용 필드 (subject·level)
+    running_numbering: True 면 letter prefix 없이 통번호 (01, 02, ..., 챕터 이어감)
     """
     logo_uri = _logo_data_uri(logo_path)
     # 디바이더 메타 디폴트
@@ -2164,6 +2269,7 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
     sections = _build_chapter_sections(questions)
     body_parts: list[str] = [cover_html]
     running_left = page_running_left or title or "KERNEL POINT"
+    running_slot = 1
     for major_no, section_no, letter, major, minor, ch_qs in sections:
         body_parts.append(_render_chapter_divider(
             major_no, section_no, major, minor,
@@ -2176,16 +2282,18 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
         def _hdr(idx_, total_, _p=major_no, _m=major):
             return _render_book_page_head(running_left, _p, _m)
         side = _render_book_page_side(major_no, letter, chapter_name=major)
-        # 슬롯 번호는 소단원(letter)마다 1부터 다시 시작 (A·01, A·02, ..., B·01)
-        body_html, _ = _problem_pages_html(
+        # 슬롯 번호: 기본은 letter마다 1부터 (A·01), running_numbering=True 면 전체 통번호
+        body_html, next_slot = _problem_pages_html(
             ch_qs, include_source, overrides, "",
             include_difficulty=True,
             per_page_header_fn=_hdr,
             page_class="bp-page",
             side_html=side,
-            start_slot=1,
-            slot_letter=letter,
+            start_slot=running_slot if running_numbering else 1,
+            slot_letter="" if running_numbering else letter,
         )
+        if running_numbering:
+            running_slot = next_slot
         body_parts.append(body_html)
     qa_html = (
         '<section class="page qa-page">'
@@ -2449,7 +2557,8 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       dcov_level: str | None = None,
                       page_running_left: str | None = None,
                       extra_css: str = "",
-                      extra_js: str = "") -> bytes:
+                      extra_js: str = "",
+                      running_numbering: bool = False) -> bytes:
     """교재 PDF 생성. 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
@@ -2470,5 +2579,6 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         page_running_left=page_running_left,
         extra_css=extra_css,
         extra_js=extra_js,
+        running_numbering=running_numbering,
     )
     return html_to_pdf_bytes(html)

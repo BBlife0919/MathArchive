@@ -135,27 +135,63 @@ def _render_prism_radar_b64(prism_row: dict) -> str:
 
     _setup_korean_font(plt, font_manager)
 
-    categories = ["P 계산정확성", "R 조건해석", "I 개념내재", "S 전략선택", "M 시간관리"]
+    categories = ["P\n계산정확성", "R\n조건해석", "I\n개념내재",
+                  "S\n전략선택", "M\n시간관리"]
     scores = [prism_row["score_p"], prism_row["score_r"], prism_row["score_i"],
               prism_row["score_s"], prism_row["score_m"]]
     values = scores + scores[:1]
     angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
     angles += angles[:1]
 
-    fig, ax = plt.subplots(figsize=(6, 6), dpi=140, subplot_kw=dict(polar=True))
-    ax.fill(angles, values, color="#4F46E5", alpha=0.25)
-    ax.plot(angles, values, "o-", color="#4F46E5", linewidth=2.2)
-    ax.set_thetagrids(np.degrees(angles[:-1]), categories, fontsize=11)
+    fig, ax = plt.subplots(figsize=(8, 8), dpi=180,
+                           subplot_kw=dict(polar=True))
+    fig.patch.set_facecolor("#ffffff")
+    ax.set_facecolor("#f8faff")
+
+    # 격자원
     ax.set_ylim(0, 5)
     ax.set_yticks([1, 2, 3, 4, 5])
-    ax.set_yticklabels(["1", "2", "3", "4", "5"], fontsize=8)
-    ax.grid(True, alpha=0.5)
-    ax.set_title(f"PRISM — 강사 임상 평가 ({prism_row['eval_date']})",
-                 fontsize=12, pad=18)
+    ax.set_yticklabels([])
+    ax.grid(True, color="#d5deee", linewidth=0.9, alpha=0.9)
+    ax.spines["polar"].set_color("#c9d3ea")
+    ax.spines["polar"].set_linewidth(1.2)
+
+    # 배경 fill (두 겹으로 은은한 그라디언트 느낌)
+    ax.fill(angles, values, color="#2b6fff", alpha=0.10, zorder=2)
+    ax.fill(angles, values, color="#2b6fff", alpha=0.18, zorder=3)
+
+    # 라인 & 마커
+    ax.plot(angles, values, "-", color="#2b6fff",
+            linewidth=3.2, zorder=4, solid_joinstyle="round")
+    ax.plot(angles, values, "o", color="#ffffff",
+            markersize=12, markeredgecolor="#2b6fff",
+            markeredgewidth=2.4, zorder=5)
+
+    ax.set_thetagrids(np.degrees(angles[:-1]), categories,
+                      fontsize=13, fontweight=700, color="#0a1020")
+
+    # y축 눈금 숫자 (top axis 하나에)
+    for r in [1, 2, 3, 4, 5]:
+        ax.text(np.pi / 2, r + 0.13, str(r),
+                fontsize=8.5, color="#8a96b3",
+                ha="center", va="bottom", zorder=6)
+
+    # 각 꼭지점 점수 뱃지
+    for angle, val in zip(angles[:-1], scores):
+        ax.text(angle, val + 0.35, str(val),
+                fontsize=11, fontweight=800, color="#0a1020",
+                ha="center", va="center", zorder=7,
+                bbox=dict(boxstyle="round,pad=0.28",
+                          facecolor="#ffffff", edgecolor="#2b6fff",
+                          linewidth=1.3))
+
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
 
     buf = io.BytesIO()
     fig.tight_layout()
-    fig.savefig(buf, format="png", bbox_inches="tight")
+    fig.savefig(buf, format="png", bbox_inches="tight",
+                facecolor="#ffffff", pad_inches=0.15)
     plt.close(fig)
     return base64.b64encode(buf.getvalue()).decode("ascii")
 
@@ -271,65 +307,128 @@ def _build_html(data: dict, chart_b64: str) -> str:
         log_rows = "<tr><td colspan='3' class='muted'>관리 로그 없음</td></tr>"
 
     css = """
-    @page { size: A4; margin: 16mm 14mm; }
+    @page { size: A4; margin: 14mm 14mm 12mm 14mm; }
     * { box-sizing: border-box; }
-    body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-           color: #1F2937; font-size: 10pt; margin: 0; }
-    .head { display: flex; justify-content: space-between; align-items: baseline;
-            border-bottom: 2px solid #1F2937; padding-bottom: 6px; margin-bottom: 14px; }
-    .brand { font-size: 18pt; font-weight: 800; letter-spacing: -0.4px; }
-    .brand-sub { color: #6B7280; font-size: 9pt; }
-    .meta { color: #6B7280; font-size: 9pt; }
-    h2 { font-size: 11pt; margin: 14px 0 6px; padding-bottom: 3px;
-         border-bottom: 1px solid #E5E7EB; }
-    .student-card { background: #F9FAFB; border-radius: 6px; padding: 10px 14px;
-                    display: flex; gap: 18px; flex-wrap: wrap; }
-    .student-card div { font-size: 10pt; }
-    .student-card strong { color: #4F46E5; margin-right: 4px; }
-    .qm-summary { display: flex; gap: 12px; margin: 6px 0 8px; }
-    .qm-summary .card { flex: 1; padding: 8px 12px; border-radius: 6px;
-                        background: #EEF2FF; }
-    .qm-summary .card.m { background: #FEF3C7; }
-    .qm-summary .card .label { font-size: 8.5pt; color: #6B7280; }
-    .qm-summary .card .val { font-size: 14pt; font-weight: 700; margin-top: 2px; }
-    .qm-summary .card .pct { font-size: 9pt; color: #6B7280; }
-    .chart img { width: 100%; max-height: 200px; object-fit: contain; }
-    table { width: 100%; border-collapse: collapse; margin-top: 4px; }
-    th, td { border: 1px solid #E5E7EB; padding: 5px 8px; font-size: 9.5pt; text-align: center; }
-    th { background: #F3F4F6; font-weight: 600; }
-    td.gap-over  { color: #DC2626; font-weight: 700; }
-    td.gap-under { color: #16A34A; font-weight: 700; }
-    td.gap-match { color: #6B7280; }
-    .qual-date { font-size: 8.5pt; color: #6B7280; margin-top: 4px; }
-    .quant-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .quant-grid .g { background: #F9FAFB; padding: 6px 8px; border-radius: 4px; text-align: center; }
-    .quant-grid .g .lbl { font-size: 8.5pt; color: #6B7280; }
-    .quant-grid .g .val { font-size: 11pt; font-weight: 600; margin-top: 2px; }
-    .muted { color: #9CA3AF; font-size: 9pt; }
-    .footer { margin-top: 14px; padding-top: 8px; border-top: 1px solid #E5E7EB;
-              font-size: 8.5pt; color: #9CA3AF; text-align: center; }
-    .comment-box { border: 1px dashed #9CA3AF; border-radius: 4px; padding: 10px;
-                   min-height: 40px; color: #9CA3AF; font-size: 9pt; }
+    :root {
+      --ink:#0a1020; --blue:#2b6fff; --blue-soft:#e8efff;
+      --paper:#f5f8ff; --text:#13203c; --muted:#5f6c87; --line:#e3e9f7;
+      --pos:#10b981; --neg:#ef4444;
+    }
+    body { font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+           color: var(--text); font-size: 10.5pt; margin: 0; letter-spacing: -0.01em;
+           -webkit-font-smoothing: antialiased; }
+
+    /* ── 헤더 ─────────────────────────────── */
+    .head { display: flex; justify-content: space-between; align-items: flex-end;
+            padding-bottom: 10px; margin-bottom: 14px;
+            border-bottom: 1.5px solid var(--ink); }
+    .brand { font-size: 20pt; font-weight: 800; letter-spacing: -0.5px; color: var(--ink);
+             line-height: 1; }
+    .brand-sub { color: var(--muted); font-size: 9.5pt; margin-top: 3px;
+                 letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+    .meta { color: var(--muted); font-size: 9pt; text-align: right; }
+    .meta strong { color: var(--ink); font-weight: 700; }
+
+    /* ── 섹션 헤딩 ─────────────────────────── */
+    h2 { font-size: 12.5pt; margin: 18px 0 8px; padding: 0 0 4px 0;
+         font-weight: 800; color: var(--ink); letter-spacing: -0.02em;
+         border-bottom: 1px solid var(--line); }
+    h2 .sub { font-weight: 500; color: var(--muted); font-size: 0.72em;
+              margin-left: 6px; letter-spacing: 0; }
+
+    /* ── 학생 카드 ─────────────────────────── */
+    .student-card { background: #ffffff; border: 1px solid var(--line);
+                    border-radius: 10px; padding: 12px 16px;
+                    display: flex; gap: 24px; flex-wrap: wrap;
+                    box-shadow: 0 1px 2px rgba(10,16,32,0.03); }
+    .student-card div { font-size: 10.5pt; color: var(--text); }
+    .student-card strong { color: var(--muted); margin-right: 6px; font-weight: 600;
+                           font-size: 9pt; letter-spacing: 0.04em;
+                           text-transform: uppercase; }
+    .student-card .name { font-size: 14pt; font-weight: 800; color: var(--ink);
+                          letter-spacing: -0.02em; }
+
+    /* ── PRISM 요약 카드 ───────────────────── */
+    .qm-summary { display: flex; gap: 12px; margin: 8px 0 12px; }
+    .qm-summary .card { flex: 1; padding: 12px 16px; border-radius: 10px;
+                        background: var(--blue-soft); border: 1px solid #cbd7ff;
+                        box-shadow: 0 1px 2px rgba(10,16,32,0.03); }
+    .qm-summary .card.m { background: #fff4e6; border-color: #ffd7a3; }
+    .qm-summary .card .label { font-size: 8.5pt; color: var(--muted);
+                               font-weight: 700; letter-spacing: 0.04em;
+                               text-transform: uppercase; }
+    .qm-summary .card .val { font-size: 18pt; font-weight: 800;
+                             color: var(--ink); margin-top: 4px; letter-spacing: -0.02em; }
+
+    /* ── 5각형 차트 (대형화) ─────────────── */
+    .chart { text-align: center; margin: 6px 0 4px; }
+    .chart img { width: 95%; max-height: 340px; object-fit: contain; }
+
+    /* ── 정량 4카드 ──────────────────────── */
+    .quant-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .quant-grid .g { background: #ffffff; padding: 10px 12px; border-radius: 10px;
+                     text-align: center; border: 1px solid var(--line);
+                     box-shadow: 0 1px 2px rgba(10,16,32,0.03); }
+    .quant-grid .g .lbl { font-size: 8.5pt; color: var(--muted);
+                          font-weight: 700; letter-spacing: 0.04em;
+                          text-transform: uppercase; }
+    .quant-grid .g .val { font-size: 12pt; font-weight: 700;
+                          color: var(--ink); margin-top: 4px; }
+
+    /* ── 표 (세련) ───────────────────────── */
+    table { width: 100%; border-collapse: separate; border-spacing: 0;
+            margin-top: 6px; border: 1px solid var(--line); border-radius: 10px;
+            overflow: hidden; box-shadow: 0 1px 2px rgba(10,16,32,0.03); }
+    th, td { padding: 8px 12px; font-size: 9.8pt; text-align: center;
+             border-bottom: 1px solid var(--line); }
+    th { background: #f8faff; color: var(--muted); font-weight: 700;
+         font-size: 8.5pt; letter-spacing: 0.04em; text-transform: uppercase; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #fafcff; }
+    td.gap-over  { color: var(--neg); font-weight: 800; }
+    td.gap-under { color: var(--pos); font-weight: 800; }
+    td.gap-match { color: var(--muted); }
+    .qual-date { font-size: 8.5pt; color: var(--muted); margin-top: 6px; text-align: right; }
+
+    /* ── 강사 코멘트 (강조) ──────────────── */
+    .comment-box { padding: 16px 20px; border-radius: 12px;
+                   background: linear-gradient(135deg, #f5f8ff 0%, #e8efff 100%);
+                   border: 1px solid #cbd7ff; border-left: 4px solid var(--blue);
+                   color: var(--text); font-size: 12pt; line-height: 1.75;
+                   letter-spacing: -0.005em; font-weight: 500;
+                   box-shadow: 0 2px 6px rgba(43,111,255,0.08); }
+
+    .muted { color: var(--muted); font-size: 9pt; }
+    .footer { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line);
+              font-size: 8.5pt; color: var(--muted); text-align: center;
+              letter-spacing: 0.02em; }
     """
 
+    school_grade = (
+        f"{s.get('school') or '-'} · "
+        f"{s.get('grade') or '-'}학년 {s.get('class_name') or ''}"
+    ).strip(" ·")
+
     return f"""<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><style>{css}</style></head>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>{css}</style></head>
 <body>
   <div class="head">
     <div>
-      <div class="brand">📐 MathArchive</div>
-      <div class="brand-sub">학부모 주간 학습 보고서</div>
+      <div class="brand">MATHOLOGY</div>
+      <div class="brand-sub">Weekly Student Report</div>
     </div>
-    <div class="meta">발행 {today_str} · 주간 {week_start} ~</div>
+    <div class="meta">발행일 <strong>{today_str}</strong><br/>주간 {week_start} ~</div>
   </div>
 
   <div class="student-card">
-    <div><strong>이름</strong>{s['name']}</div>
+    <div class="name">{s['name']}</div>
     <div><strong>학교</strong>{s.get('school') or '-'}</div>
-    <div><strong>학년/반</strong>{s.get('grade') or '-'}-{s.get('class_name') or '-'}</div>
+    <div><strong>학년/반</strong>{s.get('grade') or '-'}학년 {s.get('class_name') or ''}</div>
   </div>
 
-  <h2>PRISM · 5스펙트럼 진단 <span style="font-weight:400;color:#666;font-size:0.7em">— {prism_subtitle}</span></h2>
+  <h2>PRISM · 5스펙트럼 진단<span class="sub">{prism_subtitle}</span></h2>
   <div class="qm-summary">
     <div class="card"><div class="label">{ris_label}</div>
       <div class="val">{ris_value}</div></div>
@@ -338,7 +437,7 @@ def _build_html(data: dict, chart_b64: str) -> str:
   </div>
   <div class="chart"><img src="data:image/png;base64,{chart_b64}" alt="PRISM chart"/></div>
 
-  <h2>과제 정밀평가</h2>
+  <h2>과제 정밀평가<span class="sub">최근 4주 정량 + 최근 정성</span></h2>
   <div class="quant-grid">
     <div class="g"><div class="lbl">A 등급</div><div class="val">{grade_pct('A')}</div></div>
     <div class="g"><div class="lbl">B 등급</div><div class="val">{grade_pct('B')}</div></div>
@@ -347,7 +446,7 @@ def _build_html(data: dict, chart_b64: str) -> str:
   </div>
   {qual_html}
 
-  <h2>자가예측 격차 · 메타인지 추적</h2>
+  <h2>자가예측 격차<span class="sub">메타인지 추적</span></h2>
   <table><thead><tr>
     <th>날짜</th><th>시험</th><th>예측</th><th>실제</th><th>격차</th>
   </tr></thead><tbody>{pred_rows}</tbody></table>
@@ -361,7 +460,7 @@ def _build_html(data: dict, chart_b64: str) -> str:
   <div class="comment-box">(여기에 한 줄 추가 후 학부모께 발송)</div>
 
   <div class="footer">
-    © MathArchive · Directed by 이영우 · 학습 데이터는 AI 로 요약 후 담당 강사가 검수·발송합니다.
+    © MATHOLOGY · Directed by 이영우 · 학습 데이터는 AI 로 요약 후 담당 강사가 검수·발송합니다.
   </div>
 </body></html>
 """

@@ -1,0 +1,209 @@
+"""대수 KERNEL POINT 빈출 FINAL 표지 — SUMMIT POINT 톤 다크 네이비 + 골드.
+
+A4 300dpi 풀 페이지. 산봉우리 모티프 + 큰 메인 타이틀.
+"""
+from __future__ import annotations
+
+import math
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont
+
+ROOT = Path(__file__).resolve().parent.parent
+LOGO_PATH = ROOT / "output" / "summit_point" / "eum_logo_gold.png"
+OUT_DIR = ROOT / "output" / "daesu_kernel_point"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+OUT_PDF = OUT_DIR / "cover.pdf"
+
+USER_FONT_DIR = Path.home() / "Library" / "Fonts"
+FONT_CAFE24 = str(USER_FONT_DIR / "Cafe24Ssurround-v2.0.ttf")
+FONT_PAPER_BLACK = str(USER_FONT_DIR / "Paperlogy-9Black.ttf")
+FONT_AGGRO = str(USER_FONT_DIR / "SB 어그로OTF M.otf")
+
+W, H = 2480, 3508
+
+NAVY_DEEP = (15, 25, 50)
+NAVY = (24, 38, 75)
+NAVY_MID = (35, 55, 100)
+NAVY_LIGHT = (60, 90, 145)
+GOLD = (210, 175, 110)
+GOLD_BRIGHT = (240, 205, 135)
+WHITE = (245, 245, 250)
+GREY = (170, 180, 200)
+MUTED = (110, 125, 150)
+SUMMIT_TIP = (250, 220, 165)
+
+
+def font(size, family="paper_black"):
+    path = {"cafe24": FONT_CAFE24, "paper_black": FONT_PAPER_BLACK, "aggro": FONT_AGGRO}.get(family, FONT_PAPER_BLACK)
+    return ImageFont.truetype(path, size=size)
+
+
+def text_centered(draw, xy, text, fnt, fill):
+    bbox = draw.textbbox((0, 0), text, font=fnt)
+    w = bbox[2] - bbox[0]
+    h = bbox[3] - bbox[1]
+    draw.text((xy[0] - w // 2 - bbox[0], xy[1] - h // 2 - bbox[1]),
+              text, font=fnt, fill=fill)
+
+
+def text_left(draw, xy, text, fnt, fill):
+    bbox = draw.textbbox((0, 0), text, font=fnt)
+    draw.text((xy[0] - bbox[0], xy[1] - bbox[1]), text, font=fnt, fill=fill)
+
+
+def draw_dot(draw, cx, cy, r, color):
+    draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=color)
+
+
+def make_cover():
+    img = Image.new("RGB", (W, H), NAVY_DEEP)
+    draw = ImageDraw.Draw(img)
+
+    # 배경 그라디언트
+    for y in range(H):
+        t = y / H
+        r = int(NAVY_DEEP[0] + (NAVY[0] - NAVY_DEEP[0]) * (1 - abs(t - 0.5) * 2))
+        g = int(NAVY_DEEP[1] + (NAVY[1] - NAVY_DEEP[1]) * (1 - abs(t - 0.5) * 2))
+        b = int(NAVY_DEEP[2] + (NAVY[2] - NAVY_DEEP[2]) * (1 - abs(t - 0.5) * 2))
+        draw.line([(0, y), (W, y)], fill=(r, g, b))
+
+    import random
+    rnd = random.Random(11)
+    for _ in range(200):
+        x = rnd.randint(80, W - 80)
+        y = rnd.randint(80, H - 80)
+        r = rnd.choice([1, 1, 1, 2, 2, 3])
+        c = rnd.choice([NAVY_LIGHT, MUTED, GREY])
+        draw_dot(draw, x, y, r, c)
+
+    # 산봉우리 실루엣
+    base_y = 2300
+    poly_back = [(0, base_y - 40), (260, 1900), (700, 1500), (1100, 1850),
+                 (1500, 1480), (1850, 1750), (2220, 1900), (W, base_y - 40)]
+    draw.polygon(poly_back, fill=NAVY_MID)
+    poly_mid = [(0, base_y - 20), (180, 2000), (560, 1730), (980, 2050),
+                (1380, 1680), (1750, 1920), (2100, 1820), (W, base_y - 20)]
+    draw.polygon(poly_mid, fill=NAVY)
+    poly_front = [(0, base_y), (120, 2150), (480, 1860), (820, 2150),
+                  (1240, 1820), (1620, 2080), (2000, 1900), (2360, 2100), (W, base_y)]
+    draw.polygon(poly_front, fill=NAVY_DEEP)
+
+    peak_x, peak_y = 1380, 1680
+    for r, c in [(80, (60, 70, 110)), (50, (90, 100, 140)), (28, GOLD), (14, SUMMIT_TIP)]:
+        draw.ellipse([peak_x - r, peak_y - r, peak_x + r, peak_y + r], fill=c)
+    for ang_deg in range(0, 360, 30):
+        ang = math.radians(ang_deg)
+        x1 = peak_x + math.cos(ang) * 40
+        y1 = peak_y + math.sin(ang) * 40
+        x2 = peak_x + math.cos(ang) * 130
+        y2 = peak_y + math.sin(ang) * 130
+        draw.line([(x1, y1), (x2, y2)], fill=GOLD, width=4)
+
+    # 상단 라벨
+    label_y = 320
+    f_label = font(58, "aggro")
+    label = "K E R N E L · P O I N T · 2026"
+    bbox = draw.textbbox((0, 0), label, font=f_label)
+    label_w = bbox[2] - bbox[0]
+    text_centered(draw, (W // 2, label_y), label, f_label, GOLD)
+    lx1 = W // 2 - label_w // 2 - 80
+    lx2 = W // 2 + label_w // 2 + 80
+    draw.line([(lx1 - 240, label_y), (lx1, label_y)], fill=GOLD, width=5)
+    draw.line([(lx2, label_y), (lx2 + 240, label_y)], fill=GOLD, width=5)
+    draw_dot(draw, lx1 - 270, label_y, 8, GOLD)
+    draw_dot(draw, lx2 + 270, label_y, 8, GOLD)
+
+    # 메인 제목 — KERNEL (위 작게) / POINT (아래 크게 골드)
+    title_cx = W // 2
+    line1_cy = 760
+    f_main = font(260, "paper_black")
+    text_centered(draw, (title_cx + 6, line1_cy + 8), "KERNEL", f_main, (8, 14, 30))
+    text_centered(draw, (title_cx, line1_cy), "KERNEL", f_main, WHITE)
+
+    line2_cy = line1_cy + 360
+    f_main2 = font(440, "paper_black")
+    text_centered(draw, (title_cx + 6, line2_cy + 8), "POINT", f_main2, (8, 14, 30))
+    text_centered(draw, (title_cx, line2_cy), "POINT", f_main2, GOLD)
+
+    # 다이아몬드 + 양옆 라인
+    mid_cy = (line1_cy + line2_cy) // 2 + 30
+    line_w = 180
+    draw.line([(title_cx - line_w - 80, mid_cy), (title_cx - 60, mid_cy)], fill=GOLD, width=4)
+    draw.line([(title_cx + 60, mid_cy), (title_cx + line_w + 80, mid_cy)], fill=GOLD, width=4)
+    dsize = 22
+    diamond = [(title_cx, mid_cy - dsize), (title_cx + dsize, mid_cy),
+               (title_cx, mid_cy + dsize), (title_cx - dsize, mid_cy)]
+    draw.polygon(diamond, fill=GOLD)
+    draw_dot(draw, title_cx - line_w - 100, mid_cy, 6, GOLD)
+    draw_dot(draw, title_cx + line_w + 100, mid_cy, 6, GOLD)
+
+    # 부제 배지
+    badge_y = line2_cy + 280
+    f_badge = font(82, "cafe24")
+    text_centered(draw, (W // 2, badge_y), "대수 빈출 FINAL", f_badge, GOLD_BRIGHT)
+    bb_w = 440
+    draw.line([(W // 2 - bb_w - 50, badge_y), (W // 2 - bb_w + 30, badge_y)],
+              fill=GOLD, width=3)
+    draw.line([(W // 2 + bb_w - 30, badge_y), (W // 2 + bb_w + 50, badge_y)],
+              fill=GOLD, width=3)
+
+    subtitle_y = badge_y + 140
+    f_sub = font(120, "cafe24")
+    text_centered(draw, (W // 2, subtitle_y), "고2 · 1학기 대비", f_sub, WHITE)
+
+    f_sub_en = font(42, "aggro")
+    text_centered(draw, (W // 2, subtitle_y + 130),
+                  "C O R E   P R O B L E M   F I N A L", f_sub_en, GREY)
+
+    # 강사명
+    teacher_y = 2620
+    draw.line([(W // 2 - 320, teacher_y - 50), (W // 2 + 320, teacher_y - 50)],
+              fill=GOLD, width=3)
+    f_teacher = font(140, "cafe24")
+    text_centered(draw, (W // 2, teacher_y + 80), "이영우 T", f_teacher, WHITE)
+    draw.line([(W // 2 - 320, teacher_y + 200), (W // 2 + 320, teacher_y + 200)],
+              fill=GOLD, width=3)
+
+    # 하단 좌측 카피
+    foot_y = H - 280
+    f_foot = font(46, "aggro")
+    text_left(draw, (220, foot_y), "Kernel Point · Core Final", f_foot, GOLD)
+    f_foot_kr = font(40, "cafe24")
+    text_left(draw, (220, foot_y + 80), "빈출 핵심 끝장, 한 권에 정복", f_foot_kr, GREY)
+
+    # 우측 로고
+    try:
+        logo = Image.open(LOGO_PATH).convert("RGBA")
+        target_w = 480
+        ratio = target_w / logo.width
+        target_h = int(logo.height * ratio)
+        logo_resized = logo.resize((target_w, target_h), Image.LANCZOS)
+        margin = 200
+        lx = W - target_w - margin
+        ly = H - target_h - 220
+        img.paste(logo_resized, (lx, ly), logo_resized)
+    except Exception:
+        pass
+
+    # 프레임
+    pad = 90
+    draw.rectangle([pad, pad, W - pad, H - pad], outline=GOLD, width=3)
+    corner = 60
+    for cx, cy in [(pad, pad), (W - pad, pad), (pad, H - pad), (W - pad, H - pad)]:
+        draw.line([(cx - corner, cy), (cx + corner, cy)], fill=GOLD, width=6)
+        draw.line([(cx, cy - corner), (cx, cy + corner)], fill=GOLD, width=6)
+
+    return img
+
+
+def main():
+    img = make_cover()
+    img.save(OUT_PDF, "PDF", resolution=300.0)
+    png_path = OUT_PDF.with_suffix(".png")
+    img.save(png_path, "PNG", optimize=True)
+    print(f"[OK] PDF: {OUT_PDF}")
+
+
+if __name__ == "__main__":
+    main()

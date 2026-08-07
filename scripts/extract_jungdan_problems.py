@@ -25,7 +25,7 @@ from pathlib import Path
 import fitz
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC_PDF = Path("/Users/youngwoolee/Downloads/중단원 평가(2-2단원)_merged.pdf")
+SRC_PDF = Path("/Users/youngwoolee/Downloads/ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ/중단원 평가(2-2단원)_merged.pdf")
 OUT_DIR = ROOT / "output" / "jungdan_eval_2_2"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 META_JSON = OUT_DIR / "problems_meta.json"
@@ -33,11 +33,11 @@ META_JSON = OUT_DIR / "problems_meta.json"
 PAGE_W = 595.0
 PAGE_H = 842.0
 
-# 컬럼 경계 — 가운데 단원 배지 / 우측 가장자리 데코레이션 제거를 위해 타이트하게.
+# 컬럼 경계 — 가운데 점선(x=283) / 우측 가장자리 점선(x=524) 직전까지.
 COL_LEFT_X0 = 32.0
-COL_LEFT_X1 = 283.0
-COL_RIGHT_X0 = 297.0
-COL_RIGHT_X1 = 538.0
+COL_LEFT_X1 = 282.0
+COL_RIGHT_X0 = 288.0
+COL_RIGHT_X1 = 522.0
 COL_TOP_Y = 78.0
 COL_BOTTOM_Y = 780.0
 
@@ -258,6 +258,7 @@ def main():
                 "src_pdf": str(SRC_PDF),
                 "src_page": page_idx,
                 "clip": [col_x0, y_top, col_x1, y_bot],
+                "label_bbox": [rect.x0, rect.y0, rect.x1, rect.y1],
             })
 
     # 검증: 섹션별 라벨 수

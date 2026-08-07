@@ -150,20 +150,48 @@ def main():
         img_top = col_y + LABEL_H
         img_left = col_x0 + (COL_W - target_w) / 2  # 살짝 가운데 정렬 (잔여)
         img_left = col_x0
+        src_doc = open_src(sol["src_pdf"])
         page.show_pdf_page(
             fitz.Rect(img_left, img_top, img_left + target_w, img_top + target_h),
-            open_src(sol["src_pdf"]),
+            src_doc,
             sol["src_page"],
             clip=fitz.Rect(cx0, cy0, cx1, cy1),
         )
 
-        # 원본 라벨 영역 화이트박싱 (클립 좌측 상단)
-        label_cover_w = 20.0 * scale
-        label_cover_h = 14.0 * scale
-        page.draw_rect(
-            fitz.Rect(img_left, img_top, img_left + label_cover_w, img_top + label_cover_h),
-            color=(1, 1, 1), fill=(1, 1, 1), overlay=True,
-        )
+        # 원본 라벨 영역 화이트박싱 — extract 단계 정확 bbox 사용.
+        lb = sol.get("label_bbox")
+        if lb:
+            lx0, ly0, lx1, ly1 = lb
+            dx0 = img_left + (max(lx0, cx0) - cx0) * scale
+            dy0 = img_top + (max(ly0, cy0) - cy0) * scale
+            dx1 = img_left + (min(lx1, cx1) - cx0) * scale
+            dy1 = img_top + (min(ly1, cy1) - cy0) * scale
+            pad = 1.5
+            page.draw_rect(
+                fitz.Rect(dx0 - pad, dy0 - pad, dx1 + pad, dy1 + pad),
+                color=(1, 1, 1), fill=(1, 1, 1), overlay=True,
+            )
+
+        # [성취기준N-X] 마스킹
+        src_page_obj = src_doc[sol["src_page"]]
+        clip_rect = fitz.Rect(cx0, cy0, cx1, cy1)
+        for blk in src_page_obj.get_text("dict", clip=clip_rect).get("blocks", []):
+            if blk.get("type") != 0:
+                continue
+            for line in blk["lines"]:
+                for sp in line["spans"]:
+                    if "HCRDotum-Bold" not in sp["font"]:
+                        continue
+                    if "성취기준" not in sp["text"]:
+                        continue
+                    bb = sp["bbox"]
+                    pad = 1.5
+                    dx0 = img_left + (bb[0] - cx0) * scale - pad
+                    dy0 = img_top + (bb[1] - cy0) * scale - pad
+                    dx1 = img_left + (bb[2] - cx0) * scale + pad
+                    dy1 = img_top + (bb[3] - cy0) * scale + pad
+                    page.draw_rect(fitz.Rect(dx0, dy0, dx1, dy1),
+                                   color=(1, 1, 1), fill=(1, 1, 1), overlay=True)
 
         col_y = img_top + target_h + SOL_GAP
 

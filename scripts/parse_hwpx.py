@@ -995,10 +995,13 @@ def _is_watermark_equation(eq_elem) -> bool:
 
 
 def _is_watermark_pic(pic_elem) -> bool:
-    """워터마크/로고 이미지인지 판별한다."""
-    pos_el = pic_elem.find(NS_PAR + "pos")
-    if pos_el is not None and pos_el.attrib.get("treatAsChar", "1") == "0":
-        return True
+    """워터마크/로고 이미지 판별.
+
+    과거: treatAsChar="0" (문단 옆에 떠있는 그림) 를 워터마크로 판정 → HWP 편집기
+    기본 삽입 방식이 이 형태여서 문제 본문 그림도 대량 필터되는 문제 있었음.
+    개선: masterpage 참조 이미지 목록 (호출부에서 watermark_images 로 전달) 로만 필터.
+    반복 참조 이미지(대표문제·다른풀이 배지 등)는 빌드 단계에서 배지 필터로 제거.
+    """
     return False
 
 
@@ -1331,9 +1334,18 @@ def _sanitize_text_node(text: str) -> str:
 
 # ── 문항 구조화: XML 구조 기반 (v2 핵심) ─────────────────────
 
-# 원 번호 → 숫자
-CIRCLE_NUM = {"①": 1, "②": 2, "③": 3, "④": 4, "⑤": 5}
-CIRCLES = ["①", "②", "③", "④", "⑤"]
+# 원 번호 → 숫자.  HWPX 편집자마다 서로 다른 유니코드 원문자를 씀:
+#  U+2460 ①②③④⑤       (Enclosed Alphanumerics)   ─ 표준
+#  U+2776 ❶❷❸❹❺       (Dingbat Negative Circled)
+#  U+2780 ➀➁➂➃➄       (Dingbat Circled Sans-Serif)  ← 이번 HWPX 에서 사용
+#  U+278A ➊➋➌➍➎       (Dingbat Negative Circled Sans-Serif)
+CIRCLE_NUM = {
+    "①": 1, "②": 2, "③": 3, "④": 4, "⑤": 5,
+    "❶": 1, "❷": 2, "❸": 3, "❹": 4, "❺": 5,
+    "➀": 1, "➁": 2, "➂": 3, "➃": 4, "➄": 5,
+    "➊": 1, "➋": 2, "➌": 3, "➍": 4, "➎": 5,
+}
+CIRCLES = list(CIRCLE_NUM.keys())
 
 # 중단원명 정규화
 CHAPTER_NORMALIZE = {
@@ -1844,7 +1856,8 @@ def _strip_choices_from_text(text: str) -> str:
             pos += len(part)
         else:
             if box_depth == 0:
-                m = re.search(r"[①②③④⑤]", part)
+                # CIRCLES 전체(①②③④⑤·➀➁···➊➋··· 4계열) 검색
+                m = re.search("[" + "".join(re.escape(c) for c in CIRCLES) + "]", part)
                 if m:
                     return text[: pos + m.start()].rstrip()
             pos += len(part)

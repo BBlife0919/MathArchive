@@ -393,9 +393,13 @@ canvas#scene,
     line-height: 1.6 !important;
 }
 
-/* 카드 안 KaTeX 수식 — 11pt (폰트 자체는 KaTeX 유지) */
+/* 카드 안 KaTeX 수식 — 한글 본문 대비 자연스러운 크기.
+   KaTeX 기본 1.21em 상속이라 명목값보다 시각적으로 큼 → 10pt 로 낮춤. */
 [data-testid="stVerticalBlockBorderWrapper"] .katex {
-    font-size: 11pt !important;
+    font-size: 10pt !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] .katex-display {
+    margin: 0.4em 0 !important;
 }
 [data-testid="stVerticalBlockBorderWrapper"] .stCaption,
 [data-testid="stVerticalBlockBorderWrapper"] [data-testid="stCaptionContainer"] {

@@ -1,0 +1,336 @@
+{
+  "school": "철산중학교",
+  "short_name": "철산중",
+  "exam_title": "2026학년도 1학기 1차 정기시험",
+  "subject": "중3 수학",
+  "subject_range": "제곱근과 실수 ~ 다항식의 인수분해",
+  "grade": 3,
+  "instructor": "이영우T",
+  "academy": "이음학원",
+  "grade_level": "middle",
+  "consolidated_file": "output/pirate_analysis_middle/configs/철산중_리포트.json",
+  "show_student_case": true,
+  "show_clinic": true,
+  "questions": [
+    {
+      "q": 1,
+      "chapter": "제곱근과 실수",
+      "difficulty": "하",
+      "score": 4.0,
+      "matched_yutype": 1,
+      "matched_title": "제곱근의 이해 (옳은 것 고르기)",
+      "grade": "A"
+    },
+    {
+      "q": 2,
+      "chapter": "제곱근과 실수",
+      "difficulty": "하",
+      "score": 5.0,
+      "matched_yutype": 4,
+      "matched_title": "√A² = |A| 활용 — 절댓값 풀기",
+      "grade": "A"
+    },
+    {
+      "q": 3,
+      "chapter": "제곱근과 실수",
+      "difficulty": "하",
+      "score": 5.0,
+      "matched_yutype": 21,
+      "matched_title": "수직선 위 무리수의 응용 — 정사각형 + 일차방정식",
+      "grade": "B"
+    },
+    {
+      "q": 4,
+      "chapter": "제곱근과 실수",
+      "difficulty": "하",
+      "score": 5.0,
+      "matched_yutype": 11,
+      "matched_title": "무리수 대소비교 — 차의 부호",
+      "grade": "A"
+    },
+    {
+      "q": 5,
+      "chapter": "제곱근과 실수",
+      "difficulty": "하",
+      "score": 5.0,
+      "matched_yutype": 16,
+      "matched_title": "제곱근의 사칙연산 — a+b√2+c√3 꼴",
+      "grade": "A"
+    },
+    {
+      "q": 6,
+      "chapter": "제곱근과 실수",
+      "difficulty": "하",
+      "score": 5.0,
+      "matched_yutype": 17,
+      "matched_title": "제곱근의 성질 — 옳은 것 고르기",
+      "grade": "A"
+    },
+    {
+      "q": 7,
+      "chapter": "제곱근과 실수",
+      "difficulty": "하",
+      "score": 4.0,
+      "matched_yutype": 14,
+      "matched_title": "제곱근표 활용 — 큰 수 변환",
+      "grade": "A"
+    },
+    {
+      "q": 8,
+      "chapter": "제곱근과 실수",
+      "difficulty": "하",
+      "score": 4.0,
+      "matched_yutype": 14,
+      "matched_title": "제곱근표 활용 — 작은 수 변환",
+      "grade": "A"
+    },
+    {
+      "q": 9,
+      "chapter": "제곱근과 실수",
+      "difficulty": "중",
+      "score": 6.0,
+      "matched_yutype": 8,
+      "matched_title": "√A가 자연수 — 변수 두 개 (x+y의 값)",
+      "grade": "A"
+    },
+    {
+      "q": 10,
+      "chapter": "다항식의 인수분해",
+      "difficulty": "하",
+      "score": 5.0,
+      "matched_yutype": 9,
+      "matched_title": "치환 인수분해 — 공통부분 만들기",
+      "grade": "A"
+    },
+    {
+      "q": 11,
+      "chapter": "다항식의 인수분해",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 2,
+      "matched_title": "완전제곱식이 될 조건 — k 값의 합",
+      "grade": "A"
+    },
+    {
+      "q": 12,
+      "chapter": "다항식의 인수분해",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 5,
+      "matched_title": "도형을 이용한 인수분해 — 막대 모형",
+      "grade": "A"
+    },
+    {
+      "q": 13,
+      "chapter": "다항식의 인수분해",
+      "difficulty": "중",
+      "score": 4.0,
+      "matched_yutype": 15,
+      "matched_title": "인수분해 공식의 응용 — 수의 계산",
+      "grade": "A"
+    },
+    {
+      "q": 14,
+      "chapter": "다항식의 인수분해",
+      "difficulty": "상",
+      "score": 4.0,
+      "matched_yutype": 15,
+      "matched_title": "인수분해 공식 — 합과 차의 곱 활용",
+      "grade": "A"
+    },
+    {
+      "q": 15,
+      "chapter": "제곱근과 실수",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 15,
+      "matched_title": "무리수의 이해 — 절댓값 + 제곱근 구간 나누기",
+      "grade": "A"
+    },
+    {
+      "q": 16,
+      "chapter": "다항식의 인수분해",
+      "difficulty": "상",
+      "score": 5.0,
+      "matched_yutype": 16,
+      "matched_title": "인수분해 활용 — 정수 조건 순서쌍",
+      "grade": "A"
+    },
+    {
+      "q": 17,
+      "chapter": "다항식의 인수분해",
+      "difficulty": "중",
+      "score": 4.0,
+      "matched_yutype": 19,
+      "matched_title": "인수분해 도형 활용 — 사다리꼴 높이",
+      "grade": "A"
+    },
+    {
+      "q": 18,
+      "chapter": "다항식의 인수분해",
+      "difficulty": "상",
+      "score": 5.0,
+      "matched_yutype": 8,
+      "matched_title": "계수 또는 상수항을 잘못 보고 푼 경우",
+      "grade": "A"
+    },
+    {
+      "q": "논술1",
+      "chapter": "제곱근과 실수",
+      "difficulty": "상",
+      "score": 7.0,
+      "matched_yutype": 13,
+      "matched_title": "√x 이하의 자연수 구하기 — 시그마 합",
+      "grade": "A"
+    },
+    {
+      "q": "논술2",
+      "chapter": "다항식의 인수분해",
+      "difficulty": "상",
+      "score": 8.0,
+      "matched_yutype": 15,
+      "matched_title": "인수분해 공식 + 분모 유리화 결합",
+      "grade": "A"
+    }
+  ],
+  "key_problems": [
+    {
+      "q": 13,
+      "score": 4.0,
+      "difficulty": "중",
+      "topic": "다항식의 인수분해",
+      "exam_latex": "$2019 \\times 2033 + 49 = a^2$일 때, 자연수 $a$의 값은? [4점]",
+      "matched_yutype": 15,
+      "matched_title": "유형 — 인수분해 공식 활용 (수의 계산)",
+      "comment": "$2019 = N-7,\\ 2033 = N+7$로 두면 $2019 \\times 2033 = N^2 - 49$. 따라서 $N^2 - 49 + 49 = N^2 = a^2$이므로 $a = N = 2026$. 자체 교재 '수의 계산 — 인수분해' 핵심유형 카드의 표준 절차로, 큰 수의 곱셈을 $(N-c)(N+c) = N^2 - c^2$ 차의 곱으로 환원하는 패턴.",
+      "capture_files": [
+        "13.png"
+      ],
+      "shared_with": []
+    },
+    {
+      "q": 14,
+      "score": 4.0,
+      "difficulty": "상",
+      "topic": "다항식의 인수분해",
+      "exam_latex": "$6(7+1)(7^2+1)(7^4+1)(7^8+1)(7^{16}+1)$을 간단히 한 것은? [4점]",
+      "matched_yutype": 15,
+      "matched_title": "유형 — 인수분해 공식 활용 (합과 차의 곱 반복)",
+      "comment": "$(a-b)$를 곱해 차의 곱 형태를 만든 뒤 $a^2-b^2 = (a+b)(a-b)$ 공식을 반복 적용하는 표준 풀이. 6 = (7-1) 변형이 핵심으로, 자체 교재 STEP2 '합·차의 곱 반복형' 핵심유형의 동형 풀이.",
+      "capture_files": [
+        "14_1.png",
+        "14_2.png"
+      ],
+      "shared_with": []
+    },
+    {
+      "q": 15,
+      "score": 5.0,
+      "difficulty": "상",
+      "topic": "제곱근과 실수",
+      "exam_latex": "$0 < a < 1$일 때, $\\sqrt{(-a)^2} + \\sqrt{\\left(a - \\dfrac{1}{a}\\right)^2 + 4} - \\sqrt{\\left(a + \\dfrac{1}{a}\\right)^2 - 4}$를 간단히 한 것은? [5점]",
+      "matched_yutype": 15,
+      "matched_title": "유형 — 무리수의 이해 (절댓값 + 제곱근 구간 나누기)",
+      "comment": "$\\sqrt{A^2}=|A|$를 적용한 뒤 $0<a<1$ 구간에서 $a-\\dfrac{1}{a}<0$, $a+\\dfrac{1}{a}>0$ 부호를 정확히 판별해야 한다. 자체 교재의 '절댓값과 제곱근 — 구간별 부호 판단' 핵심유형 그대로.",
+      "capture_files": [
+        "15.png"
+      ],
+      "shared_with": [],
+      "pair_with_next": true
+    },
+    {
+      "q": 16,
+      "score": 5.0,
+      "difficulty": "상",
+      "topic": "다항식의 인수분해",
+      "exam_latex": "$x$, $y$가 자연수일 때 다항식 $3xy - 9x - 2y + 6 = 10$을 만족시키는 순서쌍 $(x, y)$의 개수는? [5점]",
+      "matched_yutype": 16,
+      "matched_title": "유형 — 인수분해 활용 (정수 조건 순서쌍)",
+      "comment": "$3x(y-3) - 2(y-3) = (3x-2)(y-3) = 10$으로 묶어 정수 인수분해로 환원. 학군지 기출에서 자주 등장하는 '인수분해 → 약수쌍 케이스' 패턴으로, 자체 교재 STEP3 변별 유형의 핵심 풀이 절차.",
+      "capture_files": [
+        "16.png"
+      ],
+      "shared_with": []
+    },
+    {
+      "q": 17,
+      "score": 4.0,
+      "difficulty": "중",
+      "topic": "다항식의 인수분해",
+      "exam_latex": "그림과 같은 사다리꼴의 넓이가 $5a^2 + 13a + 6$일 때, 이 사다리꼴의 높이는? (단, $a > 0$인 상수이다.) [4점]",
+      "matched_yutype": 19,
+      "matched_title": "유형 — 인수분해 도형 활용 (사다리꼴 높이)",
+      "comment": "사다리꼴 넓이 공식 $S=\\dfrac{1}{2}(a+b)h$에서 두 밑변의 합으로 묶어내는 인수분해. $5a^2+13a+6 = (5a+3)(a+2)$로 분해해 높이를 식별. 자체 교재의 '도형 + 인수분해 결합형' 표준 풀이.",
+      "capture_files": [
+        "17.png"
+      ],
+      "shared_with": [],
+      "pair_with_next": true
+    },
+    {
+      "q": 18,
+      "score": 5.0,
+      "difficulty": "상",
+      "topic": "다항식의 인수분해",
+      "exam_latex": "철산이는 $(2x+3)(x-6)$을 전개하는데 $2x+3$의 상수항 $3$을 $A$로 잘못 보고 풀어서 $2x^2 - 7x + B$로 전개하였고, 광명이는 $\\left(x - \\dfrac{2}{3}\\right)(2x+6)$을 전개하는데 $2x+6$의 $x$의 계수 $2$를 $C$로 잘못 보고 풀어서 $Cx^2 - 4$로 전개하였다. 이때 상수 $A$, $B$, $C$에 대하여 $A + B + C$의 값은? [5점]",
+      "matched_yutype": 8,
+      "matched_title": "유형 — 잘못 보고 푼 경우 (계수·상수 복원)",
+      "comment": "잘못 본 식의 결과로부터 계수를 역산하는 표준 패턴. $(2x+A)(x-6)$의 일차항 계수에서 $A=5$, 상수항에서 $B=-30$, $\\left(x-\\dfrac{2}{3}\\right)(Cx+6)$의 일차항을 항등식으로 풀어 $C$ 결정. 자체 교재 '잘못 본 경우' 변별 유형과 동형.",
+      "capture_files": [
+        "18.png"
+      ],
+      "shared_with": []
+    },
+    {
+      "q": "논술1",
+      "score": 7.0,
+      "difficulty": "상",
+      "topic": "제곱근과 실수 (논술형)",
+      "exam_latex": "[논술형 1] 자연수 $x$에 대하여 $\\sqrt{x}$보다 작은 자연수의 개수를 $f(x)$라 할 때, 물음에 답하시오. [총 7점]<br><br>1-1. $f(27)$의 값을 구하고 그 과정을 서술하시오. [2점]<br>1-2. $f(27) + f(28) + f(29) + \\cdots + f(50)$의 값을 구하고 그 과정을 서술하시오. [5점]",
+      "matched_yutype": 13,
+      "matched_title": "유형 — √x 미만 자연수 (구간 나누어 시그마)",
+      "comment": "$\\sqrt{27} \\approx 5.196$이므로 $f(27)=5$ (1, 2, 3, 4, 5). 합은 구간을 쪼개 계산: $27 \\le x \\le 35$에서 $f=5$ (9개·45), $x=36$에서 $f=5$ (1개·5), $37 \\le x \\le 48$에서 $f=6$ (12개·72), $x=49$에서 $f=6$ (1개·6), $x=50$에서 $f=7$ (1개·7). 합 = $135$. 완전제곱수 경계에서 $f$가 한 단계 늦게 올라가는 점이 핵심 — 자체 교재 핵심노트 '제곱수 경계 절차' 그대로.",
+      "capture_files": [
+        "논술1.png"
+      ],
+      "shared_with": [],
+      "pair_with_next": true
+    },
+    {
+      "q": "논술2",
+      "score": 8.0,
+      "difficulty": "상",
+      "topic": "다항식의 인수분해 (논술형)",
+      "exam_latex": "[논술형 2] $p = \\dfrac{1}{\\sqrt{3}}$일 때, 다항식 $\\dfrac{1}{2}\\left[\\{(2+3p)^{10} - (2-3p)^{10}\\}^2 - \\{(2+3p)^{10} + (2-3p)^{10}\\}^2\\right]$에 대하여 물음에 답하시오. [총 8점]<br><br>2-1. $p$의 분모를 유리화하시오. [3점]<br>2-2. 위 다항식의 값을 구하기 위해 사용해야 하는 가장 적절한 인수분해 공식을 적으시오. [2점]<br>2-3. 다항식의 값을 구하시오. [3점]",
+      "matched_yutype": 15,
+      "matched_title": "유형 — 인수분해 공식 + 분모 유리화 결합",
+      "comment": "$A=(2+3p)^{10},\\ B=(2-3p)^{10}$로 두면 $\\dfrac{1}{2}[(A-B)^2 - (A+B)^2] = \\dfrac{1}{2}(-4AB) = -2AB$. 분모 유리화로 $p=\\dfrac{\\sqrt{3}}{3}$ → $9p^2=3$ → $(2+3p)(2-3p) = 4-9p^2 = 1$이므로 $AB = 1^{10} = 1$ → 답은 $\\boldsymbol{-2}$. 자체 교재 '인수분해 + 분모유리화 결합' 핵심 패턴 그대로.",
+      "capture_files": [
+        "논술2.png"
+      ],
+      "shared_with": []
+    }
+  ],
+  "instructor_comment": "13~17번은 자체 교재 핵심 유형 카드와 핵심노트만 충실히 익혔다면 무리 없이 풀린다. 18번 '잘못 보고 푼 경우'와 16번 '인수분해 → 정수 순서쌍'은 학군지 기출에서 자주 등장하는 변별 패턴으로, 평소 서울·경기 학군지 기출 실전 훈련을 거친 학생만 시간 안에 풀 수 있다. 논술 2문항은 모두 자체 교재의 표준 풀이 절차(시그마 합 / 합·차 곱 결합)를 그대로 적용하면 풀리는 구조. 결국 '익숙한 패턴'을 얼마나 빠르게 인출하느냐가 만점의 갈림길.",
+  "strategy": [
+    {
+      "key": "자체 교재 핵심유형 N회독 + 인출 자동화",
+      "value": "철산중처럼 평이~중 난이도가 섞인 시험에서는 '아는 문제 0개 실수'가 등급을 만든다. 자체 교재 STEP1·STEP2 핵심유형을 풀이가 입에서 자동으로 튀어나올 때까지 N회독."
+    },
+    {
+      "key": "학군지 기출 실전 훈련",
+      "value": "16·18번처럼 '인수분해 → 정수 조건', '잘못 보고 푼 경우'는 학군지 기출에서 반복 출제되는 변별 포인트. 매주 서울·경기 학군지 기출 실전 테스트로 결합형 문제에 대한 면역을 만든다."
+    },
+    {
+      "key": "논술형 풀이 절차 인출",
+      "value": "논술1(시그마 분할)·논술2(합·차 곱 + 유리화)는 자체 교재 핵심노트의 절차를 그대로 적어내면 부분점수가 안정적으로 확보된다. 풀이 한 줄마다 '왜 이 식이 나오는지'를 함께 적는 훈련이 핵심."
+    }
+  ],
+  "note_intro": "이영우T 핵심노트 — 철산중 출제 패턴 압축",
+  "note_sub": "시험 출제 핵심 패턴을 한 줄로 정리한 직강 노트",
+  "note_sample_images": [
+    "note_sample_1.png",
+    "note_sample_2.png",
+    "note_sample_3.png"
+  ]
+}
