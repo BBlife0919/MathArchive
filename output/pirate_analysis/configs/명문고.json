@@ -1,0 +1,320 @@
+{
+  "school": "명문고등학교",
+  "short_name": "명문고",
+  "exam_title": "2026학년도 1학기 중간고사",
+  "subject": "공통수학1",
+  "subject_range": "다항식의 연산 ~ 복소수와 이차방정식",
+  "grade": 1,
+  "instructor": "이영우T",
+  "academy": "이음학원",
+  "questions": [
+    {
+      "q": 1,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "하",
+      "score": 3.8,
+      "matched_yutype": 14,
+      "matched_title": "유형14 — 일차식으로 나눈 나머지",
+      "grade": "A",
+      "rationale": "f(x)를 x-1로 나눈 나머지=f(1)"
+    },
+    {
+      "q": 2,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "하",
+      "score": 3.9,
+      "matched_yutype": 12,
+      "matched_title": "유형12 — 항등식과 미정계수법 수치대입법",
+      "grade": "A",
+      "rationale": "x에 대한 항등식에서 a, b 결정"
+    },
+    {
+      "q": 3,
+      "chapter": "다항식의 연산",
+      "difficulty": "중",
+      "score": 4.0,
+      "matched_yutype": 3,
+      "matched_title": "유형3 — 곱셈공식의 변형 항 두개",
+      "grade": "A",
+      "rationale": "x-y, xy로 x³-y³ 변형 계산"
+    },
+    {
+      "q": 4,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "중",
+      "score": 4.0,
+      "matched_yutype": 10,
+      "matched_title": "유형10 — 항등식과 미정계수법 연조립제법",
+      "grade": "A",
+      "rationale": "조립제법 결과로 a-c 식 옳지 않은 것 찾기"
+    },
+    {
+      "q": 5,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "하",
+      "score": 4.1,
+      "matched_yutype": 12,
+      "matched_title": "유형12 — 항등식과 미정계수법 수치대입법",
+      "grade": "A",
+      "rationale": "양변에 적당한 x 대입하여 a+b+c 계산"
+    },
+    {
+      "q": 6,
+      "chapter": "다항식의 연산",
+      "difficulty": "중",
+      "score": 4.2,
+      "matched_yutype": 7,
+      "matched_title": "유형7 — 곱셈공식의 변형 대칭식",
+      "grade": "B",
+      "rationale": "x²-2xy+y² 등 대칭식 변형 후 무리수 대입"
+    },
+    {
+      "q": 7,
+      "chapter": "복소수",
+      "difficulty": "하",
+      "score": 4.3,
+      "matched_yutype": 31,
+      "matched_title": "유형31 — 복소수의 결정",
+      "grade": "A",
+      "rationale": "복소수 등식의 실허부 비교로 x, y 결정"
+    },
+    {
+      "q": 8,
+      "chapter": "다항식의 연산",
+      "difficulty": "하",
+      "score": 4.3,
+      "matched_yutype": 1,
+      "matched_title": "유형1 — 다항식의 연산 기본",
+      "grade": "A",
+      "rationale": "X+A=2X+3B → X 정리 후 계수합"
+    },
+    {
+      "q": 9,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 4.4,
+      "matched_yutype": 28,
+      "matched_title": "유형28 — 복소수 기초연산",
+      "grade": "A",
+      "rationale": "z=1+i 대입하여 (1/z - 1/z̄)² 계산"
+    },
+    {
+      "q": 10,
+      "chapter": "다항식의 연산",
+      "difficulty": "중",
+      "score": 4.4,
+      "matched_yutype": 1,
+      "matched_title": "유형1 — 다항식의 연산 기본",
+      "grade": "B",
+      "rationale": "전개식에서 특정 차수 계수 추출"
+    },
+    {
+      "q": 11,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "중",
+      "score": 4.5,
+      "matched_yutype": 15,
+      "matched_title": "유형15 — 이차, 삼차식으로 나눈 나머지",
+      "grade": "A",
+      "rationale": "f(x)=(x²+2x-1)(2x+1)+(x-2) 로 f(-1) 계산"
+    },
+    {
+      "q": 12,
+      "chapter": "이차방정식",
+      "difficulty": "중",
+      "score": 4.5,
+      "matched_yutype": 41,
+      "matched_title": "유형41 — 근과 계수의 관계",
+      "grade": "A",
+      "rationale": "(α-1)(β-1)=αβ-(α+β)+1 비에타"
+    },
+    {
+      "q": 13,
+      "chapter": "이차방정식",
+      "difficulty": "상",
+      "score": 4.6,
+      "matched_yutype": 39,
+      "matched_title": "유형39 — 이차방정식 판별식",
+      "grade": "A",
+      "rationale": "두 허근 절댓값 같은 조건 → D<0 + 비에타로 k 최솟값"
+    },
+    {
+      "q": 14,
+      "chapter": "인수분해",
+      "difficulty": "중",
+      "score": 4.6,
+      "matched_yutype": 23,
+      "matched_title": "유형23 — 인수분해 스킬, 복이차식",
+      "grade": "A",
+      "rationale": "(x-2)(x+1)(x+4)(x+7)+k 짝지어 t 치환 인수분해"
+    },
+    {
+      "q": 15,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 4.7,
+      "matched_yutype": 32,
+      "matched_title": "유형32 — 조건에 따른 복소수",
+      "grade": "A",
+      "rationale": "z=-z̄ → z는 순허수, 실수부=0 조건"
+    },
+    {
+      "q": 16,
+      "chapter": "다항식의 연산",
+      "difficulty": "중",
+      "score": 4.8,
+      "matched_yutype": 6,
+      "matched_title": "유형6 — 곱셈공식의 변형 도형 활용",
+      "grade": "A",
+      "rationale": "직육면체 대각선 AG²=a²+b²+c² 활용"
+    },
+    {
+      "q": 17,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "상",
+      "score": 4.9,
+      "matched_yutype": 20,
+      "matched_title": "유형20 — 나머지정리 여러 개의 검산식",
+      "grade": "A",
+      "rationale": "(x-2)² 인수, x²-1 나누어떨어짐 두 조건 결합"
+    },
+    {
+      "q": 18,
+      "chapter": "인수분해",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 13,
+      "matched_title": "유형13 — 약수가 될 조건",
+      "grade": "A",
+      "rationale": "(x-2)²을 약수로 가질 조건으로 a, b 결정 후 Q(2)"
+    },
+    {
+      "q": 19,
+      "chapter": "복소수",
+      "difficulty": "상",
+      "score": 5.1,
+      "matched_yutype": 35,
+      "matched_title": "유형35 — 복소수 거듭제곱의 합",
+      "grade": "A",
+      "rationale": "z=√2/(1-i)=1+i? 거듭제곱 주기 활용 합"
+    },
+    {
+      "q": 20,
+      "chapter": "복소수",
+      "difficulty": "상",
+      "score": 5.2,
+      "matched_yutype": 29,
+      "matched_title": "유형29 — 복소수 음수의 제곱근",
+      "grade": "A",
+      "rationale": "√a/√b=-√(a/b) 조건으로 a<0,b>0 부호 판단 후 정리"
+    },
+    {
+      "q": 21,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "상",
+      "score": 5.3,
+      "matched_yutype": 20,
+      "matched_title": "유형20 — 나머지정리 여러 개의 검산식",
+      "grade": "A",
+      "rationale": "x²+1과 x⁴-1 두 검산식으로 a, b 결정 후 x+1로 나눈 나머지"
+    },
+    {
+      "q": 22,
+      "chapter": "이차방정식",
+      "difficulty": "상",
+      "score": 5.4,
+      "matched_yutype": 45,
+      "matched_title": "유형45 — 근과 계수의 관계, 대입 복합",
+      "grade": "A",
+      "rationale": "f(2/(1-i))=0 켤레근 조건으로 b, c 관계 후 1/α+1/β"
+    }
+  ],
+  "key_problems": [
+    {
+      "q": 19,
+      "topic": "복소수",
+      "score": 5.1,
+      "difficulty": "상",
+      "exam_latex": "복소수 $z= \\dfrac{\\sqrt{2}}{1-i}$에 대하여 $z ^{2} +z ^{4} +z ^{6} +\\, \\cdots \\,+z ^{2026} \\,$의 값은? (단, $i= \\sqrt{-1}$)",
+      "matched_yutype": 35,
+      "matched_title": "유형35 — 복소수 거듭제곱의 합",
+      "fabricated_latex": "복소수 $z=\\dfrac{\\sqrt{2}}{1+i}$에 대하여 $z^{2}+z^{4}+z^{6}+\\cdots+z^{2024}$의 값을 구하여라. (단, $i=\\sqrt{-1}$)",
+      "comment": "분모 유리화 후 $z^{2}=\\pm i$ 형태로 정리되어 거듭제곱의 주기성(주기4)으로 합을 묶는 표준 절차. 우리 교재 유형35의 풀이 골격(분모 유리화 → $z^{2}$ 단순화 → 주기 묶음)이 그대로 적용된다.",
+      "capture_files": [
+        "광명18 명문19.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 20,
+      "topic": "복소수",
+      "score": 5.2,
+      "difficulty": "상",
+      "exam_latex": "$\\dfrac{\\sqrt{a}}{\\sqrt{b}} =- \\sqrt{\\dfrac{a}{b}}$를 만족시키는 $0$이 아닌 두 실수 $a,\\,\\,\\,b$에 대하여 $\\dfrac{\\sqrt{b}}{\\sqrt{a}} \\times \\sqrt{\\dfrac{a}{b}} + \\sqrt{a ^{2} b} \\sqrt{b} - \\sqrt{a ^{2}} \\sqrt{b ^{2}}$를 간단히 하면?",
+      "matched_yutype": 29,
+      "matched_title": "유형29 — 복소수 음수의 제곱근",
+      "fabricated_latex": "$\\dfrac{\\sqrt{a}}{\\sqrt{b}}=-\\sqrt{\\dfrac{a}{b}}$를 만족시키는 $0$이 아닌 두 실수 $a$, $b$에 대하여 $\\dfrac{\\sqrt{b}}{\\sqrt{a}}\\times\\sqrt{\\dfrac{a}{b}}+\\sqrt{a^{2}b}\\,\\sqrt{b}-2\\sqrt{a^{2}}\\,\\sqrt{b^{2}}$를 간단히 하여라.",
+      "comment": "$\\sqrt{a}/\\sqrt{b}=-\\sqrt{a/b}$ 조건에서 $a<0,\\ b>0$ 부호 결정 후 $\\sqrt{a^{2}}=|a|=-a$, $\\sqrt{b^{2}}=|b|=b$로 절댓값을 풀어내는 표준 절차. 교재 유형29의 부호 판정 → 절댓값 정리 흐름과 동일.",
+      "capture_files": [
+        "명문20.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 21,
+      "topic": "항등식과 나머지정리",
+      "score": 5.3,
+      "difficulty": "상",
+      "exam_latex": "다항식 $f(x)$를 $x ^{\\,2} +1$로 나누었을 때의 나머지는 $x-2$이다. $f(x)$를 $x ^{\\,4} -1$로 나누었을 때의 나머지를 $ax ^{\\,3} +bx ^{\\,2}$이라 할 때, $f(x)$를 $x+1$로 나누었을 때의 나머지는? (단, $a,\\,\\,\\,b$는 상수)",
+      "matched_yutype": 20,
+      "matched_title": "유형20 — 나머지정리 여러 개의 검산식",
+      "fabricated_latex": "다항식 $f(x)$를 $x^{2}+1$로 나누었을 때의 나머지는 $x-3$이다. <br>$f(x)$를 $x^{4}-1$로 나누었을 때의 나머지를 $ax^{3}+bx^{2}$이라 할 때, $f(x)$를 $x+1$로 나누었을 때의 나머지를 구하여라. (단, $a$, $b$는 상수)",
+      "comment": "$x^{4}-1=(x^{2}+1)(x^{2}-1)$ 인수분해를 이용해 나머지 $ax^{3}+bx^{2}$을 $x^{2}+1$로 나눈 나머지가 $x-2$임을 비교하여 $a, b$ 결정 후 $f(-1)$을 계산. 우리 교재 유형20의 '여러 검산식 결합 → 나머지 비교' 절차와 동일한 골격.",
+      "capture_files": [
+        "광명17 광문17 명문21 소하23.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 22,
+      "topic": "이차방정식",
+      "score": 5.4,
+      "difficulty": "상",
+      "exam_latex": "$f(x)=ax ^{\\,2} +bx+c$에 대하여 $f \\left( \\dfrac{2}{1-i} \\right) =0$을 만족시킬 때, 이차방정식 $cx ^{\\,2} +bx+a=0$의 두 근을 $\\alpha ,\\,\\,\\, \\beta \\,$라 하자. $\\dfrac{1}{\\alpha } + \\dfrac{1}{\\beta }$의 값은? (단, $a,\\,\\,\\,b,\\,\\,\\,c\\,$는 실수이고, $i= \\sqrt{-1}$)",
+      "matched_yutype": 45,
+      "matched_title": "유형45 — 근과 계수의 관계, 대입 복합",
+      "fabricated_latex": "$f(x)=ax^{2}+bx+c$에 대하여 $f\\!\\left(\\dfrac{3}{1-i}\\right)=0$을 만족시킬 때, 이차방정식 $cx^{2}+bx+a=0$의 두 근을 $\\alpha$, $\\beta$라 하자. $\\dfrac{1}{\\alpha}+\\dfrac{1}{\\beta}$의 값을 구하여라. (단, $a$, $b$, $c$는 실수이고, $i=\\sqrt{-1}$)",
+      "comment": "실계수 이차방정식의 한 근이 복소수이면 켤레도 근이라는 성질로 $b/a$, $c/a$를 결정한 뒤, $cx^{2}+bx+a=0$의 두 근 합·곱을 비에타로 구해 $\\dfrac{1}{\\alpha}+\\dfrac{1}{\\beta}=-b/c$를 계산하는 절차. 교재 유형45의 켤레근 + 근과 계수의 관계 결합 흐름이 그대로 적용된다.",
+      "capture_files": [
+        "명문22.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    }
+  ],
+  "instructor_comment": "시험 범위가 짧고 전체적인 난이도가 매우 쉽습니다. 변별력이 크지 않기 때문에 실수 하나가 등급 하락으로 직결되며, 100점에 가까운 점수가 1등급의 필수 조건입니다. 이번 핵심문제 4개는 모두 우리 교재 STEP1·STEP2 핵심 유형으로 커버되며, 풀이 절차가 동형 또는 유사 패턴으로 정리되어 있다. 교재 N회독 + 핵심노트 3회독으로 시험장에서 즉시 인출 가능.",
+  "strategy": [
+    {
+      "key": "초정밀 스피드",
+      "value": "너무 쉽기 때문에 '어떻게 푸느냐'보다 '얼마나 빨리 푸느냐'의 싸움입니다. 보자마자 바로바로 풀어내는 훈련이 되어 있어야 합니다."
+    },
+    {
+      "key": "자체 교재 N회독",
+      "value": "100% 적중하는 자체 교재를 반복하여 시험지 속 문제를 낯익은 문제로 만듭니다."
+    },
+    {
+      "key": "검토의 습관",
+      "value": "남는 시간 동안 실수를 완벽히 잡아내는 훈련을 병행합니다."
+    }
+  ],
+  "note_intro": "이영우T가 직접 작성한 핵심만 모은 핵심노트",
+  "note_sub": "시험 출제 핵심 패턴을 한 줄로 정리한 직강 노트",
+  "note_sample_images": [
+    "note_sample_1.png",
+    "note_sample_2.png",
+    "note_sample_3.png"
+  ]
+}

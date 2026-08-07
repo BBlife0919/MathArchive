@@ -1,0 +1,26 @@
+{
+  "school": "광명고",
+  "verdicts": [
+    {"q_no": 1, "best_idx": 4, "code": "26643-0028", "confidence": "low", "reason": "후보 4번이 거듭제곱근 합 형태이지만 정확한 동일 템플릿은 아님"},
+    {"q_no": 2, "best_idx": 6, "code": "26477-0131", "confidence": "low", "reason": "후보 모두 부채꼴 관련이지만 호의 길이·넓이로 중심각 묻는 정확한 템플릿은 없음"},
+    {"q_no": 3, "best_idx": 1, "code": "26643-0225", "confidence": "high", "reason": "원점 O와 점 P를 지나는 동경 OP가 나타내는 각 θ에 대한 삼각함수 값 동일 템플릿"},
+    {"q_no": 4, "best_idx": null, "confidence": "none", "reason": "삼각함수의 성질 보기형 동일 템플릿 없음 (후보들은 다른 보기 문제)"},
+    {"q_no": 5, "best_idx": null, "confidence": "none", "reason": "a^x=√2-1 조건 분수식 값 묻는 동일 템플릿 후보 없음"},
+    {"q_no": 6, "best_idx": null, "confidence": "none", "reason": "log(1-1/n) 합 텔레스코핑 동일 템플릿 후보 없음"},
+    {"q_no": 7, "best_idx": 4, "code": "26643-0102", "confidence": "medium", "reason": "지수함수 그래프 두 점 통과 조건으로 상수 결정하는 유사 템플릿"},
+    {"q_no": 8, "best_idx": 7, "code": "26643-0160", "confidence": "medium", "reason": "지수부등식 만족시키는 자연수 x 개수 묻는 템플릿 일치"},
+    {"q_no": 9, "best_idx": 2, "code": "26643-0170", "confidence": "high", "reason": "log 방정식 모든 실수 x 값의 합 동일 템플릿"},
+    {"q_no": 10, "best_idx": 1, "code": "26643-0134", "confidence": "low", "reason": "로그·지수함수 그래프 평행이동 관련이지만 정확한 동일 템플릿 아님"},
+    {"q_no": 11, "best_idx": 1, "code": "26643-0584", "confidence": "high", "reason": "3^a=p, 3^b=q 일 때 log를 a,b로 나타내는 동일 템플릿"},
+    {"q_no": 12, "best_idx": null, "confidence": "none", "reason": "세 수 a,b,c 합 묻는 박스형 동일 템플릿 후보 없음"},
+    {"q_no": 13, "best_idx": 2, "code": "26643-0116", "confidence": "medium", "reason": "지수함수 정의역 제한 최댓값/최솟값 템플릿 유사"},
+    {"q_no": 14, "best_idx": 1, "code": "26643-0041", "confidence": "high", "reason": "sinθ+cosθ 조건에서 sin^3θ+cos^3θ 값 동일 템플릿"},
+    {"q_no": 15, "best_idx": null, "confidence": "none", "reason": "삼각함수 식 단순화 후보가 모두 거듭제곱근 단순화로 다른 분야"},
+    {"q_no": 16, "best_idx": null, "confidence": "none", "reason": "단위원 위의 점 P, tan 값, 삼각형 넓이 통합 문제 동일 템플릿 없음"},
+    {"q_no": 17, "best_idx": null, "confidence": "none", "reason": "n제곱근 실수 개수 f(n) 정의 동일 템플릿 후보 없음"},
+    {"q_no": 18, "best_idx": null, "confidence": "none", "reason": "삼각함수 그래프와 두 직선 교점 개수 조건 동일 템플릿 후보 없음"},
+    {"q_no": 19, "best_idx": 1, "code": "26643-0866", "confidence": "low", "reason": "지수 조건식에서 분수 값 구하는 형태이지만 정확한 동일 템플릿 아님"},
+    {"q_no": 20, "best_idx": 1, "code": "26643-0170", "confidence": "low", "reason": "로그 부등식 범위 묻는 유사 형태이지만 밑이 다른 두 로그 부등식 동일 템플릿 아님"},
+    {"q_no": 21, "best_idx": null, "confidence": "none", "reason": "합성함수 g∘f 최솟값과 상수 k 결정하는 서술형 동일 템플릿 없음"}
+  ]
+}

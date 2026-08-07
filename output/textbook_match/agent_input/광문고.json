@@ -1,0 +1,2945 @@
+{
+  "school": "광문고",
+  "questions": [
+    {
+      "q_no": 1,
+      "q_text": "$\\sqrt[3]{3\\sqrt{3}} + \\sqrt[3]{?\\sqrt{?}}$ 또는 거듭제곱근 식의 값은? [4.0점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q01.png",
+      "candidates": [
+        {
+          "code": "26643-0028",
+          "tb_short": "올림유형",
+          "page": 59,
+          "text_score": 46.7,
+          "image": "output/textbook_match/crops_textbook/26643-0028.png"
+        },
+        {
+          "code": "26008-0083",
+          "tb_short": "수특I",
+          "page": 74,
+          "text_score": 46.6,
+          "image": "output/textbook_match/crops_textbook/26008-0083.png"
+        },
+        {
+          "code": "26643-0399",
+          "tb_short": "올림유형",
+          "page": 484,
+          "text_score": 46.5,
+          "image": "output/textbook_match/crops_textbook/26643-0399.png"
+        },
+        {
+          "code": "26008-0157",
+          "tb_short": "수특I",
+          "page": 163,
+          "text_score": 45.8,
+          "image": "output/textbook_match/crops_textbook/26008-0157.png"
+        },
+        {
+          "code": "26008-0001",
+          "tb_short": "수특I",
+          "page": 2,
+          "text_score": 45.6,
+          "image": "output/textbook_match/crops_textbook/26008-0001.png"
+        },
+        {
+          "code": "26477-0076",
+          "tb_short": "올림고난도",
+          "page": 81,
+          "text_score": 45.5,
+          "image": "output/textbook_match/crops_textbook/26477-0076.png"
+        },
+        {
+          "code": "26008-0023",
+          "tb_short": "수특I",
+          "page": 16,
+          "text_score": 43.6,
+          "image": "output/textbook_match/crops_textbook/26008-0023.png"
+        },
+        {
+          "code": "26643-0060",
+          "tb_short": "올림유형",
+          "page": 81,
+          "text_score": 43.5,
+          "image": "output/textbook_match/crops_textbook/26643-0060.png"
+        },
+        {
+          "code": "26643-0023",
+          "tb_short": "올림유형",
+          "page": 56,
+          "text_score": 43.4,
+          "image": "output/textbook_match/crops_textbook/26643-0023.png"
+        },
+        {
+          "code": "26477-0002",
+          "tb_short": "올림고난도",
+          "page": 2,
+          "text_score": 43.3,
+          "image": "output/textbook_match/crops_textbook/26477-0002.png"
+        },
+        {
+          "code": "26008-0091",
+          "tb_short": "수특I",
+          "page": 89,
+          "text_score": 42.9,
+          "image": "output/textbook_match/crops_textbook/26008-0091.png"
+        },
+        {
+          "code": "26477-0289",
+          "tb_short": "올림고난도",
+          "page": 335,
+          "text_score": 42.8,
+          "image": "output/textbook_match/crops_textbook/26477-0289.png"
+        },
+        {
+          "code": "26643-0091",
+          "tb_short": "올림유형",
+          "page": 106,
+          "text_score": 42.7,
+          "image": "output/textbook_match/crops_textbook/26643-0091.png"
+        },
+        {
+          "code": "26643-0197",
+          "tb_short": "올림유형",
+          "page": 248,
+          "text_score": 42.5,
+          "image": "output/textbook_match/crops_textbook/26643-0197.png"
+        },
+        {
+          "code": "26643-0029",
+          "tb_short": "올림유형",
+          "page": 60,
+          "text_score": 42.4,
+          "image": "output/textbook_match/crops_textbook/26643-0029.png"
+        },
+        {
+          "code": "26477-0077",
+          "tb_short": "올림고난도",
+          "page": 82,
+          "text_score": 42.3,
+          "image": "output/textbook_match/crops_textbook/26477-0077.png"
+        },
+        {
+          "code": "26008-0055",
+          "tb_short": "수특I",
+          "page": 44,
+          "text_score": 41.9,
+          "image": "output/textbook_match/crops_textbook/26008-0055.png"
+        },
+        {
+          "code": "26008-0017",
+          "tb_short": "수특I",
+          "page": 12,
+          "text_score": 41.6,
+          "image": "output/textbook_match/crops_textbook/26008-0017.png"
+        },
+        {
+          "code": "26643-0409",
+          "tb_short": "올림유형",
+          "page": 493,
+          "text_score": 41.5,
+          "image": "output/textbook_match/crops_textbook/26643-0409.png"
+        },
+        {
+          "code": "26477-0047",
+          "tb_short": "올림고난도",
+          "page": 42,
+          "text_score": 41.5,
+          "image": "output/textbook_match/crops_textbook/26477-0047.png"
+        }
+      ]
+    },
+    {
+      "q_no": 2,
+      "q_text": "$\\log_2(2\\sqrt{2}) + \\log_{2\\sqrt{2}}(?)$의 값은? [4.0점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q02.png",
+      "candidates": [
+        {
+          "code": "26008-0083",
+          "tb_short": "수특I",
+          "page": 74,
+          "text_score": 49.9,
+          "image": "output/textbook_match/crops_textbook/26008-0083.png"
+        },
+        {
+          "code": "26643-0028",
+          "tb_short": "올림유형",
+          "page": 59,
+          "text_score": 48.9,
+          "image": "output/textbook_match/crops_textbook/26643-0028.png"
+        },
+        {
+          "code": "26008-0108",
+          "tb_short": "수특I",
+          "page": 106,
+          "text_score": 48.1,
+          "image": "output/textbook_match/crops_textbook/26008-0108.png"
+        },
+        {
+          "code": "26477-0076",
+          "tb_short": "올림고난도",
+          "page": 81,
+          "text_score": 47.3,
+          "image": "output/textbook_match/crops_textbook/26477-0076.png"
+        },
+        {
+          "code": "26008-0001",
+          "tb_short": "수특I",
+          "page": 2,
+          "text_score": 47.1,
+          "image": "output/textbook_match/crops_textbook/26008-0001.png"
+        },
+        {
+          "code": "26008-0157",
+          "tb_short": "수특I",
+          "page": 163,
+          "text_score": 46.9,
+          "image": "output/textbook_match/crops_textbook/26008-0157.png"
+        },
+        {
+          "code": "26477-0094",
+          "tb_short": "올림고난도",
+          "page": 103,
+          "text_score": 45.9,
+          "image": "output/textbook_match/crops_textbook/26477-0094.png"
+        },
+        {
+          "code": "26008-0055",
+          "tb_short": "수특I",
+          "page": 44,
+          "text_score": 45.8,
+          "image": "output/textbook_match/crops_textbook/26008-0055.png"
+        },
+        {
+          "code": "26477-0105",
+          "tb_short": "올림고난도",
+          "page": 117,
+          "text_score": 45.7,
+          "image": "output/textbook_match/crops_textbook/26477-0105.png"
+        },
+        {
+          "code": "26643-0197",
+          "tb_short": "올림유형",
+          "page": 248,
+          "text_score": 45.5,
+          "image": "output/textbook_match/crops_textbook/26643-0197.png"
+        },
+        {
+          "code": "26477-0077",
+          "tb_short": "올림고난도",
+          "page": 82,
+          "text_score": 45.4,
+          "image": "output/textbook_match/crops_textbook/26477-0077.png"
+        },
+        {
+          "code": "26008-0017",
+          "tb_short": "수특I",
+          "page": 12,
+          "text_score": 45.1,
+          "image": "output/textbook_match/crops_textbook/26008-0017.png"
+        },
+        {
+          "code": "26643-0174",
+          "tb_short": "올림유형",
+          "page": 227,
+          "text_score": 44.8,
+          "image": "output/textbook_match/crops_textbook/26643-0174.png"
+        },
+        {
+          "code": "26477-0030",
+          "tb_short": "올림고난도",
+          "page": 27,
+          "text_score": 44.6,
+          "image": "output/textbook_match/crops_textbook/26477-0030.png"
+        },
+        {
+          "code": "26643-0143",
+          "tb_short": "올림유형",
+          "page": 202,
+          "text_score": 44.5,
+          "image": "output/textbook_match/crops_textbook/26643-0143.png"
+        },
+        {
+          "code": "26008-0023",
+          "tb_short": "수특I",
+          "page": 16,
+          "text_score": 44.3,
+          "image": "output/textbook_match/crops_textbook/26008-0023.png"
+        },
+        {
+          "code": "26477-0014",
+          "tb_short": "올림고난도",
+          "page": 12,
+          "text_score": 44.1,
+          "image": "output/textbook_match/crops_textbook/26477-0014.png"
+        },
+        {
+          "code": "26643-0399",
+          "tb_short": "올림유형",
+          "page": 484,
+          "text_score": 44.0,
+          "image": "output/textbook_match/crops_textbook/26643-0399.png"
+        },
+        {
+          "code": "26008-0006",
+          "tb_short": "수특I",
+          "page": 5,
+          "text_score": 43.9,
+          "image": "output/textbook_match/crops_textbook/26008-0006.png"
+        },
+        {
+          "code": "26643-0199",
+          "tb_short": "올림유형",
+          "page": 251,
+          "text_score": 43.8,
+          "image": "output/textbook_match/crops_textbook/26643-0199.png"
+        }
+      ]
+    },
+    {
+      "q_no": 3,
+      "q_text": "$\\sqrt[3]{50} \\times \\sqrt[3]{?} \\div \\sqrt[3]{?}$의 값은? [4.0점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q03.png",
+      "candidates": [
+        {
+          "code": "26008-0083",
+          "tb_short": "수특I",
+          "page": 74,
+          "text_score": 51.5,
+          "image": "output/textbook_match/crops_textbook/26008-0083.png"
+        },
+        {
+          "code": "26008-0108",
+          "tb_short": "수특I",
+          "page": 106,
+          "text_score": 49.9,
+          "image": "output/textbook_match/crops_textbook/26008-0108.png"
+        },
+        {
+          "code": "26643-0028",
+          "tb_short": "올림유형",
+          "page": 59,
+          "text_score": 49.6,
+          "image": "output/textbook_match/crops_textbook/26643-0028.png"
+        },
+        {
+          "code": "26008-0001",
+          "tb_short": "수특I",
+          "page": 2,
+          "text_score": 48.1,
+          "image": "output/textbook_match/crops_textbook/26008-0001.png"
+        },
+        {
+          "code": "26008-0157",
+          "tb_short": "수특I",
+          "page": 163,
+          "text_score": 47.8,
+          "image": "output/textbook_match/crops_textbook/26008-0157.png"
+        },
+        {
+          "code": "26643-0197",
+          "tb_short": "올림유형",
+          "page": 248,
+          "text_score": 47.5,
+          "image": "output/textbook_match/crops_textbook/26643-0197.png"
+        },
+        {
+          "code": "26477-0063",
+          "tb_short": "올림고난도",
+          "page": 67,
+          "text_score": 46.8,
+          "image": "output/textbook_match/crops_textbook/26477-0063.png"
+        },
+        {
+          "code": "26477-0077",
+          "tb_short": "올림고난도",
+          "page": 82,
+          "text_score": 44.7,
+          "image": "output/textbook_match/crops_textbook/26477-0077.png"
+        },
+        {
+          "code": "26477-0076",
+          "tb_short": "올림고난도",
+          "page": 81,
+          "text_score": 44.6,
+          "image": "output/textbook_match/crops_textbook/26477-0076.png"
+        },
+        {
+          "code": "26643-0023",
+          "tb_short": "올림유형",
+          "page": 56,
+          "text_score": 44.4,
+          "image": "output/textbook_match/crops_textbook/26643-0023.png"
+        },
+        {
+          "code": "26477-0289",
+          "tb_short": "올림고난도",
+          "page": 335,
+          "text_score": 44.0,
+          "image": "output/textbook_match/crops_textbook/26477-0289.png"
+        },
+        {
+          "code": "26643-0139",
+          "tb_short": "올림유형",
+          "page": 198,
+          "text_score": 43.8,
+          "image": "output/textbook_match/crops_textbook/26643-0139.png"
+        },
+        {
+          "code": "26008-0023",
+          "tb_short": "수특I",
+          "page": 16,
+          "text_score": 43.7,
+          "image": "output/textbook_match/crops_textbook/26008-0023.png"
+        },
+        {
+          "code": "26477-0030",
+          "tb_short": "올림고난도",
+          "page": 27,
+          "text_score": 43.6,
+          "image": "output/textbook_match/crops_textbook/26477-0030.png"
+        },
+        {
+          "code": "26477-0344",
+          "tb_short": "올림고난도",
+          "page": 411,
+          "text_score": 43.6,
+          "image": "output/textbook_match/crops_textbook/26477-0344.png"
+        },
+        {
+          "code": "26477-0142",
+          "tb_short": "올림고난도",
+          "page": 167,
+          "text_score": 43.6,
+          "image": "output/textbook_match/crops_textbook/26477-0142.png"
+        },
+        {
+          "code": "26643-0060",
+          "tb_short": "올림유형",
+          "page": 81,
+          "text_score": 43.6,
+          "image": "output/textbook_match/crops_textbook/26643-0060.png"
+        },
+        {
+          "code": "26008-0017",
+          "tb_short": "수특I",
+          "page": 12,
+          "text_score": 43.4,
+          "image": "output/textbook_match/crops_textbook/26008-0017.png"
+        },
+        {
+          "code": "26008-0002",
+          "tb_short": "수특I",
+          "page": 2,
+          "text_score": 43.4,
+          "image": "output/textbook_match/crops_textbook/26008-0002.png"
+        },
+        {
+          "code": "26008-0055",
+          "tb_short": "수특I",
+          "page": 44,
+          "text_score": 43.3,
+          "image": "output/textbook_match/crops_textbook/26008-0055.png"
+        }
+      ]
+    },
+    {
+      "q_no": 4,
+      "q_text": "그림과 같이 부채꼴 OAB의 ? 또는 부채꼴의 호의 길이/넓이 관련 [4.0점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q04.png",
+      "candidates": [
+        {
+          "code": "26643-0730",
+          "tb_short": "올림유형",
+          "page": 267,
+          "text_score": 59.8,
+          "image": "output/textbook_match/crops_textbook/26643-0730.png"
+        },
+        {
+          "code": "26008-0118",
+          "tb_short": "수특I",
+          "page": 120,
+          "text_score": 59.6,
+          "image": "output/textbook_match/crops_textbook/26008-0118.png"
+        },
+        {
+          "code": "26643-0732",
+          "tb_short": "올림유형",
+          "page": 268,
+          "text_score": 57.8,
+          "image": "output/textbook_match/crops_textbook/26643-0732.png"
+        },
+        {
+          "code": "26643-0733",
+          "tb_short": "올림유형",
+          "page": 268,
+          "text_score": 57.8,
+          "image": "output/textbook_match/crops_textbook/26643-0733.png"
+        },
+        {
+          "code": "26008-0071",
+          "tb_short": "수특I",
+          "page": 61,
+          "text_score": 57.6,
+          "image": "output/textbook_match/crops_textbook/26008-0071.png"
+        },
+        {
+          "code": "26643-0224",
+          "tb_short": "올림유형",
+          "page": 301,
+          "text_score": 50.5,
+          "image": "output/textbook_match/crops_textbook/26643-0224.png"
+        },
+        {
+          "code": "26477-0133",
+          "tb_short": "올림고난도",
+          "page": 161,
+          "text_score": 50.2,
+          "image": "output/textbook_match/crops_textbook/26477-0133.png"
+        },
+        {
+          "code": "26477-0131",
+          "tb_short": "올림고난도",
+          "page": 159,
+          "text_score": 49.1,
+          "image": "output/textbook_match/crops_textbook/26477-0131.png"
+        },
+        {
+          "code": "26643-0222",
+          "tb_short": "올림유형",
+          "page": 300,
+          "text_score": 48.8,
+          "image": "output/textbook_match/crops_textbook/26643-0222.png"
+        },
+        {
+          "code": "26477-0162",
+          "tb_short": "올림고난도",
+          "page": 187,
+          "text_score": 48.6,
+          "image": "output/textbook_match/crops_textbook/26477-0162.png"
+        },
+        {
+          "code": "26643-0325",
+          "tb_short": "올림유형",
+          "page": 393,
+          "text_score": 48.5,
+          "image": "output/textbook_match/crops_textbook/26643-0325.png"
+        },
+        {
+          "code": "26477-0132",
+          "tb_short": "올림고난도",
+          "page": 160,
+          "text_score": 48.5,
+          "image": "output/textbook_match/crops_textbook/26477-0132.png"
+        },
+        {
+          "code": "26477-0094",
+          "tb_short": "올림고난도",
+          "page": 103,
+          "text_score": 48.1,
+          "image": "output/textbook_match/crops_textbook/26477-0094.png"
+        },
+        {
+          "code": "26008-0079",
+          "tb_short": "수특I",
+          "page": 67,
+          "text_score": 48.0,
+          "image": "output/textbook_match/crops_textbook/26008-0079.png"
+        },
+        {
+          "code": "26477-0224",
+          "tb_short": "올림고난도",
+          "page": 257,
+          "text_score": 47.8,
+          "image": "output/textbook_match/crops_textbook/26477-0224.png"
+        },
+        {
+          "code": "26477-0151",
+          "tb_short": "올림고난도",
+          "page": 176,
+          "text_score": 47.8,
+          "image": "output/textbook_match/crops_textbook/26477-0151.png"
+        },
+        {
+          "code": "26477-0115",
+          "tb_short": "올림고난도",
+          "page": 134,
+          "text_score": 47.7,
+          "image": "output/textbook_match/crops_textbook/26477-0115.png"
+        },
+        {
+          "code": "26008-0093",
+          "tb_short": "수특I",
+          "page": 92,
+          "text_score": 47.5,
+          "image": "output/textbook_match/crops_textbook/26008-0093.png"
+        },
+        {
+          "code": "26477-0246",
+          "tb_short": "올림고난도",
+          "page": 294,
+          "text_score": 47.3,
+          "image": "output/textbook_match/crops_textbook/26477-0246.png"
+        },
+        {
+          "code": "26643-0330",
+          "tb_short": "올림유형",
+          "page": 398,
+          "text_score": 47.2,
+          "image": "output/textbook_match/crops_textbook/26643-0330.png"
+        }
+      ]
+    },
+    {
+      "q_no": 5,
+      "q_text": "$\\theta$가 제$2$사분면의 각이고 $\\sin\\theta + \\cos\\theta = ?$일 때, $\\sin\\theta\\cos\\theta$의 값은? [4.0점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q05.png",
+      "candidates": [
+        {
+          "code": "26643-0747",
+          "tb_short": "올림유형",
+          "page": 275,
+          "text_score": 72.3,
+          "image": "output/textbook_match/crops_textbook/26643-0747.png"
+        },
+        {
+          "code": "26643-0749",
+          "tb_short": "올림유형",
+          "page": 276,
+          "text_score": 64.8,
+          "image": "output/textbook_match/crops_textbook/26643-0749.png"
+        },
+        {
+          "code": "26477-0094",
+          "tb_short": "올림고난도",
+          "page": 103,
+          "text_score": 61.9,
+          "image": "output/textbook_match/crops_textbook/26477-0094.png"
+        },
+        {
+          "code": "26643-0228",
+          "tb_short": "올림유형",
+          "page": 303,
+          "text_score": 61.6,
+          "image": "output/textbook_match/crops_textbook/26643-0228.png"
+        },
+        {
+          "code": "26477-0151",
+          "tb_short": "올림고난도",
+          "page": 176,
+          "text_score": 59.2,
+          "image": "output/textbook_match/crops_textbook/26477-0151.png"
+        },
+        {
+          "code": "26643-0197",
+          "tb_short": "올림유형",
+          "page": 248,
+          "text_score": 58.1,
+          "image": "output/textbook_match/crops_textbook/26643-0197.png"
+        },
+        {
+          "code": "26477-0228",
+          "tb_short": "올림고난도",
+          "page": 262,
+          "text_score": 57.8,
+          "image": "output/textbook_match/crops_textbook/26477-0228.png"
+        },
+        {
+          "code": "26008-0091",
+          "tb_short": "수특I",
+          "page": 89,
+          "text_score": 57.1,
+          "image": "output/textbook_match/crops_textbook/26008-0091.png"
+        },
+        {
+          "code": "26477-0184",
+          "tb_short": "올림고난도",
+          "page": 215,
+          "text_score": 56.3,
+          "image": "output/textbook_match/crops_textbook/26477-0184.png"
+        },
+        {
+          "code": "26643-0276",
+          "tb_short": "올림유형",
+          "page": 344,
+          "text_score": 55.9,
+          "image": "output/textbook_match/crops_textbook/26643-0276.png"
+        },
+        {
+          "code": "26643-0121",
+          "tb_short": "올림유형",
+          "page": 181,
+          "text_score": 55.2,
+          "image": "output/textbook_match/crops_textbook/26643-0121.png"
+        },
+        {
+          "code": "26643-0254",
+          "tb_short": "올림유형",
+          "page": 323,
+          "text_score": 54.9,
+          "image": "output/textbook_match/crops_textbook/26643-0254.png"
+        },
+        {
+          "code": "26477-0076",
+          "tb_short": "올림고난도",
+          "page": 81,
+          "text_score": 54.3,
+          "image": "output/textbook_match/crops_textbook/26477-0076.png"
+        },
+        {
+          "code": "26477-0162",
+          "tb_short": "올림고난도",
+          "page": 187,
+          "text_score": 54.0,
+          "image": "output/textbook_match/crops_textbook/26477-0162.png"
+        },
+        {
+          "code": "26477-0289",
+          "tb_short": "올림고난도",
+          "page": 335,
+          "text_score": 52.8,
+          "image": "output/textbook_match/crops_textbook/26477-0289.png"
+        },
+        {
+          "code": "26008-0067",
+          "tb_short": "수특I",
+          "page": 57,
+          "text_score": 52.5,
+          "image": "output/textbook_match/crops_textbook/26008-0067.png"
+        },
+        {
+          "code": "26643-0208",
+          "tb_short": "올림유형",
+          "page": 291,
+          "text_score": 52.4,
+          "image": "output/textbook_match/crops_textbook/26643-0208.png"
+        },
+        {
+          "code": "26477-0106",
+          "tb_short": "올림고난도",
+          "page": 118,
+          "text_score": 52.3,
+          "image": "output/textbook_match/crops_textbook/26477-0106.png"
+        },
+        {
+          "code": "26008-0055",
+          "tb_short": "수특I",
+          "page": 44,
+          "text_score": 52.0,
+          "image": "output/textbook_match/crops_textbook/26008-0055.png"
+        },
+        {
+          "code": "26008-0123",
+          "tb_short": "수특I",
+          "page": 130,
+          "text_score": 51.7,
+          "image": "output/textbook_match/crops_textbook/26008-0123.png"
+        }
+      ]
+    },
+    {
+      "q_no": 6,
+      "q_text": "어느 악취의 농도가 $c\\,\\mathrm{ppm}$일 때 악취의 세기를 $r$이라 하면, $r = a + b\\log c$의 관계가 성립한다고 한다. 이 물질의 농도가 $1{,}000{,}000\\,\\mathrm{ppm}$일 때 악취의 세기를 $r_1$, 농도가 $1\\,\\mathrm{ppm}$일 때 악취의 세기를 $r_2$라 할 때 $\\dfrac{r_1}{r_2}$의 값은? [4.0점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q06.png",
+      "candidates": [
+        {
+          "code": "26477-0075",
+          "tb_short": "올림고난도",
+          "page": 79,
+          "text_score": 60.6,
+          "image": "output/textbook_match/crops_textbook/26477-0075.png"
+        },
+        {
+          "code": "26643-0174",
+          "tb_short": "올림유형",
+          "page": 227,
+          "text_score": 54.0,
+          "image": "output/textbook_match/crops_textbook/26643-0174.png"
+        },
+        {
+          "code": "26643-0143",
+          "tb_short": "올림유형",
+          "page": 202,
+          "text_score": 53.9,
+          "image": "output/textbook_match/crops_textbook/26643-0143.png"
+        },
+        {
+          "code": "26643-0159",
+          "tb_short": "올림유형",
+          "page": 214,
+          "text_score": 53.7,
+          "image": "output/textbook_match/crops_textbook/26643-0159.png"
+        },
+        {
+          "code": "26643-0202",
+          "tb_short": "올림유형",
+          "page": 254,
+          "text_score": 51.2,
+          "image": "output/textbook_match/crops_textbook/26643-0202.png"
+        },
+        {
+          "code": "26643-0076",
+          "tb_short": "올림유형",
+          "page": 93,
+          "text_score": 50.3,
+          "image": "output/textbook_match/crops_textbook/26643-0076.png"
+        },
+        {
+          "code": "26643-0285",
+          "tb_short": "올림유형",
+          "page": 362,
+          "text_score": 50.0,
+          "image": "output/textbook_match/crops_textbook/26643-0285.png"
+        },
+        {
+          "code": "26643-0188",
+          "tb_short": "올림유형",
+          "page": 238,
+          "text_score": 49.9,
+          "image": "output/textbook_match/crops_textbook/26643-0188.png"
+        },
+        {
+          "code": "26643-0041",
+          "tb_short": "올림유형",
+          "page": 69,
+          "text_score": 49.1,
+          "image": "output/textbook_match/crops_textbook/26643-0041.png"
+        },
+        {
+          "code": "26643-0320",
+          "tb_short": "올림유형",
+          "page": 388,
+          "text_score": 48.8,
+          "image": "output/textbook_match/crops_textbook/26643-0320.png"
+        },
+        {
+          "code": "26643-0065",
+          "tb_short": "올림유형",
+          "page": 84,
+          "text_score": 48.2,
+          "image": "output/textbook_match/crops_textbook/26643-0065.png"
+        },
+        {
+          "code": "26643-0014",
+          "tb_short": "올림유형",
+          "page": 49,
+          "text_score": 47.8,
+          "image": "output/textbook_match/crops_textbook/26643-0014.png"
+        },
+        {
+          "code": "26643-0259",
+          "tb_short": "올림유형",
+          "page": 327,
+          "text_score": 47.6,
+          "image": "output/textbook_match/crops_textbook/26643-0259.png"
+        },
+        {
+          "code": "26643-0229",
+          "tb_short": "올림유형",
+          "page": 304,
+          "text_score": 47.5,
+          "image": "output/textbook_match/crops_textbook/26643-0229.png"
+        },
+        {
+          "code": "26477-0021",
+          "tb_short": "올림고난도",
+          "page": 19,
+          "text_score": 47.3,
+          "image": "output/textbook_match/crops_textbook/26477-0021.png"
+        },
+        {
+          "code": "26643-0033",
+          "tb_short": "올림유형",
+          "page": 63,
+          "text_score": 47.0,
+          "image": "output/textbook_match/crops_textbook/26643-0033.png"
+        },
+        {
+          "code": "26643-0022",
+          "tb_short": "올림유형",
+          "page": 55,
+          "text_score": 46.6,
+          "image": "output/textbook_match/crops_textbook/26643-0022.png"
+        },
+        {
+          "code": "26643-0040",
+          "tb_short": "올림유형",
+          "page": 68,
+          "text_score": 46.3,
+          "image": "output/textbook_match/crops_textbook/26643-0040.png"
+        },
+        {
+          "code": "26477-0029",
+          "tb_short": "올림고난도",
+          "page": 26,
+          "text_score": 46.2,
+          "image": "output/textbook_match/crops_textbook/26477-0029.png"
+        },
+        {
+          "code": "26643-0429",
+          "tb_short": "올림유형",
+          "page": 526,
+          "text_score": 46.1,
+          "image": "output/textbook_match/crops_textbook/26643-0429.png"
+        }
+      ]
+    },
+    {
+      "q_no": 7,
+      "q_text": "$a > 1$이고 $a \\neq 1$인 양의 실수일 때, 함수 $f(x) = a^x$과 함수 $g(x) = \\log_a x$에 대해 옳은 것만을 <보기>에서 있는 대로 고른 것은? (단, $m, n$은 $0$보다 큰 실수이다) [4.6점] <보기> ㄱ. $f(m+n) = f(m) \\cdot f(n)$ ㄴ. $g(m \\cdot n) = g(m) + g(n)$ ㄷ. $f(m) \\cdot \\log_a f(n) = \\log_a f(m \\cdot n)$",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q07.png",
+      "candidates": [
+        {
+          "code": "26477-0128",
+          "tb_short": "올림고난도",
+          "page": 157,
+          "text_score": 60.0,
+          "image": "output/textbook_match/crops_textbook/26477-0128.png"
+        },
+        {
+          "code": "26643-0238",
+          "tb_short": "올림유형",
+          "page": 311,
+          "text_score": 59.2,
+          "image": "output/textbook_match/crops_textbook/26643-0238.png"
+        },
+        {
+          "code": "26477-0026",
+          "tb_short": "올림고난도",
+          "page": 24,
+          "text_score": 58.3,
+          "image": "output/textbook_match/crops_textbook/26477-0026.png"
+        },
+        {
+          "code": "26008-0050",
+          "tb_short": "수특I",
+          "page": 39,
+          "text_score": 58.1,
+          "image": "output/textbook_match/crops_textbook/26008-0050.png"
+        },
+        {
+          "code": "26643-0602",
+          "tb_short": "올림유형",
+          "page": 111,
+          "text_score": 56.4,
+          "image": "output/textbook_match/crops_textbook/26643-0602.png"
+        },
+        {
+          "code": "26643-0237",
+          "tb_short": "올림유형",
+          "page": 310,
+          "text_score": 53.6,
+          "image": "output/textbook_match/crops_textbook/26643-0237.png"
+        },
+        {
+          "code": "26008-0031",
+          "tb_short": "수특I",
+          "page": 25,
+          "text_score": 52.8,
+          "image": "output/textbook_match/crops_textbook/26008-0031.png"
+        },
+        {
+          "code": "26643-0640",
+          "tb_short": "올림유형",
+          "page": 128,
+          "text_score": 52.7,
+          "image": "output/textbook_match/crops_textbook/26643-0640.png"
+        },
+        {
+          "code": "26477-0070",
+          "tb_short": "올림고난도",
+          "page": 73,
+          "text_score": 50.4,
+          "image": "output/textbook_match/crops_textbook/26477-0070.png"
+        },
+        {
+          "code": "26477-0304",
+          "tb_short": "올림고난도",
+          "page": 360,
+          "text_score": 48.9,
+          "image": "output/textbook_match/crops_textbook/26477-0304.png"
+        },
+        {
+          "code": "26643-0349",
+          "tb_short": "올림유형",
+          "page": 446,
+          "text_score": 48.8,
+          "image": "output/textbook_match/crops_textbook/26643-0349.png"
+        },
+        {
+          "code": "26477-0091",
+          "tb_short": "올림고난도",
+          "page": 100,
+          "text_score": 48.8,
+          "image": "output/textbook_match/crops_textbook/26477-0091.png"
+        },
+        {
+          "code": "26477-0069",
+          "tb_short": "올림고난도",
+          "page": 73,
+          "text_score": 48.7,
+          "image": "output/textbook_match/crops_textbook/26477-0069.png"
+        },
+        {
+          "code": "26477-0100",
+          "tb_short": "올림고난도",
+          "page": 110,
+          "text_score": 48.4,
+          "image": "output/textbook_match/crops_textbook/26477-0100.png"
+        },
+        {
+          "code": "26008-0058",
+          "tb_short": "수특I",
+          "page": 47,
+          "text_score": 48.0,
+          "image": "output/textbook_match/crops_textbook/26008-0058.png"
+        },
+        {
+          "code": "26643-0411",
+          "tb_short": "올림유형",
+          "page": 495,
+          "text_score": 47.9,
+          "image": "output/textbook_match/crops_textbook/26643-0411.png"
+        },
+        {
+          "code": "26477-0305",
+          "tb_short": "올림고난도",
+          "page": 364,
+          "text_score": 47.3,
+          "image": "output/textbook_match/crops_textbook/26477-0305.png"
+        },
+        {
+          "code": "26477-0298",
+          "tb_short": "올림고난도",
+          "page": 347,
+          "text_score": 46.8,
+          "image": "output/textbook_match/crops_textbook/26477-0298.png"
+        },
+        {
+          "code": "26643-0062",
+          "tb_short": "올림유형",
+          "page": 82,
+          "text_score": 46.8,
+          "image": "output/textbook_match/crops_textbook/26643-0062.png"
+        },
+        {
+          "code": "26477-0011",
+          "tb_short": "올림고난도",
+          "page": 10,
+          "text_score": 46.4,
+          "image": "output/textbook_match/crops_textbook/26477-0011.png"
+        }
+      ]
+    },
+    {
+      "q_no": 8,
+      "q_text": "$\\theta$가 제$2$사분면의 각일 때, $\\sin\\theta - \\sqrt{(\\sin\\theta - \\cos\\theta)^2} + \\cos^2\\theta$의 값을 구하시오. [4.6점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q08.png",
+      "candidates": [
+        {
+          "code": "26643-0208",
+          "tb_short": "올림유형",
+          "page": 291,
+          "text_score": 68.0,
+          "image": "output/textbook_match/crops_textbook/26643-0208.png"
+        },
+        {
+          "code": "26643-0207",
+          "tb_short": "올림유형",
+          "page": 291,
+          "text_score": 67.8,
+          "image": "output/textbook_match/crops_textbook/26643-0207.png"
+        },
+        {
+          "code": "26477-0151",
+          "tb_short": "올림고난도",
+          "page": 176,
+          "text_score": 67.7,
+          "image": "output/textbook_match/crops_textbook/26477-0151.png"
+        },
+        {
+          "code": "26643-0254",
+          "tb_short": "올림유형",
+          "page": 323,
+          "text_score": 66.5,
+          "image": "output/textbook_match/crops_textbook/26643-0254.png"
+        },
+        {
+          "code": "26643-0872",
+          "tb_short": "올림유형",
+          "page": 511,
+          "text_score": 66.1,
+          "image": "output/textbook_match/crops_textbook/26643-0872.png"
+        },
+        {
+          "code": "26643-0876",
+          "tb_short": "올림유형",
+          "page": 513,
+          "text_score": 66.1,
+          "image": "output/textbook_match/crops_textbook/26643-0876.png"
+        },
+        {
+          "code": "26643-0509",
+          "tb_short": "올림유형",
+          "page": 7,
+          "text_score": 65.6,
+          "image": "output/textbook_match/crops_textbook/26643-0509.png"
+        },
+        {
+          "code": "26643-0514",
+          "tb_short": "올림유형",
+          "page": 9,
+          "text_score": 65.6,
+          "image": "output/textbook_match/crops_textbook/26643-0514.png"
+        },
+        {
+          "code": "26643-0518",
+          "tb_short": "올림유형",
+          "page": 10,
+          "text_score": 65.6,
+          "image": "output/textbook_match/crops_textbook/26643-0518.png"
+        },
+        {
+          "code": "26643-0521",
+          "tb_short": "올림유형",
+          "page": 11,
+          "text_score": 65.6,
+          "image": "output/textbook_match/crops_textbook/26643-0521.png"
+        },
+        {
+          "code": "26643-0540",
+          "tb_short": "올림유형",
+          "page": 18,
+          "text_score": 65.6,
+          "image": "output/textbook_match/crops_textbook/26643-0540.png"
+        },
+        {
+          "code": "26643-0535",
+          "tb_short": "올림유형",
+          "page": 16,
+          "text_score": 65.2,
+          "image": "output/textbook_match/crops_textbook/26643-0535.png"
+        },
+        {
+          "code": "26643-0276",
+          "tb_short": "올림유형",
+          "page": 344,
+          "text_score": 64.9,
+          "image": "output/textbook_match/crops_textbook/26643-0276.png"
+        },
+        {
+          "code": "26643-0533",
+          "tb_short": "올림유형",
+          "page": 15,
+          "text_score": 64.9,
+          "image": "output/textbook_match/crops_textbook/26643-0533.png"
+        },
+        {
+          "code": "26643-0760",
+          "tb_short": "올림유형",
+          "page": 281,
+          "text_score": 63.9,
+          "image": "output/textbook_match/crops_textbook/26643-0760.png"
+        },
+        {
+          "code": "26643-0761",
+          "tb_short": "올림유형",
+          "page": 281,
+          "text_score": 63.6,
+          "image": "output/textbook_match/crops_textbook/26643-0761.png"
+        },
+        {
+          "code": "26643-0868",
+          "tb_short": "올림유형",
+          "page": 510,
+          "text_score": 63.3,
+          "image": "output/textbook_match/crops_textbook/26643-0868.png"
+        },
+        {
+          "code": "26643-0516",
+          "tb_short": "올림유형",
+          "page": 9,
+          "text_score": 63.1,
+          "image": "output/textbook_match/crops_textbook/26643-0516.png"
+        },
+        {
+          "code": "26643-0228",
+          "tb_short": "올림유형",
+          "page": 303,
+          "text_score": 62.6,
+          "image": "output/textbook_match/crops_textbook/26643-0228.png"
+        },
+        {
+          "code": "26643-0537",
+          "tb_short": "올림유형",
+          "page": 17,
+          "text_score": 62.4,
+          "image": "output/textbook_match/crops_textbook/26643-0537.png"
+        }
+      ]
+    },
+    {
+      "q_no": 9,
+      "q_text": "지수함수 또는 삼각함수 그래프 관련 문제 [4.6점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q09.png",
+      "candidates": [
+        {
+          "code": "26008-0042",
+          "tb_short": "수특I",
+          "page": 34,
+          "text_score": 49.5,
+          "image": "output/textbook_match/crops_textbook/26008-0042.png"
+        },
+        {
+          "code": "26477-0184",
+          "tb_short": "올림고난도",
+          "page": 215,
+          "text_score": 49.2,
+          "image": "output/textbook_match/crops_textbook/26477-0184.png"
+        },
+        {
+          "code": "26643-0105",
+          "tb_short": "올림유형",
+          "page": 169,
+          "text_score": 47.7,
+          "image": "output/textbook_match/crops_textbook/26643-0105.png"
+        },
+        {
+          "code": "26643-0631",
+          "tb_short": "올림유형",
+          "page": 124,
+          "text_score": 46.5,
+          "image": "output/textbook_match/crops_textbook/26643-0631.png"
+        },
+        {
+          "code": "26643-0629",
+          "tb_short": "올림유형",
+          "page": 123,
+          "text_score": 45.2,
+          "image": "output/textbook_match/crops_textbook/26643-0629.png"
+        },
+        {
+          "code": "26477-0092",
+          "tb_short": "올림고난도",
+          "page": 101,
+          "text_score": 44.8,
+          "image": "output/textbook_match/crops_textbook/26477-0092.png"
+        },
+        {
+          "code": "26643-0757",
+          "tb_short": "올림유형",
+          "page": 279,
+          "text_score": 44.8,
+          "image": "output/textbook_match/crops_textbook/26643-0757.png"
+        },
+        {
+          "code": "26477-0088",
+          "tb_short": "올림고난도",
+          "page": 96,
+          "text_score": 44.6,
+          "image": "output/textbook_match/crops_textbook/26477-0088.png"
+        },
+        {
+          "code": "26477-0336",
+          "tb_short": "올림고난도",
+          "page": 398,
+          "text_score": 44.3,
+          "image": "output/textbook_match/crops_textbook/26477-0336.png"
+        },
+        {
+          "code": "26643-0756",
+          "tb_short": "올림유형",
+          "page": 279,
+          "text_score": 44.1,
+          "image": "output/textbook_match/crops_textbook/26643-0756.png"
+        },
+        {
+          "code": "26008-0033",
+          "tb_short": "수특I",
+          "page": 27,
+          "text_score": 44.0,
+          "image": "output/textbook_match/crops_textbook/26008-0033.png"
+        },
+        {
+          "code": "26008-0032",
+          "tb_short": "수특I",
+          "page": 27,
+          "text_score": 43.9,
+          "image": "output/textbook_match/crops_textbook/26008-0032.png"
+        },
+        {
+          "code": "26643-0630",
+          "tb_short": "올림유형",
+          "page": 124,
+          "text_score": 43.7,
+          "image": "output/textbook_match/crops_textbook/26643-0630.png"
+        },
+        {
+          "code": "26008-0036",
+          "tb_short": "수특I",
+          "page": 30,
+          "text_score": 43.6,
+          "image": "output/textbook_match/crops_textbook/26008-0036.png"
+        },
+        {
+          "code": "26477-0162",
+          "tb_short": "올림고난도",
+          "page": 187,
+          "text_score": 43.4,
+          "image": "output/textbook_match/crops_textbook/26477-0162.png"
+        },
+        {
+          "code": "26643-0103",
+          "tb_short": "올림유형",
+          "page": 167,
+          "text_score": 43.0,
+          "image": "output/textbook_match/crops_textbook/26643-0103.png"
+        },
+        {
+          "code": "26477-0087",
+          "tb_short": "올림고난도",
+          "page": 95,
+          "text_score": 43.0,
+          "image": "output/textbook_match/crops_textbook/26477-0087.png"
+        },
+        {
+          "code": "26477-0161",
+          "tb_short": "올림고난도",
+          "page": 186,
+          "text_score": 42.9,
+          "image": "output/textbook_match/crops_textbook/26477-0161.png"
+        },
+        {
+          "code": "26008-0047",
+          "tb_short": "수특I",
+          "page": 37,
+          "text_score": 42.6,
+          "image": "output/textbook_match/crops_textbook/26008-0047.png"
+        },
+        {
+          "code": "26008-0145",
+          "tb_short": "수특I",
+          "page": 150,
+          "text_score": 42.4,
+          "image": "output/textbook_match/crops_textbook/26008-0145.png"
+        }
+      ]
+    },
+    {
+      "q_no": 10,
+      "q_text": "이차방정식 $x^2 - 10x + 4 = 0$의 두 근이 $\\log a$, $\\log b$일 때, $\\log_a b + \\log_b a$의 값은? (단, $a, b$는 $1$이 아닌 양의 실수이다) [4.6점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q10.png",
+      "candidates": [
+        {
+          "code": "26643-0008",
+          "tb_short": "올림유형",
+          "page": 46,
+          "text_score": 60.2,
+          "image": "output/textbook_match/crops_textbook/26643-0008.png"
+        },
+        {
+          "code": "26643-0435",
+          "tb_short": "올림유형",
+          "page": 531,
+          "text_score": 60.0,
+          "image": "output/textbook_match/crops_textbook/26643-0435.png"
+        },
+        {
+          "code": "26008-0023",
+          "tb_short": "수특I",
+          "page": 16,
+          "text_score": 58.8,
+          "image": "output/textbook_match/crops_textbook/26008-0023.png"
+        },
+        {
+          "code": "26643-0174",
+          "tb_short": "올림유형",
+          "page": 227,
+          "text_score": 58.2,
+          "image": "output/textbook_match/crops_textbook/26643-0174.png"
+        },
+        {
+          "code": "26008-0171",
+          "tb_short": "수특I",
+          "page": 176,
+          "text_score": 57.2,
+          "image": "output/textbook_match/crops_textbook/26008-0171.png"
+        },
+        {
+          "code": "26643-0070",
+          "tb_short": "올림유형",
+          "page": 89,
+          "text_score": 56.5,
+          "image": "output/textbook_match/crops_textbook/26643-0070.png"
+        },
+        {
+          "code": "26477-0008",
+          "tb_short": "올림고난도",
+          "page": 7,
+          "text_score": 56.1,
+          "image": "output/textbook_match/crops_textbook/26477-0008.png"
+        },
+        {
+          "code": "26008-0040",
+          "tb_short": "수특I",
+          "page": 33,
+          "text_score": 56.0,
+          "image": "output/textbook_match/crops_textbook/26008-0040.png"
+        },
+        {
+          "code": "26643-0176",
+          "tb_short": "올림유형",
+          "page": 229,
+          "text_score": 55.1,
+          "image": "output/textbook_match/crops_textbook/26643-0176.png"
+        },
+        {
+          "code": "26643-0235",
+          "tb_short": "올림유형",
+          "page": 309,
+          "text_score": 55.0,
+          "image": "output/textbook_match/crops_textbook/26643-0235.png"
+        },
+        {
+          "code": "26643-0159",
+          "tb_short": "올림유형",
+          "page": 214,
+          "text_score": 54.8,
+          "image": "output/textbook_match/crops_textbook/26643-0159.png"
+        },
+        {
+          "code": "26008-0067",
+          "tb_short": "수특I",
+          "page": 57,
+          "text_score": 54.8,
+          "image": "output/textbook_match/crops_textbook/26008-0067.png"
+        },
+        {
+          "code": "26643-0033",
+          "tb_short": "올림유형",
+          "page": 63,
+          "text_score": 54.7,
+          "image": "output/textbook_match/crops_textbook/26643-0033.png"
+        },
+        {
+          "code": "26643-0030",
+          "tb_short": "올림유형",
+          "page": 61,
+          "text_score": 54.3,
+          "image": "output/textbook_match/crops_textbook/26643-0030.png"
+        },
+        {
+          "code": "26643-0184",
+          "tb_short": "올림유형",
+          "page": 236,
+          "text_score": 54.3,
+          "image": "output/textbook_match/crops_textbook/26643-0184.png"
+        },
+        {
+          "code": "26643-0173",
+          "tb_short": "올림유형",
+          "page": 226,
+          "text_score": 54.1,
+          "image": "output/textbook_match/crops_textbook/26643-0173.png"
+        },
+        {
+          "code": "26477-0317",
+          "tb_short": "올림고난도",
+          "page": 376,
+          "text_score": 53.7,
+          "image": "output/textbook_match/crops_textbook/26477-0317.png"
+        },
+        {
+          "code": "26643-0258",
+          "tb_short": "올림유형",
+          "page": 326,
+          "text_score": 53.6,
+          "image": "output/textbook_match/crops_textbook/26643-0258.png"
+        },
+        {
+          "code": "26643-0429",
+          "tb_short": "올림유형",
+          "page": 526,
+          "text_score": 53.5,
+          "image": "output/textbook_match/crops_textbook/26643-0429.png"
+        },
+        {
+          "code": "26643-0079",
+          "tb_short": "올림유형",
+          "page": 95,
+          "text_score": 53.3,
+          "image": "output/textbook_match/crops_textbook/26643-0079.png"
+        }
+      ]
+    },
+    {
+      "q_no": 11,
+      "q_text": "지수함수 $f(x) = 3^{?x-?}$에 대하여 부등식 $\\log_2 f(x) \\leq -2$를 만족시키는 자연수 $x$의 개수는? [4.7점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q11.png",
+      "candidates": [
+        {
+          "code": "26643-0162",
+          "tb_short": "올림유형",
+          "page": 217,
+          "text_score": 80.1,
+          "image": "output/textbook_match/crops_textbook/26643-0162.png"
+        },
+        {
+          "code": "26477-0121",
+          "tb_short": "올림고난도",
+          "page": 147,
+          "text_score": 75.0,
+          "image": "output/textbook_match/crops_textbook/26477-0121.png"
+        },
+        {
+          "code": "26477-0103",
+          "tb_short": "올림고난도",
+          "page": 114,
+          "text_score": 74.7,
+          "image": "output/textbook_match/crops_textbook/26477-0103.png"
+        },
+        {
+          "code": "26643-0182",
+          "tb_short": "올림유형",
+          "page": 234,
+          "text_score": 72.4,
+          "image": "output/textbook_match/crops_textbook/26643-0182.png"
+        },
+        {
+          "code": "26643-0185",
+          "tb_short": "올림유형",
+          "page": 236,
+          "text_score": 71.7,
+          "image": "output/textbook_match/crops_textbook/26643-0185.png"
+        },
+        {
+          "code": "26643-0011",
+          "tb_short": "올림유형",
+          "page": 47,
+          "text_score": 71.1,
+          "image": "output/textbook_match/crops_textbook/26643-0011.png"
+        },
+        {
+          "code": "26477-0305",
+          "tb_short": "올림고난도",
+          "page": 364,
+          "text_score": 70.5,
+          "image": "output/textbook_match/crops_textbook/26477-0305.png"
+        },
+        {
+          "code": "26643-0180",
+          "tb_short": "올림유형",
+          "page": 233,
+          "text_score": 70.2,
+          "image": "output/textbook_match/crops_textbook/26643-0180.png"
+        },
+        {
+          "code": "26643-0608",
+          "tb_short": "올림유형",
+          "page": 113,
+          "text_score": 69.3,
+          "image": "output/textbook_match/crops_textbook/26643-0608.png"
+        },
+        {
+          "code": "26643-0158",
+          "tb_short": "올림유형",
+          "page": 214,
+          "text_score": 67.9,
+          "image": "output/textbook_match/crops_textbook/26643-0158.png"
+        },
+        {
+          "code": "26643-0350",
+          "tb_short": "올림유형",
+          "page": 446,
+          "text_score": 65.9,
+          "image": "output/textbook_match/crops_textbook/26643-0350.png"
+        },
+        {
+          "code": "26008-0060",
+          "tb_short": "수특I",
+          "page": 51,
+          "text_score": 65.8,
+          "image": "output/textbook_match/crops_textbook/26008-0060.png"
+        },
+        {
+          "code": "26643-0386",
+          "tb_short": "올림유형",
+          "page": 473,
+          "text_score": 64.8,
+          "image": "output/textbook_match/crops_textbook/26643-0386.png"
+        },
+        {
+          "code": "26643-0451",
+          "tb_short": "올림유형",
+          "page": 545,
+          "text_score": 64.7,
+          "image": "output/textbook_match/crops_textbook/26643-0451.png"
+        },
+        {
+          "code": "26477-0119",
+          "tb_short": "올림고난도",
+          "page": 142,
+          "text_score": 64.4,
+          "image": "output/textbook_match/crops_textbook/26477-0119.png"
+        },
+        {
+          "code": "26477-0082",
+          "tb_short": "올림고난도",
+          "page": 87,
+          "text_score": 64.2,
+          "image": "output/textbook_match/crops_textbook/26477-0082.png"
+        },
+        {
+          "code": "26477-0044",
+          "tb_short": "올림고난도",
+          "page": 39,
+          "text_score": 64.2,
+          "image": "output/textbook_match/crops_textbook/26477-0044.png"
+        },
+        {
+          "code": "26477-0297",
+          "tb_short": "올림고난도",
+          "page": 345,
+          "text_score": 63.5,
+          "image": "output/textbook_match/crops_textbook/26477-0297.png"
+        },
+        {
+          "code": "26643-0163",
+          "tb_short": "올림유형",
+          "page": 217,
+          "text_score": 63.5,
+          "image": "output/textbook_match/crops_textbook/26643-0163.png"
+        },
+        {
+          "code": "26643-0161",
+          "tb_short": "올림유형",
+          "page": 216,
+          "text_score": 62.9,
+          "image": "output/textbook_match/crops_textbook/26643-0161.png"
+        }
+      ]
+    },
+    {
+      "q_no": 12,
+      "q_text": "그림과 같이 두 함수 $y = \\left(\\dfrac{5}{3}\\right)^x$, $y = \\left(\\dfrac{1}{?}\\right)^x$의 그래프가 만나는 점을 각각 $\\mathrm{A}, \\mathrm{B}$라 할 때, 삼각형 $\\mathrm{AOB}$의 넓이는? (단, $\\mathrm{O}$는 원점) [4.7점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q12.png",
+      "candidates": [
+        {
+          "code": "26643-0104",
+          "tb_short": "올림유형",
+          "page": 168,
+          "text_score": 71.4,
+          "image": "output/textbook_match/crops_textbook/26643-0104.png"
+        },
+        {
+          "code": "26643-0200",
+          "tb_short": "올림유형",
+          "page": 252,
+          "text_score": 68.6,
+          "image": "output/textbook_match/crops_textbook/26643-0200.png"
+        },
+        {
+          "code": "26477-0184",
+          "tb_short": "올림고난도",
+          "page": 215,
+          "text_score": 64.5,
+          "image": "output/textbook_match/crops_textbook/26477-0184.png"
+        },
+        {
+          "code": "26477-0118",
+          "tb_short": "올림고난도",
+          "page": 140,
+          "text_score": 61.3,
+          "image": "output/textbook_match/crops_textbook/26477-0118.png"
+        },
+        {
+          "code": "26477-0115",
+          "tb_short": "올림고난도",
+          "page": 134,
+          "text_score": 59.3,
+          "image": "output/textbook_match/crops_textbook/26477-0115.png"
+        },
+        {
+          "code": "26477-0117",
+          "tb_short": "올림고난도",
+          "page": 138,
+          "text_score": 59.2,
+          "image": "output/textbook_match/crops_textbook/26477-0117.png"
+        },
+        {
+          "code": "26643-0249",
+          "tb_short": "올림유형",
+          "page": 319,
+          "text_score": 58.9,
+          "image": "output/textbook_match/crops_textbook/26643-0249.png"
+        },
+        {
+          "code": "26477-0094",
+          "tb_short": "올림고난도",
+          "page": 103,
+          "text_score": 57.7,
+          "image": "output/textbook_match/crops_textbook/26477-0094.png"
+        },
+        {
+          "code": "26477-0162",
+          "tb_short": "올림고난도",
+          "page": 187,
+          "text_score": 56.8,
+          "image": "output/textbook_match/crops_textbook/26477-0162.png"
+        },
+        {
+          "code": "26643-0325",
+          "tb_short": "올림유형",
+          "page": 393,
+          "text_score": 55.9,
+          "image": "output/textbook_match/crops_textbook/26643-0325.png"
+        },
+        {
+          "code": "26477-0081",
+          "tb_short": "올림고난도",
+          "page": 86,
+          "text_score": 55.8,
+          "image": "output/textbook_match/crops_textbook/26477-0081.png"
+        },
+        {
+          "code": "26643-0146",
+          "tb_short": "올림유형",
+          "page": 204,
+          "text_score": 55.7,
+          "image": "output/textbook_match/crops_textbook/26643-0146.png"
+        },
+        {
+          "code": "26477-0227",
+          "tb_short": "올림고난도",
+          "page": 261,
+          "text_score": 55.3,
+          "image": "output/textbook_match/crops_textbook/26477-0227.png"
+        },
+        {
+          "code": "26477-0101",
+          "tb_short": "올림고난도",
+          "page": 112,
+          "text_score": 55.2,
+          "image": "output/textbook_match/crops_textbook/26477-0101.png"
+        },
+        {
+          "code": "26477-0066",
+          "tb_short": "올림고난도",
+          "page": 70,
+          "text_score": 54.9,
+          "image": "output/textbook_match/crops_textbook/26477-0066.png"
+        },
+        {
+          "code": "26643-0340",
+          "tb_short": "올림유형",
+          "page": 411,
+          "text_score": 54.7,
+          "image": "output/textbook_match/crops_textbook/26643-0340.png"
+        },
+        {
+          "code": "26008-0083",
+          "tb_short": "수특I",
+          "page": 74,
+          "text_score": 54.7,
+          "image": "output/textbook_match/crops_textbook/26008-0083.png"
+        },
+        {
+          "code": "26643-0128",
+          "tb_short": "올림유형",
+          "page": 188,
+          "text_score": 54.6,
+          "image": "output/textbook_match/crops_textbook/26643-0128.png"
+        },
+        {
+          "code": "26008-0042",
+          "tb_short": "수특I",
+          "page": 34,
+          "text_score": 54.3,
+          "image": "output/textbook_match/crops_textbook/26008-0042.png"
+        },
+        {
+          "code": "26643-0250",
+          "tb_short": "올림유형",
+          "page": 320,
+          "text_score": 54.0,
+          "image": "output/textbook_match/crops_textbook/26643-0250.png"
+        }
+      ]
+    },
+    {
+      "q_no": 13,
+      "q_text": "함수 $y = \\sqrt{?\\sqrt{?}}$ 또는 거듭제곱근 평행이동 관련 [4.7점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q13.png",
+      "candidates": [
+        {
+          "code": "26643-0100",
+          "tb_short": "올림유형",
+          "page": 164,
+          "text_score": 46.9,
+          "image": "output/textbook_match/crops_textbook/26643-0100.png"
+        },
+        {
+          "code": "26643-0124",
+          "tb_short": "올림유형",
+          "page": 184,
+          "text_score": 45.0,
+          "image": "output/textbook_match/crops_textbook/26643-0124.png"
+        },
+        {
+          "code": "26643-0136",
+          "tb_short": "올림유형",
+          "page": 196,
+          "text_score": 42.1,
+          "image": "output/textbook_match/crops_textbook/26643-0136.png"
+        },
+        {
+          "code": "26643-0628",
+          "tb_short": "올림유형",
+          "page": 123,
+          "text_score": 41.9,
+          "image": "output/textbook_match/crops_textbook/26643-0628.png"
+        },
+        {
+          "code": "26477-0076",
+          "tb_short": "올림고난도",
+          "page": 81,
+          "text_score": 41.3,
+          "image": "output/textbook_match/crops_textbook/26477-0076.png"
+        },
+        {
+          "code": "26643-0123",
+          "tb_short": "올림유형",
+          "page": 183,
+          "text_score": 40.5,
+          "image": "output/textbook_match/crops_textbook/26643-0123.png"
+        },
+        {
+          "code": "26643-0627",
+          "tb_short": "올림유형",
+          "page": 123,
+          "text_score": 40.2,
+          "image": "output/textbook_match/crops_textbook/26643-0627.png"
+        },
+        {
+          "code": "26643-0139",
+          "tb_short": "올림유형",
+          "page": 198,
+          "text_score": 40.1,
+          "image": "output/textbook_match/crops_textbook/26643-0139.png"
+        },
+        {
+          "code": "26643-0244",
+          "tb_short": "올림유형",
+          "page": 315,
+          "text_score": 39.5,
+          "image": "output/textbook_match/crops_textbook/26643-0244.png"
+        },
+        {
+          "code": "26477-0187",
+          "tb_short": "올림고난도",
+          "page": 220,
+          "text_score": 38.6,
+          "image": "output/textbook_match/crops_textbook/26477-0187.png"
+        },
+        {
+          "code": "26643-0193",
+          "tb_short": "올림유형",
+          "page": 243,
+          "text_score": 38.6,
+          "image": "output/textbook_match/crops_textbook/26643-0193.png"
+        },
+        {
+          "code": "26643-0278",
+          "tb_short": "올림유형",
+          "page": 346,
+          "text_score": 38.6,
+          "image": "output/textbook_match/crops_textbook/26643-0278.png"
+        },
+        {
+          "code": "26643-0125",
+          "tb_short": "올림유형",
+          "page": 185,
+          "text_score": 37.4,
+          "image": "output/textbook_match/crops_textbook/26643-0125.png"
+        },
+        {
+          "code": "26477-0181",
+          "tb_short": "올림고난도",
+          "page": 211,
+          "text_score": 36.7,
+          "image": "output/textbook_match/crops_textbook/26477-0181.png"
+        },
+        {
+          "code": "26008-0083",
+          "tb_short": "수특I",
+          "page": 74,
+          "text_score": 36.1,
+          "image": "output/textbook_match/crops_textbook/26008-0083.png"
+        },
+        {
+          "code": "26477-0162",
+          "tb_short": "올림고난도",
+          "page": 187,
+          "text_score": 36.1,
+          "image": "output/textbook_match/crops_textbook/26477-0162.png"
+        },
+        {
+          "code": "26477-0139",
+          "tb_short": "올림고난도",
+          "page": 165,
+          "text_score": 35.8,
+          "image": "output/textbook_match/crops_textbook/26477-0139.png"
+        },
+        {
+          "code": "26643-0134",
+          "tb_short": "올림유형",
+          "page": 194,
+          "text_score": 35.7,
+          "image": "output/textbook_match/crops_textbook/26643-0134.png"
+        },
+        {
+          "code": "26008-0045",
+          "tb_short": "수특I",
+          "page": 36,
+          "text_score": 35.7,
+          "image": "output/textbook_match/crops_textbook/26008-0045.png"
+        },
+        {
+          "code": "26643-0102",
+          "tb_short": "올림유형",
+          "page": 166,
+          "text_score": 35.7,
+          "image": "output/textbook_match/crops_textbook/26643-0102.png"
+        }
+      ]
+    },
+    {
+      "q_no": 14,
+      "q_text": "부등식 $3 - 2(?) - ?(?) < 0$ 또는 비슷한 식을 만족시키는 모든 정수 $x$의 개수는? [4.7점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q14.png",
+      "candidates": [
+        {
+          "code": "26643-0162",
+          "tb_short": "올림유형",
+          "page": 217,
+          "text_score": 75.7,
+          "image": "output/textbook_match/crops_textbook/26643-0162.png"
+        },
+        {
+          "code": "26643-0180",
+          "tb_short": "올림유형",
+          "page": 233,
+          "text_score": 72.5,
+          "image": "output/textbook_match/crops_textbook/26643-0180.png"
+        },
+        {
+          "code": "26477-0121",
+          "tb_short": "올림고난도",
+          "page": 147,
+          "text_score": 70.4,
+          "image": "output/textbook_match/crops_textbook/26477-0121.png"
+        },
+        {
+          "code": "26643-0182",
+          "tb_short": "올림유형",
+          "page": 234,
+          "text_score": 69.8,
+          "image": "output/textbook_match/crops_textbook/26643-0182.png"
+        },
+        {
+          "code": "26643-0158",
+          "tb_short": "올림유형",
+          "page": 214,
+          "text_score": 69.1,
+          "image": "output/textbook_match/crops_textbook/26643-0158.png"
+        },
+        {
+          "code": "26643-0161",
+          "tb_short": "올림유형",
+          "page": 216,
+          "text_score": 66.6,
+          "image": "output/textbook_match/crops_textbook/26643-0161.png"
+        },
+        {
+          "code": "26008-0020",
+          "tb_short": "수특I",
+          "page": 14,
+          "text_score": 66.3,
+          "image": "output/textbook_match/crops_textbook/26008-0020.png"
+        },
+        {
+          "code": "26643-0160",
+          "tb_short": "올림유형",
+          "page": 215,
+          "text_score": 66.1,
+          "image": "output/textbook_match/crops_textbook/26643-0160.png"
+        },
+        {
+          "code": "26477-0082",
+          "tb_short": "올림고난도",
+          "page": 87,
+          "text_score": 64.3,
+          "image": "output/textbook_match/crops_textbook/26477-0082.png"
+        },
+        {
+          "code": "26643-0185",
+          "tb_short": "올림유형",
+          "page": 236,
+          "text_score": 63.8,
+          "image": "output/textbook_match/crops_textbook/26643-0185.png"
+        },
+        {
+          "code": "26643-0011",
+          "tb_short": "올림유형",
+          "page": 47,
+          "text_score": 63.8,
+          "image": "output/textbook_match/crops_textbook/26643-0011.png"
+        },
+        {
+          "code": "26643-0274",
+          "tb_short": "올림유형",
+          "page": 342,
+          "text_score": 62.4,
+          "image": "output/textbook_match/crops_textbook/26643-0274.png"
+        },
+        {
+          "code": "26477-0119",
+          "tb_short": "올림고난도",
+          "page": 142,
+          "text_score": 61.9,
+          "image": "output/textbook_match/crops_textbook/26477-0119.png"
+        },
+        {
+          "code": "26643-0170",
+          "tb_short": "올림유형",
+          "page": 224,
+          "text_score": 61.0,
+          "image": "output/textbook_match/crops_textbook/26643-0170.png"
+        },
+        {
+          "code": "26643-0152",
+          "tb_short": "올림유형",
+          "page": 209,
+          "text_score": 60.5,
+          "image": "output/textbook_match/crops_textbook/26643-0152.png"
+        },
+        {
+          "code": "26477-0004",
+          "tb_short": "올림고난도",
+          "page": 4,
+          "text_score": 59.1,
+          "image": "output/textbook_match/crops_textbook/26477-0004.png"
+        },
+        {
+          "code": "26643-0201",
+          "tb_short": "올림유형",
+          "page": 253,
+          "text_score": 58.4,
+          "image": "output/textbook_match/crops_textbook/26643-0201.png"
+        },
+        {
+          "code": "26643-0157",
+          "tb_short": "올림유형",
+          "page": 213,
+          "text_score": 58.4,
+          "image": "output/textbook_match/crops_textbook/26643-0157.png"
+        },
+        {
+          "code": "26643-0451",
+          "tb_short": "올림유형",
+          "page": 545,
+          "text_score": 57.1,
+          "image": "output/textbook_match/crops_textbook/26643-0451.png"
+        },
+        {
+          "code": "26477-0103",
+          "tb_short": "올림고난도",
+          "page": 114,
+          "text_score": 56.1,
+          "image": "output/textbook_match/crops_textbook/26477-0103.png"
+        }
+      ]
+    },
+    {
+      "q_no": 15,
+      "q_text": "두 정수 $a, b$와 자연수 $c$에 대하여 다음을 만족시키는 모든 $a + b + c$의 값의 합은? (단, $\\sqrt{b}$는 음수 아닌 실수이다) [4.5점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q15.png",
+      "candidates": [
+        {
+          "code": "26643-0158",
+          "tb_short": "올림유형",
+          "page": 214,
+          "text_score": 69.5,
+          "image": "output/textbook_match/crops_textbook/26643-0158.png"
+        },
+        {
+          "code": "26477-0060",
+          "tb_short": "올림고난도",
+          "page": 62,
+          "text_score": 69.0,
+          "image": "output/textbook_match/crops_textbook/26477-0060.png"
+        },
+        {
+          "code": "26643-0482",
+          "tb_short": "올림유형",
+          "page": 571,
+          "text_score": 66.6,
+          "image": "output/textbook_match/crops_textbook/26643-0482.png"
+        },
+        {
+          "code": "26477-0338",
+          "tb_short": "올림고난도",
+          "page": 401,
+          "text_score": 63.4,
+          "image": "output/textbook_match/crops_textbook/26477-0338.png"
+        },
+        {
+          "code": "26643-0467",
+          "tb_short": "올림유형",
+          "page": 557,
+          "text_score": 61.8,
+          "image": "output/textbook_match/crops_textbook/26643-0467.png"
+        },
+        {
+          "code": "26643-0605",
+          "tb_short": "올림유형",
+          "page": 112,
+          "text_score": 61.7,
+          "image": "output/textbook_match/crops_textbook/26643-0605.png"
+        },
+        {
+          "code": "26477-0001",
+          "tb_short": "올림고난도",
+          "page": 2,
+          "text_score": 61.3,
+          "image": "output/textbook_match/crops_textbook/26477-0001.png"
+        },
+        {
+          "code": "26643-0610",
+          "tb_short": "올림유형",
+          "page": 114,
+          "text_score": 60.7,
+          "image": "output/textbook_match/crops_textbook/26643-0610.png"
+        },
+        {
+          "code": "26643-0612",
+          "tb_short": "올림유형",
+          "page": 115,
+          "text_score": 60.5,
+          "image": "output/textbook_match/crops_textbook/26643-0612.png"
+        },
+        {
+          "code": "26643-0445",
+          "tb_short": "올림유형",
+          "page": 540,
+          "text_score": 59.8,
+          "image": "output/textbook_match/crops_textbook/26643-0445.png"
+        },
+        {
+          "code": "26643-0609",
+          "tb_short": "올림유형",
+          "page": 114,
+          "text_score": 59.6,
+          "image": "output/textbook_match/crops_textbook/26643-0609.png"
+        },
+        {
+          "code": "26477-0061",
+          "tb_short": "올림고난도",
+          "page": 63,
+          "text_score": 59.5,
+          "image": "output/textbook_match/crops_textbook/26477-0061.png"
+        },
+        {
+          "code": "26477-0335",
+          "tb_short": "올림고난도",
+          "page": 396,
+          "text_score": 59.4,
+          "image": "output/textbook_match/crops_textbook/26477-0335.png"
+        },
+        {
+          "code": "26643-0152",
+          "tb_short": "올림유형",
+          "page": 209,
+          "text_score": 59.3,
+          "image": "output/textbook_match/crops_textbook/26643-0152.png"
+        },
+        {
+          "code": "26643-0465",
+          "tb_short": "올림유형",
+          "page": 556,
+          "text_score": 59.1,
+          "image": "output/textbook_match/crops_textbook/26643-0465.png"
+        },
+        {
+          "code": "26643-0613",
+          "tb_short": "올림유형",
+          "page": 115,
+          "text_score": 58.8,
+          "image": "output/textbook_match/crops_textbook/26643-0613.png"
+        },
+        {
+          "code": "26477-0103",
+          "tb_short": "올림고난도",
+          "page": 114,
+          "text_score": 58.7,
+          "image": "output/textbook_match/crops_textbook/26477-0103.png"
+        },
+        {
+          "code": "26008-0166",
+          "tb_short": "수특I",
+          "page": 172,
+          "text_score": 58.5,
+          "image": "output/textbook_match/crops_textbook/26008-0166.png"
+        },
+        {
+          "code": "26643-0607",
+          "tb_short": "올림유형",
+          "page": 113,
+          "text_score": 58.1,
+          "image": "output/textbook_match/crops_textbook/26643-0607.png"
+        },
+        {
+          "code": "26643-0185",
+          "tb_short": "올림유형",
+          "page": 236,
+          "text_score": 58.0,
+          "image": "output/textbook_match/crops_textbook/26643-0185.png"
+        }
+      ]
+    },
+    {
+      "q_no": 16,
+      "q_text": "서로 다른 두 실수 $\\alpha, \\beta$와 $0 < \\alpha < \\beta$가 다음을 만족시킨다. (가) $\\log_? x + 3a \\log_3 x = ?$의 두 근이 $3, 6$이다. (나) $\\log_? - 3 \\log_? = ?$의 두 근이 $\\alpha, \\beta$이다. $\\alpha + \\beta$의 값은? (단, ?는 $1$이 아닌 양의 실수이다) [5.2점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q16.png",
+      "candidates": [
+        {
+          "code": "26643-0072",
+          "tb_short": "올림유형",
+          "page": 90,
+          "text_score": 61.1,
+          "image": "output/textbook_match/crops_textbook/26643-0072.png"
+        },
+        {
+          "code": "26643-0111",
+          "tb_short": "올림유형",
+          "page": 174,
+          "text_score": 55.3,
+          "image": "output/textbook_match/crops_textbook/26643-0111.png"
+        },
+        {
+          "code": "26643-0150",
+          "tb_short": "올림유형",
+          "page": 207,
+          "text_score": 55.2,
+          "image": "output/textbook_match/crops_textbook/26643-0150.png"
+        },
+        {
+          "code": "26643-0498",
+          "tb_short": "올림유형",
+          "page": 2,
+          "text_score": 54.6,
+          "image": "output/textbook_match/crops_textbook/26643-0498.png"
+        },
+        {
+          "code": "26643-0020",
+          "tb_short": "올림유형",
+          "page": 54,
+          "text_score": 54.2,
+          "image": "output/textbook_match/crops_textbook/26643-0020.png"
+        },
+        {
+          "code": "26643-0066",
+          "tb_short": "올림유형",
+          "page": 85,
+          "text_score": 53.6,
+          "image": "output/textbook_match/crops_textbook/26643-0066.png"
+        },
+        {
+          "code": "26477-0067",
+          "tb_short": "올림고난도",
+          "page": 71,
+          "text_score": 53.5,
+          "image": "output/textbook_match/crops_textbook/26477-0067.png"
+        },
+        {
+          "code": "26643-0502",
+          "tb_short": "올림유형",
+          "page": 4,
+          "text_score": 53.4,
+          "image": "output/textbook_match/crops_textbook/26643-0502.png"
+        },
+        {
+          "code": "26643-0070",
+          "tb_short": "올림유형",
+          "page": 89,
+          "text_score": 51.5,
+          "image": "output/textbook_match/crops_textbook/26643-0070.png"
+        },
+        {
+          "code": "26477-0025",
+          "tb_short": "올림고난도",
+          "page": 23,
+          "text_score": 51.2,
+          "image": "output/textbook_match/crops_textbook/26477-0025.png"
+        },
+        {
+          "code": "26643-0079",
+          "tb_short": "올림유형",
+          "page": 95,
+          "text_score": 51.1,
+          "image": "output/textbook_match/crops_textbook/26643-0079.png"
+        },
+        {
+          "code": "26643-0258",
+          "tb_short": "올림유형",
+          "page": 326,
+          "text_score": 51.1,
+          "image": "output/textbook_match/crops_textbook/26643-0258.png"
+        },
+        {
+          "code": "26643-0497",
+          "tb_short": "올림유형",
+          "page": 2,
+          "text_score": 50.8,
+          "image": "output/textbook_match/crops_textbook/26643-0497.png"
+        },
+        {
+          "code": "26643-0028",
+          "tb_short": "올림유형",
+          "page": 59,
+          "text_score": 50.5,
+          "image": "output/textbook_match/crops_textbook/26643-0028.png"
+        },
+        {
+          "code": "26643-0199",
+          "tb_short": "올림유형",
+          "page": 251,
+          "text_score": 50.5,
+          "image": "output/textbook_match/crops_textbook/26643-0199.png"
+        },
+        {
+          "code": "26477-0059",
+          "tb_short": "올림고난도",
+          "page": 60,
+          "text_score": 50.5,
+          "image": "output/textbook_match/crops_textbook/26477-0059.png"
+        },
+        {
+          "code": "26008-0088",
+          "tb_short": "수특I",
+          "page": 82,
+          "text_score": 50.5,
+          "image": "output/textbook_match/crops_textbook/26008-0088.png"
+        },
+        {
+          "code": "26643-0251",
+          "tb_short": "올림유형",
+          "page": 321,
+          "text_score": 50.3,
+          "image": "output/textbook_match/crops_textbook/26643-0251.png"
+        },
+        {
+          "code": "26008-0114",
+          "tb_short": "수특I",
+          "page": 114,
+          "text_score": 50.3,
+          "image": "output/textbook_match/crops_textbook/26008-0114.png"
+        },
+        {
+          "code": "26008-0014",
+          "tb_short": "수특I",
+          "page": 10,
+          "text_score": 50.3,
+          "image": "output/textbook_match/crops_textbook/26008-0014.png"
+        }
+      ]
+    },
+    {
+      "q_no": 17,
+      "q_text": "$a > 1$인 양의 실수에 대하여 $\\sin\\theta = \\log_a x$, $\\cos\\theta = \\log_a y$이고 $x \\cdot y = ?$일 때 $a$의 값은? [5.2점]",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q17.png",
+      "candidates": [
+        {
+          "code": "26643-0035",
+          "tb_short": "올림유형",
+          "page": 64,
+          "text_score": 70.7,
+          "image": "output/textbook_match/crops_textbook/26643-0035.png"
+        },
+        {
+          "code": "26477-0326",
+          "tb_short": "올림고난도",
+          "page": 386,
+          "text_score": 65.9,
+          "image": "output/textbook_match/crops_textbook/26477-0326.png"
+        },
+        {
+          "code": "26643-0015",
+          "tb_short": "올림유형",
+          "page": 50,
+          "text_score": 65.2,
+          "image": "output/textbook_match/crops_textbook/26643-0015.png"
+        },
+        {
+          "code": "26008-0014",
+          "tb_short": "수특I",
+          "page": 10,
+          "text_score": 64.3,
+          "image": "output/textbook_match/crops_textbook/26008-0014.png"
+        },
+        {
+          "code": "26477-0051",
+          "tb_short": "올림고난도",
+          "page": 48,
+          "text_score": 64.2,
+          "image": "output/textbook_match/crops_textbook/26477-0051.png"
+        },
+        {
+          "code": "26643-0428",
+          "tb_short": "올림유형",
+          "page": 526,
+          "text_score": 64.1,
+          "image": "output/textbook_match/crops_textbook/26643-0428.png"
+        },
+        {
+          "code": "26477-0029",
+          "tb_short": "올림고난도",
+          "page": 26,
+          "text_score": 63.5,
+          "image": "output/textbook_match/crops_textbook/26477-0029.png"
+        },
+        {
+          "code": "26477-0076",
+          "tb_short": "올림고난도",
+          "page": 81,
+          "text_score": 63.1,
+          "image": "output/textbook_match/crops_textbook/26477-0076.png"
+        },
+        {
+          "code": "26008-0166",
+          "tb_short": "수특I",
+          "page": 172,
+          "text_score": 62.6,
+          "image": "output/textbook_match/crops_textbook/26008-0166.png"
+        },
+        {
+          "code": "26477-0030",
+          "tb_short": "올림고난도",
+          "page": 27,
+          "text_score": 62.3,
+          "image": "output/textbook_match/crops_textbook/26477-0030.png"
+        },
+        {
+          "code": "26477-0228",
+          "tb_short": "올림고난도",
+          "page": 262,
+          "text_score": 61.7,
+          "image": "output/textbook_match/crops_textbook/26477-0228.png"
+        },
+        {
+          "code": "26008-0022",
+          "tb_short": "수특I",
+          "page": 15,
+          "text_score": 61.6,
+          "image": "output/textbook_match/crops_textbook/26008-0022.png"
+        },
+        {
+          "code": "26643-0240",
+          "tb_short": "올림유형",
+          "page": 312,
+          "text_score": 60.9,
+          "image": "output/textbook_match/crops_textbook/26643-0240.png"
+        },
+        {
+          "code": "26008-0002",
+          "tb_short": "수특I",
+          "page": 2,
+          "text_score": 60.6,
+          "image": "output/textbook_match/crops_textbook/26008-0002.png"
+        },
+        {
+          "code": "26643-0065",
+          "tb_short": "올림유형",
+          "page": 84,
+          "text_score": 59.9,
+          "image": "output/textbook_match/crops_textbook/26643-0065.png"
+        },
+        {
+          "code": "26643-0033",
+          "tb_short": "올림유형",
+          "page": 63,
+          "text_score": 59.8,
+          "image": "output/textbook_match/crops_textbook/26643-0033.png"
+        },
+        {
+          "code": "26008-0073",
+          "tb_short": "수특I",
+          "page": 62,
+          "text_score": 59.5,
+          "image": "output/textbook_match/crops_textbook/26008-0073.png"
+        },
+        {
+          "code": "26477-0259",
+          "tb_short": "올림고난도",
+          "page": 306,
+          "text_score": 59.4,
+          "image": "output/textbook_match/crops_textbook/26477-0259.png"
+        },
+        {
+          "code": "26643-0431",
+          "tb_short": "올림유형",
+          "page": 528,
+          "text_score": 59.3,
+          "image": "output/textbook_match/crops_textbook/26643-0431.png"
+        },
+        {
+          "code": "26643-0429",
+          "tb_short": "올림유형",
+          "page": 526,
+          "text_score": 59.3,
+          "image": "output/textbook_match/crops_textbook/26643-0429.png"
+        }
+      ]
+    },
+    {
+      "q_no": 18,
+      "q_text": "[서답형 1] $1$이 아닌 두 양수 $a, b$에 대하여 다음 물음에 답하시오. [6.2점] (1-1) $a^? = b^?$임을 밑의 변환을 사용하여 서술하시오 [3점]. (1-2) $0.01^? = ?$의 $abc$ 구하고 그 과정을 서술하시오 [2점].",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q18.png",
+      "candidates": [
+        {
+          "code": "26477-0041",
+          "tb_short": "올림고난도",
+          "page": 37,
+          "text_score": 68.6,
+          "image": "output/textbook_match/crops_textbook/26477-0041.png"
+        },
+        {
+          "code": "26643-0605",
+          "tb_short": "올림유형",
+          "page": 112,
+          "text_score": 65.4,
+          "image": "output/textbook_match/crops_textbook/26643-0605.png"
+        },
+        {
+          "code": "26643-0007",
+          "tb_short": "올림유형",
+          "page": 45,
+          "text_score": 62.6,
+          "image": "output/textbook_match/crops_textbook/26643-0007.png"
+        },
+        {
+          "code": "26643-0609",
+          "tb_short": "올림유형",
+          "page": 114,
+          "text_score": 61.7,
+          "image": "output/textbook_match/crops_textbook/26643-0609.png"
+        },
+        {
+          "code": "26643-0647",
+          "tb_short": "올림유형",
+          "page": 131,
+          "text_score": 59.5,
+          "image": "output/textbook_match/crops_textbook/26643-0647.png"
+        },
+        {
+          "code": "26643-0607",
+          "tb_short": "올림유형",
+          "page": 113,
+          "text_score": 59.1,
+          "image": "output/textbook_match/crops_textbook/26643-0607.png"
+        },
+        {
+          "code": "26643-0612",
+          "tb_short": "올림유형",
+          "page": 115,
+          "text_score": 59.0,
+          "image": "output/textbook_match/crops_textbook/26643-0612.png"
+        },
+        {
+          "code": "26643-0842",
+          "tb_short": "올림유형",
+          "page": 435,
+          "text_score": 58.9,
+          "image": "output/textbook_match/crops_textbook/26643-0842.png"
+        },
+        {
+          "code": "26643-0608",
+          "tb_short": "올림유형",
+          "page": 113,
+          "text_score": 58.1,
+          "image": "output/textbook_match/crops_textbook/26643-0608.png"
+        },
+        {
+          "code": "26477-0017",
+          "tb_short": "올림고난도",
+          "page": 15,
+          "text_score": 57.5,
+          "image": "output/textbook_match/crops_textbook/26477-0017.png"
+        },
+        {
+          "code": "26643-0645",
+          "tb_short": "올림유형",
+          "page": 131,
+          "text_score": 56.9,
+          "image": "output/textbook_match/crops_textbook/26643-0645.png"
+        },
+        {
+          "code": "26643-0650",
+          "tb_short": "올림유형",
+          "page": 132,
+          "text_score": 56.7,
+          "image": "output/textbook_match/crops_textbook/26643-0650.png"
+        },
+        {
+          "code": "26643-0604",
+          "tb_short": "올림유형",
+          "page": 112,
+          "text_score": 55.8,
+          "image": "output/textbook_match/crops_textbook/26643-0604.png"
+        },
+        {
+          "code": "26008-0005",
+          "tb_short": "수특I",
+          "page": 4,
+          "text_score": 55.6,
+          "image": "output/textbook_match/crops_textbook/26008-0005.png"
+        },
+        {
+          "code": "26643-0653",
+          "tb_short": "올림유형",
+          "page": 133,
+          "text_score": 55.3,
+          "image": "output/textbook_match/crops_textbook/26643-0653.png"
+        },
+        {
+          "code": "26477-0007",
+          "tb_short": "올림고난도",
+          "page": 6,
+          "text_score": 55.2,
+          "image": "output/textbook_match/crops_textbook/26477-0007.png"
+        },
+        {
+          "code": "26643-0610",
+          "tb_short": "올림유형",
+          "page": 114,
+          "text_score": 55.2,
+          "image": "output/textbook_match/crops_textbook/26643-0610.png"
+        },
+        {
+          "code": "26643-0078",
+          "tb_short": "올림유형",
+          "page": 95,
+          "text_score": 55.0,
+          "image": "output/textbook_match/crops_textbook/26643-0078.png"
+        },
+        {
+          "code": "26643-0613",
+          "tb_short": "올림유형",
+          "page": 115,
+          "text_score": 54.9,
+          "image": "output/textbook_match/crops_textbook/26643-0613.png"
+        },
+        {
+          "code": "26643-0036",
+          "tb_short": "올림유형",
+          "page": 65,
+          "text_score": 54.8,
+          "image": "output/textbook_match/crops_textbook/26643-0036.png"
+        }
+      ]
+    },
+    {
+      "q_no": 19,
+      "q_text": "[서답형 2] (본문 식별 어려움)",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q19.png",
+      "candidates": [
+        {
+          "code": "26643-0471",
+          "tb_short": "올림유형",
+          "page": 560,
+          "text_score": 26.4,
+          "image": "output/textbook_match/crops_textbook/26643-0471.png"
+        },
+        {
+          "code": "26643-0372",
+          "tb_short": "올림유형",
+          "page": 463,
+          "text_score": 24.9,
+          "image": "output/textbook_match/crops_textbook/26643-0372.png"
+        },
+        {
+          "code": "26643-0677",
+          "tb_short": "올림유형",
+          "page": 145,
+          "text_score": 24.4,
+          "image": "output/textbook_match/crops_textbook/26643-0677.png"
+        },
+        {
+          "code": "26643-0407",
+          "tb_short": "올림유형",
+          "page": 490,
+          "text_score": 24.2,
+          "image": "output/textbook_match/crops_textbook/26643-0407.png"
+        },
+        {
+          "code": "26643-0303",
+          "tb_short": "올림유형",
+          "page": 375,
+          "text_score": 23.9,
+          "image": "output/textbook_match/crops_textbook/26643-0303.png"
+        },
+        {
+          "code": "26643-0159",
+          "tb_short": "올림유형",
+          "page": 214,
+          "text_score": 23.8,
+          "image": "output/textbook_match/crops_textbook/26643-0159.png"
+        },
+        {
+          "code": "26643-0553",
+          "tb_short": "올림유형",
+          "page": 23,
+          "text_score": 23.7,
+          "image": "output/textbook_match/crops_textbook/26643-0553.png"
+        },
+        {
+          "code": "26643-0307",
+          "tb_short": "올림유형",
+          "page": 379,
+          "text_score": 23.5,
+          "image": "output/textbook_match/crops_textbook/26643-0307.png"
+        },
+        {
+          "code": "26643-0698",
+          "tb_short": "올림유형",
+          "page": 156,
+          "text_score": 23.5,
+          "image": "output/textbook_match/crops_textbook/26643-0698.png"
+        },
+        {
+          "code": "26643-0682",
+          "tb_short": "올림유형",
+          "page": 147,
+          "text_score": 23.4,
+          "image": "output/textbook_match/crops_textbook/26643-0682.png"
+        },
+        {
+          "code": "26643-0317",
+          "tb_short": "올림유형",
+          "page": 386,
+          "text_score": 23.4,
+          "image": "output/textbook_match/crops_textbook/26643-0317.png"
+        },
+        {
+          "code": "26643-0160",
+          "tb_short": "올림유형",
+          "page": 215,
+          "text_score": 23.2,
+          "image": "output/textbook_match/crops_textbook/26643-0160.png"
+        },
+        {
+          "code": "26643-0875",
+          "tb_short": "올림유형",
+          "page": 513,
+          "text_score": 23.2,
+          "image": "output/textbook_match/crops_textbook/26643-0875.png"
+        },
+        {
+          "code": "26643-0794",
+          "tb_short": "올림유형",
+          "page": 415,
+          "text_score": 23.1,
+          "image": "output/textbook_match/crops_textbook/26643-0794.png"
+        },
+        {
+          "code": "26477-0207",
+          "tb_short": "올림고난도",
+          "page": 240,
+          "text_score": 23.1,
+          "image": "output/textbook_match/crops_textbook/26477-0207.png"
+        },
+        {
+          "code": "26477-0194",
+          "tb_short": "올림고난도",
+          "page": 230,
+          "text_score": 22.9,
+          "image": "output/textbook_match/crops_textbook/26477-0194.png"
+        },
+        {
+          "code": "26643-0705",
+          "tb_short": "올림유형",
+          "page": 160,
+          "text_score": 22.9,
+          "image": "output/textbook_match/crops_textbook/26643-0705.png"
+        },
+        {
+          "code": "26008-0078",
+          "tb_short": "수특I",
+          "page": 66,
+          "text_score": 22.8,
+          "image": "output/textbook_match/crops_textbook/26008-0078.png"
+        },
+        {
+          "code": "26008-0049",
+          "tb_short": "수특I",
+          "page": 39,
+          "text_score": 22.8,
+          "image": "output/textbook_match/crops_textbook/26008-0049.png"
+        },
+        {
+          "code": "26643-0697",
+          "tb_short": "올림유형",
+          "page": 156,
+          "text_score": 22.4,
+          "image": "output/textbook_match/crops_textbook/26643-0697.png"
+        }
+      ]
+    },
+    {
+      "q_no": 20,
+      "q_text": "[서답형 3] 그림과 같이 좌표평면 위에 두 점 $\\mathrm{A}, \\mathrm{B}$가 있다. $\\mathrm{P}(t, 0), \\mathrm{Q}(0, t)$에 대하여 평면도형 $\\mathrm{APQB}$의 넓이를 $f(t)$, 점 $\\mathrm{P}$와 점 $\\mathrm{Q}$ 사이의 거리를 $g(t)$라 하자. (3-1) 어떤 실수 $t$에 대하여 $f(t) = ? + 6$일 때 $t$의 값을 구하고, 그 과정을 서술하시오 [3점]. (3-2) (3-1)에서 구한 실수 $a, b, c$에 대하여 $t$에 관한 방정식",
+      "q_image": "output/textbook_match/crops_exam/광문고_Q20.png",
+      "candidates": [
+        {
+          "code": "26477-0041",
+          "tb_short": "올림고난도",
+          "page": 37,
+          "text_score": 72.6,
+          "image": "output/textbook_match/crops_textbook/26477-0041.png"
+        },
+        {
+          "code": "26008-0153",
+          "tb_short": "수특I",
+          "page": 160,
+          "text_score": 71.0,
+          "image": "output/textbook_match/crops_textbook/26008-0153.png"
+        },
+        {
+          "code": "26643-0088",
+          "tb_short": "올림유형",
+          "page": 103,
+          "text_score": 70.3,
+          "image": "output/textbook_match/crops_textbook/26643-0088.png"
+        },
+        {
+          "code": "26008-0014",
+          "tb_short": "수특I",
+          "page": 10,
+          "text_score": 69.8,
+          "image": "output/textbook_match/crops_textbook/26008-0014.png"
+        },
+        {
+          "code": "26643-0424",
+          "tb_short": "올림유형",
+          "page": 523,
+          "text_score": 69.2,
+          "image": "output/textbook_match/crops_textbook/26643-0424.png"
+        },
+        {
+          "code": "26643-0266",
+          "tb_short": "올림유형",
+          "page": 333,
+          "text_score": 67.0,
+          "image": "output/textbook_match/crops_textbook/26643-0266.png"
+        },
+        {
+          "code": "26643-0015",
+          "tb_short": "올림유형",
+          "page": 50,
+          "text_score": 65.5,
+          "image": "output/textbook_match/crops_textbook/26643-0015.png"
+        },
+        {
+          "code": "26643-0035",
+          "tb_short": "올림유형",
+          "page": 64,
+          "text_score": 65.1,
+          "image": "output/textbook_match/crops_textbook/26643-0035.png"
+        },
+        {
+          "code": "26477-0165",
+          "tb_short": "올림고난도",
+          "page": 191,
+          "text_score": 65.1,
+          "image": "output/textbook_match/crops_textbook/26477-0165.png"
+        },
+        {
+          "code": "26477-0189",
+          "tb_short": "올림고난도",
+          "page": 223,
+          "text_score": 65.0,
+          "image": "output/textbook_match/crops_textbook/26477-0189.png"
+        },
+        {
+          "code": "26008-0174",
+          "tb_short": "수특I",
+          "page": 179,
+          "text_score": 64.7,
+          "image": "output/textbook_match/crops_textbook/26008-0174.png"
+        },
+        {
+          "code": "26477-0129",
+          "tb_short": "올림고난도",
+          "page": 158,
+          "text_score": 64.3,
+          "image": "output/textbook_match/crops_textbook/26477-0129.png"
+        },
+        {
+          "code": "26008-0166",
+          "tb_short": "수특I",
+          "page": 172,
+          "text_score": 64.2,
+          "image": "output/textbook_match/crops_textbook/26008-0166.png"
+        },
+        {
+          "code": "26643-0078",
+          "tb_short": "올림유형",
+          "page": 95,
+          "text_score": 63.9,
+          "image": "output/textbook_match/crops_textbook/26643-0078.png"
+        },
+        {
+          "code": "26643-0866",
+          "tb_short": "올림유형",
+          "page": 509,
+          "text_score": 63.8,
+          "image": "output/textbook_match/crops_textbook/26643-0866.png"
+        },
+        {
+          "code": "26643-0308",
+          "tb_short": "올림유형",
+          "page": 379,
+          "text_score": 62.7,
+          "image": "output/textbook_match/crops_textbook/26643-0308.png"
+        },
+        {
+          "code": "26643-0863",
+          "tb_short": "올림유형",
+          "page": 508,
+          "text_score": 62.1,
+          "image": "output/textbook_match/crops_textbook/26643-0863.png"
+        },
+        {
+          "code": "26643-0212",
+          "tb_short": "올림유형",
+          "page": 294,
+          "text_score": 61.8,
+          "image": "output/textbook_match/crops_textbook/26643-0212.png"
+        },
+        {
+          "code": "26643-0605",
+          "tb_short": "올림유형",
+          "page": 112,
+          "text_score": 61.8,
+          "image": "output/textbook_match/crops_textbook/26643-0605.png"
+        },
+        {
+          "code": "26477-0051",
+          "tb_short": "올림고난도",
+          "page": 48,
+          "text_score": 61.5,
+          "image": "output/textbook_match/crops_textbook/26477-0051.png"
+        }
+      ]
+    }
+  ]
+}

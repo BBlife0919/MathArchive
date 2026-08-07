@@ -1,0 +1,280 @@
+{
+  "school": "운산고등학교",
+  "short_name": "운산고",
+  "exam_title": "2026학년도 1학기 중간고사",
+  "subject": "공통수학1",
+  "subject_range": "다항식의 연산 ~ 이차함수의 최대·최소",
+  "grade": 1,
+  "instructor": "이영우T",
+  "academy": "이음학원",
+  "questions": [
+    {
+      "q": 1,
+      "chapter": "다항식의 연산",
+      "difficulty": "하",
+      "score": 4.0,
+      "matched_yutype": 1,
+      "matched_title": "유형1 — 다항식의 연산 기본",
+      "grade": "A"
+    },
+    {
+      "q": 2,
+      "chapter": "복소수",
+      "difficulty": "하",
+      "score": 4.0,
+      "matched_yutype": 28,
+      "matched_title": "유형28 — 복소수 기초연산",
+      "grade": "A"
+    },
+    {
+      "q": 3,
+      "chapter": "다항식의 연산",
+      "difficulty": "하",
+      "score": 4.0,
+      "matched_yutype": 4,
+      "matched_title": "유형4 — 곱셈공식의 변형(고차)",
+      "grade": "A"
+    },
+    {
+      "q": 4,
+      "chapter": "이차방정식",
+      "difficulty": "하",
+      "score": 4.2,
+      "matched_yutype": 42,
+      "matched_title": "유형42 — 한 근이 주어지는 경우",
+      "grade": "A"
+    },
+    {
+      "q": 5,
+      "chapter": "복소수",
+      "difficulty": "하",
+      "score": 4.4,
+      "matched_yutype": 29,
+      "matched_title": "유형29 — 음수의 제곱근",
+      "grade": "A"
+    },
+    {
+      "q": 6,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "하",
+      "score": 4.4,
+      "matched_yutype": 10,
+      "matched_title": "유형10 — 연조립제법",
+      "grade": "A"
+    },
+    {
+      "q": 7,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 4.5,
+      "matched_yutype": 32,
+      "matched_title": "유형32 — 조건에 따른 복소수",
+      "grade": "A"
+    },
+    {
+      "q": 8,
+      "chapter": "이차함수",
+      "difficulty": "중",
+      "score": 4.6,
+      "matched_yutype": 50,
+      "matched_title": "유형50 — 함수와 직선의 위치관계(판별식)",
+      "grade": "A"
+    },
+    {
+      "q": 9,
+      "chapter": "인수분해",
+      "difficulty": "중",
+      "score": 4.7,
+      "matched_yutype": 24,
+      "matched_title": "유형24 — 인수분해 내림차순",
+      "grade": "B"
+    },
+    {
+      "q": 10,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "중",
+      "score": 4.8,
+      "matched_yutype": 14,
+      "matched_title": "유형14 — 일차식으로 나눈 나머지",
+      "grade": "A"
+    },
+    {
+      "q": 11,
+      "chapter": "인수분해",
+      "difficulty": "중",
+      "score": 4.9,
+      "matched_yutype": 25,
+      "matched_title": "유형25 — 두 일차식의 곱으로 인수분해",
+      "grade": "B"
+    },
+    {
+      "q": 12,
+      "chapter": "이차함수",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 39,
+      "matched_title": "유형39 — 이차방정식의 판별식",
+      "grade": "A"
+    },
+    {
+      "q": 13,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "중",
+      "score": 5.1,
+      "matched_yutype": 19,
+      "matched_title": "유형19 — 나머지정리(인수정리)",
+      "grade": "A"
+    },
+    {
+      "q": 14,
+      "chapter": "복소수",
+      "difficulty": "상",
+      "score": 5.2,
+      "matched_yutype": 29,
+      "matched_title": "유형29 — 음수의 제곱근",
+      "grade": "B"
+    },
+    {
+      "q": 15,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "상",
+      "score": 5.3,
+      "matched_yutype": 15,
+      "matched_title": "유형15 — 이차·삼차식으로 나눈 나머지",
+      "grade": "B"
+    },
+    {
+      "q": 16,
+      "chapter": "이차함수",
+      "difficulty": "상",
+      "score": 5.4,
+      "matched_yutype": 53,
+      "matched_title": "유형53 — 이차함수 최대·최소(구간내)",
+      "grade": "A"
+    },
+    {
+      "q": 17,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "상",
+      "score": 5.5,
+      "matched_yutype": 17,
+      "matched_title": "유형17 — 합성함수/치환(복잡한 다항식)",
+      "grade": "A"
+    },
+    {
+      "q": 18,
+      "chapter": "이차함수",
+      "difficulty": "중",
+      "score": 6.0,
+      "matched_yutype": 50,
+      "matched_title": "유형50 — 함수와 직선의 위치관계(판별식)",
+      "grade": "A"
+    },
+    {
+      "q": 19,
+      "chapter": "이차방정식",
+      "difficulty": "중",
+      "score": 7.0,
+      "matched_yutype": 45,
+      "matched_title": "유형45 — 근과 계수의 관계, 대입 복합",
+      "grade": "A"
+    },
+    {
+      "q": 20,
+      "chapter": "복소수",
+      "difficulty": "상",
+      "score": 7.0,
+      "matched_yutype": 35,
+      "matched_title": "유형35 — 복소수 거듭제곱의 합",
+      "grade": "B"
+    }
+  ],
+  "key_problems": [
+    {
+      "q": 14,
+      "topic": "복소수 (음수의 제곱근)",
+      "score": 5.2,
+      "difficulty": "상",
+      "exam_latex": "어느 카페에서 아메리카노 한 잔의 가격이 $4000$원일 때 하루에 $100$잔이 판매된다고 한다. 이 가격을 $200$원씩 내릴 때마다 하루 판매량이 $10$잔씩 증가한다고 한다. 이 카페의 아메리카노 하루 매출이 최대가 될 때의 아메리카노 한 잔의 가격은?",
+      "matched_yutype": 29,
+      "matched_title": "유형29 — 음수의 제곱근",
+      "fabricated_latex": "이차다항식 $P(x)=2x^{2}+ax-2+a$ 에 대하여<br>$\\sqrt{P(0)-2}+\\sqrt{2-P(0)}-\\sqrt{3P(1)}$ 의 값이<br>실수일 때, 모든 $a$값의 합을 구하시오.<br>(단, $a$는 실수이다.)",
+      "comment": "두 제곱근 표현이 동시에 실수가 되는 조건(피제곱근 부호 분기)을 $P(0)$, $P(1)$ 부호로 환원해 $a$ 범위를 끊어내는 전형 패턴. 우리 교재 유형29 STEP B 본문에 동일 절차(피제곱근 $\\geq 0$ vs $\\leq 0$ 분기 → $a$ 후보 합산)로 정리되어 있음.",
+      "capture_files": [
+        "광북17 운산14.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 17,
+      "topic": "항등식과 나머지정리 (합성·치환)",
+      "score": 5.5,
+      "difficulty": "상",
+      "exam_latex": "다항식 $f(x)$를 $4x ^{\\,2} -2x+1$로 나누었을 때의 나머지는 $2x+3$이다. $f(x)$를 $8x ^{\\,2} +1$로 나누었을 때의 나머지를 $4ax ^{\\,2} +bx-2$라 할 때, $f(x)$를 $2x+1$로 나누었을 때의 나머지는?",
+      "matched_yutype": 17,
+      "matched_title": "유형17 — 합성함수/치환(복잡한 다항식)",
+      "fabricated_latex": "다항식 $f(x)$를 $(x-1)(x-2)^{2}$으로 나누었을 때의<br>몫은 $Q(x)$이고, 나머지는 $x^{2}+2x-3$이다. $f(x^{2})$을 $(x-1)^{2}$<br>으로 나누었을 때 나머지가 $Q(x)$라면, $f(4)$의 값을 구하시오.",
+      "comment": "$f(x) = (x-1)(x-3)^2 Q(x) + (x^2+x-2)$ 식과 $f(x^2)$의 $(x-1)^2$ 나머지 비교를 연립해 $Q(x)$의 형태와 $f(4)$를 동시에 결정하는 절차. 우리 교재 유형17 STEP C에 '$f(x) \\leftrightarrow f(x^2)$ 치환 후 항등식 비교'로 동일 풀이 흐름이 정리됨.",
+      "capture_files": [
+        "운산17.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 19,
+      "topic": "이차방정식 (근과 계수의 관계, 대입)",
+      "score": 7.0,
+      "difficulty": "중",
+      "exam_latex": "$x$에 대한 이차방정식 $x ^{\\,2} +(a ^{\\,2} -2a-3)x-a+1=0$의 두 실근이 절댓값은 서로 같고 부호는 다를 때, 실수 $a$의 값을 구하고 그 과정을 서술하시오.",
+      "matched_yutype": 45,
+      "matched_title": "유형45 — 근과 계수의 관계, 대입 복합",
+      "fabricated_latex": "[유형 학습용]<br>이차방정식 $x^{2}-6x-4=0$의 두 근을 $\\alpha,\\beta$라 할 때,<br>$\\alpha+\\dfrac{1}{\\beta},\\ \\beta+\\dfrac{1}{\\alpha}$을 두 근으로 하는 $x^{2}$의 계수가 1인 이차방<br>정식을 구하고 그 과정을 서술하시오.",
+      "comment": "$\\alpha+\\beta$, $\\alpha\\beta$ 값을 먼저 구한 뒤 새 두 근의 합·곱을 $(\\alpha+\\beta)(1+1/(\\alpha\\beta))$ 형태로 정리하는 표준 절차. 우리 교재 유형45 STEP B에 동일 풀이(합·곱→이차방정식 작성)로 정리되어 있음.",
+      "capture_files": [
+        "운산19.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 20,
+      "topic": "복소수 (거듭제곱·켤레 종합)",
+      "score": 7.0,
+      "difficulty": "상",
+      "exam_latex": "최고차항의 계수가 $1$인 이차다항식 $f(x)$와 두 다항식 $P(x)$, $Q(x)$가 다음 조건을 만족시킨다.<br><div class='cond-box'>(가) 두 다항식 $P(x)+Q(x)$, $P(x)-Q(x)$를 $(x+\\,1) ^{\\,2}$로 나누었을 때, 몫은 모두 $f(x)$이고, 두 나머지의 합은 $4$이다.<br>(나) $f(x)=f(-x+1)$</div><br><br>$P(0)=Q(0)=2$일 때, 방정식 $f(x)+Q(x)= -x$는 오직 하나의 해를 갖는다. 이 때, $Q(\\sqrt{2})$의 값을 구하고 그 과정을 서술하시오.<br>(단, $Q(\\sqrt{2})>0$)",
+      "matched_yutype": 35,
+      "matched_title": "유형35 — 복소수 거듭제곱의 합",
+      "fabricated_latex": "[유형 학습용]<br>복소수 $z=(a^{2}-4)+(a^{2}+2a)i$ 에 대하여<br>$z^{2}$이 음의 실수일 때, $\\left(\\dfrac{1}{z}-\\dfrac{1}{\\bar{z}}\\right)^{n}=(z-i)^{4}$ 를 만족시<br>키는 20이하의 자연수 $n$의 개수를 구하고 그 과<br>정을 서술하시오. (단, $i=\\sqrt{-1}$이고, $\\bar{z}$는 $z$의 켤레<br>복소수이다.)",
+      "comment": "$z^2 \\in \\mathbb{R}_{<0}$ 조건으로 $z$의 실·허부 관계(순허수 골격)를 결정한 뒤, $\\dfrac{1}{z}-\\dfrac{1}{\\bar{z}}$ 가 순허수임을 이용해 좌·우변 모두 $i^k$ 꼴로 환원, 지수 주기 $4$로 $n$을 분류하는 절차. 우리 교재 유형35 STEP C(거듭제곱 주기성+켤레 처리)에 동일 풀이 골격이 정리됨.",
+      "capture_files": [
+        "운산20.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    }
+  ],
+  "instructor_comment": "객관식 17문항, 논술형 3문항으로 서술형 비중이 높습니다. 특히 복소수 주기성이나 고난도 나머지정리 등 변별력 문항이 확실하게 존재하는 시험입니다. 이번 핵심문제 4개는 모두 우리 교재 STEP1·STEP2 핵심 유형으로 커버되며, 풀이 절차가 동형 또는 유사 패턴으로 정리되어 있다. 교재 N회독 + 핵심노트 3회독으로 시험장에서 즉시 인출 가능.",
+  "strategy": [
+    {
+      "key": "단계별 점수 확보",
+      "value": "배부된 핵심노트를 반복 회독하여 서술형 단계별 감점 요인을 차단하고 완벽한 답안을 작성합니다."
+    },
+    {
+      "key": "킬러 문항 선별 학습",
+      "value": "운산고 내신에 최적화된 모의고사 변형 문제를 선별하여, 복잡한 추론 문제도 기계적으로 풀어낼 수 있게 훈련합니다."
+    },
+    {
+      "key": "기초와 심화의 조화",
+      "value": "필수 유형의 기계적 풀이를 바탕으로 고난도 문항에 투자할 시간을 충분히 확보합니다."
+    }
+  ],
+  "note_intro": "이영우T가 직접 작성한 핵심만 모은 핵심노트",
+  "note_sub": "시험 출제 핵심 패턴을 한 줄로 정리한 직강 노트",
+  "note_sample_images": [
+    "note_sample_1.png",
+    "note_sample_2.png",
+    "note_sample_3.png"
+  ]
+}

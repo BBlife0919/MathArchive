@@ -1,0 +1,22 @@
+[
+  {
+    "school": "명문고",
+    "q_no": 6,
+    "q_text": "부등식 $\\log_?(2x-5) > \\log_?(7-x)$를 만족시키는 $x$값의 범위는? [4.7점]",
+    "tb_key": "yuhyung2",
+    "tb_short": "유형ON2",
+    "page": 59,
+    "confidence": "low",
+    "page_image": "output/textbook_match_v3/pages_png/yuhyung2/p0059.png"
+  },
+  {
+    "school": "명문고",
+    "q_no": 6,
+    "q_text": "부등식 $\\log_?(2x-5) > \\log_?(7-x)$를 만족시키는 $x$값의 범위는? [4.7점]",
+    "tb_key": "yuhyung1",
+    "tb_short": "유형ON1",
+    "page": 87,
+    "confidence": "low",
+    "page_image": "output/textbook_match_v3/pages_png/yuhyung1/p0087.png"
+  }
+]

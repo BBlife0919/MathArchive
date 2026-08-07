@@ -1,0 +1,152 @@
+[
+  {
+    "school": "광명고",
+    "q_no": 3,
+    "q_text": "원점 $\\mathrm{O}$와 점 $\\mathrm{P} \\left( -3, 4 \\right)$를 지나는 동경 $\\mathrm{OP}$가 나타내는 각을 $\\theta$라 할 때, $sin \\theta$의 값은? [3.9점]",
+    "tb_key": "mirae_text",
+    "tb_short": "미래엔교과서",
+    "page": 119,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/mirae_text/p0119.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 3,
+    "q_text": "원점 $\\mathrm{O}$와 점 $\\mathrm{P} \\left( -3, 4 \\right)$를 지나는 동경 $\\mathrm{OP}$가 나타내는 각을 $\\theta$라 할 때, $sin \\theta$의 값은? [3.9점]",
+    "tb_key": "uon2",
+    "tb_short": "유형ON2",
+    "page": 66,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/uon2/p0066.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 3,
+    "q_text": "원점 $\\mathrm{O}$와 점 $\\mathrm{P} \\left( -3, 4 \\right)$를 지나는 동경 $\\mathrm{OP}$가 나타내는 각을 $\\theta$라 할 때, $sin \\theta$의 값은? [3.9점]",
+    "tb_key": "mirae_text",
+    "tb_short": "미래엔교과서",
+    "page": 79,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/mirae_text/p0079.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 3,
+    "q_text": "원점 $\\mathrm{O}$와 점 $\\mathrm{P} \\left( -3, 4 \\right)$를 지나는 동경 $\\mathrm{OP}$가 나타내는 각을 $\\theta$라 할 때, $sin \\theta$의 값은? [3.9점]",
+    "tb_key": "olimpos",
+    "tb_short": "올림포스",
+    "page": 36,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/olimpos/p0036.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 4,
+    "q_text": "삼각함수의 성질로 옳은 것만을 <보기>에서 있는 대로 고른 것은? [4.0점]\n<<BOX_START>>\nㄱ. 사인함수 $y= sin \\theta$의 치역은 $\\left\\{y \\, \\left\\|\\, -1 \\leq y \\leq 1 \\right\\}\\right\\|$이다.<br>ㄴ. 코사인함수 $y= cos \\theta$의 그래프는 $y$축에 대하여 대칭이다.<br",
+    "tb_key": "uon2",
+    "tb_short": "유형ON2",
+    "page": 72,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/uon2/p0072.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 4,
+    "q_text": "삼각함수의 성질로 옳은 것만을 <보기>에서 있는 대로 고른 것은? [4.0점]\n<<BOX_START>>\nㄱ. 사인함수 $y= sin \\theta$의 치역은 $\\left\\{y \\, \\left\\|\\, -1 \\leq y \\leq 1 \\right\\}\\right\\|$이다.<br>ㄴ. 코사인함수 $y= cos \\theta$의 그래프는 $y$축에 대하여 대칭이다.<br",
+    "tb_key": "uon1",
+    "tb_short": "유형ON1",
+    "page": 109,
+    "confidence": "medium",
+    "page_image": "output/textbook_match_v3/pages_png/uon1/p0109.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 7,
+    "q_text": "상수 $a$에 대하여 함수 $y= a^{2x}+1 -5$ ($a>0$, $a \\neq 1$)의 그래프가 두 점 $\\left( -2, 3 \\right)$, $\\left( 0, b \\right)$를 지날 때, $a+b$의 값은? [4.2점]",
+    "tb_key": "uon1",
+    "tb_short": "유형ON1",
+    "page": 49,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/uon1/p0049.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 10,
+    "q_text": "함수 $y=log_3 9x$의 그래프를 $x$축의 방향으로 $-2$만큼 평행이동한 그래프가 함수 $y= 3^x -2$의 그래프를 $x$축으로 $a$만큼 평행이동한 그래프와 직선 $y=x$에 대하여 대칭일 때, 상수 $a$의 값은? [4.5점]",
+    "tb_key": "ybm_text",
+    "tb_short": "YBM교과서",
+    "page": 51,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/ybm_text/p0051.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 11,
+    "q_text": "$3^a =2$, $3^b =5$일 때, $log_{10} 6$을 $a$, $b$로 나타내면? [4.5점]",
+    "tb_key": "ybm_text",
+    "tb_short": "YBM교과서",
+    "page": 33,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/ybm_text/p0033.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 11,
+    "q_text": "$3^a =2$, $3^b =5$일 때, $log_{10} 6$을 $a$, $b$로 나타내면? [4.5점]",
+    "tb_key": "uon1",
+    "tb_short": "유형ON1",
+    "page": 30,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/uon1/p0030.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 13,
+    "q_text": "정의역이 $\\left\\{x\\, \\left|\\, -1 \\leq x \\leq 1 \\right\\}\\right|$인 함수 $f \\left( x \\right) = \\left( \\dfrac{\\sqrt{3}}{2} \\right)^-x+a +b$의 최댓값, 최솟값이 각각 $\\dfrac{ 9}{ 16}$, $\\dfrac{ 3}{ 8}$일 때, $\\dfrac{a}{b}$의 ",
+    "tb_key": "uon1",
+    "tb_short": "유형ON1",
+    "page": 51,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/uon1/p0051.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 13,
+    "q_text": "정의역이 $\\left\\{x\\, \\left|\\, -1 \\leq x \\leq 1 \\right\\}\\right|$인 함수 $f \\left( x \\right) = \\left( \\dfrac{\\sqrt{3}}{2} \\right)^-x+a +b$의 최댓값, 최솟값이 각각 $\\dfrac{ 9}{ 16}$, $\\dfrac{ 3}{ 8}$일 때, $\\dfrac{a}{b}$의 ",
+    "tb_key": "uon1",
+    "tb_short": "유형ON1",
+    "page": 52,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/uon1/p0052.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 13,
+    "q_text": "정의역이 $\\left\\{x\\, \\left|\\, -1 \\leq x \\leq 1 \\right\\}\\right|$인 함수 $f \\left( x \\right) = \\left( \\dfrac{\\sqrt{3}}{2} \\right)^-x+a +b$의 최댓값, 최솟값이 각각 $\\dfrac{ 9}{ 16}$, $\\dfrac{ 3}{ 8}$일 때, $\\dfrac{a}{b}$의 ",
+    "tb_key": "kojaengi",
+    "tb_short": "고쟁이",
+    "page": 58,
+    "confidence": "medium",
+    "page_image": "output/textbook_match_v3/pages_png/kojaengi/p0058.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 14,
+    "q_text": "$sin \\theta + cos \\theta = \\dfrac{ 3}{ 4}$일 때, $sin^3 \\theta + cos^3 \\theta$의 값은? [4.8점]",
+    "tb_key": "jeongseok_silyeok",
+    "tb_short": "정석실력",
+    "page": 104,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/jeongseok_silyeok/p0104.png"
+  },
+  {
+    "school": "광명고",
+    "q_no": 21,
+    "q_text": "두 함수\t$g \\left( x \\right) = 7- log_2 \\left( x+12 \\right)$, $f \\left( x \\right) =3 sin^2 x - 3 cos x +k$\n가 있다. $0 \\leq x < 2 \\pi$에서 합성함수 $\\left( g \\circ f \\right) \\left( x \\right)$의 최솟값이 $3$일 때, $\\left(",
+    "tb_key": "ybm_text",
+    "tb_short": "YBM교과서",
+    "page": 99,
+    "confidence": "medium",
+    "page_image": "output/textbook_match_v3/pages_png/ybm_text/p0099.png"
+  }
+]

@@ -1,0 +1,322 @@
+{
+  "school": "광명북고등학교",
+  "short_name": "광명북고",
+  "exam_title": "2026학년도 1학기 중간고사",
+  "subject": "공통수학1",
+  "subject_range": "다항식의 연산 ~ 이차함수 (고차방정식 포함)",
+  "grade": 1,
+  "instructor": "이영우T",
+  "academy": "이음학원",
+  "questions": [
+    {
+      "q": 1,
+      "chapter": "다항식의 연산",
+      "difficulty": "하",
+      "score": 4.1,
+      "matched_yutype": 1,
+      "matched_title": "유형1 — 다항식의 연산 기본",
+      "grade": "A",
+      "rationale": "두 다항식의 2A+B 단순 계산"
+    },
+    {
+      "q": 2,
+      "chapter": "이차방정식",
+      "difficulty": "하",
+      "score": 4.1,
+      "matched_yutype": 41,
+      "matched_title": "유형41 — 근과 계수의 관계",
+      "grade": "A",
+      "rationale": "근의 합/곱 직접 활용"
+    },
+    {
+      "q": 3,
+      "chapter": "인수분해",
+      "difficulty": "하",
+      "score": 4.2,
+      "matched_yutype": 22,
+      "matched_title": "유형22 — 인수분해 기본공식 사용 (a²-b²)",
+      "grade": "A",
+      "rationale": "(2026²-1)/(2025·2027)=1, 곱셈공식 차의 제곱 적용"
+    },
+    {
+      "q": 4,
+      "chapter": "이차방정식",
+      "difficulty": "하",
+      "score": 4.3,
+      "matched_yutype": 43,
+      "matched_title": "유형43 — 이차방정식 근의 정수 조건",
+      "grade": "A",
+      "rationale": "정수근을 갖도록 하는 자연수 a의 개수"
+    },
+    {
+      "q": 5,
+      "chapter": "인수분해",
+      "difficulty": "하",
+      "score": 4.3,
+      "matched_yutype": 5,
+      "matched_title": "유형5 — 곱셈공식의 변형(항 두개)",
+      "grade": "B",
+      "rationale": "a-b, ab로 a³-b³ 계산 (곱셈공식 변형)"
+    },
+    {
+      "q": 6,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "하",
+      "score": 4.3,
+      "matched_yutype": 18,
+      "matched_title": "유형18 — 나누어지는 식 변형",
+      "grade": "A",
+      "rationale": "P(x+1)을 x+3으로 나눈 나머지 = P(-2)"
+    },
+    {
+      "q": 7,
+      "chapter": "이차방정식",
+      "difficulty": "중",
+      "score": 4.4,
+      "matched_yutype": 41,
+      "matched_title": "유형41 — 근과 계수의 관계",
+      "grade": "A",
+      "rationale": "두 근의 차 조건으로 a 구하기"
+    },
+    {
+      "q": 8,
+      "chapter": "고차방정식",
+      "difficulty": "하",
+      "score": 4.4,
+      "matched_yutype": 21,
+      "matched_title": "유형21 — 인수분해(조립제법)",
+      "grade": "B",
+      "rationale": "삼차방정식 인수분해 후 양의 실근 합 (광명북고 추가 단원)"
+    },
+    {
+      "q": 9,
+      "chapter": "이차함수",
+      "difficulty": "중",
+      "score": 4.4,
+      "matched_yutype": 51,
+      "matched_title": "유형51 — 이차함수 그래프의 개형(판별식)",
+      "grade": "A",
+      "rationale": "x축과 만나도록 D≥0 조건"
+    },
+    {
+      "q": 10,
+      "chapter": "이차함수",
+      "difficulty": "중",
+      "score": 4.5,
+      "matched_yutype": 53,
+      "matched_title": "유형53 — 이차함수 최대,최소(구간 내)",
+      "grade": "A",
+      "rationale": "꼭짓점 위치에 따른 구간 내 최대최소 분류"
+    },
+    {
+      "q": 11,
+      "chapter": "인수분해",
+      "difficulty": "중",
+      "score": 4.5,
+      "matched_yutype": 23,
+      "matched_title": "유형23 — 인수분해 스킬(복이차식 / 등차4연속곱)",
+      "grade": "A",
+      "rationale": "연속한 짝수 4개의 곱 + 16 = 완전제곱 패턴"
+    },
+    {
+      "q": 12,
+      "chapter": "인수분해",
+      "difficulty": "중",
+      "score": 4.6,
+      "matched_yutype": 11,
+      "matched_title": "유형11 — 다항식의 추정(계수비교법)",
+      "grade": "B",
+      "rationale": "f(x)g(x) 형태에서 g가 일차일 때 f, g 추정"
+    },
+    {
+      "q": 13,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 4.6,
+      "matched_yutype": 35,
+      "matched_title": "유형35 — 복소수 거듭제곱의 합",
+      "grade": "A",
+      "rationale": "(√3+i)/2의 거듭제곱 주기성 활용한 합"
+    },
+    {
+      "q": 14,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 4.6,
+      "matched_yutype": 36,
+      "matched_title": "유형36 — 켤레 관계 종합",
+      "grade": "A",
+      "rationale": "u=z̄+z̄i 보기 ㄱ,ㄴ,ㄷ 진위판정"
+    },
+    {
+      "q": 15,
+      "chapter": "다항식의 연산",
+      "difficulty": "상",
+      "score": 4.7,
+      "matched_yutype": 8,
+      "matched_title": "유형8 — 주어진 식의 값으로 고차식의 값 구하기",
+      "grade": "A",
+      "rationale": "x=√2+1 대입해 x²-2x-1=0 활용한 차수낮추기"
+    },
+    {
+      "q": 16,
+      "chapter": "이차함수",
+      "difficulty": "중",
+      "score": 4.7,
+      "matched_yutype": 50,
+      "matched_title": "유형50 — 함수와 직선의 위치관계 (교점 길이)",
+      "grade": "A",
+      "rationale": "y=ax²와 y=2x+1 교점 A,B 좌표 + 수선의 발 H,C 거리 BC=2√3"
+    },
+    {
+      "q": 17,
+      "chapter": "이차방정식",
+      "difficulty": "상",
+      "score": 4.7,
+      "matched_yutype": 39,
+      "matched_title": "유형39 — 이차방정식 판별식",
+      "grade": "A",
+      "rationale": "P(1), P(2)에 √ 안의 식이 모두 실수가 되는 조건 → 판별식/부등식"
+    },
+    {
+      "q": 18,
+      "chapter": "이차함수",
+      "difficulty": "상",
+      "score": 4.8,
+      "matched_yutype": 53,
+      "matched_title": "유형53 — 이차함수 최대,최소(구간 내) — 구간이동",
+      "grade": "A",
+      "rationale": "(x-a)² 두 구간의 최댓값 조건 + g(a)=-a²+6a로 또다른 최솟값 m 구하기"
+    },
+    {
+      "q": 19,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "상",
+      "score": 4.9,
+      "matched_yutype": 15,
+      "matched_title": "유형15 — 이차/삼차식으로 나눈 나머지",
+      "grade": "A",
+      "rationale": "f(x)g(x)를 4x²로 나눈 몫과 나머지 조건 → f(1)+g(2) 추정"
+    },
+    {
+      "q": 20,
+      "chapter": "이차방정식",
+      "difficulty": "상",
+      "score": 4.9,
+      "matched_yutype": 39,
+      "matched_title": "유형39 — 이차방정식 판별식 (조건 종합)",
+      "grade": "A",
+      "rationale": "두 조건(중근/실근) 동시 만족하도록 m,n 카드뽑기 경우의 수"
+    },
+    {
+      "q": 21,
+      "chapter": "이차함수",
+      "difficulty": "중",
+      "score": 4.0,
+      "matched_yutype": 50,
+      "matched_title": "유형50 — 함수와 직선의 위치관계(판별식)",
+      "grade": "A",
+      "rationale": "k 무관 항상 한 점 만남 → 항등식 + 판별식 (서술형1)"
+    },
+    {
+      "q": 22,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "중",
+      "score": 6.0,
+      "matched_yutype": 15,
+      "matched_title": "유형15 — 이차식으로 나눈 나머지",
+      "grade": "A",
+      "rationale": "x²+x+1로 나눈 나머지 — 1의 거듭제곱근 활용 (서술형2)"
+    }
+  ],
+  "key_problems": [
+    {
+      "q": 16,
+      "topic": "이차함수",
+      "score": 4.7,
+      "difficulty": "중",
+      "exam_latex": "그림과 같이 이차함수 $y=ax ^{\\,2}$($a>0$)의 그래프와 직선 $y=2x+1$이 만나는 두 점 $\\mathrm{A}$, $\\mathrm{B}$의 $x$좌표를 각각 $\\alpha$, $\\beta$라 하자. 점 $\\mathrm{B}$에서 $x\\,$축에 내린 수선의 발을 $\\mathrm{H}$, 점 $\\mathrm{A}$에서 선분 $\\mathrm{BH}$에 내린 수선의 발을 $\\mathrm{C}$라 하자. $\\overline{\\mathrm{BC}}=2 \\sqrt{3}$일 때, $(\\alpha+1)(\\beta+1)$의 값은? (단, $\\alpha<\\beta$)",
+      "matched_yutype": 50,
+      "matched_title": "유형50 — 함수와 직선의 위치관계 (교점 + 길이조건)",
+      "fabricated_latex": "그림과 같이 이차함수 $y=ax^2\\,(a>0)$의 그래프와 직선 $y=2x+3$이<br>만나는 두 점 A, B의 $x$좌표를 각각 $\\alpha,\\ \\beta$라 하자. 점 B에서 $x$축에<br>내린 수선의 발을 H, 점 A에서 선분 BH에 내린 수선의 발을 C라<br>하자. $\\overline{\\mathrm{BC}}=2\\sqrt{5}$일 때, $(\\alpha+1)(\\beta+1)$의 값은? (단, $\\alpha<\\beta$)",
+      "comment": "이 문제는 우리 교재 유형50(함수와 직선의 위치관계)에 정리되어 있습니다. 두 그래프의 교점 $x$좌표를 근과 계수의 관계로 표현하고, $\\overline{BC}=\\beta-\\alpha$ 길이조건을 $(\\beta-\\alpha)^2=(\\alpha+\\beta)^2-4\\alpha\\beta$로 변환하는 정형 풀이가 동일하게 적용됩니다.",
+      "capture_files": [
+        "광북16.png"
+      ],
+      "shared_with": [],
+      "exam_images": [
+        "images/[고][2026][1-1-a][경기광명시][광명북고][공수1][다항식의연산-이차함수][02054][그림1-0-1-0]_image3.png"
+      ]
+    },
+    {
+      "q": 17,
+      "topic": "이차방정식",
+      "score": 4.7,
+      "difficulty": "상",
+      "exam_latex": "이차다항식 $P(x)=x ^{\\,2} -ax+8$에 대하여 $\\sqrt{P(1)}+\\sqrt{-P(1)}-\\sqrt{P(2)}-\\sqrt{-P(2)}$의 값이 실수가 되는 모든 $a$의 값의 합은? (단, $a$는 실수이다.)",
+      "matched_yutype": 39,
+      "matched_title": "유형39 — 이차방정식 판별식 / 부호조건",
+      "fabricated_latex": "이차다항식 $P(x)=x^2-ax+6a$에 대하여<br>$\\sqrt{P(1)}+\\sqrt{-P(1)}-\\sqrt{P(2)}-\\sqrt{-P(2)}$의 값이 실수가 되는 모든<br>$a$의 값의 합은? (단, $a$는 정수이다.)",
+      "comment": "이 문제는 우리 교재 유형39(판별식·부호조건)에 동일 풀이절차가 정리되어 있습니다. $\\sqrt{A}+\\sqrt{-A}$ 형태가 실수가 되려면 $A=0$이라는 조건과, $P(1)\\cdot P(2)$의 부호 분석을 결합하는 패턴이 핵심입니다.",
+      "capture_files": [
+        "광북17 운산14.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 18,
+      "topic": "이차함수",
+      "score": 4.8,
+      "difficulty": "상",
+      "exam_latex": "이차함수 $f(x)=(x-a)\\, ^{\\,2}$이 다음 두 조건을 모두 만족시키는 모든 실수 $a$의 값의 범위는 $p\\,\\leq a\\,\\leq q$이다. $p\\,\\leq a\\,\\leq q$에서 이차함수 $g(a)=-a ^{\\,2} +6a$의 최솟값을 $m$이라 할 때, $p+q+m$의 값은?(단, $p$, $q$, $m$은 실수이다.) [$4.8$점]<br><br><div class='cond-box'>(가) $2\\leq x\\,\\leq 10$에서 함수 $f(x)$의 최솟값은 $0$이다.<br>(나) $2\\leq x\\,\\leq 6$에서 함수 $f(x)$의 최댓값과 $6\\leq x\\,\\leq 10$에서 함수 $f(x)$의 최솟값은 같다.</div>",
+      "matched_yutype": 53,
+      "matched_title": "유형53 — 이차함수 최대,최소 (구간 내·구간이동)",
+      "fabricated_latex": "이차함수 $f(x)=(x-a)^2$이 다음 두 조건을 모두 만족시키는 모든<br>실수 $a$의 값의 범위는 $p\\le a\\le q$이다. $p\\le a\\le q$에서 이차함수<br>$g(a)=-a^2+8a$의 최솟값을 $m$이라 할 때, $p+q+m$의 값은?<br>(단, $p,\\ q,\\ m$은 실수이다.)<br><br>(가) $2\\le x\\le 80$에서 함수 $f(x)$의 최솟값은 0이다.<br>(나) $2\\le x\\le 50$에서 함수 $f(x)$의 최댓값은 $5\\le x\\le 80$에서 함수 $f(x)$의 최솟값과 같다.",
+      "comment": "이 문제는 우리 교재 유형53(최대·최소 구간 내, 축 위치 분류)의 정형 풀이가 그대로 적용됩니다. 꼭짓점 $a$의 위치에 따른 케이스 분류 → $a$의 범위 $[p,q]$ → 그 위에서 $g(a)$의 최솟값을 다시 구하는 2단 구조입니다.",
+      "capture_files": [
+        "광북18.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 19,
+      "topic": "항등식과 나머지정리",
+      "score": 4.9,
+      "difficulty": "상",
+      "exam_latex": "이차다항식 $f(x)$와 일차다항식 $g(x)$에 대하여 $f(x)g(x)$를 $f(x)-4x ^{\\,2}$으로 나누었을 때의 몫은 $4x ^{\\,2} +6x+3$이고 나머지는 $f(x)-xg(x)$이다. 이 때, $f(1)+g(2)$의 값은?",
+      "matched_yutype": 15,
+      "matched_title": "유형15 — 이차·삼차식으로 나눈 나머지 + 다항식 추정",
+      "fabricated_latex": "이차다항식 $f(x)$와 일차다항식 $g(x)$에 대하여 $f(x)g(x)$를<br>$f(x)-4x^2$으로 나누었을 때의 몫은 $4x^2+8x+24$이고 나머지는<br>$f(x)-xg(x)$이다. 이 때, $f(1)+g(2)$의 값은?",
+      "comment": "이 문제는 우리 교재 유형15(이차식으로 나눈 나머지) + 유형11(계수비교법)의 결합형입니다. $A=BQ+R$ 항등식에 대입하고 양변의 차수·계수를 비교해 $f$, $g$를 결정하는 표준 절차가 동일하게 적용됩니다.",
+      "capture_files": [
+        "광북19.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    }
+  ],
+  "instructor_comment": "범위가 넓었지만 추가 범위는 기본적인 문제 위주로 출제되었습니다. 교과서의 '탐구활동/창의융합' 페이지와 학교 프린트의 비중이 매우 높았습니다. 특히 이영우T가 강조한 변형 포인트가 그대로 출제되어 적중률을 증명했습니다. 이번 핵심문제 4개는 모두 우리 교재 STEP1·STEP2 핵심 유형으로 커버되며, 풀이 절차가 동형 또는 유사 패턴으로 정리되어 있다. 교재 N회독 + 핵심노트 3회독으로 시험장에서 즉시 인출 가능.",
+  "strategy": [
+    {
+      "key": "프린트 & 교과서 무한 반복",
+      "value": "학교 제공 자료의 변형 포인트를 완벽하게 학습하는 것이 고득점의 핵심입니다."
+    },
+    {
+      "key": "서술형 우선 공략",
+      "value": "서술형이 어렵지 않게 나오는 경향이 뚜렷합니다. 시험지를 받자마자 서술형 먼저 푸는 습관을 들여 점수를 선점하세요."
+    },
+    {
+      "key": "선별 문항 집중",
+      "value": "넓은 범위를 다 보지 말고, 이영우T가 짚어주는 핵심 문항만 N회독하여 효율을 높이세요."
+    }
+  ],
+  "note_intro": "이영우T가 직접 작성한 핵심만 모은 핵심노트",
+  "note_sub": "시험 출제 핵심 패턴을 한 줄로 정리한 직강 노트",
+  "note_sample_images": [
+    "note_sample_1.png",
+    "note_sample_2.png",
+    "note_sample_3.png"
+  ]
+}

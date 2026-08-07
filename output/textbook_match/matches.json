@@ -1,0 +1,5895 @@
+{
+  "광명고": [
+    {
+      "school": "광명고",
+      "q_no": 1,
+      "q_text": "$\\sqrt{3} of -27 + \\sqrt{4} of \\dfrac{64}{\\sqrt} 3 of \\sqrt{8}$의 값은? [3.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-2$"
+        },
+        {
+          "number": 2,
+          "text": "$-1$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$1$"
+        },
+        {
+          "number": 5,
+          "text": "$2$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 4,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0011",
+          "page": 7,
+          "text_orig": "\n\n× \n의 값은?\n① \n② \n③ 2 \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0013",
+          "page": 9,
+          "text_orig": "\n× \n\n\n의 값은?\n① \n\n② \n\n③ 1 \n④ 2 \n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0157",
+          "page": 162,
+          "text_orig": "\n\n\n\n\n의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0169",
+          "page": 173,
+          "text_orig": "\n\n\n\n\n\n\n의 값은?\n① \n\n② 3 \n③ \n\n④ 4 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0173",
+          "page": 177,
+          "text_orig": "\n\n\n\n\n\n의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 2,
+      "q_text": "호의 길이가 $8 \\pi$인 부채꼴의 넓이가 $32 \\pi$일 때, 이 부채꼴의 중심각의 크기는? [3.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$45 ^{\\circ}$"
+        },
+        {
+          "number": 2,
+          "text": "$90 ^{\\circ}$"
+        },
+        {
+          "number": 3,
+          "text": "$135 ^{\\circ}$"
+        },
+        {
+          "number": 4,
+          "text": "$180 ^{\\circ}$"
+        },
+        {
+          "number": 5,
+          "text": "$225 ^{\\circ}$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 28,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 76.5,
+          "s_token": 85.7,
+          "s_lcs": 70.4,
+          "kor_min": 27,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0222",
+          "page": 299,
+          "text_orig": "중심각의 크기가 인 부채꼴의 넓이가 일 때, 이 부채꼴의 호의 길이는?\n① \n② \n\n\n③ \n④ \n\n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 27
+        },
+        {
+          "score": 64.8,
+          "s_token": 53.8,
+          "s_lcs": 82.1,
+          "kor_min": 28,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0224",
+          "page": 300,
+          "text_orig": "그림과 같이 반지름의 길이가 인 부채꼴의 둘레의 길이를 , 넓이를 라 할 때, 이다. 이 부채꼴\n의 중심각의 크기를 라 할 때, 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 53
+        },
+        {
+          "score": 62.1,
+          "s_token": 73.8,
+          "s_lcs": 64.3,
+          "kor_min": 28,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0133",
+          "page": 160,
+          "text_orig": "중심각의 크기가 150인 부채꼴의 넓이가 일 때, 이 부채꼴의 호의 길이를 구하시오.",
+          "choice_n": 0,
+          "kor_len": 31
+        },
+        {
+          "score": 59.8,
+          "s_token": 78.7,
+          "s_lcs": 57.1,
+          "kor_min": 28,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0221",
+          "page": 298,
+          "text_orig": "중심각의 크기가 \n\n인 부채꼴의 호의 길이가 일 때, 이 부채꼴의 넓이를 구하시오.",
+          "choice_n": 0,
+          "kor_len": 31
+        },
+        {
+          "score": 58.9,
+          "s_token": 61.5,
+          "s_lcs": 57.1,
+          "kor_min": 28,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0219",
+          "page": 297,
+          "text_orig": "반지름의 길이가 이고 호의 길이가 인 부채꼴의 중심각의 크기를 , 넓이를 라 할 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 35
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 3,
+      "q_text": "원점 $\\mathrm{O}$와 점 $\\mathrm{P} \\left( -3, 4 \\right)$를 지나는 동경 $\\mathrm{OP}$가 나타내는 각을 $\\theta$라 할 때, $sin \\theta$의 값은? [3.9점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$- \\dfrac{ 4}{ 5}$"
+        },
+        {
+          "number": 2,
+          "text": "$- \\dfrac{ 3}{ 5}$"
+        },
+        {
+          "number": 3,
+          "text": "$- \\dfrac{ 1}{ 5}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{ 3}{ 5}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{ 4}{ 5}$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 24,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 87.3,
+          "s_token": 80.9,
+          "s_lcs": 91.7,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0225",
+          "page": 301,
+          "text_orig": "원점 O와 점 P를 지나는 동경 OP가 나타내는 각의 크기를 라 할 때, cos\n이다. 의 값은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 28
+        },
+        {
+          "score": 86.7,
+          "s_token": 79.2,
+          "s_lcs": 91.7,
+          "kor_min": 24,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0134",
+          "page": 160,
+          "text_orig": "직선  위의 점 중 제3사분면 위의 점을 P라 하자. 원점 O와 점 P를 지나는 동경 OP가 나타내는 \n각의 크기를 라 할 때, sincos의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 43
+        },
+        {
+          "score": 75.8,
+          "s_token": 73.3,
+          "s_lcs": 87.5,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0734",
+          "page": 268,
+          "text_orig": "원점 O와 다음 점 P를 지나는 동경 OP가 나타내는 각의 크기를 라 할 때, sincostan의 값을 각각 \n구하시오.\nP",
+          "choice_n": 0,
+          "kor_len": 34
+        },
+        {
+          "score": 75.8,
+          "s_token": 73.3,
+          "s_lcs": 87.5,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0735",
+          "page": 269,
+          "text_orig": "원점 O와 다음 점 P를 지나는 동경 OP가 나타내는 각의 크기를 라 할 때, sincostan의 값을 각각 \n구하시오.\nP",
+          "choice_n": 0,
+          "kor_len": 34
+        },
+        {
+          "score": 75.8,
+          "s_token": 73.3,
+          "s_lcs": 87.5,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0736",
+          "page": 269,
+          "text_orig": "원점 O와 다음 점 P를 지나는 동경 OP가 나타내는 각의 크기를 라 할 때, sincostan의 값을 각각 \n구하시오.\nP",
+          "choice_n": 0,
+          "kor_len": 34
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 4,
+      "q_text": "삼각함수의 성질로 옳은 것만을 <보기>에서 있는 대로 고른 것은? [4.0점]\n<<BOX_START>>\nㄱ. 사인함수 $y= sin \\theta$의 치역은 $\\left\\{y \\, \\left\\|\\, -1 \\leq y \\leq 1 \\right\\}\\right\\|$이다.<br>ㄴ. 코사인함수 $y= cos \\theta$의 그래프는 $y$축에 대하여 대칭이다.<br>ㄷ. 탄젠트함수 $y= tan \\theta$의 그래프의 점근선은 직선 $\\theta = \\dfrac{n \\pi }{2} + \\dfrac{\\pi}{2}$ ($n$은 정수)이다.\n<<BOX_END>>",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "ㄱ"
+        },
+        {
+          "number": 2,
+          "text": "ㄷ"
+        },
+        {
+          "number": 3,
+          "text": "ㄱ, ㄴ"
+        },
+        {
+          "number": 4,
+          "text": "ㄴ, ㄷ"
+        },
+        {
+          "number": 5,
+          "text": "ㄱ, ㄴ, ㄷ"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 76,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 64.6,
+          "s_token": 63.6,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0004",
+          "page": 2,
+          "text_orig": "함수 \n\n\n에 대하여 × 의 값은?\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 62.2,
+          "s_token": 56.2,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0011",
+          "page": 9,
+          "text_orig": "함수 loglog에 대하여 ⋯의 값은?\n① 2 \n② \n\n③ 3\n④ \n\n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 62.2,
+          "s_token": 80.4,
+          "s_lcs": 50.0,
+          "kor_min": 42,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0237",
+          "page": 309,
+          "text_orig": "함수 sin에 대하여 < 보기 >에서 옳은 것만을 있는 대로 고른 것은?\n< 보 기 >\nㄱ. \n\nㄴ. 함수 의 주기는 이다.\nㄷ. 함수 의 최댓값은 이다.\n① ㄴ \n② ㄷ \n③ ㄱ, ㄴ\n④ ㄴ, ㄷ \n⑤ ㄱ, ㄴ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 42
+        },
+        {
+          "score": 62.1,
+          "s_token": 77.6,
+          "s_lcs": 70.0,
+          "kor_min": 10,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0064",
+          "page": 54,
+          "text_orig": "\n인 에 대하여 sincostan일 때, tan의 값은?\n① \n\n② \n\n③ -1 \n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 10
+        },
+        {
+          "score": 61.4,
+          "s_token": 75.6,
+          "s_lcs": 70.0,
+          "kor_min": 10,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0077",
+          "page": 64,
+          "text_orig": "\n인 에 대하여 \ncos\n\n\nsintan\n\n\n일 때, tan의 값은?\n① \n\n\n② \n\n\n③ \n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 10
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 5,
+      "q_text": "$a^x =\\sqrt{2} -1$일 때, $\\dfrac{a^{3x} + a^-3x}{a^{2x} +a^-2x}$의 값은? (단, $a>0$) [4.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{4 \\sqrt{2}}{3}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\dfrac{3 \\sqrt{2}}{2}$"
+        },
+        {
+          "number": 3,
+          "text": "$5 \\dfrac{\\sqrt{2}}{3}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{11 \\sqrt{2}}{6}$"
+        },
+        {
+          "number": 5,
+          "text": "$2 \\sqrt{2}$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 7,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0017",
+          "page": 51,
+          "text_orig": "\n\n×\n\n×\n\n일 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 67.2,
+          "s_token": 90.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0047",
+          "page": 72,
+          "text_orig": "일 때, loglog\n의 값은?\n① 2.2 \n② 2.3 \n③ 2.4\n④ 2.5 \n⑤ 2.6",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 64.4,
+          "s_token": 80.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0040",
+          "page": 67,
+          "text_orig": "loglog일 때, 의 값은?\n① \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 64.1,
+          "s_token": 60.7,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0094",
+          "page": 102,
+          "text_orig": "그림과 같이 함수 log의 그래프의 제1사분면 위에 있는 세 점 A, B, C에서 축에 내린 수선의 발을 \n각각 D, E, F라 하자. \nOD\nDE\nEF이고 두 사각형 ADEB, BEFC의 넓이의 차가 1일 때, 의 값\n은? (단, O는 원점이고, 는 상수이다.)\n① 4 \n② 5 \n③ 6\n④ 7 \n⑤ 8",
+          "choice_n": 5,
+          "kor_len": 66
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0011",
+          "page": 7,
+          "text_orig": "\n\n× \n의 값은?\n① \n② \n③ 2 \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 6,
+      "q_text": "$log \\left( 1 - \\dfrac{1}{2} \\right) + log \\left( 1 - \\dfrac{1}{3} \\right) + log \\left( 1 - \\dfrac{1}{4} \\right) + \\, \\cdots \\, + log \\left( 1 - \\dfrac{1}{100} \\right)$의 값은? [4.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-2$"
+        },
+        {
+          "number": 2,
+          "text": "$-1$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$1$"
+        },
+        {
+          "number": 5,
+          "text": "$2$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 4,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0006",
+          "page": 4,
+          "text_orig": "log\n\nlog\nlog의 값은?\n① log\n\n② log\n\n③ log\n\n④ log\n\n⑤ log",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0007",
+          "page": 5,
+          "text_orig": "log×× log의 값은?\n① \n\n② \n\n③ \n\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0011",
+          "page": 7,
+          "text_orig": "\n\n× \n의 값은?\n① \n② \n③ 2 \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0013",
+          "page": 9,
+          "text_orig": "\n× \n\n\n의 값은?\n① \n\n② \n\n③ 1 \n④ 2 \n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0017",
+          "page": 11,
+          "text_orig": "log\nlog\n\n\n의 값은?\n① \n\n\n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 7,
+      "q_text": "상수 $a$에 대하여 함수 $y= a^{2x}+1 -5$ ($a>0$, $a \\neq 1$)의 그래프가 두 점 $\\left( -2, 3 \\right)$, $\\left( 0, b \\right)$를 지날 때, $a+b$의 값은? [4.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-4$"
+        },
+        {
+          "number": 2,
+          "text": "$-2$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$2$"
+        },
+        {
+          "number": 5,
+          "text": "$4$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 23,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 90.6,
+          "s_token": 89.7,
+          "s_lcs": 91.3,
+          "kor_min": 23,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0105",
+          "page": 168,
+          "text_orig": "두 양수 에 대하여 함수 ×의 그래프가 두 점 를 지날 때, 의 값은?\n① 2  \n② 4    \n③ 6\n④ 8  \n⑤ 10",
+          "choice_n": 5,
+          "kor_len": 23
+        },
+        {
+          "score": 76.5,
+          "s_token": 100.0,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0004",
+          "page": 2,
+          "text_orig": "함수 \n\n\n에 대하여 × 의 값은?\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 76.3,
+          "s_token": 60.3,
+          "s_lcs": 87.0,
+          "kor_min": 23,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0197",
+          "page": 247,
+          "text_orig": "그림과 같이 상수  ()에 대하여 지수함수 의 그래프와 직선 가 제사분면 위의 서로 다른 \n두 점 AB에서 만난다. 두 점 AB에서 축에 내린 수선의 발을 각각 CD라 하자. \nAB이고 사각\n형 ACDB의 넓이가 일 때, \nOA×\nOB의 값은?  (단, O는 원점이다.)\n① 10 \n② 12 \n③ 14 \n④ 16 \n⑤ 18",
+          "choice_n": 5,
+          "kor_len": 78
+        },
+        {
+          "score": 75.5,
+          "s_token": 77.8,
+          "s_lcs": 73.9,
+          "kor_min": 23,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0077",
+          "page": 81,
+          "text_orig": "두 상수 , 에 대하여 함수 log의 역함수를 라 하자. 두 곡선 가 두 점 \nA(1, ), B(2, )에서 만날 때, 의 값은?\n① 1 \n② \n\n③ 2\n④ \n\n⑤ 3",
+          "choice_n": 5,
+          "kor_len": 31
+        },
+        {
+          "score": 74.8,
+          "s_token": 89.8,
+          "s_lcs": 81.8,
+          "kor_min": 11,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0022",
+          "page": 14,
+          "text_orig": "양수 에 대하여 일 때, \n\n\n\n\n의 값은?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 11
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 8,
+      "q_text": "부등식 $\\left( x-2 \\right) \\left( 3^-x+4 - \\dfrac{1}{81} \\right) >0$을 만족시키는 모든 자연수 $x$의 값의 개수는? [4.3점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$1$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$3$"
+        },
+        {
+          "number": 4,
+          "text": "$4$"
+        },
+        {
+          "number": 5,
+          "text": "$5$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 21,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 100.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0162",
+          "page": 216,
+          "text_orig": "부등식 ×≤을 만족시키는 자연수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 16
+        },
+        {
+          "score": 88.8,
+          "s_token": 71.9,
+          "s_lcs": 100.0,
+          "kor_min": 16,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0121",
+          "page": 146,
+          "text_orig": "부등식\nlog≤log\n을 만족시키는 자연수 의 개수는?\n① 11 \n② 12 \n③ 13\n④ 14 \n⑤ 15",
+          "choice_n": 5,
+          "kor_len": 16
+        },
+        {
+          "score": 87.5,
+          "s_token": 68.9,
+          "s_lcs": 100.0,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0182",
+          "page": 233,
+          "text_orig": "부등식 logloglog을 만족시키는 자연수 의 개수는?\n① 26 \n② 28 \n③ 30\n④ 32 \n⑤ 34",
+          "choice_n": 5,
+          "kor_len": 16
+        },
+        {
+          "score": 85.9,
+          "s_token": 84.7,
+          "s_lcs": 86.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0179",
+          "page": 231,
+          "text_orig": "부등식 loglog≤를 만족시키는 정수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 85.7,
+          "s_token": 89.3,
+          "s_lcs": 83.3,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0160",
+          "page": 214,
+          "text_orig": "부등식 \n을 만족시키는 모든 정수 의 값의 합은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 18
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 9,
+      "q_text": "방정식 $log_2 \\left( 2x-3 \\right) = 1- log_2 \\left( 7-2x \\right)$를 만족시키는 모든 실수 $x$의 값의 합은? [4.4점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{ 5}{ 2}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\dfrac{ 5+\\sqrt{2}}{2}$"
+        },
+        {
+          "number": 3,
+          "text": "$\\dfrac{5+ \\sqrt{3}}{2}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{ 7}{ 2}$"
+        },
+        {
+          "number": 5,
+          "text": "$5$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 19,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 95.0,
+          "s_token": 95.8,
+          "s_lcs": 94.4,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0152",
+          "page": 208,
+          "text_orig": "방정식 을 만족시키는 모든 실수 의 값의 합은?\n① \n② \n\n\n③ \n\n\n④ \n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 18
+        },
+        {
+          "score": 94.5,
+          "s_token": 94.5,
+          "s_lcs": 94.4,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0170",
+          "page": 223,
+          "text_orig": "방정식 loglog를 만족시키는 모든 실수 의 값의 곱은?\n① \n② \n\n\n③ \n\n\n④ \n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 18
+        },
+        {
+          "score": 93.2,
+          "s_token": 93.1,
+          "s_lcs": 93.3,
+          "kor_min": 15,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0001",
+          "page": 1,
+          "text_orig": "\n\n\n\n을 만족시키는 모든 실수 의 값의 합은?\n① 1 \n② 3\n③ 5\n④ 7 \n⑤ 9",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 84.4,
+          "s_token": 81.0,
+          "s_lcs": 86.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0054",
+          "page": 76,
+          "text_orig": "방정식 \nlog\n\n\nlog\n\n\nlog\n\n를 만족시키는 양수 의 값은? (단, ≠)\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 83.2,
+          "s_token": 83.0,
+          "s_lcs": 83.3,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0161",
+          "page": 215,
+          "text_orig": "부등식 ≤를 만족시키는 모든 정수 의 값의 합은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 18
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 10,
+      "q_text": "함수 $y=log_3 9x$의 그래프를 $x$축의 방향으로 $-2$만큼 평행이동한 그래프가 함수 $y= 3^x -2$의 그래프를 $x$축으로 $a$만큼 평행이동한 그래프와 직선 $y=x$에 대하여 대칭일 때, 상수 $a$의 값은? [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-3$"
+        },
+        {
+          "number": 2,
+          "text": "$-2$"
+        },
+        {
+          "number": 3,
+          "text": "$-1$"
+        },
+        {
+          "number": 4,
+          "text": "$1$"
+        },
+        {
+          "number": 5,
+          "text": "$2$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 61,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 88.9,
+          "s_token": 92.1,
+          "s_lcs": 96.7,
+          "kor_min": 61,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0134",
+          "page": 193,
+          "text_orig": "함수 의 그래프를 축의 방향으로 만큼 평행이동한 그래프가 함수 log의 그래프를 축\n의 방향으로 만큼 평행이동한 그래프와 직선 에 대하여 대칭일 때, 상수 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 67
+        },
+        {
+          "score": 86.2,
+          "s_token": 90.9,
+          "s_lcs": 92.3,
+          "kor_min": 13,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0427",
+          "page": 524,
+          "text_orig": "수열 에 대하여\n     \n\n\n\n\n\n\n일 때, 상수 의 값은?\n① -5 \n② -4 \n③ -3\n④ -2 \n⑤ -1",
+          "choice_n": 5,
+          "kor_len": 13
+        },
+        {
+          "score": 82.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0004",
+          "page": 2,
+          "text_orig": "함수 \n\n\n에 대하여 × 의 값은?\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 82.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 9,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0011",
+          "page": 9,
+          "text_orig": "함수 loglog에 대하여 ⋯의 값은?\n① 2 \n② \n\n③ 3\n④ \n\n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 79.6,
+          "s_token": 89.8,
+          "s_lcs": 90.9,
+          "kor_min": 11,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0022",
+          "page": 14,
+          "text_orig": "양수 에 대하여 일 때, \n\n\n\n\n의 값은?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 11
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 11,
+      "q_text": "$3^a =2$, $3^b =5$일 때, $log_{10} 6$을 $a$, $b$로 나타내면? [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$a-\\dfrac{2}{a}-b$"
+        },
+        {
+          "number": 2,
+          "text": "$a+\\dfrac{1}{a}-b$"
+        },
+        {
+          "number": 3,
+          "text": "$a-\\dfrac{1}{a}+b$"
+        },
+        {
+          "number": 4,
+          "text": "$a+\\dfrac{1}{a}+b$"
+        },
+        {
+          "number": 5,
+          "text": "$a+\\dfrac{2}{a}+b$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 9,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 54.0,
+          "s_token": 64.7,
+          "s_lcs": 66.7,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0010",
+          "page": 7,
+          "text_orig": "loglog일 때, 다음 중 log\n\n을 로 나타낸 것은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 12
+        },
+        {
+          "score": 54.0,
+          "s_token": 64.7,
+          "s_lcs": 66.7,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0019",
+          "page": 12,
+          "text_orig": "log \nlog\nlog 일 때, 다음 중 log을 로 나타낸 것은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 12
+        },
+        {
+          "score": 53.4,
+          "s_token": 64.3,
+          "s_lcs": 77.8,
+          "kor_min": 9,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0584",
+          "page": 34,
+          "text_orig": "loglog일 때, 다음을 로 나타내시오.\nlog",
+          "choice_n": 0,
+          "kor_len": 11
+        },
+        {
+          "score": 53.4,
+          "s_token": 64.3,
+          "s_lcs": 77.8,
+          "kor_min": 9,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0585",
+          "page": 34,
+          "text_orig": "loglog일 때, 다음을 로 나타내시오.\nlog\n\n\n",
+          "choice_n": 0,
+          "kor_len": 11
+        },
+        {
+          "score": 53.4,
+          "s_token": 64.3,
+          "s_lcs": 77.8,
+          "kor_min": 9,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0586",
+          "page": 35,
+          "text_orig": "loglog일 때, 다음을 로 나타내시오.\nloglog",
+          "choice_n": 0,
+          "kor_len": 11
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 12,
+      "q_text": "다음과 같이 주어진 세 수 $a$, $b$, $c$에 대하여 $a+b+c$의 값은? [4.6점]\n<<BOX_START>>\n$a= 81^{ log_3 32 - log_3 16 }$<br>$b= log_5 \\left\\{ log_3 \\left( log_2 8 \\right) \\right\\}$<br>$c= log_6 3 + log_6 8 + log_6 9$\n<<BOX_END>>",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$18$"
+        },
+        {
+          "number": 2,
+          "text": "$19$"
+        },
+        {
+          "number": 3,
+          "text": "$20$"
+        },
+        {
+          "number": 4,
+          "text": "$21$"
+        },
+        {
+          "number": 5,
+          "text": "$22$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 18,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 76.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0014",
+          "page": 11,
+          "text_orig": "\n\n\n\n\n에 대하여\nlogloglog⋯log\n의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 7
+        },
+        {
+          "score": 74.2,
+          "s_token": 93.0,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0011",
+          "page": 9,
+          "text_orig": "함수 loglog에 대하여 ⋯의 값은?\n① 2 \n② \n\n③ 3\n④ \n\n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 72.6,
+          "s_token": 88.9,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0005",
+          "page": 3,
+          "text_orig": " log에 대하여 의 값은?\n① -2 \n② -1 \n③ 0 \n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 7
+        },
+        {
+          "score": 70.8,
+          "s_token": 82.1,
+          "s_lcs": 75.0,
+          "kor_min": 12,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0065",
+          "page": 83,
+          "text_orig": "세 양수 에 대하여 일 때, log\n\n의 값은?\n① \n\n② \n\n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 12
+        },
+        {
+          "score": 70.0,
+          "s_token": 80.0,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0004",
+          "page": 2,
+          "text_orig": "함수 \n\n\n에 대하여 × 의 값은?\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 9
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 13,
+      "q_text": "정의역이 $\\left\\{x\\, \\left|\\, -1 \\leq x \\leq 1 \\right\\}\\right|$인 함수 $f \\left( x \\right) = \\left( \\dfrac{\\sqrt{3}}{2} \\right)^-x+a +b$의 최댓값, 최솟값이 각각 $\\dfrac{ 9}{ 16}$, $\\dfrac{ 3}{ 8}$일 때, $\\dfrac{a}{b}$의 값은? (단, $a$, $b$는 상수이다.) [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-16$"
+        },
+        {
+          "number": 2,
+          "text": "$-12$"
+        },
+        {
+          "number": 3,
+          "text": "$-8$"
+        },
+        {
+          "number": 4,
+          "text": "$-4$"
+        },
+        {
+          "number": 5,
+          "text": "$-2$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 29,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 94.9,
+          "s_token": 92.5,
+          "s_lcs": 96.6,
+          "kor_min": 29,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0090",
+          "page": 98,
+          "text_orig": "정의역이 ≤≤인 함수 의 최댓값과 최솟값이 각각 1, -7일 때, 의 값은? \n(단, 는 상수이다.)\n① 1 \n② 3 \n③ 5\n④ 7 \n⑤ 9",
+          "choice_n": 5,
+          "kor_len": 29
+        },
+        {
+          "score": 85.7,
+          "s_token": 80.0,
+          "s_lcs": 89.5,
+          "kor_min": 19,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0258",
+          "page": 325,
+          "text_orig": "함수 sincos의 최솟값이 일 때, 최댓값은?  (단, 는 상수이다.)\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 19
+        },
+        {
+          "score": 85.1,
+          "s_token": 80.0,
+          "s_lcs": 88.5,
+          "kor_min": 26,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0140",
+          "page": 198,
+          "text_orig": "≤≤에서 함수 log\n\n의 최댓값과 최솟값이 각각 일 때, 의 값은? (단, 는 \n상수이다.)\n① 2 \n② 4 \n③ 6\n④ 8 \n⑤ 10",
+          "choice_n": 5,
+          "kor_len": 26
+        },
+        {
+          "score": 84.0,
+          "s_token": 82.6,
+          "s_lcs": 85.0,
+          "kor_min": 20,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0116",
+          "page": 177,
+          "text_orig": "≤≤에서 함수 의 최댓값과 최솟값이 각각 일 때, 의 값은?\n① \n② \n\n③ \n\n④ \n\n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 20
+        },
+        {
+          "score": 78.4,
+          "s_token": 72.9,
+          "s_lcs": 82.1,
+          "kor_min": 28,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0142",
+          "page": 200,
+          "text_orig": "≤≤에서 함수 log의 최댓값과 최솟값이 각각 일 때, 의 값은?  (단, 이고, \n는 상수이다.)\n① 11 \n② 12 \n③ 13\n④ 14 \n⑤ 15",
+          "choice_n": 5,
+          "kor_len": 28
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 14,
+      "q_text": "$sin \\theta + cos \\theta = \\dfrac{ 3}{ 4}$일 때, $sin^3 \\theta + cos^3 \\theta$의 값은? [4.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{ 27}{ 64}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\dfrac{ 75 }{ 128}$"
+        },
+        {
+          "number": 3,
+          "text": "$\\dfrac{ 3}{ 4}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{ 117}{ 128}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{ 69}{ 64}$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 6,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0135",
+          "page": 161,
+          "text_orig": "sincos\n\n일 때, sincos의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0017",
+          "page": 51,
+          "text_orig": "\n\n×\n\n×\n\n일 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0231",
+          "page": 304,
+          "text_orig": "sincos\n일 때, sincos의 값은?\n① \n\n\n② \n\n③ \n\n\n④ \n\n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0256",
+          "page": 323,
+          "text_orig": "sin\ncos\n\n\n, cos\n\n일 때, cos\nsin\n의 값은?\n① \n\n\n② \n\n③ \n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 66.9,
+          "s_token": 88.9,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0142",
+          "page": 166,
+          "text_orig": "sin\n\n일 때, cos\ntan의 값은?\n① \n\n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 5
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 15,
+      "q_text": "다음 식을 간단히 하면? [4.9점]\t$sin \\left( 3 \\dfrac{\\pi}{2} +x \\right) -cos \\left( \\pi -x \\right) + tan x tan \\left( 3 \\dfrac{\\pi}{2} -x \\right)$",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-1$"
+        },
+        {
+          "number": 2,
+          "text": "$0$"
+        },
+        {
+          "number": 3,
+          "text": "$1$"
+        },
+        {
+          "number": 4,
+          "text": "$2cos x -1$"
+        },
+        {
+          "number": 5,
+          "text": "$2cos x +1$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 10,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 62.6,
+          "s_token": 81.8,
+          "s_lcs": 80.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0528",
+          "page": 12,
+          "text_orig": "다음 식을 간단히 하시오.\n\n\n×\n",
+          "choice_n": 0,
+          "kor_len": 10
+        },
+        {
+          "score": 62.6,
+          "s_token": 81.8,
+          "s_lcs": 80.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0529",
+          "page": 13,
+          "text_orig": "다음 식을 간단히 하시오.\n\n\n\n\n\n\n\n\n",
+          "choice_n": 0,
+          "kor_len": 10
+        },
+        {
+          "score": 62.6,
+          "s_token": 81.8,
+          "s_lcs": 80.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0551",
+          "page": 21,
+          "text_orig": "다음 식을 간단히 하시오.\n\n\n\n\n×\n\n",
+          "choice_n": 0,
+          "kor_len": 10
+        },
+        {
+          "score": 62.6,
+          "s_token": 81.8,
+          "s_lcs": 80.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0552",
+          "page": 22,
+          "text_orig": "다음 식을 간단히 하시오.\n÷",
+          "choice_n": 0,
+          "kor_len": 10
+        },
+        {
+          "score": 62.6,
+          "s_token": 81.8,
+          "s_lcs": 80.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0553",
+          "page": 22,
+          "text_orig": "다음 식을 간단히 하시오.\n×÷",
+          "choice_n": 0,
+          "kor_len": 10
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 16,
+      "q_text": "그림과 같이 반지름의 길이가 $1$인 원 위의 점 $\\mathrm{P}$에서 $x$축에 수선의 발을 $\\mathrm{H}$라고 하고, $\\mathrm{ang} \\leq AOP = \\theta$라 하자. $tan \\theta = - \\dfrac{\\sqrt{7}}{3}$일 때, 삼각형 $\\mathrm{APH}$의 넓이는 $\\dfrac{n}{m} \\sqrt{7}$이다. 이때, $m+n$의 값은? (단, 점 $\\mathrm{P}$는 제$2$사분면 위의 점이고, $m$, $n$은 서로소인 자연수이다.) [5.0점]<<IMG:image1>>",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$39$"
+        },
+        {
+          "number": 2,
+          "text": "$41$"
+        },
+        {
+          "number": 3,
+          "text": "$43$"
+        },
+        {
+          "number": 4,
+          "text": "$45$"
+        },
+        {
+          "number": 5,
+          "text": "$47$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 72,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 77.6,
+          "s_token": 74.1,
+          "s_lcs": 80.0,
+          "kor_min": 15,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0100",
+          "page": 96,
+          "text_orig": "\nAB\nBC\n인 삼각형 ABC에서 cos\n일 때, 삼각형 ABC의 넓이는?\n① \n② \n③ 3 \n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 73.3,
+          "s_token": 71.1,
+          "s_lcs": 78.6,
+          "kor_min": 14,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0317",
+          "page": 385,
+          "text_orig": "삼각형 ABC에서 \nAB\nBC\nCA, ∠B일 때, 삼각형 ABC의 넓이는?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 14
+        },
+        {
+          "score": 70.7,
+          "s_token": 61.9,
+          "s_lcs": 76.7,
+          "kor_min": 30,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0122",
+          "page": 126,
+          "text_orig": "그림과 \n같이 \nAC\nBC인 \n삼각형 \nABC에서 \n선분 \nAC의 \n중점을 \nM이라 \n하자. \nBM \nsin∠BCAsin∠ABM일 때, 삼각형 ABC의 넓이는?\n① \n\n② 3 \n③ \n\n④ 4 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 30
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0017",
+          "page": 51,
+          "text_orig": "\n\n×\n\n×\n\n일 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 67.4,
+          "s_token": 71.8,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0063",
+          "page": 53,
+          "text_orig": "sin\n이고 tan일 때, tan\ncos\n\n의 값은?\n① -2 \n② \n③ \n\n\n④ \n\n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 7
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 17,
+      "q_text": "자연수 $n$과 정수 $a$에 대하여 $-n-a$의 $n$제곱근 중 실수인 것의 개수를 $f \\left( n \\right)$이라 하자. $f \\left( 6 \\right) +f \\left( 7 \\right) + f \\left( 8 \\right) + f \\left( 9 \\right) =4$일 때, $a$의 값은? [5.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-4$"
+        },
+        {
+          "number": 2,
+          "text": "$-5$"
+        },
+        {
+          "number": 3,
+          "text": "$-6$"
+        },
+        {
+          "number": 4,
+          "text": "$-7$"
+        },
+        {
+          "number": 5,
+          "text": "$-8$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 33,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 79.8,
+          "s_token": 90.3,
+          "s_lcs": 90.9,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0032",
+          "page": 61,
+          "text_orig": "실수 에 대하여 일 때, \n\n\n의 값은?\n① \n\n② \n③ \n\n④ \n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 11
+        },
+        {
+          "score": 78.7,
+          "s_token": 69.5,
+          "s_lcs": 84.8,
+          "kor_min": 33,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0021",
+          "page": 14,
+          "text_orig": "2 이상의 자연수 과 실수 에 대하여 실수 의 제곱근 중에서 서로 다른 실수인 것의 개수를 라 \n하자. 을 만족시키는 2 이상 10 이하인 모든 자연수 의 값의 합은?\n① 6 \n② 12 \n③ 18 \n④ 24 \n⑤ 30",
+          "choice_n": 5,
+          "kor_len": 58
+        },
+        {
+          "score": 78.0,
+          "s_token": 85.1,
+          "s_lcs": 90.9,
+          "kor_min": 11,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0022",
+          "page": 14,
+          "text_orig": "양수 에 대하여 일 때, \n\n\n\n\n의 값은?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 11
+        },
+        {
+          "score": 77.3,
+          "s_token": 83.3,
+          "s_lcs": 90.9,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0033",
+          "page": 62,
+          "text_orig": "실수 에 대하여 일 때, 의 값은?\n① 2 \n② 4 \n③ 6\n④ 8 \n⑤ 10",
+          "choice_n": 5,
+          "kor_len": 11
+        },
+        {
+          "score": 76.4,
+          "s_token": 84.8,
+          "s_lcs": 83.3,
+          "kor_min": 12,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0012",
+          "page": 8,
+          "text_orig": "두 양수 에 대하여  일 때, 의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 12
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 18,
+      "q_text": "$0 \\leq x < \\pi$에서 함수 $f \\left( x \\right) = a sin 3x +b$의 그래프가 두 직선 $y=3$, $y= -1$과 만나는 점의 개수가 각각 $3$, $4$일 때, 정수 $a$, $b$에 대하여 $a^2 +b^2$의 최솟값은? [5.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$25$"
+        },
+        {
+          "number": 2,
+          "text": "$34$"
+        },
+        {
+          "number": 3,
+          "text": "$41$"
+        },
+        {
+          "number": 4,
+          "text": "$45$"
+        },
+        {
+          "number": 5,
+          "text": "$58$"
+        }
+      ],
+      "q_chapter": "",
+      "q_kor_len": 37,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 78.4,
+          "s_token": 88.9,
+          "s_lcs": 100.0,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0004",
+          "page": 2,
+          "text_orig": "함수 \n\n\n에 대하여 × 의 값은?\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 76.4,
+          "s_token": 78.9,
+          "s_lcs": 78.6,
+          "kor_min": 14,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0053",
+          "page": 50,
+          "text_orig": "점 P()가 직선  위의 점일 때,\n\n\n\n\n\n\n\n\n\n\n의 최솟값은?\n① 1 \n② \n\n\n③ \n\n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 14
+        },
+        {
+          "score": 76.1,
+          "s_token": 82.1,
+          "s_lcs": 100.0,
+          "kor_min": 9,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0011",
+          "page": 9,
+          "text_orig": "함수 loglog에 대하여 ⋯의 값은?\n① 2 \n② \n\n③ 3\n④ \n\n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 72.4,
+          "s_token": 86.4,
+          "s_lcs": 75.0,
+          "kor_min": 12,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0007",
+          "page": 5,
+          "text_orig": "두 양수 에 대하여 \n\n일 때, \n\n의 값은?\n① 2 \n② \n\n③ 3\n④ \n\n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 12
+        },
+        {
+          "score": 71.3,
+          "s_token": 83.3,
+          "s_lcs": 75.0,
+          "kor_min": 12,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0014",
+          "page": 9,
+          "text_orig": "두 실수 에 대하여 일 때, \n\n\n\n의 값은?\n① \n② \n③ 2 \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 12
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 19,
+      "q_text": "$3^x = 8$, $36^y = 16$일 때, $\\dfrac{3}{x} - \\dfrac{2}{y}$의 값을 구하고, 풀이과정을 서술하시오. [6.0점]",
+      "q_choices": [],
+      "q_chapter": "",
+      "q_kor_len": 19,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 64.3,
+          "s_token": 61.5,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0003",
+          "page": 2,
+          "text_orig": "\n\n× \n의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 7
+        },
+        {
+          "score": 64.3,
+          "s_token": 61.5,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0867",
+          "page": 508,
+          "text_orig": "\n\n\n\n\n\n\n\n의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 7
+        },
+        {
+          "score": 61.0,
+          "s_token": 50.7,
+          "s_lcs": 81.8,
+          "kor_min": 11,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0179",
+          "page": 207,
+          "text_orig": "\n\n이고 tantan일 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 11
+        },
+        {
+          "score": 61.0,
+          "s_token": 50.7,
+          "s_lcs": 81.8,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0234",
+          "page": 307,
+          "text_orig": "\n이고 tan\ntan\n\n\n\n일 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 11
+        },
+        {
+          "score": 60.8,
+          "s_token": 50.0,
+          "s_lcs": 81.8,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0232",
+          "page": 305,
+          "text_orig": "\n이고 sincos\n일 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 11
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 20,
+      "q_text": "부등식 $log_4 \\left( x^2 +9x + 14 \\right) \\leq log_{16} \\left( x^2 -10x +25 \\right)$를 만족시키는 모든 실수 $x$의 범위를 구하고, 풀이과정을 서술하시오. [7.0점]",
+      "q_choices": [],
+      "q_chapter": "",
+      "q_kor_len": 31,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 68.7,
+          "s_token": 78.4,
+          "s_lcs": 72.2,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0161",
+          "page": 215,
+          "text_orig": "부등식 ≤를 만족시키는 모든 정수 의 값의 합은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 18
+        },
+        {
+          "score": 68.5,
+          "s_token": 76.4,
+          "s_lcs": 73.3,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0179",
+          "page": 231,
+          "text_orig": "부등식 loglog≤를 만족시키는 정수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 66.6,
+          "s_token": 62.2,
+          "s_lcs": 69.6,
+          "kor_min": 23,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0004",
+          "page": 3,
+          "text_orig": "부등식\n≤\n\n× \n≤\n\n을 만족시키는 모든 자연수 의 값의 합을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 23
+        },
+        {
+          "score": 66.2,
+          "s_token": 52.9,
+          "s_lcs": 75.0,
+          "kor_min": 16,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0155",
+          "page": 179,
+          "text_orig": "cos\n\ncos\n\ncos\n\n⋯cos\n\n\n\n를 만족시키는 자연수 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 16
+        },
+        {
+          "score": 65.7,
+          "s_token": 79.2,
+          "s_lcs": 66.7,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0170",
+          "page": 223,
+          "text_orig": "방정식 loglog를 만족시키는 모든 실수 의 값의 곱은?\n① \n② \n\n\n③ \n\n\n④ \n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 18
+        }
+      ]
+    },
+    {
+      "school": "광명고",
+      "q_no": 21,
+      "q_text": "두 함수\t$g \\left( x \\right) = 7- log_2 \\left( x+12 \\right)$, $f \\left( x \\right) =3 sin^2 x - 3 cos x +k$\n가 있다. $0 \\leq x < 2 \\pi$에서 합성함수 $\\left( g \\circ f \\right) \\left( x \\right)$의 최솟값이 $3$일 때, $\\left( g \\circ f \\right) \\left( x \\right)$의 최댓값을 구하고, 풀이 과정을 서술하시오. (단, $k$는 상수이다.) [7.0점]\n정답",
+      "q_choices": [],
+      "q_chapter": "",
+      "q_kor_len": 46,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 85.3,
+          "s_token": 86.1,
+          "s_lcs": 94.7,
+          "kor_min": 19,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0258",
+          "page": 325,
+          "text_orig": "함수 sincos의 최솟값이 일 때, 최댓값은?  (단, 는 상수이다.)\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 19
+        },
+        {
+          "score": 76.2,
+          "s_token": 72.0,
+          "s_lcs": 78.9,
+          "kor_min": 19,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0079",
+          "page": 94,
+          "text_orig": "log일 때, loglog이다. 의 값을 구하시오. (단, 이고, 는 상수이다.)",
+          "choice_n": 0,
+          "kor_len": 19
+        },
+        {
+          "score": 73.1,
+          "s_token": 85.3,
+          "s_lcs": 75.0,
+          "kor_min": 24,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0105",
+          "page": 116,
+          "text_orig": "두 함수 \n log≠\n이 있다. ≤≤에서 함수 ∘의 최솟값이 2, 최댓값이 일 때, 의 값은?\n① log\n② log\n③ 0\n④ log\n⑤ log",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 72.7,
+          "s_token": 70.3,
+          "s_lcs": 90.9,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0232",
+          "page": 305,
+          "text_orig": "\n이고 sincos\n일 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 11
+        },
+        {
+          "score": 70.3,
+          "s_token": 63.4,
+          "s_lcs": 90.9,
+          "kor_min": 11,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0179",
+          "page": 207,
+          "text_orig": "\n\n이고 tantan일 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 11
+        }
+      ]
+    }
+  ],
+  "광명북고": [
+    {
+      "school": "광명북고",
+      "q_no": 1,
+      "q_text": "$3^{\\frac{1}{2}} \\times 9^{-\\frac{1}{4}}$의 값은? [3.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$1$"
+        },
+        {
+          "number": 2,
+          "text": "$\\sqrt{3}$"
+        },
+        {
+          "number": 3,
+          "text": "$2$"
+        },
+        {
+          "number": 4,
+          "text": "$3$"
+        },
+        {
+          "number": 5,
+          "text": "$2\\sqrt{3}$"
+        }
+      ],
+      "q_chapter": "지수",
+      "q_kor_len": 4,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0011",
+          "page": 7,
+          "text_orig": "\n\n× \n의 값은?\n① \n② \n③ 2 \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0013",
+          "page": 9,
+          "text_orig": "\n× \n\n\n의 값은?\n① \n\n② \n\n③ 1 \n④ 2 \n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0157",
+          "page": 162,
+          "text_orig": "\n\n\n\n\n의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0169",
+          "page": 173,
+          "text_orig": "\n\n\n\n\n\n\n의 값은?\n① \n\n② 3 \n③ \n\n④ 4 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0173",
+          "page": 177,
+          "text_orig": "\n\n\n\n\n\n의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 2,
+      "q_text": "반지름의 길이가 $6$, 중심각의 크기가 $\\dfrac{2}{3}\\pi$인 부채꼴의 호의 길이는? [3.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\pi$"
+        },
+        {
+          "number": 2,
+          "text": "$2\\pi$"
+        },
+        {
+          "number": 3,
+          "text": "$3\\pi$"
+        },
+        {
+          "number": 4,
+          "text": "$4\\pi$"
+        },
+        {
+          "number": 5,
+          "text": "$5\\pi$"
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "q_kor_len": 25,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 73.4,
+          "s_token": 81.5,
+          "s_lcs": 68.0,
+          "kor_min": 25,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0222",
+          "page": 299,
+          "text_orig": "중심각의 크기가 인 부채꼴의 넓이가 일 때, 이 부채꼴의 호의 길이는?\n① \n② \n\n\n③ \n④ \n\n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 27
+        },
+        {
+          "score": 73.2,
+          "s_token": 66.0,
+          "s_lcs": 88.0,
+          "kor_min": 25,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0275",
+          "page": 342,
+          "text_orig": "반지름의 길이가 이고 중심각의 크기가 인 부채꼴의 둘레의 길이가 , 넓이가 \n일 때, 의 값을 구하\n시오.",
+          "choice_n": 0,
+          "kor_len": 39
+        },
+        {
+          "score": 68.8,
+          "s_token": 61.0,
+          "s_lcs": 84.0,
+          "kor_min": 25,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0730",
+          "page": 266,
+          "text_orig": "다음과 같이 반지름의 길이 과 중심각의 크기 가 주어진 부채꼴의 호의 길이 과 넓이 를 각각 구하\n시오.\n\n",
+          "choice_n": 0,
+          "kor_len": 40
+        },
+        {
+          "score": 68.8,
+          "s_token": 61.0,
+          "s_lcs": 84.0,
+          "kor_min": 25,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0731",
+          "page": 266,
+          "text_orig": "다음과 같이 반지름의 길이 과 중심각의 크기 가 주어진 부채꼴의 호의 길이 과 넓이 를 각각 구하\n시오.\n\n",
+          "choice_n": 0,
+          "kor_len": 40
+        },
+        {
+          "score": 68.8,
+          "s_token": 61.0,
+          "s_lcs": 84.0,
+          "kor_min": 25,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0732",
+          "page": 267,
+          "text_orig": "다음과 같이 반지름의 길이 과 중심각의 크기 가 주어진 부채꼴의 호의 길이 과 넓이 를 각각 구하\n시오.\n",
+          "choice_n": 0,
+          "kor_len": 40
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 3,
+      "q_text": "$\\log 1.2 = 0.0792$일 때, $\\log N = 2.0792$를 만족하는 양의 실수 $N$의 값은? [3.9점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$112$"
+        },
+        {
+          "number": 2,
+          "text": "$120$"
+        },
+        {
+          "number": 3,
+          "text": "$132$"
+        },
+        {
+          "number": 4,
+          "text": "$152$"
+        },
+        {
+          "number": 5,
+          "text": "$1200$"
+        }
+      ],
+      "q_chapter": "로그",
+      "q_kor_len": 15,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0017",
+          "page": 51,
+          "text_orig": "\n\n×\n\n×\n\n일 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0040",
+          "page": 67,
+          "text_orig": "loglog일 때, 의 값은?\n① \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 65.6,
+          "s_token": 84.2,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0047",
+          "page": 72,
+          "text_orig": "일 때, loglog\n의 값은?\n① 2.2 \n② 2.3 \n③ 2.4\n④ 2.5 \n⑤ 2.6",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0006",
+          "page": 4,
+          "text_orig": "log\n\nlog\nlog의 값은?\n① log\n\n② log\n\n③ log\n\n④ log\n\n⑤ log",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0007",
+          "page": 5,
+          "text_orig": "log×× log의 값은?\n① \n\n② \n\n③ \n\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 4,
+      "q_text": "부등식 $2\\log_{\\frac{1}{2}}(x-1) > \\log_{\\frac{1}{2}}(x+5)$의 해가 $a < x < b$일 때, $a+b$의 값은? [3.9점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$1$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$3$"
+        },
+        {
+          "number": 4,
+          "text": "$4$"
+        },
+        {
+          "number": 5,
+          "text": "$5$"
+        }
+      ],
+      "q_chapter": "로그",
+      "q_kor_len": 12,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 88.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0159",
+          "page": 213,
+          "text_orig": "부등식 \n\n\n의 해가 일 때, 의 값은?\n① \n② \n\n③ \n\n④ \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 11
+        },
+        {
+          "score": 78.9,
+          "s_token": 79.4,
+          "s_lcs": 91.7,
+          "kor_min": 12,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0184",
+          "page": 235,
+          "text_orig": "에 대한 부등식 \nlog\n\n\nlog\n\n의 해가 \n일 때, 의 값은? (단, 는 상수이다.)\n① 3 \n② 4 \n③ 5\n④ 6 \n⑤ 7",
+          "choice_n": 5,
+          "kor_len": 20
+        },
+        {
+          "score": 78.2,
+          "s_token": 72.2,
+          "s_lcs": 100.0,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0181",
+          "page": 232,
+          "text_orig": "부등식 loglog의 해가 일 때, 의 값은?\n① 82 \n② 84 \n③ 86\n④ 88 \n⑤ 90",
+          "choice_n": 5,
+          "kor_len": 11
+        },
+        {
+          "score": 77.6,
+          "s_token": 75.7,
+          "s_lcs": 91.7,
+          "kor_min": 12,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0079",
+          "page": 83,
+          "text_orig": "부등식 \n의 해가 일 때, \nlog의 값은? (단, )\n① 20 \n② 21\n③ 22\n④ 23 \n⑤ 24",
+          "choice_n": 5,
+          "kor_len": 12
+        },
+        {
+          "score": 77.6,
+          "s_token": 75.7,
+          "s_lcs": 91.7,
+          "kor_min": 12,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0188",
+          "page": 237,
+          "text_orig": "연립부등식 \nlog\n×\n의 해가 일 때, 의 값은?\n① 13 \n② 14 \n③ 15\n④ 16 \n⑤ 17",
+          "choice_n": 5,
+          "kor_len": 13
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 5,
+      "q_text": "$\\mathrm{pH}$는 용액의 산성 또는 염기성의 정도를 나타내는 수치로써 용액 $1L$ 속에 들어있는 수소이온농도가 $[\\mathrm{H}^{+}]\\,\\mathrm{mol}/L$일 때, $\\mathrm{pH} = -\\log[\\mathrm{H}^{+}]$로 정의한다. 어떤 용액의 수소이온농도가 $[\\mathrm{H}^{+}] = ?$일 때, 이 용액의 $\\mathrm{pH}$의 값은? (단, $\\log 2 = 0.3$으로 계산한다) [4.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$2.8$"
+        },
+        {
+          "number": 2,
+          "text": "$2.9$"
+        },
+        {
+          "number": 3,
+          "text": "$3.0$"
+        },
+        {
+          "number": 4,
+          "text": "$3.1$"
+        },
+        {
+          "number": 5,
+          "text": "$3.2$"
+        }
+      ],
+      "q_chapter": "로그",
+      "q_kor_len": 74,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0017",
+          "page": 51,
+          "text_orig": "\n\n×\n\n×\n\n일 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0040",
+          "page": 67,
+          "text_orig": "loglog일 때, 의 값은?\n① \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 69.6,
+          "s_token": 82.9,
+          "s_lcs": 64.3,
+          "kor_min": 14,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0040",
+          "page": 32,
+          "text_orig": "방정식 \n의 해가  또는 일 때, 의 값은? (단, )\n① \n\n② 1 \n③ \n\n④ 2 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 14
+        },
+        {
+          "score": 68.6,
+          "s_token": 75.9,
+          "s_lcs": 75.0,
+          "kor_min": 12,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0317",
+          "page": 375,
+          "text_orig": "수열 {}이\n \n\n\n (⋯)\n으로 정의될 때, 의 값은?\n① \n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 12
+        },
+        {
+          "score": 68.6,
+          "s_token": 75.9,
+          "s_lcs": 75.0,
+          "kor_min": 12,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0464",
+          "page": 554,
+          "text_orig": "수열 이\n     , \n\n\n (…)\n으로 정의될 때, 의 값은?\n① \n\n\n② \n\n③ \n\n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 12
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 6,
+      "q_text": "$\\log_{x^2}(-x^2+x+12)$가 정의되도록 하는 정수 $x$의 개수는? [4.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$1$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$3$"
+        },
+        {
+          "number": 4,
+          "text": "$4$"
+        },
+        {
+          "number": 5,
+          "text": "$5$"
+        }
+      ],
+      "q_chapter": "로그",
+      "q_kor_len": 15,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 78.7,
+          "s_token": 66.7,
+          "s_lcs": 86.7,
+          "kor_min": 15,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0058",
+          "page": 58,
+          "text_orig": "자연수 에 대하여 log가 정의되도록 하는 정수 의 개수를 이라 할 때, \n⋯의 값은?\n① 22 \n② 24 \n③ 26\n④ 28 \n⑤ 30",
+          "choice_n": 5,
+          "kor_len": 28
+        },
+        {
+          "score": 76.5,
+          "s_token": 71.2,
+          "s_lcs": 80.0,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0045",
+          "page": 70,
+          "text_orig": "log이 정의되도록 하는 한 자리의 두 자연수 의 모든 순서쌍 의 개수는?\n① 6 \n② 8 \n③ 10\n④ 12 \n⑤ 14",
+          "choice_n": 5,
+          "kor_len": 26
+        },
+        {
+          "score": 76.3,
+          "s_token": 80.7,
+          "s_lcs": 73.3,
+          "kor_min": 15,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0010",
+          "page": 8,
+          "text_orig": "log가 정의되도록 하는 모든 정수 의 값의 합은?\n① -2 \n② -1\n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 17
+        },
+        {
+          "score": 75.0,
+          "s_token": 77.4,
+          "s_lcs": 73.3,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0120",
+          "page": 180,
+          "text_orig": "로그함수 log\n\n\n\n\n\n가 의 값이 증가할 때 의 값도 증가하도록 하는 자연수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 29
+        },
+        {
+          "score": 72.2,
+          "s_token": 75.6,
+          "s_lcs": 80.0,
+          "kor_min": 15,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0016",
+          "page": 10,
+          "text_orig": "log이 정의되도록 하는 정수 의 개수를 구하시오.",
+          "choice_n": 0,
+          "kor_len": 18
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 7,
+      "q_text": "다항식 $f(x) = x^2 - (7+a)x + 9$, $a > 0$에서 $f(x) \\geq 1$일 때 모든 정수 $a$의 값의 합은? [3.9점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$3$"
+        },
+        {
+          "number": 2,
+          "text": "$5$"
+        },
+        {
+          "number": 3,
+          "text": "$7$"
+        },
+        {
+          "number": 4,
+          "text": "$9$"
+        },
+        {
+          "number": 5,
+          "text": "$11$"
+        }
+      ],
+      "q_chapter": "이차부등식",
+      "q_kor_len": 17,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 76.9,
+          "s_token": 77.4,
+          "s_lcs": 76.5,
+          "kor_min": 17,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0043",
+          "page": 34,
+          "text_orig": "지수함수 이 에서 일 때, 모든 정수 의 값의 합은?\n① 6 \n② 7 \n③ 8 \n④ 9 \n⑤ 10",
+          "choice_n": 5,
+          "kor_len": 18
+        },
+        {
+          "score": 65.7,
+          "s_token": 76.0,
+          "s_lcs": 58.8,
+          "kor_min": 17,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0160",
+          "page": 214,
+          "text_orig": "부등식 \n을 만족시키는 모든 정수 의 값의 합은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 18
+        },
+        {
+          "score": 65.7,
+          "s_token": 76.0,
+          "s_lcs": 58.8,
+          "kor_min": 17,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0161",
+          "page": 215,
+          "text_orig": "부등식 ≤를 만족시키는 모든 정수 의 값의 합은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 18
+        },
+        {
+          "score": 63.8,
+          "s_token": 71.3,
+          "s_lcs": 58.8,
+          "kor_min": 17,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0103",
+          "page": 113,
+          "text_orig": "함수 에 대하여 부등식\n\n을 만족시키는 모든 정수 의 값의 합은?\n① 1 \n② 3 \n③ 5\n④ 7 \n⑤ 9",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 63.5,
+          "s_token": 76.9,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0017",
+          "page": 51,
+          "text_orig": "\n\n×\n\n×\n\n일 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 5
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 8,
+      "q_text": "함수 $y = a^x$ ($a > 0, a \\neq 1$)에 대하여 옳은 것만을 <보기>에서 있는 대로 고른 것은? [4.4점] <보기> ㄱ. ㄴ. ㄷ.",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "ㄱ"
+        },
+        {
+          "number": 2,
+          "text": "ㄴ"
+        },
+        {
+          "number": 3,
+          "text": "ㄷ"
+        },
+        {
+          "number": 4,
+          "text": "ㄱ,ㄴ"
+        },
+        {
+          "number": 5,
+          "text": "ㄴ,ㄷ"
+        }
+      ],
+      "q_chapter": "지수함수",
+      "q_kor_len": 26,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 84.1,
+          "s_token": 89.2,
+          "s_lcs": 80.8,
+          "kor_min": 26,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0237",
+          "page": 309,
+          "text_orig": "함수 sin에 대하여 < 보기 >에서 옳은 것만을 있는 대로 고른 것은?\n< 보 기 >\nㄱ. \n\nㄴ. 함수 의 주기는 이다.\nㄷ. 함수 의 최댓값은 이다.\n① ㄴ \n② ㄷ \n③ ㄱ, ㄴ\n④ ㄴ, ㄷ \n⑤ ㄱ, ㄴ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 42
+        },
+        {
+          "score": 82.3,
+          "s_token": 84.5,
+          "s_lcs": 80.8,
+          "kor_min": 26,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0069",
+          "page": 72,
+          "text_orig": "로그함수 log≠에 대하여 보기에서 옳은 것만을 있는 대로 고른 것은? \n< 보 기 >\nㄱ. 정의역과 치역은 모두 양의 실수 전체의 집합이다.\nㄴ. 두 양수 에 대하여 이면 이다.\nㄷ. 의 값이 증가하면 의 값도 증가한다.\nㄹ. 곡선 는 두 점 (1, 0), (, 1)을 지난다.\n① ㄱ \n② ㄴ\n③ ㄴ, ㄷ\n④ ㄴ, ㄹ \n⑤ ㄷ, ㄹ",
+          "choice_n": 5,
+          "kor_len": 81
+        },
+        {
+          "score": 79.5,
+          "s_token": 77.6,
+          "s_lcs": 80.8,
+          "kor_min": 26,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0050",
+          "page": 38,
+          "text_orig": "가 1이 아닌 양수일 때, 두 함수 에 대하여 보기에서 옳은 것만을 있는 대로 고른 것\n은?\n< 보 기 >\nㄱ. 두 함수 의 그래프의 점근선은 서로 일치한다.\nㄴ. 모든 음의 실수 에 대하여 이면 이다.\nㄷ. 양수 에 대하여 직선 과 두 곡선 가 만나는 점을 각각 A, B라 하고, 직선 \n와 두 곡선 가 만나는 점을 각각 C, D라 할 때, \nAB\nCD이다.\n① ㄱ  \n② ㄷ  \n③ ㄱ, ㄴ  \n④ ㄱ, ㄷ  \n⑤ ㄱ, ㄴ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 108
+        },
+        {
+          "score": 77.2,
+          "s_token": 71.9,
+          "s_lcs": 80.8,
+          "kor_min": 26,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0238",
+          "page": 310,
+          "text_orig": "정의역의 모든 실수 에 대하여 인 함수만을 < 보기 >에서 있는 대로 고른 것은?\n< 보 기 >\nㄱ. sin \n\nㄴ. cos\nㄷ. \ntan\n① ㄱ \n② ㄴ \n③ ㄷ\n④ ㄴ, ㄷ \n⑤ ㄱ, ㄴ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 31
+        },
+        {
+          "score": 77.2,
+          "s_token": 77.6,
+          "s_lcs": 76.9,
+          "kor_min": 26,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0305",
+          "page": 363,
+          "text_orig": "공차가 음수인 등차수열 {}의 첫째항부터 제항까지의 합을 이라 할 때, 자연수 에 대하여 을 \n만족시키는 자연수 의 개수를 이라 하자. 이고, 집합 를 ∪∪이라 할 \n때, 보기에서 옳은 것만을 있는 대로 고른 것은?\n< 보 기 >\nㄱ. 이면 이다. \nㄴ. 이면 이다. \nㄷ. ∈이면 을 만족시키는 자연수 의 개수는 4이다.\n① ㄱ \n② ㄴ \n③ ㄱ, ㄴ \n④ ㄴ, ㄷ \n⑤ ㄱ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 104
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 9,
+      "q_text": "$x$에 대한 방정식 $9^x - 2(a-3) \\cdot 3^x + a - 9 = 0$이 한 양수와 한 음수의 실근을 갖도록 하는 모든 정수 $a$의 값의 합은? [4.4점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$16$"
+        },
+        {
+          "number": 2,
+          "text": "$19$"
+        },
+        {
+          "number": 3,
+          "text": "$20$"
+        },
+        {
+          "number": 4,
+          "text": "$21$"
+        },
+        {
+          "number": 5,
+          "text": "$22$"
+        }
+      ],
+      "q_chapter": "지수방정식",
+      "q_kor_len": 33,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 86.1,
+          "s_token": 75.9,
+          "s_lcs": 92.9,
+          "kor_min": 28,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0052",
+          "page": 41,
+          "text_orig": "에 대한 방정식\n× \n이 한 개의 실근만을 갖도록 하는 모든 정수 의 값의 합은?\n① 6 \n② 8 \n③ 10 \n④ 12 \n⑤ 14",
+          "choice_n": 5,
+          "kor_len": 28
+        },
+        {
+          "score": 82.6,
+          "s_token": 74.1,
+          "s_lcs": 88.2,
+          "kor_min": 17,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0010",
+          "page": 8,
+          "text_orig": "log가 정의되도록 하는 모든 정수 의 값의 합은?\n① -2 \n② -1\n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 17
+        },
+        {
+          "score": 76.5,
+          "s_token": 59.0,
+          "s_lcs": 88.2,
+          "kor_min": 17,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0043",
+          "page": 69,
+          "text_orig": "log이 정의되도록 하는 모든 정수 의 값의 합은?\n① 11 \n② 12 \n③ 13\n④ 14 \n⑤ 15",
+          "choice_n": 5,
+          "kor_len": 17
+        },
+        {
+          "score": 74.7,
+          "s_token": 73.1,
+          "s_lcs": 75.8,
+          "kor_min": 33,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0078",
+          "page": 82,
+          "text_orig": "에 대한 방정식 × 이 한 개의 양의 실근과 한 개의 음의 실근을 갖도록 하는 모든 정\n수 의 개수는?\n① 8 \n② 9\n③ 10\n④ 11 \n⑤ 12",
+          "choice_n": 5,
+          "kor_len": 36
+        },
+        {
+          "score": 72.1,
+          "s_token": 71.8,
+          "s_lcs": 72.2,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0152",
+          "page": 208,
+          "text_orig": "방정식 을 만족시키는 모든 실수 의 값의 합은?\n① \n② \n\n\n③ \n\n\n④ \n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 18
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 10,
+      "q_text": "$n$이 $6$ 이하의 자연수일 때, $\\sqrt[4]{\\sqrt{n}} \\times \\sqrt[6]{\\sqrt[3]{n}}$이 자연수가 되도록 하는 $n$의 값의 합은? [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$98$"
+        },
+        {
+          "number": 2,
+          "text": "$99$"
+        },
+        {
+          "number": 3,
+          "text": "$100$"
+        },
+        {
+          "number": 4,
+          "text": "$101$"
+        },
+        {
+          "number": 5,
+          "text": "$102$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "q_kor_len": 25,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 70.1,
+          "s_token": 61.3,
+          "s_lcs": 76.0,
+          "kor_min": 25,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0024",
+          "page": 16,
+          "text_orig": "2 이상의 두 자연수 에 대하여 정의역이 인 함수 를 \n\n이라 할 때, 의 값이 \n자연수가 되도록 하는 의 최솟값은?\n① 6 \n② 12 \n③ 18 \n④ 24 \n⑤ 30",
+          "choice_n": 5,
+          "kor_len": 40
+        },
+        {
+          "score": 69.0,
+          "s_token": 64.6,
+          "s_lcs": 72.0,
+          "kor_min": 25,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0027",
+          "page": 58,
+          "text_orig": "보다 큰 두 자연수 에 대하여 \n\n이 자연수가 되도록 하는 모든 의 값의 합을 라 할 때, \n의 값은?\n① 20 \n② 25 \n③ 30\n④ 35 \n⑤ 40",
+          "choice_n": 5,
+          "kor_len": 34
+        },
+        {
+          "score": 67.3,
+          "s_token": 61.9,
+          "s_lcs": 70.8,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0025",
+          "page": 56,
+          "text_orig": " 이하의 자연수 에 대하여 ×이 자연수가 되도록 하는 의 개수는?\n① 16 \n② 17 \n③ 18\n④ 19 \n⑤ 20",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 66.7,
+          "s_token": 64.9,
+          "s_lcs": 68.0,
+          "kor_min": 25,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0154",
+          "page": 159,
+          "text_orig": "자연수 과 5 이하의 자연수 에 대하여 을 3으로 나눈 나머지가 1이 되도록 하는 모든 의 값의 \n합을 이라 하자. \n\n\n의 값은?\n① 190   \n② 192 \n③ 194 \n④ 196 \n⑤ 198",
+          "choice_n": 5,
+          "kor_len": 43
+        },
+        {
+          "score": 66.2,
+          "s_token": 63.5,
+          "s_lcs": 68.0,
+          "kor_min": 25,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0075",
+          "page": 92,
+          "text_orig": "자연수 에 대하여 \n\nlog의 값이  이하의 자연수가 되도록 하는 모든 의 값의 곱은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 29
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 11,
+      "q_text": "$\\alpha + \\beta = -2, \\alpha\\beta = 2b$인 두 실수 $\\alpha, \\beta$에 대하여 ... [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-8$"
+        },
+        {
+          "number": 2,
+          "text": "$-4$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$4$"
+        },
+        {
+          "number": 5,
+          "text": "$8$"
+        }
+      ],
+      "q_chapter": "지수",
+      "q_kor_len": 9,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 70.0,
+          "s_token": 80.0,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0082",
+          "page": 71,
+          "text_orig": "두 실수 에 대하여 ≤≤에서 정의된 함수 \nsin\n≤≤\ncos≤가 있다. 모든 실수 \n에 대하여 함수 의 그래프와 직선 가 만나는 점의 개수가 3이 되지 않도록 하는 의 모든 \n순서쌍 ()의 개수는?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 61
+        },
+        {
+          "score": 67.9,
+          "s_token": 73.7,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0087",
+          "page": 79,
+          "text_orig": "4 이하의 자연수 \n와 \n인 두 실수 \n에 대하여 \n\n\n≤≤\n\n에서 정의된 함수 \nsin\n가 있다.  에 대한 방정식 은 서로 다른 네 실근 를 \n갖고, 이다. × 의 값은?\n① \n\n② 3 \n③ \n\n\n④ \n\n\n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 47
+        },
+        {
+          "score": 67.9,
+          "s_token": 73.7,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0015",
+          "page": 49,
+          "text_orig": "≠인 두 실수 에 대하여 \n     \n일 때, 의 값은?\n① 1 \n② 3 \n③ 5\n④ 7 \n⑤ 9",
+          "choice_n": 5,
+          "kor_len": 13
+        },
+        {
+          "score": 67.4,
+          "s_token": 73.7,
+          "s_lcs": 100.0,
+          "kor_min": 9,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0392",
+          "page": 476,
+          "text_orig": "인 두 실수 에 대하여 좌표평면 위에 네 점 O, P, Q, R이 있다. 세 \n선분 OQPQQR의 길이가 이 순서대로 등비수열을 이룰 때, 점 P가 나타내는 도형과 선분 OR로 둘러싸\n인 도형의 넓이를 구하시오.",
+          "choice_n": 0,
+          "kor_len": 65
+        },
+        {
+          "score": 65.6,
+          "s_token": 66.7,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0109",
+          "page": 171,
+          "text_orig": "인 두 실수 에 대하여 의 대소 관계로 옳은 것은?\n①  \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 18
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 12,
+      "q_text": "좌표평면 위의 점 $\\mathrm{P}$에서 동경 $\\mathrm{OP}$가 나타내는 각의 크기가 $\\theta$일 때, 직선의 기울기 또는 점 좌표를 구하는 문제. 점 $\\mathrm{P}$의 좌표가 ... [4.6점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{\\sqrt{3}-1}{2}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\sqrt{3}-1$"
+        },
+        {
+          "number": 3,
+          "text": "$\\sqrt{3}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{\\sqrt{3}+1}{2}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\sqrt{3}+1$"
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "q_kor_len": 46,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 54.7,
+          "s_token": 61.7,
+          "s_lcs": 50.0,
+          "kor_min": 28,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0225",
+          "page": 301,
+          "text_orig": "원점 O와 점 P를 지나는 동경 OP가 나타내는 각의 크기를 라 할 때, cos\n이다. 의 값은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 28
+        },
+        {
+          "score": 51.5,
+          "s_token": 68.6,
+          "s_lcs": 42.9,
+          "kor_min": 14,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0053",
+          "page": 50,
+          "text_orig": "점 P()가 직선  위의 점일 때,\n\n\n\n\n\n\n\n\n\n\n의 최솟값은?\n① 1 \n② \n\n\n③ \n\n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 14
+        },
+        {
+          "score": 50.8,
+          "s_token": 66.7,
+          "s_lcs": 42.9,
+          "kor_min": 14,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0040",
+          "page": 32,
+          "text_orig": "방정식 \n의 해가  또는 일 때, 의 값은? (단, )\n① \n\n② 1 \n③ \n\n④ 2 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 14
+        },
+        {
+          "score": 50.0,
+          "s_token": 50.0,
+          "s_lcs": 50.0,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0060",
+          "page": 80,
+          "text_orig": "좌표평면 위의 두 점 Alog, Blog를 지나는 직선이 점 C을 지날 때, log의 값은?  (단, \n≠)\n① \n\n② \n\n③ \n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 46.9,
+          "s_token": 73.3,
+          "s_lcs": 50.0,
+          "kor_min": 8,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0014",
+          "page": 48,
+          "text_orig": "실수 가 ≠≠일 때, \n     \n의 값은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 8
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 13,
+      "q_text": "$1$이 아닌 세 양수 $k, l, m$이 다음 조건을 만족시킬 때, $\\log_k a + \\log_l b + \\log_m c$의 값은? [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$17$"
+        },
+        {
+          "number": 2,
+          "text": "$18$"
+        },
+        {
+          "number": 3,
+          "text": "$19$"
+        },
+        {
+          "number": 4,
+          "text": "$20$"
+        },
+        {
+          "number": 5,
+          "text": "$21$"
+        }
+      ],
+      "q_chapter": "로그",
+      "q_kor_len": 21,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 91.9,
+          "s_token": 94.1,
+          "s_lcs": 90.5,
+          "kor_min": 21,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0066",
+          "page": 84,
+          "text_orig": "이 아닌 세 양수 가 다음 조건을 만족시킬 때, \nlogloglog의 값은?\n(가) logloglog\n\n(나) logloglog\n\n① \n② \n\n\n③ \n\n\n④ \n\n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 22
+        },
+        {
+          "score": 90.1,
+          "s_token": 89.5,
+          "s_lcs": 90.5,
+          "kor_min": 21,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0059",
+          "page": 59,
+          "text_orig": "1이 아닌 서로 다른 세 양수 가 다음 조건을 만족시킬 때, log\n의 값은?\n㈎ loglog\n㈏ loglog\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 74.6,
+          "s_token": 65.9,
+          "s_lcs": 90.5,
+          "kor_min": 21,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0080",
+          "page": 84,
+          "text_orig": "1이 아닌 세 양수 와 1보다 큰 두 자연수 이 다음 조건을 만족시킬 때, 의 최댓값과 최솟값의 \n합을 구하시오.\n㈎ 는 의 제곱근 중 하나이다.\n㈏ \n는 의 제곱근 중 하나이다.\n㈐ ",
+          "choice_n": 0,
+          "kor_len": 60
+        },
+        {
+          "score": 73.4,
+          "s_token": 78.6,
+          "s_lcs": 70.0,
+          "kor_min": 20,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0072",
+          "page": 89,
+          "text_orig": "≠인 두 수 가 다음 조건을 만족시킬 때, \n의 값은? (단, log)\n(가) log× log\n(나) loglog\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 20
+        },
+        {
+          "score": 73.1,
+          "s_token": 82.8,
+          "s_lcs": 66.7,
+          "kor_min": 15,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0040",
+          "page": 35,
+          "text_orig": "1이 아닌 세 양수 에 대하여\nlogloglog\n일 때, logloglog의 값은?\n① 3 \n② \n\n\n③ \n\n\n④ 4 \n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 15
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 14,
+      "q_text": "함수 $y = a^x$ 또는 $y = \\log_a x$의 그래프와 직선이 만나는 점의 좌표 또는 길이 관련 [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "지수/로그",
+      "q_kor_len": 26,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 66.5,
+          "s_token": 62.3,
+          "s_lcs": 69.2,
+          "kor_min": 26,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0094",
+          "page": 108,
+          "text_orig": "자연수 에 대하여 이차함수 의 그래프와 직선 이 만나는 서로 다른 두 점의 좌\n표를 이라 하자. \n\n\n\n이라 할 때, \nlogloglog\nlogloglog⋯log의 값은?\n① 2 \n② 3 \n③ 4 \n④ 5 \n⑤ 6",
+          "choice_n": 5,
+          "kor_len": 43
+        },
+        {
+          "score": 65.1,
+          "s_token": 64.6,
+          "s_lcs": 65.4,
+          "kor_min": 26,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0054",
+          "page": 42,
+          "text_orig": "함수 의 그래프와 직선 이 만나는 점의 개수를 , 함수 log의 그래프와 직선\n이 만나는 점의 개수를 라 하자. 일 때, 의 값은? (단, 는 상수이다.)\n① 1 \n② log\n③ 2 \n④ log\n⑤ log",
+          "choice_n": 5,
+          "kor_len": 50
+        },
+        {
+          "score": 61.4,
+          "s_token": 61.2,
+          "s_lcs": 61.5,
+          "kor_min": 26,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0250",
+          "page": 319,
+          "text_orig": "그림과 같이 ≤에서 함수 cos의 그래프와 직선 가 만나는 점의 좌표를 각각  \n라 하자. \n\n일 때, 의 값은? (단, )\n① \n\n② \n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 36
+        },
+        {
+          "score": 60.8,
+          "s_token": 59.8,
+          "s_lcs": 61.5,
+          "kor_min": 26,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0099",
+          "page": 163,
+          "text_orig": "함수 의 그래프의 점근선과 함수 log의 그래프의 점근선이 만나는 점을 A라 할 \n때, 선분 OA의 길이는? (단, O는 원점이다.)\n① \n② \n\n③ \n④ \n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 42
+        },
+        {
+          "score": 58.6,
+          "s_token": 60.0,
+          "s_lcs": 57.7,
+          "kor_min": 26,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0082",
+          "page": 71,
+          "text_orig": "두 실수 에 대하여 ≤≤에서 정의된 함수 \nsin\n≤≤\ncos≤가 있다. 모든 실수 \n에 대하여 함수 의 그래프와 직선 가 만나는 점의 개수가 3이 되지 않도록 하는 의 모든 \n순서쌍 ()의 개수는?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 61
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 15,
+      "q_text": "제$1$사분면에서 직선 $y = ax - 6$에 두 점 $\\mathrm{P}, \\mathrm{Q}$가 있다. $y = \\log_a x$ 그래프와 만나는 점이 $\\mathrm{P}$, $\\mathrm{Q}$이고 ... [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$4$"
+        },
+        {
+          "number": 2,
+          "text": "$4\\sqrt{2}$"
+        },
+        {
+          "number": 3,
+          "text": "$5$"
+        },
+        {
+          "number": 4,
+          "text": "$6$"
+        },
+        {
+          "number": 5,
+          "text": "$6\\sqrt{2}$"
+        }
+      ],
+      "q_chapter": "로그함수 그래프",
+      "q_kor_len": 26,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 63.3,
+          "s_token": 63.6,
+          "s_lcs": 73.1,
+          "kor_min": 26,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0162",
+          "page": 186,
+          "text_orig": "자연수 에 대하여 함수 를 cos\n\n라 하자. 그림과 같이 함수 의 그래프와 직선 \n이 만나는 점 중 제1사분면의 점이면서 축과의 거리가 가장 가까운 점을 A, 두 번째로 가\n까운 점을 B라 할 때, \nAB이다. 함수 의 그래프와 직선 이 만나는 점 중 제4사분면의 점이\n면서 축과 의 거리가 가장 가까운 점을 C라 하고 함수 의 그래프와 축이 만나는 점을 D라 하자. \n직선 BC와 직선 CD의 기울기의 곱이 \n일 때, 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 147
+        },
+        {
+          "score": 57.8,
+          "s_token": 63.6,
+          "s_lcs": 53.8,
+          "kor_min": 26,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0082",
+          "page": 71,
+          "text_orig": "두 실수 에 대하여 ≤≤에서 정의된 함수 \nsin\n≤≤\ncos≤가 있다. 모든 실수 \n에 대하여 함수 의 그래프와 직선 가 만나는 점의 개수가 3이 되지 않도록 하는 의 모든 \n순서쌍 ()의 개수는?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 61
+        },
+        {
+          "score": 57.4,
+          "s_token": 60.5,
+          "s_lcs": 65.4,
+          "kor_min": 26,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0184",
+          "page": 214,
+          "text_orig": "두 양수 에 대하여 집합 \n≤≤\n에서 정의된 함수 sin가 있다.\n직선 가 함수 의 그래프와 만나는 두 점 을 각각 A, B라 하자. 원점 O에 대하여 \nOA\n이\n고 함수 의 그래프 위의 점 P에 대하여 삼각형 PAB의 넓이의 최댓값이 12가 되도록 하는 의 \n모든 순서쌍 ()의 개수는 2이다. 이 두 순서쌍을 각각 (), ()라 할 때, 의 값을 구하시\n오. (단, 점 A는 제3사분면의 점이고, 점 P는 점 A가 아니고 점 B도 아니다.)",
+          "choice_n": 0,
+          "kor_len": 131
+        },
+        {
+          "score": 51.6,
+          "s_token": 54.0,
+          "s_lcs": 50.0,
+          "kor_min": 26,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0118",
+          "page": 139,
+          "text_orig": "그림과 같이 자연수 에 대하여 직선 이 두 함수 , × 의 그래프와 만나는 점을 각각 \nAB이라 할 때, \nA를 만족시키는 의 개수는?\n① 11 \n② 12 \n③ 13\n④ 14 \n⑤ 15",
+          "choice_n": 5,
+          "kor_len": 44
+        },
+        {
+          "score": 51.5,
+          "s_token": 53.7,
+          "s_lcs": 50.0,
+          "kor_min": 26,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0094",
+          "page": 102,
+          "text_orig": "그림과 같이 함수 log의 그래프의 제1사분면 위에 있는 세 점 A, B, C에서 축에 내린 수선의 발을 \n각각 D, E, F라 하자. \nOD\nDE\nEF이고 두 사각형 ADEB, BEFC의 넓이의 차가 1일 때, 의 값\n은? (단, O는 원점이고, 는 상수이다.)\n① 4 \n② 5 \n③ 6\n④ 7 \n⑤ 8",
+          "choice_n": 5,
+          "kor_len": 66
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 16,
+      "q_text": "두 양수 $a, b$가 다음 조건을 만족시킬 때, $a, b, c$의 대소관계를 나타낸 것은? [5.0점] $(1/a)^? = b^?, (1/b)^? = ?, (1/?)^? = ?$",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$a<b<c$"
+        },
+        {
+          "number": 2,
+          "text": "$b<a<c$"
+        },
+        {
+          "number": 3,
+          "text": "$b<c<a$"
+        },
+        {
+          "number": 4,
+          "text": "$c<a<b$"
+        },
+        {
+          "number": 5,
+          "text": "$c<b<a$"
+        }
+      ],
+      "q_chapter": "지수/로그",
+      "q_kor_len": 26,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 74.1,
+          "s_token": 72.7,
+          "s_lcs": 75.0,
+          "kor_min": 20,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0072",
+          "page": 89,
+          "text_orig": "≠인 두 수 가 다음 조건을 만족시킬 때, \n의 값은? (단, log)\n(가) log× log\n(나) loglog\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 20
+        },
+        {
+          "score": 69.5,
+          "s_token": 71.4,
+          "s_lcs": 68.2,
+          "kor_min": 22,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0066",
+          "page": 84,
+          "text_orig": "이 아닌 세 양수 가 다음 조건을 만족시킬 때, \nlogloglog의 값은?\n(가) logloglog\n\n(나) logloglog\n\n① \n② \n\n\n③ \n\n\n④ \n\n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 22
+        },
+        {
+          "score": 65.8,
+          "s_token": 61.8,
+          "s_lcs": 68.4,
+          "kor_min": 19,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0114",
+          "page": 113,
+          "text_orig": "삼각형 ABC가 다음 조건을 만족시킬 때, cos의 값은?\n(가) sinsin\n(나) sincossincos\n① \n\n\n② \n\n③ \n\n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 19
+        },
+        {
+          "score": 65.0,
+          "s_token": 68.8,
+          "s_lcs": 62.5,
+          "kor_min": 24,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0059",
+          "page": 59,
+          "text_orig": "1이 아닌 서로 다른 세 양수 가 다음 조건을 만족시킬 때, log\n의 값은?\n㈎ loglog\n㈏ loglog\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 62.5,
+          "s_token": 69.7,
+          "s_lcs": 57.7,
+          "kor_min": 26,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0125",
+          "page": 132,
+          "text_orig": "두 등차수열 {}, {}이 다음 조건을 만족시킬 때, 의 값은?\n(가) 모든 자연수 에 대하여 이다.\n(나)  \n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 32
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 17,
+      "q_text": "함수 $f(x) = \\log_a x$ ($a>1$) 그래프 위의 점 $\\mathrm{A}, \\mathrm{B}, \\mathrm{C}$에 대하여 $\\overline{\\mathrm{BD}} = \\overline{\\mathrm{AC}}$가 되는 이등변삼각형이 되도록 하는 점 $\\mathrm{D}$의 좌표 또는 값은? [5.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{5}{3}$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$\\dfrac{11}{4}$"
+        },
+        {
+          "number": 4,
+          "text": "$3$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{10}{3}$"
+        }
+      ],
+      "q_chapter": "로그함수 그래프",
+      "q_kor_len": 36,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 82.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0004",
+          "page": 2,
+          "text_orig": "함수 \n\n\n에 대하여 × 의 값은?\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 82.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 9,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0011",
+          "page": 9,
+          "text_orig": "함수 loglog에 대하여 ⋯의 값은?\n① 2 \n② \n\n③ 3\n④ \n\n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 76.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0014",
+          "page": 11,
+          "text_orig": "\n\n\n\n\n에 대하여\nlogloglog⋯log\n의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 7
+        },
+        {
+          "score": 74.4,
+          "s_token": 94.7,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0005",
+          "page": 3,
+          "text_orig": " log에 대하여 의 값은?\n① -2 \n② -1 \n③ 0 \n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 7
+        },
+        {
+          "score": 68.4,
+          "s_token": 85.1,
+          "s_lcs": 72.7,
+          "kor_min": 11,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0022",
+          "page": 14,
+          "text_orig": "양수 에 대하여 일 때, \n\n\n\n\n의 값은?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 11
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 18,
+      "q_text": "자연수 $n$과 정수 $a$에 대하여 $(n-a)(n-a-?)$의 $n$ 제곱근 중 실수인 것의 개수를 $f(n)$이라 하자. $f(2) + f(3) + \\cdots + f(?)$의 값은? [5.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$3$"
+        },
+        {
+          "number": 2,
+          "text": "$5$"
+        },
+        {
+          "number": 3,
+          "text": "$6$"
+        },
+        {
+          "number": 4,
+          "text": "$7$"
+        },
+        {
+          "number": 5,
+          "text": "$8$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "q_kor_len": 31,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 85.0,
+          "s_token": 76.9,
+          "s_lcs": 90.3,
+          "kor_min": 31,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0021",
+          "page": 14,
+          "text_orig": "2 이상의 자연수 과 실수 에 대하여 실수 의 제곱근 중에서 서로 다른 실수인 것의 개수를 라 \n하자. 을 만족시키는 2 이상 10 이하인 모든 자연수 의 값의 합은?\n① 6 \n② 12 \n③ 18 \n④ 24 \n⑤ 30",
+          "choice_n": 5,
+          "kor_len": 58
+        },
+        {
+          "score": 80.0,
+          "s_token": 74.2,
+          "s_lcs": 83.9,
+          "kor_min": 31,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0050",
+          "page": 45,
+          "text_orig": "2 이상의 자연수 에 대하여 의 제곱근 중 실수인 것의 개수를 이라 할 때,\n≤ ⋯≤\n를 만족시키는 모든 자연수 의 값의 합은?\n① 11 \n② 12\n③ 13\n④ 14 \n⑤ 15",
+          "choice_n": 5,
+          "kor_len": 43
+        },
+        {
+          "score": 70.9,
+          "s_token": 83.3,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0014",
+          "page": 11,
+          "text_orig": "\n\n\n\n\n에 대하여\nlogloglog⋯log\n의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 7
+        },
+        {
+          "score": 70.0,
+          "s_token": 80.0,
+          "s_lcs": 88.9,
+          "kor_min": 9,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0004",
+          "page": 2,
+          "text_orig": "함수 \n\n\n에 대하여 × 의 값은?\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 9
+        },
+        {
+          "score": 69.6,
+          "s_token": 72.9,
+          "s_lcs": 77.4,
+          "kor_min": 31,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0003",
+          "page": 42,
+          "text_orig": "보다 큰 자연수 에 대하여 의 제곱근 중 서로 다른 실수인 것의 개수를 이라 할 때, \n⋯의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 38
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 19,
+      "q_text": "[서답형 1] $\\dfrac{\\pi}{2} < \\alpha < \\pi$이고 $\\sin\\alpha = \\dfrac{1}{3}$일 때, $\\sin 2\\alpha$의 값을 구하고, 그 과정을 서술하시오. [4.0점]",
+      "q_choices": [],
+      "q_chapter": "삼각함수",
+      "q_kor_len": 23,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 79.9,
+          "s_token": 76.9,
+          "s_lcs": 100.0,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0232",
+          "page": 305,
+          "text_orig": "\n이고 sincos\n일 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 11
+        },
+        {
+          "score": 77.4,
+          "s_token": 69.8,
+          "s_lcs": 100.0,
+          "kor_min": 11,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0179",
+          "page": 207,
+          "text_orig": "\n\n이고 tantan일 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 11
+        },
+        {
+          "score": 77.4,
+          "s_token": 69.8,
+          "s_lcs": 100.0,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0234",
+          "page": 307,
+          "text_orig": "\n이고 tan\ntan\n\n\n\n일 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 11
+        },
+        {
+          "score": 64.9,
+          "s_token": 60.0,
+          "s_lcs": 71.4,
+          "kor_min": 14,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0202",
+          "page": 235,
+          "text_orig": "삼각형 ABC에서 sinsinsin일 때, sin의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 14
+        },
+        {
+          "score": 64.9,
+          "s_token": 60.0,
+          "s_lcs": 71.4,
+          "kor_min": 14,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0297",
+          "page": 370,
+          "text_orig": "삼각형 ABC에서 sinsinsin일 때 sin의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 14
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 20,
+      "q_text": "[서답형 2] $2$의 세제곱근 중 실수인 것을 $a$, $n$의 제곱근 중 양의 실수인 것을 $b$라 할 때, $\\left(\\dfrac{a}{\\sqrt{b}}\\right)^? = \\left(\\dfrac{b}{a}\\right)^?$를 만족시키는 자연수 $n$의 값을 모두 구하고, 그 과정을 서술하시오. [7.0점]",
+      "q_choices": [],
+      "q_chapter": "거듭제곱근",
+      "q_kor_len": 56,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 91.2,
+          "s_token": 78.0,
+          "s_lcs": 100.0,
+          "kor_min": 16,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0155",
+          "page": 179,
+          "text_orig": "cos\n\ncos\n\ncos\n\n⋯cos\n\n\n\n를 만족시키는 자연수 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 16
+        },
+        {
+          "score": 79.2,
+          "s_token": 64.7,
+          "s_lcs": 88.9,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0439",
+          "page": 533,
+          "text_orig": "⋯을 만족시키는 자연수 의 최솟값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 18
+        },
+        {
+          "score": 77.9,
+          "s_token": 79.4,
+          "s_lcs": 87.0,
+          "kor_min": 23,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0002",
+          "page": 1,
+          "text_orig": "8의 세제곱근 중 실수인 것을 , 허수인 것을 라 할 때, \n\n\n의 값은? (단, ≠)\n① -2 \n② -1\n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 23
+        },
+        {
+          "score": 73.3,
+          "s_token": 85.7,
+          "s_lcs": 75.0,
+          "kor_min": 20,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0149",
+          "page": 205,
+          "text_orig": "의 세제곱근 중 실수인 것을 라 할 때, 방정식 \n\n\n\n의 해는?\n① \n② \n\n③ \n④ \n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 20
+        },
+        {
+          "score": 69.9,
+          "s_token": 73.1,
+          "s_lcs": 67.7,
+          "kor_min": 31,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0530",
+          "page": 13,
+          "text_orig": "의 제곱근 중 양수인 것을 의 네제곱근 중 양수인 것을 라 할 때, \n의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 31
+        }
+      ]
+    },
+    {
+      "school": "광명북고",
+      "q_no": 21,
+      "q_text": "[서답형 3] 함수 $f(x) = \\begin{cases} a^{x-1}-1 & (x \\leq 2) \\\\ \\log_a(x-2) & (x > 2) \\end{cases}$에 대하여 함수 $y=f(x)$가 $x=2$에서 연속이고 $y=g(x)$가 ... 자연수의 개수를 구하고, 그 과정을 서술하시오. [7.0점]",
+      "q_choices": [],
+      "q_chapter": "지수/로그함수 연속",
+      "q_kor_len": 39,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 62.5,
+          "s_token": 56.2,
+          "s_lcs": 66.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0645",
+          "page": 130,
+          "text_orig": "로그함수 log에 대하여 다음을 구하시오.\n",
+          "choice_n": 0,
+          "kor_len": 15
+        },
+        {
+          "score": 62.5,
+          "s_token": 56.2,
+          "s_lcs": 66.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0646",
+          "page": 130,
+          "text_orig": "로그함수 log에 대하여 다음을 구하시오.\n\n",
+          "choice_n": 0,
+          "kor_len": 15
+        },
+        {
+          "score": 62.5,
+          "s_token": 56.2,
+          "s_lcs": 66.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0647",
+          "page": 130,
+          "text_orig": "로그함수 log에 대하여 다음을 구하시오.\n",
+          "choice_n": 0,
+          "kor_len": 15
+        },
+        {
+          "score": 62.5,
+          "s_token": 56.2,
+          "s_lcs": 66.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0648",
+          "page": 131,
+          "text_orig": "로그함수 log에 대하여 다음을 구하시오.\n\n\n",
+          "choice_n": 0,
+          "kor_len": 15
+        },
+        {
+          "score": 62.5,
+          "s_token": 56.2,
+          "s_lcs": 66.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0649",
+          "page": 131,
+          "text_orig": "로그함수 log에 대하여 다음을 구하시오.\n\n",
+          "choice_n": 0,
+          "kor_len": 15
+        }
+      ]
+    }
+  ],
+  "광문고": [
+    {
+      "school": "광문고",
+      "q_no": 1,
+      "q_text": "$\\sqrt[3]{3\\sqrt{3}} + \\sqrt[3]{?\\sqrt{?}}$ 또는 거듭제곱근 식의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\sqrt{3}$"
+        },
+        {
+          "number": 2,
+          "text": "$2\\sqrt{3}$"
+        },
+        {
+          "number": 3,
+          "text": "$3\\sqrt{3}$"
+        },
+        {
+          "number": 4,
+          "text": "$4\\sqrt{3}$"
+        },
+        {
+          "number": 5,
+          "text": "$5\\sqrt{3}$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "q_kor_len": 12,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 60.3,
+          "s_token": 85.7,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0169",
+          "page": 173,
+          "text_orig": "\n\n\n\n\n\n\n의 값은?\n① \n\n② 3 \n③ \n\n④ 4 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 59.7,
+          "s_token": 83.3,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0005",
+          "page": 43,
+          "text_orig": "\n\n×\n\n\n\n\n의 값은?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 58.9,
+          "s_token": 80.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0011",
+          "page": 7,
+          "text_orig": "\n\n× \n의 값은?\n① \n② \n③ 2 \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 57.6,
+          "s_token": 75.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0013",
+          "page": 9,
+          "text_orig": "\n× \n\n\n의 값은?\n① \n\n② \n\n③ 1 \n④ 2 \n⑤ 4",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 56.7,
+          "s_token": 71.4,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0008",
+          "page": 5,
+          "text_orig": "logloglog\nlog의 값은?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 2,
+      "q_text": "$\\log_2(2\\sqrt{2}) + \\log_{2\\sqrt{2}}(?)$의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{3}{2}$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$\\dfrac{5}{2}$"
+        },
+        {
+          "number": 4,
+          "text": "$3$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{7}{2}$"
+        }
+      ],
+      "q_chapter": "로그",
+      "q_kor_len": 4,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0006",
+          "page": 4,
+          "text_orig": "log\n\nlog\nlog의 값은?\n① log\n\n② log\n\n③ log\n\n④ log\n\n⑤ log",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0011",
+          "page": 7,
+          "text_orig": "\n\n× \n의 값은?\n① \n② \n③ 2 \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0017",
+          "page": 11,
+          "text_orig": "log\nlog\n\n\n의 값은?\n① \n\n\n② \n\n③ \n\n④ \n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0157",
+          "page": 162,
+          "text_orig": "\n\n\n\n\n의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0169",
+          "page": 173,
+          "text_orig": "\n\n\n\n\n\n\n의 값은?\n① \n\n② 3 \n③ \n\n④ 4 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 3,
+      "q_text": "$\\sqrt[3]{50} \\times \\sqrt[3]{?} \\div \\sqrt[3]{?}$의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\sqrt[3]{2}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\sqrt[3]{3}$"
+        },
+        {
+          "number": 3,
+          "text": "$\\sqrt[3]{4}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\sqrt[3]{5}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\sqrt[3]{6}$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "q_kor_len": 4,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0011",
+          "page": 7,
+          "text_orig": "\n\n× \n의 값은?\n① \n② \n③ 2 \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0157",
+          "page": 162,
+          "text_orig": "\n\n\n\n\n의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0169",
+          "page": 173,
+          "text_orig": "\n\n\n\n\n\n\n의 값은?\n① \n\n② 3 \n③ \n\n④ 4 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0173",
+          "page": 177,
+          "text_orig": "\n\n\n\n\n\n의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0330",
+          "page": 389,
+          "text_orig": "\n\n\n\n\n\n\n의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 4,
+      "q_text": "그림과 같이 부채꼴 OAB의 ? 또는 부채꼴의 호의 길이/넓이 관련 [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "q_kor_len": 24,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 69.0,
+          "s_token": 60.0,
+          "s_lcs": 75.0,
+          "kor_min": 24,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0118",
+          "page": 119,
+          "text_orig": "그림과 같이 중심이 O이고 반지름의 길이가 인 부채꼴 OAB에서 \nAB이다. 부채꼴 OAB의 호 AB 위의 \n점 C에 대하여 두 선분 AB, OC가 만나는 점을 D라 하자. 삼각형 AOB의 외접원의 반지름의 길이가 이\n고 cos∠BDO\n\n\n일 때, 삼각형 OBD의 넓이는?\n① \n\n\n② \n\n\n③ \n\n\n④ \n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 75
+        },
+        {
+          "score": 55.9,
+          "s_token": 58.6,
+          "s_lcs": 54.2,
+          "kor_min": 24,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0071",
+          "page": 60,
+          "text_orig": "중심이 O인 부채꼴 OAB의 둘레의 길이를 , 이 부채꼴의 호의 길이를 라 하자. 일 때, ∠AOB의 크\n기는?\n① 1 \n② \n\n③ 2 \n④ \n\n⑤ 3",
+          "choice_n": 5,
+          "kor_len": 33
+        },
+        {
+          "score": 52.1,
+          "s_token": 57.6,
+          "s_lcs": 58.3,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0224",
+          "page": 300,
+          "text_orig": "그림과 같이 반지름의 길이가 인 부채꼴의 둘레의 길이를 , 넓이를 라 할 때, 이다. 이 부채꼴\n의 중심각의 크기를 라 할 때, 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 53
+        },
+        {
+          "score": 52.0,
+          "s_token": 57.4,
+          "s_lcs": 58.3,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0730",
+          "page": 266,
+          "text_orig": "다음과 같이 반지름의 길이 과 중심각의 크기 가 주어진 부채꼴의 호의 길이 과 넓이 를 각각 구하\n시오.\n\n",
+          "choice_n": 0,
+          "kor_len": 40
+        },
+        {
+          "score": 52.0,
+          "s_token": 57.4,
+          "s_lcs": 58.3,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0731",
+          "page": 266,
+          "text_orig": "다음과 같이 반지름의 길이 과 중심각의 크기 가 주어진 부채꼴의 호의 길이 과 넓이 를 각각 구하\n시오.\n\n",
+          "choice_n": 0,
+          "kor_len": 40
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 5,
+      "q_text": "$\\theta$가 제$2$사분면의 각이고 $\\sin\\theta + \\cos\\theta = ?$일 때, $\\sin\\theta\\cos\\theta$의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-\\dfrac{1}{3}$"
+        },
+        {
+          "number": 2,
+          "text": "$-\\dfrac{1}{4}$"
+        },
+        {
+          "number": 3,
+          "text": "$-\\dfrac{1}{5}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{1}{4}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{1}{3}$"
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "q_kor_len": 15,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 78.0,
+          "s_token": 80.0,
+          "s_lcs": 86.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0747",
+          "page": 274,
+          "text_orig": "다음을 구하시오.\n각 가 제사분면의 각이고 sin\n일 때, cos의 값",
+          "choice_n": 0,
+          "kor_len": 21
+        },
+        {
+          "score": 76.5,
+          "s_token": 41.2,
+          "s_lcs": 100.0,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0197",
+          "page": 247,
+          "text_orig": "그림과 같이 상수  ()에 대하여 지수함수 의 그래프와 직선 가 제사분면 위의 서로 다른 \n두 점 AB에서 만난다. 두 점 AB에서 축에 내린 수선의 발을 각각 CD라 하자. \nAB이고 사각\n형 ACDB의 넓이가 일 때, \nOA×\nOB의 값은?  (단, O는 원점이다.)\n① 10 \n② 12 \n③ 14 \n④ 16 \n⑤ 18",
+          "choice_n": 5,
+          "kor_len": 78
+        },
+        {
+          "score": 76.1,
+          "s_token": 75.4,
+          "s_lcs": 86.7,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0749",
+          "page": 275,
+          "text_orig": "다음을 구하시오.\n각 가 제사분면의 각이고 sin\n\n일 때, costan의 값",
+          "choice_n": 0,
+          "kor_len": 21
+        },
+        {
+          "score": 73.4,
+          "s_token": 91.4,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0076",
+          "page": 63,
+          "text_orig": "sin이고 sin\n× sin\n일 때, sincos의 값은?\n① \n\n\n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 7
+        },
+        {
+          "score": 73.4,
+          "s_token": 43.5,
+          "s_lcs": 93.3,
+          "kor_min": 15,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0094",
+          "page": 102,
+          "text_orig": "그림과 같이 함수 log의 그래프의 제1사분면 위에 있는 세 점 A, B, C에서 축에 내린 수선의 발을 \n각각 D, E, F라 하자. \nOD\nDE\nEF이고 두 사각형 ADEB, BEFC의 넓이의 차가 1일 때, 의 값\n은? (단, O는 원점이고, 는 상수이다.)\n① 4 \n② 5 \n③ 6\n④ 7 \n⑤ 8",
+          "choice_n": 5,
+          "kor_len": 66
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 6,
+      "q_text": "어느 악취의 농도가 $c\\,\\mathrm{ppm}$일 때 악취의 세기를 $r$이라 하면, $r = a + b\\log c$의 관계가 성립한다고 한다. 이 물질의 농도가 $1{,}000{,}000\\,\\mathrm{ppm}$일 때 악취의 세기를 $r_1$, 농도가 $1\\,\\mathrm{ppm}$일 때 악취의 세기를 $r_2$라 할 때 $\\dfrac{r_1}{r_2}$의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "로그",
+      "q_kor_len": 64,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0017",
+          "page": 51,
+          "text_orig": "\n\n×\n\n×\n\n일 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0040",
+          "page": 67,
+          "text_orig": "loglog일 때, 의 값은?\n① \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 66.0,
+          "s_token": 83.3,
+          "s_lcs": 61.5,
+          "kor_min": 13,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0075",
+          "page": 78,
+          "text_orig": "함수 \n\n\nlog≥의 역함수를 라 할 때, 의 값은?\n① -2 \n② -1\n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 13
+        },
+        {
+          "score": 65.6,
+          "s_token": 84.2,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0047",
+          "page": 72,
+          "text_orig": "일 때, loglog\n의 값은?\n① 2.2 \n② 2.3 \n③ 2.4\n④ 2.5 \n⑤ 2.6",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 64.7,
+          "s_token": 77.8,
+          "s_lcs": 66.7,
+          "kor_min": 12,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0421",
+          "page": 520,
+          "text_orig": "수열 의 일반항이 \n\n일 때, \n\n\n\n\n\n의 값은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 12
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 7,
+      "q_text": "$a > 1$이고 $a \\neq 1$인 양의 실수일 때, 함수 $f(x) = a^x$과 함수 $g(x) = \\log_a x$에 대해 옳은 것만을 <보기>에서 있는 대로 고른 것은? (단, $m, n$은 $0$보다 큰 실수이다) [4.6점] <보기> ㄱ. $f(m+n) = f(m) \\cdot f(n)$ ㄴ. $g(m \\cdot n) = g(m) + g(n)$ ㄷ. $f(m) \\cdot \\log_a f(n) = \\log_a f(m \\cdot n)$",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "ㄱ"
+        },
+        {
+          "number": 2,
+          "text": "ㄴ"
+        },
+        {
+          "number": 3,
+          "text": "ㄷ"
+        },
+        {
+          "number": 4,
+          "text": "ㄱ,ㄴ"
+        },
+        {
+          "number": 5,
+          "text": "ㄱ,ㄴ,ㄷ"
+        }
+      ],
+      "q_chapter": "지수/로그함수",
+      "q_kor_len": 46,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 64.1,
+          "s_token": 58.6,
+          "s_lcs": 67.7,
+          "kor_min": 31,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0238",
+          "page": 310,
+          "text_orig": "정의역의 모든 실수 에 대하여 인 함수만을 < 보기 >에서 있는 대로 고른 것은?\n< 보 기 >\nㄱ. sin \n\nㄴ. cos\nㄷ. \ntan\n① ㄱ \n② ㄴ \n③ ㄷ\n④ ㄴ, ㄷ \n⑤ ㄱ, ㄴ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 31
+        },
+        {
+          "score": 60.1,
+          "s_token": 55.7,
+          "s_lcs": 63.0,
+          "kor_min": 46,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0050",
+          "page": 38,
+          "text_orig": "가 1이 아닌 양수일 때, 두 함수 에 대하여 보기에서 옳은 것만을 있는 대로 고른 것\n은?\n< 보 기 >\nㄱ. 두 함수 의 그래프의 점근선은 서로 일치한다.\nㄴ. 모든 음의 실수 에 대하여 이면 이다.\nㄷ. 양수 에 대하여 직선 과 두 곡선 가 만나는 점을 각각 A, B라 하고, 직선 \n와 두 곡선 가 만나는 점을 각각 C, D라 할 때, \nAB\nCD이다.\n① ㄱ  \n② ㄷ  \n③ ㄱ, ㄴ  \n④ ㄱ, ㄷ  \n⑤ ㄱ, ㄴ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 108
+        },
+        {
+          "score": 59.5,
+          "s_token": 60.3,
+          "s_lcs": 59.0,
+          "kor_min": 39,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0026",
+          "page": 23,
+          "text_orig": "2 이상의 자연수 과 양수 에 대하여\n\n\n라 할 때, 보기에서 옳은 것만을 있는 대로 고른 것은?\n< 보 기 >\nㄱ. × \nㄴ. 이면 × 이다.\nㄷ. \n① ㄱ \n② ㄷ\n③ ㄱ, ㄴ\n④ ㄴ, ㄷ \n⑤ ㄱ, ㄴ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 39
+        },
+        {
+          "score": 57.6,
+          "s_token": 69.0,
+          "s_lcs": 50.0,
+          "kor_min": 42,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0237",
+          "page": 309,
+          "text_orig": "함수 sin에 대하여 < 보기 >에서 옳은 것만을 있는 대로 고른 것은?\n< 보 기 >\nㄱ. \n\nㄴ. 함수 의 주기는 이다.\nㄷ. 함수 의 최댓값은 이다.\n① ㄴ \n② ㄷ \n③ ㄱ, ㄴ\n④ ㄴ, ㄷ \n⑤ ㄱ, ㄴ, ㄷ",
+          "choice_n": 5,
+          "kor_len": 42
+        },
+        {
+          "score": 55.0,
+          "s_token": 59.3,
+          "s_lcs": 52.2,
+          "kor_min": 46,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0095",
+          "page": 160,
+          "text_orig": "< 보기 >에서 지수함수  ≠에 대한 설명 중 옳은 것만을 있는 대로 고른 것은?\n< 보 기 >\nㄱ. 정의역과 치역은 모두 실수 전체의 집합이다.\nㄴ. ≠이면 ≠이다.\nㄷ. 의 값이 증가하면 의 값도 증가한다.\nㄹ. 곡선 는 두 점 를 지난다.\n① ㄱ, ㄴ \n② ㄱ, ㄹ \n③ ㄴ, ㄷ\n④ ㄴ, ㄹ \n⑤ ㄷ, ㄹ",
+          "choice_n": 5,
+          "kor_len": 74
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 8,
+      "q_text": "$\\theta$가 제$2$사분면의 각일 때, $\\sin\\theta - \\sqrt{(\\sin\\theta - \\cos\\theta)^2} + \\cos^2\\theta$의 값을 구하시오. [4.6점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "q_kor_len": 17,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 75.7,
+          "s_token": 72.0,
+          "s_lcs": 88.2,
+          "kor_min": 17,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0254",
+          "page": 322,
+          "text_orig": "제사분면의 각 에 대하여 tan tan\n\n일 때, tan의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 19
+        },
+        {
+          "score": 72.9,
+          "s_token": 64.9,
+          "s_lcs": 88.2,
+          "kor_min": 17,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0276",
+          "page": 343,
+          "text_orig": "제사분면의 각 에 대하여 costan가 에 대한 이차방정식 의 서로 다른 두 근일 때, 상\n수 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 37
+        },
+        {
+          "score": 72.1,
+          "s_token": 71.8,
+          "s_lcs": 82.4,
+          "kor_min": 17,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0162",
+          "page": 186,
+          "text_orig": "자연수 에 대하여 함수 를 cos\n\n라 하자. 그림과 같이 함수 의 그래프와 직선 \n이 만나는 점 중 제1사분면의 점이면서 축과의 거리가 가장 가까운 점을 A, 두 번째로 가\n까운 점을 B라 할 때, \nAB이다. 함수 의 그래프와 직선 이 만나는 점 중 제4사분면의 점이\n면서 축과 의 거리가 가장 가까운 점을 C라 하고 함수 의 그래프와 축이 만나는 점을 D라 하자. \n직선 BC와 직선 CD의 기울기의 곱이 \n일 때, 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 147
+        },
+        {
+          "score": 70.1,
+          "s_token": 66.7,
+          "s_lcs": 82.4,
+          "kor_min": 17,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0226",
+          "page": 301,
+          "text_orig": "직선 와 수직이고 원점 O를 지나는 직선이 원 와 만나는 점 중 제사분면 위의 점을 P라 \n하자. 동경 OP가 나타내는 각의 크기를 라 할 때, sincos의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 56
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 7,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0003",
+          "page": 2,
+          "text_orig": "\n\n× \n의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 7
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 9,
+      "q_text": "지수함수 또는 삼각함수 그래프 관련 문제 [4.6점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "?",
+      "q_kor_len": 18,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 48.5,
+          "s_token": 38.0,
+          "s_lcs": 55.6,
+          "kor_min": 18,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0042",
+          "page": 33,
+          "text_orig": "지수함수 에 대하여 함수 의 그래프가 축과 만나는 점을 A, 직선 와 만나는 점을 B\n라 할 때, 선분 AB의 길이는?\n① \n\n\n\n② \n\n\n③ \n\n\n\n④ \n\n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 39
+        },
+        {
+          "score": 44.8,
+          "s_token": 45.3,
+          "s_lcs": 44.4,
+          "kor_min": 18,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0032",
+          "page": 26,
+          "text_orig": "일 때 두 지수함수  \n의 그래프와 직선 가 만나는 점을 각각 A, B라 하자. \nAB\n\n\n일 때, 의 값은?\n① \n\n② 2 \n③ \n\n④ 3 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 30
+        },
+        {
+          "score": 44.2,
+          "s_token": 35.4,
+          "s_lcs": 50.0,
+          "kor_min": 18,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0036",
+          "page": 29,
+          "text_orig": "1이 아닌 두 양수 에 대하여 함수 log의 역함수를 이라 하자. 함수 의 그래프는 \n점 (3, -1)을 지나고 함수 의 그래프는 점 (-2, )를 지난다. 의 값은?\n① \n\n\n② 9 \n③ \n\n\n④ \n\n\n⑤ 10",
+          "choice_n": 5,
+          "kor_len": 48
+        },
+        {
+          "score": 44.1,
+          "s_token": 35.3,
+          "s_lcs": 50.0,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0197",
+          "page": 247,
+          "text_orig": "그림과 같이 상수  ()에 대하여 지수함수 의 그래프와 직선 가 제사분면 위의 서로 다른 \n두 점 AB에서 만난다. 두 점 AB에서 축에 내린 수선의 발을 각각 CD라 하자. \nAB이고 사각\n형 ACDB의 넓이가 일 때, \nOA×\nOB의 값은?  (단, O는 원점이다.)\n① 10 \n② 12 \n③ 14 \n④ 16 \n⑤ 18",
+          "choice_n": 5,
+          "kor_len": 78
+        },
+        {
+          "score": 43.7,
+          "s_token": 42.6,
+          "s_lcs": 44.4,
+          "kor_min": 18,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0047",
+          "page": 36,
+          "text_orig": "함수 의 역함수를 라 하자. 함수 의 그래프가 점 (4, 3)을 지나고, 점근선이 직선 \n일 때, 의 값은? (단, 는 상수이다.)\n① -6 \n② -7 \n③ -8 \n④ -9 \n⑤ -10",
+          "choice_n": 5,
+          "kor_len": 39
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 10,
+      "q_text": "이차방정식 $x^2 - 10x + 4 = 0$의 두 근이 $\\log a$, $\\log b$일 때, $\\log_a b + \\log_b a$의 값은? (단, $a, b$는 $1$이 아닌 양의 실수이다) [4.6점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$14$"
+        },
+        {
+          "number": 2,
+          "text": "$16$"
+        },
+        {
+          "number": 3,
+          "text": "$20$"
+        },
+        {
+          "number": 4,
+          "text": "$23$"
+        },
+        {
+          "number": 5,
+          "text": "$26$"
+        }
+      ],
+      "q_chapter": "로그·이차방정식",
+      "q_kor_len": 26,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 79.8,
+          "s_token": 80.7,
+          "s_lcs": 79.2,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0008",
+          "page": 45,
+          "text_orig": "이차방정식 ×\n의 서로 다른 두 근이 \n\n일 때, 의 값은? (단, 는 상수이다.)\n① \n\n② \n③ \n\n④ \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 70.2,
+          "s_token": 73.7,
+          "s_lcs": 71.4,
+          "kor_min": 14,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0040",
+          "page": 32,
+          "text_orig": "방정식 \n의 해가  또는 일 때, 의 값은? (단, )\n① \n\n② 1 \n③ \n\n④ 2 \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 14
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0017",
+          "page": 51,
+          "text_orig": "\n\n×\n\n×\n\n일 때, 의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 70.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 5,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0040",
+          "page": 67,
+          "text_orig": "loglog일 때, 의 값은?\n① \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 5
+        },
+        {
+          "score": 68.4,
+          "s_token": 50.9,
+          "s_lcs": 80.0,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0435",
+          "page": 530,
+          "text_orig": "이차방정식 의 두 근을 라 할 때, \n\n\n의 값은?\n① 820 \n② 825 \n③ 830\n④ 835 \n⑤ 840",
+          "choice_n": 5,
+          "kor_len": 15
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 11,
+      "q_text": "지수함수 $f(x) = 3^{?x-?}$에 대하여 부등식 $\\log_2 f(x) \\leq -2$를 만족시키는 자연수 $x$의 개수는? [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$5$"
+        },
+        {
+          "number": 2,
+          "text": "$6$"
+        },
+        {
+          "number": 3,
+          "text": "$7$"
+        },
+        {
+          "number": 4,
+          "text": "$8$"
+        },
+        {
+          "number": 5,
+          "text": "$9$"
+        }
+      ],
+      "q_chapter": "지수/로그부등식",
+      "q_kor_len": 25,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 93.5,
+          "s_token": 93.1,
+          "s_lcs": 93.8,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0162",
+          "page": 216,
+          "text_orig": "부등식 ×≤을 만족시키는 자연수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 16
+        },
+        {
+          "score": 92.8,
+          "s_token": 92.1,
+          "s_lcs": 93.3,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0179",
+          "page": 231,
+          "text_orig": "부등식 loglog≤를 만족시키는 정수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 89.5,
+          "s_token": 73.7,
+          "s_lcs": 100.0,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0011",
+          "page": 46,
+          "text_orig": "부등식 \n×\n\n\n\n를 만족시키는 자연수 의 개수는?\n① 61 \n② 63 \n③ 65\n④ 67 \n⑤ 69",
+          "choice_n": 5,
+          "kor_len": 16
+        },
+        {
+          "score": 85.5,
+          "s_token": 73.0,
+          "s_lcs": 93.8,
+          "kor_min": 16,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0121",
+          "page": 146,
+          "text_orig": "부등식\nlog≤log\n을 만족시키는 자연수 의 개수는?\n① 11 \n② 12 \n③ 13\n④ 14 \n⑤ 15",
+          "choice_n": 5,
+          "kor_len": 16
+        },
+        {
+          "score": 85.5,
+          "s_token": 73.0,
+          "s_lcs": 93.8,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0182",
+          "page": 233,
+          "text_orig": "부등식 logloglog을 만족시키는 자연수 의 개수는?\n① 26 \n② 28 \n③ 30\n④ 32 \n⑤ 34",
+          "choice_n": 5,
+          "kor_len": 16
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 12,
+      "q_text": "그림과 같이 두 함수 $y = \\left(\\dfrac{5}{3}\\right)^x$, $y = \\left(\\dfrac{1}{?}\\right)^x$의 그래프가 만나는 점을 각각 $\\mathrm{A}, \\mathrm{B}$라 할 때, 삼각형 $\\mathrm{AOB}$의 넓이는? (단, $\\mathrm{O}$는 원점) [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "지수함수 그래프",
+      "q_kor_len": 35,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 89.1,
+          "s_token": 81.4,
+          "s_lcs": 94.3,
+          "kor_min": 35,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0200",
+          "page": 251,
+          "text_orig": "그림과 같이 두 함수 , 의 그래프가 직선  과 만나는 점을 각각 AB라 하\n자. 점 C에 대하여 \nAC\nBC일 때, 삼각형 OAB의 넓이는? (단, O는 원점이다.)\n① 6 \n② 7 \n③ 8 \n④ 9 \n⑤ 10",
+          "choice_n": 5,
+          "kor_len": 46
+        },
+        {
+          "score": 73.3,
+          "s_token": 67.5,
+          "s_lcs": 77.1,
+          "kor_min": 35,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0115",
+          "page": 133,
+          "text_orig": "그림과 같이 직선 이 함수 log의 그래프와 두 점 A, B에서 만나고, 함수 log\n의 그래프와는 두 점 C, D에서 만난다. 점 B가 선분 AC의 중점일 때, 삼각형 OBC의 넓이는? (단, O는 원\n점이다.)\n① \n\n② \n\n③ 1\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 59
+        },
+        {
+          "score": 71.8,
+          "s_token": 74.5,
+          "s_lcs": 80.0,
+          "kor_min": 35,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0104",
+          "page": 167,
+          "text_orig": "두 함수 , 의 그래프가 직선 과 만나는 점을 각각 AB라 할 때, 삼각형 OAB의 넓이를 구\n하시오.  (단, O는 원점이다.)",
+          "choice_n": 0,
+          "kor_len": 38
+        },
+        {
+          "score": 70.7,
+          "s_token": 65.4,
+          "s_lcs": 74.3,
+          "kor_min": 35,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0094",
+          "page": 102,
+          "text_orig": "그림과 같이 함수 log의 그래프의 제1사분면 위에 있는 세 점 A, B, C에서 축에 내린 수선의 발을 \n각각 D, E, F라 하자. \nOD\nDE\nEF이고 두 사각형 ADEB, BEFC의 넓이의 차가 1일 때, 의 값\n은? (단, O는 원점이고, 는 상수이다.)\n① 4 \n② 5 \n③ 6\n④ 7 \n⑤ 8",
+          "choice_n": 5,
+          "kor_len": 66
+        },
+        {
+          "score": 70.2,
+          "s_token": 72.7,
+          "s_lcs": 68.6,
+          "kor_min": 35,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0117",
+          "page": 137,
+          "text_orig": "그림과 같이 1보다 큰 실수 에 대하여 직선 가 두 곡선 log와 만나는 점을 각각 A, B\n라 하고 삼각형 AOB의 외심을 C()라 하자. 삼각형 AOB의 넓이가 \n\n일 때, 의 값은?\n(단, O는 원점이다.)\n① 3 \n② \n\n\n③ \n\n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 59
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 13,
+      "q_text": "함수 $y = \\sqrt{?\\sqrt{?}}$ 또는 거듭제곱근 평행이동 관련 [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "?",
+      "q_kor_len": 16,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 43.1,
+          "s_token": 42.1,
+          "s_lcs": 43.8,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0123",
+          "page": 182,
+          "text_orig": "함수 log의 그래프를 축의 방향으로 만큼, 축의 방향으로 만큼 평행이동한 그래프가 두 점 \n을 지날 때, 의 값은? (단, 는 상수이다.)\n① 4 \n② 5 \n③ 6\n④ 7 \n⑤ 8",
+          "choice_n": 5,
+          "kor_len": 47
+        },
+        {
+          "score": 42.5,
+          "s_token": 50.0,
+          "s_lcs": 37.5,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0100",
+          "page": 163,
+          "text_orig": "< 보기 >에서 함수 의 그래프를 평행이동 또는 대칭이동하여 일치시킬 수 있는 그래프를 나타내는 \n식만을 있는 대로 고른 것은?\n< 보 기 >\nㄱ.  \nㄴ. ×\nㄷ. \nㄹ. \n① ㄱ, ㄴ \n② ㄱ, ㄷ \n③ ㄴ, ㄷ\n④ ㄱ, ㄴ, ㄹ \n⑤ ㄴ, ㄷ, ㄹ",
+          "choice_n": 5,
+          "kor_len": 51
+        },
+        {
+          "score": 42.5,
+          "s_token": 50.0,
+          "s_lcs": 37.5,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0124",
+          "page": 183,
+          "text_orig": "< 보기 >에서 함수 log의 그래프를 평행이동 또는 대칭이동하여 일치시킬 수 있는 그래프를 나타내\n는 식만을 있는 대로 고른 것은?\n< 보 기 >\nㄱ. log\n\nㄴ. log\nㄷ. log\nㄹ. log\n① ㄱ, ㄴ \n② ㄱ, ㄷ \n③ ㄱ, ㄹ\n④ ㄱ, ㄴ, ㄹ \n⑤ ㄴ, ㄷ, ㄹ",
+          "choice_n": 5,
+          "kor_len": 51
+        },
+        {
+          "score": 39.2,
+          "s_token": 32.3,
+          "s_lcs": 43.8,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0244",
+          "page": 314,
+          "text_orig": "함수 tan의 그래프를 축의 방향으로 \n만큼 평행이동한 후, 원점에 대하여 대칭이동한 그래프를 \n나타내는 함수를 라 하자. \n의 값은?\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 49
+        },
+        {
+          "score": 37.7,
+          "s_token": 28.6,
+          "s_lcs": 43.8,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0102",
+          "page": 165,
+          "text_orig": "함수 \n\n\n의 그래프를 원점에 대하여 대칭이동한 후, 축의 방향으로 만큼, 축의 방향으로 만큼 평\n행이동한 그래프가 그림과 같이 두 점 을 지날 때, 의 값은?  (단, 는 상수이다.)\n① \n② \nlog\n③ log\n④ \nlog\n⑤ log",
+          "choice_n": 5,
+          "kor_len": 64
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 14,
+      "q_text": "부등식 $3 - 2(?) - ?(?) < 0$ 또는 비슷한 식을 만족시키는 모든 정수 $x$의 개수는? [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$5$"
+        },
+        {
+          "number": 2,
+          "text": "$6$"
+        },
+        {
+          "number": 3,
+          "text": "$7$"
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "지수/로그부등식",
+      "q_kor_len": 24,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 90.7,
+          "s_token": 86.7,
+          "s_lcs": 93.3,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0179",
+          "page": 231,
+          "text_orig": "부등식 loglog≤를 만족시키는 정수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 86.8,
+          "s_token": 82.9,
+          "s_lcs": 89.5,
+          "kor_min": 19,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0274",
+          "page": 341,
+          "text_orig": "≤≤일 때, 부등식 sin \n≥을 만족시키는 모든 정수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 19
+        },
+        {
+          "score": 86.6,
+          "s_token": 85.2,
+          "s_lcs": 87.5,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0162",
+          "page": 216,
+          "text_orig": "부등식 ×≤을 만족시키는 자연수 의 개수는?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 16
+        },
+        {
+          "score": 83.0,
+          "s_token": 67.4,
+          "s_lcs": 93.3,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0180",
+          "page": 232,
+          "text_orig": "부등식 log\n\n를 만족시키는 정수 의 개수는?\n① 20 \n② 22 \n③ 24\n④ 26 \n⑤ 28",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 79.2,
+          "s_token": 66.7,
+          "s_lcs": 87.5,
+          "kor_min": 16,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0121",
+          "page": 146,
+          "text_orig": "부등식\nlog≤log\n을 만족시키는 자연수 의 개수는?\n① 11 \n② 12 \n③ 13\n④ 14 \n⑤ 15",
+          "choice_n": 5,
+          "kor_len": 16
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 15,
+      "q_text": "두 정수 $a, b$와 자연수 $c$에 대하여 다음을 만족시키는 모든 $a + b + c$의 값의 합은? (단, $\\sqrt{b}$는 음수 아닌 실수이다) [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$63$"
+        },
+        {
+          "number": 2,
+          "text": "$120$"
+        },
+        {
+          "number": 3,
+          "text": "$240$"
+        },
+        {
+          "number": 4,
+          "text": "$336$"
+        },
+        {
+          "number": 5,
+          "text": "$432$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "q_kor_len": 37,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 81.4,
+          "s_token": 73.5,
+          "s_lcs": 86.7,
+          "kor_min": 15,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0001",
+          "page": 1,
+          "text_orig": "\n\n\n\n을 만족시키는 모든 실수 의 값의 합은?\n① 1 \n② 3\n③ 5\n④ 7 \n⑤ 9",
+          "choice_n": 5,
+          "kor_len": 15
+        },
+        {
+          "score": 77.9,
+          "s_token": 78.0,
+          "s_lcs": 77.8,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0152",
+          "page": 208,
+          "text_orig": "방정식 을 만족시키는 모든 실수 의 값의 합은?\n① \n② \n\n\n③ \n\n\n④ \n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 18
+        },
+        {
+          "score": 75.4,
+          "s_token": 76.1,
+          "s_lcs": 75.0,
+          "kor_min": 24,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0103",
+          "page": 113,
+          "text_orig": "함수 에 대하여 부등식\n\n을 만족시키는 모든 정수 의 값의 합은?\n① 1 \n② 3 \n③ 5\n④ 7 \n⑤ 9",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 74.3,
+          "s_token": 79.5,
+          "s_lcs": 70.8,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0163",
+          "page": 216,
+          "text_orig": "함수 에 대하여 부등식 \n     ≤\n를 만족시키는 모든 정수 의 값의 합은?\n① 1 \n② 2 \n③ 3\n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 73.7,
+          "s_token": 76.0,
+          "s_lcs": 72.2,
+          "kor_min": 18,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0160",
+          "page": 214,
+          "text_orig": "부등식 \n을 만족시키는 모든 정수 의 값의 합은?\n① -2 \n② -1 \n③ 0\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 18
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 16,
+      "q_text": "서로 다른 두 실수 $\\alpha, \\beta$와 $0 < \\alpha < \\beta$가 다음을 만족시킨다. (가) $\\log_? x + 3a \\log_3 x = ?$의 두 근이 $3, 6$이다. (나) $\\log_? - 3 \\log_? = ?$의 두 근이 $\\alpha, \\beta$이다. $\\alpha + \\beta$의 값은? (단, ?는 $1$이 아닌 양의 실수이다) [5.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-9$"
+        },
+        {
+          "number": 2,
+          "text": "$-3$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$1$"
+        },
+        {
+          "number": 5,
+          "text": "$9$"
+        }
+      ],
+      "q_chapter": "로그방정식",
+      "q_kor_len": 46,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 66.2,
+          "s_token": 71.7,
+          "s_lcs": 62.5,
+          "kor_min": 24,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0008",
+          "page": 45,
+          "text_orig": "이차방정식 ×\n의 서로 다른 두 근이 \n\n일 때, 의 값은? (단, 는 상수이다.)\n① \n\n② \n③ \n\n④ \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 65.8,
+          "s_token": 70.8,
+          "s_lcs": 62.5,
+          "kor_min": 24,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0059",
+          "page": 59,
+          "text_orig": "1이 아닌 서로 다른 세 양수 가 다음 조건을 만족시킬 때, log\n의 값은?\n㈎ loglog\n㈏ loglog\n① 1 \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 24
+        },
+        {
+          "score": 64.6,
+          "s_token": 64.0,
+          "s_lcs": 65.0,
+          "kor_min": 20,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0072",
+          "page": 89,
+          "text_orig": "≠인 두 수 가 다음 조건을 만족시킬 때, \n의 값은? (단, log)\n(가) log× log\n(나) loglog\n① \n② \n③ \n④ \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 20
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0006",
+          "page": 4,
+          "text_orig": "log\n\nlog\nlog의 값은?\n① log\n\n② log\n\n③ log\n\n④ log\n\n⑤ log",
+          "choice_n": 5,
+          "kor_len": 3
+        },
+        {
+          "score": 64.0,
+          "s_token": 100.0,
+          "s_lcs": 100.0,
+          "kor_min": 3,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0007",
+          "page": 5,
+          "text_orig": "log×× log의 값은?\n① \n\n② \n\n③ \n\n④ 1 \n⑤ 2",
+          "choice_n": 5,
+          "kor_len": 3
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 17,
+      "q_text": "$a > 1$인 양의 실수에 대하여 $\\sin\\theta = \\log_a x$, $\\cos\\theta = \\log_a y$이고 $x \\cdot y = ?$일 때 $a$의 값은? [5.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{1}{2}$"
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "로그·삼각함수",
+      "q_kor_len": 17,
+      "q_choice_n": 5,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 83.2,
+          "s_token": 86.5,
+          "s_lcs": 100.0,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0186",
+          "page": 236,
+          "text_orig": "양수 에 대하여 \n\nlog\n\n\nlog\n일 때, loglog의 값은?\n① \n\n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 11
+        },
+        {
+          "score": 81.9,
+          "s_token": 82.8,
+          "s_lcs": 100.0,
+          "kor_min": 11,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0032",
+          "page": 61,
+          "text_orig": "실수 에 대하여 일 때, \n\n\n의 값은?\n① \n\n② \n③ \n\n④ \n\n⑤ ",
+          "choice_n": 5,
+          "kor_len": 11
+        },
+        {
+          "score": 81.2,
+          "s_token": 88.9,
+          "s_lcs": 100.0,
+          "kor_min": 10,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0064",
+          "page": 54,
+          "text_orig": "\n인 에 대하여 sincostan일 때, tan의 값은?\n① \n\n② \n\n③ -1 \n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 10
+        },
+        {
+          "score": 81.0,
+          "s_token": 80.0,
+          "s_lcs": 100.0,
+          "kor_min": 11,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0022",
+          "page": 14,
+          "text_orig": "양수 에 대하여 일 때, \n\n\n\n\n의 값은?\n① 1 \n② 2 \n③ 3 \n④ 4 \n⑤ 5",
+          "choice_n": 5,
+          "kor_len": 11
+        },
+        {
+          "score": 80.9,
+          "s_token": 88.0,
+          "s_lcs": 100.0,
+          "kor_min": 10,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0077",
+          "page": 64,
+          "text_orig": "\n인 에 대하여 \ncos\n\n\nsintan\n\n\n일 때, tan의 값은?\n① \n\n\n② \n\n\n③ \n\n④ \n\n\n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 10
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 18,
+      "q_text": "[서답형 1] $1$이 아닌 두 양수 $a, b$에 대하여 다음 물음에 답하시오. [6.2점] (1-1) $a^? = b^?$임을 밑의 변환을 사용하여 서술하시오 [3점]. (1-2) $0.01^? = ?$의 $abc$ 구하고 그 과정을 서술하시오 [2점].",
+      "q_choices": [],
+      "q_chapter": "로그",
+      "q_kor_len": 54,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 69.2,
+          "s_token": 70.4,
+          "s_lcs": 68.4,
+          "kor_min": 19,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0041",
+          "page": 36,
+          "text_orig": "1이 아닌 두 양수 에 대하여 \nlog\nlog\n일 때, \nlog의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 19
+        },
+        {
+          "score": 67.0,
+          "s_token": 81.1,
+          "s_lcs": 71.4,
+          "kor_min": 14,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0031",
+          "page": 60,
+          "text_orig": "이 아닌 양수 에 대하여 \n\n\n일 때, 의 값은?\n① \n\n② \n③ \n\n④ \n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 14
+        },
+        {
+          "score": 66.0,
+          "s_token": 76.9,
+          "s_lcs": 68.8,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0007",
+          "page": 44,
+          "text_orig": "이 아닌 양수 에 대하여 \n\n\n×\n\n\n\n×\n\n\n의 값과 같은 것은?\n① \n② \n\n③ \n\n④ \n\n⑤ \n",
+          "choice_n": 5,
+          "kor_len": 16
+        },
+        {
+          "score": 65.7,
+          "s_token": 77.6,
+          "s_lcs": 71.4,
+          "kor_min": 14,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0017",
+          "page": 14,
+          "text_orig": "1이 아닌 양수 에 대하여\n\nlog\n\n\nlog\n\nlog× log\n일 때, 의 값은?\n① \n\n② \n\n\n③ \n④ 2 \n⑤ ",
+          "choice_n": 5,
+          "kor_len": 14
+        },
+        {
+          "score": 62.7,
+          "s_token": 71.7,
+          "s_lcs": 66.7,
+          "kor_min": 15,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0040",
+          "page": 35,
+          "text_orig": "1이 아닌 세 양수 에 대하여\nlogloglog\n일 때, logloglog의 값은?\n① 3 \n② \n\n\n③ \n\n\n④ 4 \n⑤ \n\n",
+          "choice_n": 5,
+          "kor_len": 15
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 19,
+      "q_text": "[서답형 2] (본문 식별 어려움)",
+      "q_choices": [],
+      "q_chapter": "?",
+      "q_kor_len": 10,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 18.5,
+          "s_token": 9.4,
+          "s_lcs": 30.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0407",
+          "page": 489,
+          "text_orig": "그림과 같이 한 변의 길이가 인 정삼각형 ABC에서 각 변의 중점을 이어서 만든 정삼각형을 ABC라 \n하고, 정삼각형 ABC에서 각 변의 중점을 이어서 만든 정삼각형을 ABC이라 하자. 이와 같은 과정을 \n반복할 때, 삼각형 ABC의 둘레의 길이를 이라 하자.\n     ⋯\n\n일 때, 의 값을 구하시오. (단, 와 는 서로소인 자연수이다.)",
+          "choice_n": 0,
+          "kor_len": 109
+        },
+        {
+          "score": 18.1,
+          "s_token": 23.3,
+          "s_lcs": 20.0,
+          "kor_min": 10,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0165",
+          "page": 190,
+          "text_orig": "≤에서 방정식 \nlog sinloglogcos의 해를 구하시오.",
+          "choice_n": 0,
+          "kor_len": 12
+        },
+        {
+          "score": 18.1,
+          "s_token": 23.3,
+          "s_lcs": 20.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0316",
+          "page": 384,
+          "text_orig": "삼각형 ABC에서 ∠A \n∠B\n\nBC일 때, 삼각형 ABC의 넓이를 구하시오.",
+          "choice_n": 0,
+          "kor_len": 18
+        },
+        {
+          "score": 18.0,
+          "s_token": 8.1,
+          "s_lcs": 30.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0471",
+          "page": 559,
+          "text_orig": "이웃한 두 변의 길이가 인 직사각형 모양의 종이를 이어 붙여 가로의 길이가 , 세로의 길이가 인 \n직사각형을 만드는 방법의 수를 이라 하자. 예를 들어 이고, 인 경우 그림과 같이 세 \n가지 방법이 있으므로 이다. 의 값을 구하시오. (단, 도형을 회전시키는 것은 고려하지 않는다.)",
+          "choice_n": 0,
+          "kor_len": 105
+        },
+        {
+          "score": 17.5,
+          "s_token": 21.4,
+          "s_lcs": 20.0,
+          "kor_min": 10,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0307",
+          "page": 378,
+          "text_orig": "삼각형 ABC에 대하여 sinsin× cos일 때, 삼각형 ABC는 어떤 삼각형인지 구하시오.",
+          "choice_n": 0,
+          "kor_len": 24
+        }
+      ]
+    },
+    {
+      "school": "광문고",
+      "q_no": 20,
+      "q_text": "[서답형 3] 그림과 같이 좌표평면 위에 두 점 $\\mathrm{A}, \\mathrm{B}$가 있다. $\\mathrm{P}(t, 0), \\mathrm{Q}(0, t)$에 대하여 평면도형 $\\mathrm{APQB}$의 넓이를 $f(t)$, 점 $\\mathrm{P}$와 점 $\\mathrm{Q}$ 사이의 거리를 $g(t)$라 하자. (3-1) 어떤 실수 $t$에 대하여 $f(t) = ? + 6$일 때 $t$의 값을 구하고, 그 과정을 서술하시오 [3점]. (3-2) (3-1)에서 구한 실수 $a, b, c$에 대하여 $t$에 관한 방정식 $\\log_? + \\sin? = ?$의 모든 실근의 곱을 구하고, 그 과정을 서술하시오 [5점].",
+      "q_choices": [],
+      "q_chapter": "로그·삼각함수",
+      "q_kor_len": 106,
+      "q_choice_n": 0,
+      "is_ocr": false,
+      "top": [
+        {
+          "score": 89.6,
+          "s_token": 83.3,
+          "s_lcs": 93.8,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0088",
+          "page": 102,
+          "text_orig": "두 양수 에 대하여\n     loglog\nlog\n일 때, 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 16
+        },
+        {
+          "score": 88.7,
+          "s_token": 81.8,
+          "s_lcs": 93.3,
+          "kor_min": 15,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0078",
+          "page": 94,
+          "text_orig": "양수 에 대하여 log일 때, log\nlog\n의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 15
+        },
+        {
+          "score": 88.2,
+          "s_token": 80.0,
+          "s_lcs": 93.8,
+          "kor_min": 16,
+          "tb_key": "sk_su1",
+          "tb_short": "수특I",
+          "code": "26008-0153",
+          "page": 159,
+          "text_orig": "두 수열 {}, {}에 대하여 \n\n\n\n\n\n일 때, \n\n\n의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 16
+        },
+        {
+          "score": 88.2,
+          "s_token": 80.0,
+          "s_lcs": 93.8,
+          "kor_min": 16,
+          "tb_key": "op_high",
+          "tb_short": "올림고난도",
+          "code": "26477-0129",
+          "page": 157,
+          "text_orig": "두 상수 에 대하여 , \n\n일 때, 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 16
+        },
+        {
+          "score": 88.2,
+          "s_token": 80.0,
+          "s_lcs": 93.8,
+          "kor_min": 16,
+          "tb_key": "op_type",
+          "tb_short": "올림유형",
+          "code": "26643-0212",
+          "page": 293,
+          "text_orig": "두 상수 에 대하여 \n\n일 때, 의 값을 구하시오.",
+          "choice_n": 0,
+          "kor_len": 16
+        }
+      ]
+    }
+  ]
+}

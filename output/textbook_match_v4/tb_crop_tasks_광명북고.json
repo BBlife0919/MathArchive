@@ -1,0 +1,152 @@
+[
+  {
+    "school": "광명북고",
+    "q_no": 2,
+    "q_text": "반지름의 길이가 $6$, 중심각의 크기가 $\\dfrac{2}{3}\\pi$인 부채꼴의 호의 길이는? [3.8점]",
+    "tb_key": "gojaeng",
+    "tb_short": "고쟁이",
+    "page": 81,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/gojaeng/p0081.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 4,
+    "q_text": "부등식 $2\\log_{\\frac{1}{2}}(x-1) > \\log_{\\frac{1}{2}}(x+5)$의 해가 $a < x < b$일 때, $a+b$의 값은? [3.9점]",
+    "tb_key": "mdt_su1",
+    "tb_short": "마더텅수1",
+    "page": 105,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/mdt_su1/p0105.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 4,
+    "q_text": "부등식 $2\\log_{\\frac{1}{2}}(x-1) > \\log_{\\frac{1}{2}}(x+5)$의 해가 $a < x < b$일 때, $a+b$의 값은? [3.9점]",
+    "tb_key": "mdt_su1",
+    "tb_short": "마더텅수1",
+    "page": 106,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/mdt_su1/p0106.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 5,
+    "q_text": "$\\mathrm{pH}$는 용액의 산성 또는 염기성의 정도를 나타내는 수치로써 용액 $1L$ 속에 들어있는 수소이온농도가 $[\\mathrm{H}^{+}]\\,\\mathrm{mol}/L$일 때, $\\mathrm{pH} = -\\log[\\mathrm{H}^{+}]$로 정의한다. 어떤 용액의 수소이온농도가 $[\\mathrm{H}^{+}] = ?$일 때, 이 용액의 ",
+    "tb_key": "cj_text",
+    "tb_short": "천재교과서",
+    "page": 49,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/cj_text/p0049.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 5,
+    "q_text": "$\\mathrm{pH}$는 용액의 산성 또는 염기성의 정도를 나타내는 수치로써 용액 $1L$ 속에 들어있는 수소이온농도가 $[\\mathrm{H}^{+}]\\,\\mathrm{mol}/L$일 때, $\\mathrm{pH} = -\\log[\\mathrm{H}^{+}]$로 정의한다. 어떤 용액의 수소이온농도가 $[\\mathrm{H}^{+}] = ?$일 때, 이 용액의 ",
+    "tb_key": "me_text",
+    "tb_short": "미래엔교과서",
+    "page": 41,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/me_text/p0041.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 6,
+    "q_text": "$\\log_{x^2}(-x^2+x+12)$가 정의되도록 하는 정수 $x$의 개수는? [4.1점]",
+    "tb_key": "yhon1",
+    "tb_short": "유형ON1",
+    "page": 26,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/yhon1/p0026.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 6,
+    "q_text": "$\\log_{x^2}(-x^2+x+12)$가 정의되도록 하는 정수 $x$의 개수는? [4.1점]",
+    "tb_key": "yhon1",
+    "tb_short": "유형ON1",
+    "page": 27,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/yhon1/p0027.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 6,
+    "q_text": "$\\log_{x^2}(-x^2+x+12)$가 정의되도록 하는 정수 $x$의 개수는? [4.1점]",
+    "tb_key": "me_text",
+    "tb_short": "미래엔교과서",
+    "page": 40,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/me_text/p0040.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 6,
+    "q_text": "$\\log_{x^2}(-x^2+x+12)$가 정의되도록 하는 정수 $x$의 개수는? [4.1점]",
+    "tb_key": "cj_text",
+    "tb_short": "천재교과서",
+    "page": 35,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/cj_text/p0035.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 9,
+    "q_text": "$x$에 대한 방정식 $9^x - 2(a-3) \\cdot 3^x + a - 9 = 0$이 한 양수와 한 음수의 실근을 갖도록 하는 모든 정수 $a$의 값의 합은? [4.4점]",
+    "tb_key": "js_silyeok",
+    "tb_short": "정석실력",
+    "page": 69,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/js_silyeok/p0069.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 9,
+    "q_text": "$x$에 대한 방정식 $9^x - 2(a-3) \\cdot 3^x + a - 9 = 0$이 한 양수와 한 음수의 실근을 갖도록 하는 모든 정수 $a$의 값의 합은? [4.4점]",
+    "tb_key": "ol_godando",
+    "tb_short": "올림고난도",
+    "page": 26,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/ol_godando/p0026.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 18,
+    "q_text": "자연수 $n$과 정수 $a$에 대하여 $(n-a)(n-a-?)$의 $n$ 제곱근 중 실수인 것의 개수를 $f(n)$이라 하자. $f(2) + f(3) + \\cdots + f(?)$의 값은? [5.2점]",
+    "tb_key": "sutuk26",
+    "tb_short": "수특26",
+    "page": 5,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/sutuk26/p0005.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 18,
+    "q_text": "자연수 $n$과 정수 $a$에 대하여 $(n-a)(n-a-?)$의 $n$ 제곱근 중 실수인 것의 개수를 $f(n)$이라 하자. $f(2) + f(3) + \\cdots + f(?)$의 값은? [5.2점]",
+    "tb_key": "ol_godando",
+    "tb_short": "올림고난도",
+    "page": 18,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/ol_godando/p0018.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 18,
+    "q_text": "자연수 $n$과 정수 $a$에 대하여 $(n-a)(n-a-?)$의 $n$ 제곱근 중 실수인 것의 개수를 $f(n)$이라 하자. $f(2) + f(3) + \\cdots + f(?)$의 값은? [5.2점]",
+    "tb_key": "ol_jeongug",
+    "tb_short": "올림전국연합",
+    "page": 139,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/ol_jeongug/p0139.png"
+  },
+  {
+    "school": "광명북고",
+    "q_no": 18,
+    "q_text": "자연수 $n$과 정수 $a$에 대하여 $(n-a)(n-a-?)$의 $n$ 제곱근 중 실수인 것의 개수를 $f(n)$이라 하자. $f(2) + f(3) + \\cdots + f(?)$의 값은? [5.2점]",
+    "tb_key": "yhon1",
+    "tb_short": "유형ON1",
+    "page": 22,
+    "confidence": "high",
+    "page_image": "output/textbook_match_v3/pages_png/yhon1/p0022.png"
+  }
+]

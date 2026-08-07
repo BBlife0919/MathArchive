@@ -1,0 +1,302 @@
+{
+  "school": "광명고등학교",
+  "short_name": "광명고",
+  "exam_title": "2026학년도 1학기 중간고사",
+  "subject": "공통수학1",
+  "subject_range": "다항식의 연산 ~ 이차함수",
+  "grade": 1,
+  "instructor": "이영우T",
+  "academy": "이음학원",
+  "questions": [
+    {
+      "q": 1,
+      "chapter": "복소수",
+      "difficulty": "하",
+      "score": 4.7,
+      "matched_yutype": 28,
+      "matched_title": "유형28 — 복소수 기초연산",
+      "grade": "A",
+      "rationale": "복소수 실수 판정 개념"
+    },
+    {
+      "q": 2,
+      "chapter": "다항식의 연산",
+      "difficulty": "하",
+      "score": 4.7,
+      "matched_yutype": 1,
+      "matched_title": "유형1 — 다항식의 연산 기본",
+      "grade": "A",
+      "rationale": "다항식 곱셈 후 계수 합"
+    },
+    {
+      "q": 3,
+      "chapter": "이차방정식",
+      "difficulty": "하",
+      "score": 4.7,
+      "matched_yutype": 49,
+      "matched_title": "유형49 — 함수와 방정식의 관계 기본 - 실근",
+      "grade": "A",
+      "rationale": "이차함수와 직선 교점의 합"
+    },
+    {
+      "q": 4,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "하",
+      "score": 4.8,
+      "matched_yutype": 19,
+      "matched_title": "유형19 — 나머지정리 인수정리",
+      "grade": "A",
+      "rationale": "P(α)=0 이 되는 α 값"
+    },
+    {
+      "q": 5,
+      "chapter": "복소수",
+      "difficulty": "하",
+      "score": 4.8,
+      "matched_yutype": 29,
+      "matched_title": "유형29 — 복소수 음수의 제곱근",
+      "grade": "A",
+      "rationale": "음수 제곱근 계산 후 a+bi 꼴"
+    },
+    {
+      "q": 6,
+      "chapter": "이차함수",
+      "difficulty": "중",
+      "score": 4.8,
+      "matched_yutype": 50,
+      "matched_title": "유형50 — 함수와 직선의 위치관계 판별식",
+      "grade": "A",
+      "rationale": "x축 접 판별식 D=0"
+    },
+    {
+      "q": 7,
+      "chapter": "이차방정식",
+      "difficulty": "중",
+      "score": 4.9,
+      "matched_yutype": 40,
+      "matched_title": "유형40 — 이차방정식의 작성",
+      "grade": "A",
+      "rationale": "두 근 1/α, 1/β 로 새 이차방정식 작성"
+    },
+    {
+      "q": 8,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 4.9,
+      "matched_yutype": 32,
+      "matched_title": "유형32 — 조건에 따른 복소수",
+      "grade": "A",
+      "rationale": "켤레복소수=자기자신 → 실수조건"
+    },
+    {
+      "q": 9,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 28,
+      "matched_title": "유형28 — 복소수 기초연산",
+      "grade": "B",
+      "rationale": "x,y 복소수 대입 후 식의 값"
+    },
+    {
+      "q": 10,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 35,
+      "matched_title": "유형35 — 복소수 거듭제곱의 합",
+      "grade": "A",
+      "rationale": "((1-i)/(1+i))^n 거듭제곱 주기"
+    },
+    {
+      "q": 11,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 15,
+      "matched_title": "유형15 — 이차, 삼차식으로 나눈 나머지",
+      "grade": "B",
+      "rationale": "조립제법 활용 몫과 나머지"
+    },
+    {
+      "q": 12,
+      "chapter": "이차방정식",
+      "difficulty": "중",
+      "score": 5.0,
+      "matched_yutype": 39,
+      "matched_title": "유형39 — 이차방정식 판별식",
+      "grade": "A",
+      "rationale": "서로 다른 두 실근 D>0 정수 k 최댓값"
+    },
+    {
+      "q": 13,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "중",
+      "score": 5.1,
+      "matched_yutype": 20,
+      "matched_title": "유형20 — 나머지정리 여러 개의 검산식",
+      "grade": "A",
+      "rationale": "P(x-1) 인수, P(2x+1) 나머지 동시조건"
+    },
+    {
+      "q": 14,
+      "chapter": "복소수",
+      "difficulty": "중",
+      "score": 5.1,
+      "matched_yutype": 36,
+      "matched_title": "유형36 — 켤레 관계 종합",
+      "grade": "A",
+      "rationale": "z, z̄ 활용 분수식 정리"
+    },
+    {
+      "q": 15,
+      "chapter": "인수분해",
+      "difficulty": "중",
+      "score": 5.1,
+      "matched_yutype": 25,
+      "matched_title": "유형25 — 두 일차식의 곱으로 인수분해",
+      "grade": "B",
+      "rationale": "절댓값 식 전개 후 일차식 곱 인수분해"
+    },
+    {
+      "q": 16,
+      "chapter": "이차함수",
+      "difficulty": "상",
+      "score": 5.2,
+      "matched_yutype": 54,
+      "matched_title": "유형54 — 이차함수의 최대최소 활용",
+      "grade": "B",
+      "rationale": "원·반원 도형의 넓이 최대최소 보기 판별"
+    },
+    {
+      "q": 17,
+      "chapter": "항등식과 나머지정리",
+      "difficulty": "상",
+      "score": 5.2,
+      "matched_yutype": 18,
+      "matched_title": "유형18 — 나누어지는 식 변형",
+      "grade": "A",
+      "rationale": "f(x) 와 Q1(x) 두 단계 나누기 후 R(1) 계산"
+    },
+    {
+      "q": 18,
+      "chapter": "복소수",
+      "difficulty": "상",
+      "score": 5.3,
+      "matched_yutype": 35,
+      "matched_title": "유형35 — 복소수 거듭제곱의 합",
+      "grade": "A",
+      "rationale": "z^n 합=−1 이 되는 n 값들의 합"
+    },
+    {
+      "q": 19,
+      "chapter": "이차함수",
+      "difficulty": "상",
+      "score": 5.3,
+      "matched_yutype": 53,
+      "matched_title": "유형53 — 이차함수의 최대최소 구간내",
+      "grade": "A",
+      "rationale": "구간 [1,6] 최댓값/최솟값 + 직선접 조건"
+    },
+    {
+      "q": 20,
+      "chapter": "이차함수",
+      "difficulty": "상",
+      "score": 5.4,
+      "matched_yutype": 55,
+      "matched_title": "유형55 — 이차함수 식의 추정",
+      "grade": "B",
+      "rationale": "꼭짓점·접선·차수4 조건으로 두 근의 곱 추론"
+    }
+  ],
+  "key_problems": [
+    {
+      "q": 17,
+      "topic": "항등식과 나머지정리",
+      "score": 5.2,
+      "difficulty": "상",
+      "exam_latex": "다항식 $f(x)\\,$를 $x ^{2} +2x+4\\,\\,$로 나누었을때의 몫은 $Q _{1} (x)$, 나머지는 $x+1$이고 다항식 $f(x)$를 $x ^{3} -8$로 나누었을 때의 몫은 $Q _{2} (x)$, 나머지는 $R(x)=ax ^{2} +bx+c$이다. $Q _{1} (2)=1\\,\\,$일 때, $R(1)$의 값은? (단, $a,b,c$는 실수이다.) [5.2점] <br><div class='choices'>①  3&nbsp;&nbsp;&nbsp;&nbsp;②  6&nbsp;&nbsp;&nbsp;&nbsp;③  9&nbsp;&nbsp;&nbsp;&nbsp;④  12&nbsp;&nbsp;&nbsp;&nbsp;⑤  15</div>",
+      "matched_yutype": 18,
+      "matched_title": "유형18 — 나누어지는 식 변형",
+      "fabricated_latex": "다항식 $f(x)$를 $x^{2}+2x+4$로 나누었을 때의 몫은 $Q_{1}(x)$, 나머지는 $x+8$이고, 다항식 $f(x)$를 $x^{3}-8$로 나누었을 때의 몫은 $Q_{2}(x)$, 나머지는 $R(x)=ax^{2}+bx+c$이다. <br>$Q_{1}(2)=2$일 때, $R(1)$의 값은? (단, $a,b,c$는 실수이다.)",
+      "comment": "이 패턴은 우리 교재 유형18(나누어지는 식 변형)에 동일 풀이 절차가 정리됨. $x^{3}-8=(x-2)(x^{2}+2x+4)$ 를 이용해 $f(x)=(x-2)(x^{2}+2x+4)Q_{1}(x)+(x-2)(x+10)+R(x)$ 형태로 묶고 $x=2$ 대입 + $x^{2}+2x+4=0$ 두 근에서의 값 비교로 $R(x)$ 결정.",
+      "capture_files": [
+        "광명17 광문17 명문21 소하23.png"
+      ],
+      "shared_with": [
+        "광문고"
+      ],
+      "exam_images": []
+    },
+    {
+      "q": 18,
+      "topic": "복소수 — 거듭제곱의 합",
+      "score": 5.3,
+      "difficulty": "상",
+      "exam_latex": "(단, $n$은 자연수, $i= \\sqrt{-1}$) [5.3점] <br><div class='choices'>①  37&nbsp;&nbsp;&nbsp;&nbsp;②  40&nbsp;&nbsp;&nbsp;&nbsp;③  45&nbsp;&nbsp;&nbsp;&nbsp;④  51&nbsp;&nbsp;&nbsp;&nbsp;⑤  62</div>",
+      "matched_yutype": 35,
+      "matched_title": "유형35 — 복소수 거듭제곱의 합",
+      "fabricated_latex": "복소수 $z=\\dfrac{1+i}{\\sqrt{2}}$에 대하여 <br>$-z+z^{2}-z^{3}+\\cdots+(-1)^{n}z^{n}=-1$ <br>을 만족시키는 $20$ 이하의 모든 $n$의 값의 합은? (단, $n$은 자연수, $i=\\sqrt{-1}$)",
+      "comment": "이 패턴은 우리 교재 유형35(복소수 거듭제곱의 합)에 동일 풀이 절차가 정리됨. $z^{8}=1$ 주기성과 등비합 공식 $S_{n}=\\dfrac{(-z)\\{1-(-z)^{n}\\}}{1-(-z)}$ 로 정리 후 주기 8을 이용해 조건을 만족하는 $n$ 을 분류.",
+      "capture_files": [
+        "광명18 명문19.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 19,
+      "topic": "이차함수의 최대최소 — 구간내",
+      "score": 5.3,
+      "difficulty": "상",
+      "exam_latex": "이차함수 $y=f(x)$가 다음 조건을 만족시킬 때, $f(7)$의 값은? [5.3점] <br><div class='cond-box'><br>❙조건❙</div>",
+      "matched_yutype": 53,
+      "matched_title": "유형53 — 이차함수의 최대최소 구간내",
+      "fabricated_latex": "이차함수 $y=f(x)$가 다음 조건을 만족시킬 때 $f(8)$의 값은? <br>━━ 조건 ━━<br>(가) $f(x)$의 축의 방정식은 $x=3$이다.<br>(나) $1\\le x\\le 6$에서 $f(x)$의 최댓값은 $5$이고, 최솟값은 $-4$이다.<br>(다) 함수 $y=f(x)$의 그래프와 직선 $y=2x-10$은 접한다.",
+      "comment": "이 패턴은 우리 교재 유형53(이차함수의 최대최소 구간내)에 동일 풀이 절차가 정리됨. 축 $x=3$ 으로 $f(x)=a(x-3)^{2}+k$ 두고 구간 끝점/꼭짓점 비교로 $a$ 의 부호 결정 → 직선 접 조건 $D=0$ 으로 $a,k$ 확정 → $f(7)$ 대입.",
+      "capture_files": [
+        "광명19.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    },
+    {
+      "q": 20,
+      "topic": "이차함수 — 식의 추정 / 근과 계수의 관계",
+      "score": 5.4,
+      "difficulty": "상",
+      "exam_latex": "꼭짓점의 좌표가 $(0,2)$인 이차함수 $f(x)$의 그래프와 $y$절편이 $1$이고 기울기가 양수인 직선 $y=g(x)$가 제3사분면 위의 점 $\\left( a,- \\dfrac{1}{2} \\right)$에서 만난다. 방정식 $f(x)=g(x)$의 두 근의 차가 $7$일 때, 방정식 $f(x)=0$의 두 근의 곱은? (단, $a$는 실수) [5.4점] <br><div class='choices'>①  -20&nbsp;&nbsp;&nbsp;&nbsp;②  -25&nbsp;&nbsp;&nbsp;&nbsp;③  -30&nbsp;&nbsp;&nbsp;&nbsp;④  -35&nbsp;&nbsp;&nbsp;&nbsp;⑤  -40</div>",
+      "matched_yutype": 55,
+      "matched_title": "유형55 — 이차함수 식의 추정",
+      "fabricated_latex": "꼭짓점의 좌표가 $(0,3)$인 이차함수 $f(x)$의 그래프와 $y$절편이 $1$이고 기울기가 양수인 직선 $y=g(x)$가 제3사분면 위의 점 $\\left(a, -\\dfrac{1}{2}\\right)$에서 만난다. 방정식 $f(x)=g(x)$의 두 근의 차가 $5$일 때, 방정식 $f(x)=0$의 두 근의 곱은? (단, $a$는 실수)",
+      "comment": "이 패턴은 우리 교재 유형55(이차함수 식의 추정)와 유형45(근과 계수의 관계, 대입 복합)의 결합형. 꼭짓점 조건으로 $f(x)=px^{2}+2$ 로 놓고 점 $(a,-1/2)$ 대입, 두 근의 차 공식 $\\sqrt{(\\alpha+\\beta)^{2}-4\\alpha\\beta}=7$ 로 미지수 결정 → $f(x)=0$ 의 근의 곱은 근과 계수 관계로 즉시 계산.",
+      "capture_files": [
+        "광명20.png"
+      ],
+      "shared_with": [],
+      "exam_images": []
+    }
+  ],
+  "instructor_comment": "대체적으로 평이하게 출제되었습니다. 변별력을 위한 문항들도 난이도가 아주 높지 않아 충분히 대비 가능한 수준이었습니다. 100% 선택형(객관식)이라 1문항당 배점이 높으므로 실수가 곧 실력입니다. 이번 핵심문제 4개는 모두 우리 교재 STEP1·STEP2 핵심 유형으로 커버되며, 풀이 절차가 동형 또는 유사 패턴으로 정리되어 있다. 교재 N회독 + 핵심노트 3회독으로 시험장에서 즉시 인출 가능.",
+  "strategy": [
+    {
+      "key": "기계적 풀이",
+      "value": "난이도가 평이할수록 '아는 것'보다 '빠르고 정확하게 푸는 것'이 중요합니다. 자체 교재 반복으로 인출 속도를 극대화하세요."
+    },
+    {
+      "key": "후반부 추론 대비",
+      "value": "18~20번의 추론 문항도 이영우T가 선별한 모의고사 기출 변형 범주 안에서 해결 가능합니다."
+    },
+    {
+      "key": "핵심노트 회독",
+      "value": "핵심노트에 정리된 유형별 풀이법을 체득하여 시험장에서 고민 시간을 제로(0)로 만듭니다."
+    }
+  ],
+  "note_intro": "이영우T가 직접 작성한 핵심만 모은 핵심노트",
+  "note_sub": "시험 출제 핵심 패턴을 한 줄로 정리한 직강 노트",
+  "note_sample_images": [
+    "note_sample_1.png",
+    "note_sample_2.png",
+    "note_sample_3.png"
+  ]
+}
