@@ -1,0 +1,28 @@
+{
+  "school": "명문고",
+  "source": "PDF 비전 추출 (명문고 학생 답안지, 손글씨로 다수 가려짐)",
+  "total_questions": 21,
+  "questions": [
+    {"question_number": 1, "question_text": "$\\log_{\\sqrt{3}} \\sqrt[?]{10}$의 값은? [4.0점]", "choices": [], "chapter": "로그"},
+    {"question_number": 2, "question_text": "$(\\sqrt[3]{a^?})^?$ 또는 거듭제곱근 식의 값은? [4.0점]", "choices": [], "chapter": "지수"},
+    {"question_number": 3, "question_text": "반지름의 길이가 $?$이고 중심각의 크기가 $\\dfrac{\\pi}{4}$인 부채꼴의 넓이는? [4.4점]", "choices": [], "chapter": "삼각함수"},
+    {"question_number": 4, "question_text": "$x = \\log_?$, $y = \\log_?$일 때, $?$의 값은? [4.6점] 답 25", "choices": [], "chapter": "로그"},
+    {"question_number": 5, "question_text": "다음 중 옳은 것은? [4.6점] 거듭제곱근의 성질에 관한 보기 5개", "choices": [], "chapter": "거듭제곱근"},
+    {"question_number": 6, "question_text": "부등식 $\\log_?(2x-5) > \\log_?(7-x)$를 만족시키는 $x$값의 범위는? [4.7점]", "choices": [], "chapter": "로그부등식"},
+    {"question_number": 7, "question_text": "$\\sqrt[?]{a\\sqrt[?]{a}} = a^p$일 때 $p$의 값은? [4.6점] (또는 비슷한 거듭제곱근 식)", "choices": [], "chapter": "거듭제곱근"},
+    {"question_number": 8, "question_text": "함수 $f(x) = (\\log_a x)^? - (\\log_a x) + ?$의 최댓값 $M$ 또는 최솟값 $m$ 관련 [4.7점]", "choices": [], "chapter": "로그함수"},
+    {"question_number": 9, "question_text": "$\\sqrt[?]{?}\\cdot\\sqrt[?]{?} \\cdot\\sqrt[?]{?}$의 값은? [4.6점]", "choices": [], "chapter": "거듭제곱근"},
+    {"question_number": 10, "question_text": "$\\theta$가 제?사분면의 각일 때, $\\frac{?}{?}$의 동경이 속할 수 있는 사분면은? [4.7점]", "choices": [], "chapter": "삼각함수"},
+    {"question_number": 11, "question_text": "$\\log a = 0.7882$, $\\log b = 0.8939$일 때, $\\log$ 어떤 값은? [4.7점] (선지 7.04, 6.24 등)", "choices": [], "chapter": "로그"},
+    {"question_number": 12, "question_text": "$a > 0$, $a \\neq 1$이고 $a^x = b$일 때 ... 미정계수 값 [4.8점]", "choices": [], "chapter": "지수/로그"},
+    {"question_number": 13, "question_text": "기준점 함수 / 두 그래프 차이 관련 [4.8점]", "choices": [], "chapter": "함수"},
+    {"question_number": 14, "question_text": "삼각함수 또는 부등식: $\\cos\\alpha - \\cos\\beta = \\dfrac{?}{?}$일 때 ... [4.8점]", "choices": [], "chapter": "삼각함수"},
+    {"question_number": 15, "question_text": "좌표평면 위에 두 함수 $y = a^x$와 $y = \\log_b x$의 그래프가 만나는 점 또는 대칭 관련 [4.8점]", "choices": [], "chapter": "지수/로그함수 그래프"},
+    {"question_number": 16, "question_text": "$y = \\log_b(x+?) + ?$의 그래프 평행이동 관련 [4.7점]", "choices": [], "chapter": "로그함수 그래프"},
+    {"question_number": 17, "question_text": "방정식 $a^?·b^? = ?$의 두 근 $\\alpha, \\beta$일 때 [5.0점]", "choices": [], "chapter": "지수방정식"},
+    {"question_number": 18, "question_text": "함수 $f(x) = \\dfrac{1}{2}x^? - 3x + ?$, $g(x) = \\log_a x$에 대하여 ... [5.0점]", "choices": [], "chapter": "함수"},
+    {"question_number": 19, "question_text": "삼각형 $\\mathrm{ABC}$의 세 변 $a, b, c$에 대하여 $\\log_a + \\log_b + \\log_c = ?$일 때 [5.0점]", "choices": [], "chapter": "삼각함수"},
+    {"question_number": 20, "question_text": "함수 $y = 2^x + 1$과 그래프 위의 점 A, B, C, D 또는 삼각형 ABCD의 넓이 [5.0점]", "choices": [], "chapter": "지수함수 그래프"},
+    {"question_number": 21, "question_text": "[서답형 1] $A = \\{x | ax^2 + ?\\}$, $B = \\{x | ?\\}$에 대하여 $A \\cap B$ 개수 또는 합 [5.2점]", "choices": [], "chapter": "집합/지수"}
+  ]
+}

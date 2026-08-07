@@ -1,0 +1,136 @@
+{
+  "school": "광명북고",
+  "source": "PDF 비전 추출 (광명북고 사진본, 손글씨로 일부 가려짐)",
+  "total_questions": 21,
+  "questions": [
+    {
+      "question_number": 1,
+      "question_text": "$3^{\\frac{1}{2}} \\times 9^{-\\frac{1}{4}}$의 값은? [3.8점]",
+      "choices": [{"number":1,"text":"$1$"},{"number":2,"text":"$\\sqrt{3}$"},{"number":3,"text":"$2$"},{"number":4,"text":"$3$"},{"number":5,"text":"$2\\sqrt{3}$"}],
+      "chapter": "지수"
+    },
+    {
+      "question_number": 2,
+      "question_text": "반지름의 길이가 $6$, 중심각의 크기가 $\\dfrac{2}{3}\\pi$인 부채꼴의 호의 길이는? [3.8점]",
+      "choices": [{"number":1,"text":"$\\pi$"},{"number":2,"text":"$2\\pi$"},{"number":3,"text":"$3\\pi$"},{"number":4,"text":"$4\\pi$"},{"number":5,"text":"$5\\pi$"}],
+      "chapter": "삼각함수"
+    },
+    {
+      "question_number": 3,
+      "question_text": "$\\log 1.2 = 0.0792$일 때, $\\log N = 2.0792$를 만족하는 양의 실수 $N$의 값은? [3.9점]",
+      "choices": [{"number":1,"text":"$112$"},{"number":2,"text":"$120$"},{"number":3,"text":"$132$"},{"number":4,"text":"$152$"},{"number":5,"text":"$1200$"}],
+      "chapter": "로그"
+    },
+    {
+      "question_number": 4,
+      "question_text": "부등식 $2\\log_{\\frac{1}{2}}(x-1) > \\log_{\\frac{1}{2}}(x+5)$의 해가 $a < x < b$일 때, $a+b$의 값은? [3.9점]",
+      "choices": [{"number":1,"text":"$1$"},{"number":2,"text":"$2$"},{"number":3,"text":"$3$"},{"number":4,"text":"$4$"},{"number":5,"text":"$5$"}],
+      "chapter": "로그"
+    },
+    {
+      "question_number": 5,
+      "question_text": "$\\mathrm{pH}$는 용액의 산성 또는 염기성의 정도를 나타내는 수치로써 용액 $1L$ 속에 들어있는 수소이온농도가 $[\\mathrm{H}^{+}]\\,\\mathrm{mol}/L$일 때, $\\mathrm{pH} = -\\log[\\mathrm{H}^{+}]$로 정의한다. 어떤 용액의 수소이온농도가 $[\\mathrm{H}^{+}] = ?$일 때, 이 용액의 $\\mathrm{pH}$의 값은? (단, $\\log 2 = 0.3$으로 계산한다) [4.1점]",
+      "choices": [{"number":1,"text":"$2.8$"},{"number":2,"text":"$2.9$"},{"number":3,"text":"$3.0$"},{"number":4,"text":"$3.1$"},{"number":5,"text":"$3.2$"}],
+      "chapter": "로그"
+    },
+    {
+      "question_number": 6,
+      "question_text": "$\\log_{x^2}(-x^2+x+12)$가 정의되도록 하는 정수 $x$의 개수는? [4.1점]",
+      "choices": [{"number":1,"text":"$1$"},{"number":2,"text":"$2$"},{"number":3,"text":"$3$"},{"number":4,"text":"$4$"},{"number":5,"text":"$5$"}],
+      "chapter": "로그"
+    },
+    {
+      "question_number": 7,
+      "question_text": "다항식 $f(x) = x^2 - (7+a)x + 9$, $a > 0$에서 $f(x) \\geq 1$일 때 모든 정수 $a$의 값의 합은? [3.9점]",
+      "choices": [{"number":1,"text":"$3$"},{"number":2,"text":"$5$"},{"number":3,"text":"$7$"},{"number":4,"text":"$9$"},{"number":5,"text":"$11$"}],
+      "chapter": "이차부등식",
+      "note": "손글씨로 가려져 부분만 식별 가능"
+    },
+    {
+      "question_number": 8,
+      "question_text": "함수 $y = a^x$ ($a > 0, a \\neq 1$)에 대하여 옳은 것만을 <보기>에서 있는 대로 고른 것은? [4.4점] <보기> ㄱ. ㄴ. ㄷ.",
+      "choices": [{"number":1,"text":"ㄱ"},{"number":2,"text":"ㄴ"},{"number":3,"text":"ㄷ"},{"number":4,"text":"ㄱ,ㄴ"},{"number":5,"text":"ㄴ,ㄷ"}],
+      "chapter": "지수함수"
+    },
+    {
+      "question_number": 9,
+      "question_text": "$x$에 대한 방정식 $9^x - 2(a-3) \\cdot 3^x + a - 9 = 0$이 한 양수와 한 음수의 실근을 갖도록 하는 모든 정수 $a$의 값의 합은? [4.4점]",
+      "choices": [{"number":1,"text":"$16$"},{"number":2,"text":"$19$"},{"number":3,"text":"$20$"},{"number":4,"text":"$21$"},{"number":5,"text":"$22$"}],
+      "chapter": "지수방정식"
+    },
+    {
+      "question_number": 10,
+      "question_text": "$n$이 $6$ 이하의 자연수일 때, $\\sqrt[4]{\\sqrt{n}} \\times \\sqrt[6]{\\sqrt[3]{n}}$이 자연수가 되도록 하는 $n$의 값의 합은? [4.5점]",
+      "choices": [{"number":1,"text":"$98$"},{"number":2,"text":"$99$"},{"number":3,"text":"$100$"},{"number":4,"text":"$101$"},{"number":5,"text":"$102$"}],
+      "chapter": "거듭제곱근"
+    },
+    {
+      "question_number": 11,
+      "question_text": "$\\alpha + \\beta = -2, \\alpha\\beta = 2b$인 두 실수 $\\alpha, \\beta$에 대하여 ... [4.5점]",
+      "choices": [{"number":1,"text":"$-8$"},{"number":2,"text":"$-4$"},{"number":3,"text":"$0$"},{"number":4,"text":"$4$"},{"number":5,"text":"$8$"}],
+      "chapter": "지수",
+      "note": "손글씨 가림 다수, 본문 식별 어려움"
+    },
+    {
+      "question_number": 12,
+      "question_text": "좌표평면 위의 점 $\\mathrm{P}$에서 동경 $\\mathrm{OP}$가 나타내는 각의 크기가 $\\theta$일 때, 직선의 기울기 또는 점 좌표를 구하는 문제. 점 $\\mathrm{P}$의 좌표가 ... [4.6점]",
+      "choices": [{"number":1,"text":"$\\dfrac{\\sqrt{3}-1}{2}$"},{"number":2,"text":"$\\sqrt{3}-1$"},{"number":3,"text":"$\\sqrt{3}$"},{"number":4,"text":"$\\dfrac{\\sqrt{3}+1}{2}$"},{"number":5,"text":"$\\sqrt{3}+1$"}],
+      "chapter": "삼각함수"
+    },
+    {
+      "question_number": 13,
+      "question_text": "$1$이 아닌 세 양수 $k, l, m$이 다음 조건을 만족시킬 때, $\\log_k a + \\log_l b + \\log_m c$의 값은? [4.7점]",
+      "choices": [{"number":1,"text":"$17$"},{"number":2,"text":"$18$"},{"number":3,"text":"$19$"},{"number":4,"text":"$20$"},{"number":5,"text":"$21$"}],
+      "chapter": "로그"
+    },
+    {
+      "question_number": 14,
+      "question_text": "함수 $y = a^x$ 또는 $y = \\log_a x$의 그래프와 직선이 만나는 점의 좌표 또는 길이 관련 [4.7점]",
+      "choices": [{"number":1,"text":""},{"number":2,"text":""},{"number":3,"text":""},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "지수/로그",
+      "note": "손글씨 가림 심함"
+    },
+    {
+      "question_number": 15,
+      "question_text": "제$1$사분면에서 직선 $y = ax - 6$에 두 점 $\\mathrm{P}, \\mathrm{Q}$가 있다. $y = \\log_a x$ 그래프와 만나는 점이 $\\mathrm{P}$, $\\mathrm{Q}$이고 ... [4.7점]",
+      "choices": [{"number":1,"text":"$4$"},{"number":2,"text":"$4\\sqrt{2}$"},{"number":3,"text":"$5$"},{"number":4,"text":"$6$"},{"number":5,"text":"$6\\sqrt{2}$"}],
+      "chapter": "로그함수 그래프"
+    },
+    {
+      "question_number": 16,
+      "question_text": "두 양수 $a, b$가 다음 조건을 만족시킬 때, $a, b, c$의 대소관계를 나타낸 것은? [5.0점] $(1/a)^? = b^?, (1/b)^? = ?, (1/?)^? = ?$",
+      "choices": [{"number":1,"text":"$a<b<c$"},{"number":2,"text":"$b<a<c$"},{"number":3,"text":"$b<c<a$"},{"number":4,"text":"$c<a<b$"},{"number":5,"text":"$c<b<a$"}],
+      "chapter": "지수/로그"
+    },
+    {
+      "question_number": 17,
+      "question_text": "함수 $f(x) = \\log_a x$ ($a>1$) 그래프 위의 점 $\\mathrm{A}, \\mathrm{B}, \\mathrm{C}$에 대하여 $\\overline{\\mathrm{BD}} = \\overline{\\mathrm{AC}}$가 되는 이등변삼각형이 되도록 하는 점 $\\mathrm{D}$의 좌표 또는 값은? [5.1점]",
+      "choices": [{"number":1,"text":"$\\dfrac{5}{3}$"},{"number":2,"text":"$2$"},{"number":3,"text":"$\\dfrac{11}{4}$"},{"number":4,"text":"$3$"},{"number":5,"text":"$\\dfrac{10}{3}$"}],
+      "chapter": "로그함수 그래프"
+    },
+    {
+      "question_number": 18,
+      "question_text": "자연수 $n$과 정수 $a$에 대하여 $(n-a)(n-a-?)$의 $n$ 제곱근 중 실수인 것의 개수를 $f(n)$이라 하자. $f(2) + f(3) + \\cdots + f(?)$의 값은? [5.2점]",
+      "choices": [{"number":1,"text":"$3$"},{"number":2,"text":"$5$"},{"number":3,"text":"$6$"},{"number":4,"text":"$7$"},{"number":5,"text":"$8$"}],
+      "chapter": "거듭제곱근"
+    },
+    {
+      "question_number": 19,
+      "question_text": "[서답형 1] $\\dfrac{\\pi}{2} < \\alpha < \\pi$이고 $\\sin\\alpha = \\dfrac{1}{3}$일 때, $\\sin 2\\alpha$의 값을 구하고, 그 과정을 서술하시오. [4.0점]",
+      "choices": [],
+      "chapter": "삼각함수"
+    },
+    {
+      "question_number": 20,
+      "question_text": "[서답형 2] $2$의 세제곱근 중 실수인 것을 $a$, $n$의 제곱근 중 양의 실수인 것을 $b$라 할 때, $\\left(\\dfrac{a}{\\sqrt{b}}\\right)^? = \\left(\\dfrac{b}{a}\\right)^?$를 만족시키는 자연수 $n$의 값을 모두 구하고, 그 과정을 서술하시오. [7.0점]",
+      "choices": [],
+      "chapter": "거듭제곱근"
+    },
+    {
+      "question_number": 21,
+      "question_text": "[서답형 3] 함수 $f(x) = \\begin{cases} a^{x-1}-1 & (x \\leq 2) \\\\ \\log_a(x-2) & (x > 2) \\end{cases}$에 대하여 함수 $y=f(x)$가 $x=2$에서 연속이고 $y=g(x)$가 ... 자연수의 개수를 구하고, 그 과정을 서술하시오. [7.0점]",
+      "choices": [],
+      "chapter": "지수/로그함수 연속"
+    }
+  ]
+}

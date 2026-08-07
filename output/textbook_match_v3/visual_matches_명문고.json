@@ -1,0 +1,30 @@
+{
+  "school": "명문고",
+  "note": "명문고 q_text는 채점본 손글씨로 인해 핵심 숫자/지수가 대부분 ? 로 비어 있어 식 구조의 '동일 템플릿' 판정이 매우 제한적임. 또한 각 후보 패널은 단일 문제가 아니라 교재 전체 페이지 썸네일이라, 같은 페이지 안의 어떤 문제와 매칭되는지 시각적으로 식별이 곤란. 따라서 한글 instruction shell + 식 구조가 명확히 일치하는 후보에 한해 medium/low 로 표기하고, 카테고리만 같고 템플릿 동일성을 단정할 수 없는 경우는 매칭 없음으로 처리함.",
+  "verdicts": [
+    {"q_no": 1, "matches": []},
+    {"q_no": 2, "matches": []},
+    {"q_no": 3, "matches": []},
+    {"q_no": 4, "matches": []},
+    {"q_no": 5, "matches": []},
+    {"q_no": 6, "matches": [
+      {"best_idx": 1, "tb_key": "yuhyung2", "tb_short": "유형ON2", "page": 59, "confidence": "low", "reason": "로그부등식 log_a(다항) > log_a(다항) 형태의 페이지로 보이며 후보 score 100. 다만 정확히 (2x-5)>(7-x) 와 동일한 숫자 변형 문항이라고 썸네일에서 확정 불가."},
+      {"best_idx": 4, "tb_key": "yuhyung1", "tb_short": "유형ON1", "page": 87, "confidence": "low", "reason": "로그부등식 유형 페이지. 같은 인스트럭션('만족시키는 x값의 범위') 다수 포함 가능성 있으나 확정 불가."}
+    ]},
+    {"q_no": 7, "matches": []},
+    {"q_no": 8, "matches": []},
+    {"q_no": 9, "matches": []},
+    {"q_no": 10, "matches": []},
+    {"q_no": 11, "matches": []},
+    {"q_no": 12, "matches": []},
+    {"q_no": 13, "matches": []},
+    {"q_no": 14, "matches": []},
+    {"q_no": 15, "matches": []},
+    {"q_no": 16, "matches": []},
+    {"q_no": 17, "matches": []},
+    {"q_no": 18, "matches": []},
+    {"q_no": 19, "matches": []},
+    {"q_no": 20, "matches": []},
+    {"q_no": 21, "matches": []}
+  ]
+}

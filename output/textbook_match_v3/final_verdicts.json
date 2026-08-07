@@ -1,0 +1,2144 @@
+{
+  "광명고": [
+    {
+      "q_no": 1,
+      "q_text": "$\\sqrt{3} of -27 + \\sqrt{4} of \\dfrac{64}{\\sqrt} 3 of \\sqrt{8}$의 값은? [3.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-2$"
+        },
+        {
+          "number": 2,
+          "text": "$-1$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$1$"
+        },
+        {
+          "number": 5,
+          "text": "$2$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 2,
+      "q_text": "호의 길이가 $8 \\pi$인 부채꼴의 넓이가 $32 \\pi$일 때, 이 부채꼴의 중심각의 크기는? [3.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$45 ^{\\circ}$"
+        },
+        {
+          "number": 2,
+          "text": "$90 ^{\\circ}$"
+        },
+        {
+          "number": 3,
+          "text": "$135 ^{\\circ}$"
+        },
+        {
+          "number": 4,
+          "text": "$180 ^{\\circ}$"
+        },
+        {
+          "number": 5,
+          "text": "$225 ^{\\circ}$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 3,
+      "q_text": "원점 $\\mathrm{O}$와 점 $\\mathrm{P} \\left( -3, 4 \\right)$를 지나는 동경 $\\mathrm{OP}$가 나타내는 각을 $\\theta$라 할 때, $sin \\theta$의 값은? [3.9점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$- \\dfrac{ 4}{ 5}$"
+        },
+        {
+          "number": 2,
+          "text": "$- \\dfrac{ 3}{ 5}$"
+        },
+        {
+          "number": 3,
+          "text": "$- \\dfrac{ 1}{ 5}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{ 3}{ 5}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{ 4}{ 5}$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "mirae_text",
+          "tb_short": "미래엔교과서",
+          "page": 119,
+          "confidence": "high",
+          "reason": "원점 O와 점 P(-1,-2)를 지나는 동경 OP가 나타내는 각 θ에 대해 sinθcosθ를 구하는 문제 — 좌표 숫자만 다른 동일 템플릿"
+        },
+        {
+          "best_idx": 4,
+          "tb_key": "uon2",
+          "tb_short": "유형ON2",
+          "page": 66,
+          "confidence": "high",
+          "reason": "원점 O와 점 P(-12,-9)를 지나는 동경 OP가 나타내는 각 θ에 대해 sinθ-cosθ — 좌표/식 외 골격 동일"
+        },
+        {
+          "best_idx": 6,
+          "tb_key": "mirae_text",
+          "tb_short": "미래엔교과서",
+          "page": 79,
+          "confidence": "high",
+          "reason": "원점 O와 점 P(-√3,1)을 지나는 동경 OP가 나타내는 각 θ의 sinθ, cosθ, tanθ — 동일 템플릿"
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "olimpos",
+          "tb_short": "올림포스",
+          "page": 36,
+          "confidence": "high",
+          "reason": "원점과 점 P(-8,-4)를 지나는 동경 OP — 동일 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 4,
+      "q_text": "삼각함수의 성질로 옳은 것만을 <보기>에서 있는 대로 고른 것은? [4.0점]\n<<BOX_START>>\nㄱ. 사인함수 $y= sin \\theta$의 치역은 $\\left\\{y \\, \\left\\|\\, -1 \\leq y \\leq 1 \\right\\}\\right\\|$이다.<br>ㄴ. 코사인함수 $y= cos \\theta$의 그래프는 $y$축에 대하여 대칭이다.<br>ㄷ. 탄젠트함수 $y= tan \\theta$의 그래프의 점근선은 직선 $\\theta = \\dfrac{n \\pi }{2} + \\dfrac{\\pi}{2}$ ($n$은 정수)이다.\n<<BOX_END>>",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "ㄱ"
+        },
+        {
+          "number": 2,
+          "text": "ㄷ"
+        },
+        {
+          "number": 3,
+          "text": "ㄱ, ㄴ"
+        },
+        {
+          "number": 4,
+          "text": "ㄴ, ㄷ"
+        },
+        {
+          "number": 5,
+          "text": "ㄱ, ㄴ, ㄷ"
+        }
+      ],
+      "q_chapter": "",
+      "matches": [
+        {
+          "best_idx": 4,
+          "tb_key": "uon2",
+          "tb_short": "유형ON2",
+          "page": 72,
+          "confidence": "high",
+          "reason": "보기에서 함수 y=cosx에 대한 설명 ㄱ.치역은... 옳은 것만 있는 대로 고른 것 — 동일 보기형 템플릿"
+        },
+        {
+          "best_idx": 3,
+          "tb_key": "uon1",
+          "tb_short": "유형ON1",
+          "page": 109,
+          "confidence": "medium",
+          "reason": "f=sinx, g=cosx, h=tanx 세 함수 성질 설명 옳지 않은 것 — 보기 형식은 다르나 삼각함수 성질 다중 진위 판단 구조 유사"
+        }
+      ]
+    },
+    {
+      "q_no": 5,
+      "q_text": "$a^x =\\sqrt{2} -1$일 때, $\\dfrac{a^{3x} + a^-3x}{a^{2x} +a^-2x}$의 값은? (단, $a>0$) [4.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{4 \\sqrt{2}}{3}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\dfrac{3 \\sqrt{2}}{2}$"
+        },
+        {
+          "number": 3,
+          "text": "$5 \\dfrac{\\sqrt{2}}{3}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{11 \\sqrt{2}}{6}$"
+        },
+        {
+          "number": 5,
+          "text": "$2 \\sqrt{2}$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 6,
+      "q_text": "$log \\left( 1 - \\dfrac{1}{2} \\right) + log \\left( 1 - \\dfrac{1}{3} \\right) + log \\left( 1 - \\dfrac{1}{4} \\right) + \\, \\cdots \\, + log \\left( 1 - \\dfrac{1}{100} \\right)$의 값은? [4.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-2$"
+        },
+        {
+          "number": 2,
+          "text": "$-1$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$1$"
+        },
+        {
+          "number": 5,
+          "text": "$2$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 7,
+      "q_text": "상수 $a$에 대하여 함수 $y= a^{2x}+1 -5$ ($a>0$, $a \\neq 1$)의 그래프가 두 점 $\\left( -2, 3 \\right)$, $\\left( 0, b \\right)$를 지날 때, $a+b$의 값은? [4.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-4$"
+        },
+        {
+          "number": 2,
+          "text": "$-2$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$2$"
+        },
+        {
+          "number": 5,
+          "text": "$4$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": [
+        {
+          "best_idx": 2,
+          "tb_key": "uon1",
+          "tb_short": "유형ON1",
+          "page": 49,
+          "confidence": "high",
+          "reason": "함수 f(x)=a^x의 그래프가 두 점 (b,4),(c,12)를 지난다 → a^b, a^c값 — 지수함수 그래프가 두 점 지나는 동일 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 8,
+      "q_text": "부등식 $\\left( x-2 \\right) \\left( 3^-x+4 - \\dfrac{1}{81} \\right) >0$을 만족시키는 모든 자연수 $x$의 값의 개수는? [4.3점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$1$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$3$"
+        },
+        {
+          "number": 4,
+          "text": "$4$"
+        },
+        {
+          "number": 5,
+          "text": "$5$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 9,
+      "q_text": "방정식 $log_2 \\left( 2x-3 \\right) = 1- log_2 \\left( 7-2x \\right)$를 만족시키는 모든 실수 $x$의 값의 합은? [4.4점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{ 5}{ 2}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\dfrac{ 5+\\sqrt{2}}{2}$"
+        },
+        {
+          "number": 3,
+          "text": "$\\dfrac{5+ \\sqrt{3}}{2}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{ 7}{ 2}$"
+        },
+        {
+          "number": 5,
+          "text": "$5$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 10,
+      "q_text": "함수 $y=log_3 9x$의 그래프를 $x$축의 방향으로 $-2$만큼 평행이동한 그래프가 함수 $y= 3^x -2$의 그래프를 $x$축으로 $a$만큼 평행이동한 그래프와 직선 $y=x$에 대하여 대칭일 때, 상수 $a$의 값은? [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-3$"
+        },
+        {
+          "number": 2,
+          "text": "$-2$"
+        },
+        {
+          "number": 3,
+          "text": "$-1$"
+        },
+        {
+          "number": 4,
+          "text": "$1$"
+        },
+        {
+          "number": 5,
+          "text": "$2$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": [
+        {
+          "best_idx": 8,
+          "tb_key": "ybm_text",
+          "tb_short": "YBM교과서",
+          "page": 51,
+          "confidence": "high",
+          "reason": "함수 y=log_2 4x의 그래프를 x축 방향으로 1만큼 평행이동한 그래프가 함수 y=2^(x+1)의 그래프를 x축 방향으로 a만큼... — 동일 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 11,
+      "q_text": "$3^a =2$, $3^b =5$일 때, $log_{10} 6$을 $a$, $b$로 나타내면? [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$a-\\dfrac{2}{a}-b$"
+        },
+        {
+          "number": 2,
+          "text": "$a+\\dfrac{1}{a}-b$"
+        },
+        {
+          "number": 3,
+          "text": "$a-\\dfrac{1}{a}+b$"
+        },
+        {
+          "number": 4,
+          "text": "$a+\\dfrac{1}{a}+b$"
+        },
+        {
+          "number": 5,
+          "text": "$a+\\dfrac{2}{a}+b$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": [
+        {
+          "best_idx": 3,
+          "tb_key": "ybm_text",
+          "tb_short": "YBM교과서",
+          "page": 33,
+          "confidence": "high",
+          "reason": "log_10 2=a, log_10 3=b일 때 log_10 18 등을 a, b로 나타내는 동일 표기 변환 템플릿"
+        },
+        {
+          "best_idx": 6,
+          "tb_key": "uon1",
+          "tb_short": "유형ON1",
+          "page": 30,
+          "confidence": "high",
+          "reason": "log_5 2=a, log_5 3=b일 때 log_12 √48을 a,b로 나타내면 — 동일 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 12,
+      "q_text": "다음과 같이 주어진 세 수 $a$, $b$, $c$에 대하여 $a+b+c$의 값은? [4.6점]\n<<BOX_START>>\n$a= 81^{ log_3 32 - log_3 16 }$<br>$b= log_5 \\left\\{ log_3 \\left( log_2 8 \\right) \\right\\}$<br>$c= log_6 3 + log_6 8 + log_6 9$\n<<BOX_END>>",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$18$"
+        },
+        {
+          "number": 2,
+          "text": "$19$"
+        },
+        {
+          "number": 3,
+          "text": "$20$"
+        },
+        {
+          "number": 4,
+          "text": "$21$"
+        },
+        {
+          "number": 5,
+          "text": "$22$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 13,
+      "q_text": "정의역이 $\\left\\{x\\, \\left|\\, -1 \\leq x \\leq 1 \\right\\}\\right|$인 함수 $f \\left( x \\right) = \\left( \\dfrac{\\sqrt{3}}{2} \\right)^-x+a +b$의 최댓값, 최솟값이 각각 $\\dfrac{ 9}{ 16}$, $\\dfrac{ 3}{ 8}$일 때, $\\dfrac{a}{b}$의 값은? (단, $a$, $b$는 상수이다.) [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-16$"
+        },
+        {
+          "number": 2,
+          "text": "$-12$"
+        },
+        {
+          "number": 3,
+          "text": "$-8$"
+        },
+        {
+          "number": 4,
+          "text": "$-4$"
+        },
+        {
+          "number": 5,
+          "text": "$-2$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": [
+        {
+          "best_idx": 3,
+          "tb_key": "uon1",
+          "tb_short": "유형ON1",
+          "page": 51,
+          "confidence": "high",
+          "reason": "정의역 {x|m≤x≤n}인 함수 f(x)=a^(px+q)+r의 최대·최소 — 그대로 일반화된 동일 템플릿"
+        },
+        {
+          "best_idx": 6,
+          "tb_key": "uon1",
+          "tb_short": "유형ON1",
+          "page": 52,
+          "confidence": "high",
+          "reason": "정의역 {x|1≤x≤2}인 함수 f(x)=(1/3)^(2x-k)의 최댓값 9, 최솟값 m일 때 k·m — 동일 템플릿 (변수만 다름)"
+        },
+        {
+          "best_idx": 1,
+          "tb_key": "kojaengi",
+          "tb_short": "고쟁이",
+          "page": 58,
+          "confidence": "medium",
+          "reason": "정의역에서 함수의 최댓값과 최솟값을 이용한 a/b 또는 합 구하는 구조 유사 (식 형태 다름)"
+        }
+      ]
+    },
+    {
+      "q_no": 14,
+      "q_text": "$sin \\theta + cos \\theta = \\dfrac{ 3}{ 4}$일 때, $sin^3 \\theta + cos^3 \\theta$의 값은? [4.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{ 27}{ 64}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\dfrac{ 75 }{ 128}$"
+        },
+        {
+          "number": 3,
+          "text": "$\\dfrac{ 3}{ 4}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{ 117}{ 128}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{ 69}{ 64}$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": [
+        {
+          "best_idx": 7,
+          "tb_key": "jeongseok_silyeok",
+          "tb_short": "정석실력",
+          "page": 104,
+          "confidence": "high",
+          "reason": "sinθ+cosθ=3/√2일 때 sin³θ+cos³θ의 값을 구하시오 — 숫자만 다른 동일 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 15,
+      "q_text": "다음 식을 간단히 하면? [4.9점]\t$sin \\left( 3 \\dfrac{\\pi}{2} +x \\right) -cos \\left( \\pi -x \\right) + tan x tan \\left( 3 \\dfrac{\\pi}{2} -x \\right)$",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-1$"
+        },
+        {
+          "number": 2,
+          "text": "$0$"
+        },
+        {
+          "number": 3,
+          "text": "$1$"
+        },
+        {
+          "number": 4,
+          "text": "$2cos x -1$"
+        },
+        {
+          "number": 5,
+          "text": "$2cos x +1$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 16,
+      "q_text": "그림과 같이 반지름의 길이가 $1$인 원 위의 점 $\\mathrm{P}$에서 $x$축에 수선의 발을 $\\mathrm{H}$라고 하고, $\\mathrm{ang} \\leq AOP = \\theta$라 하자. $tan \\theta = - \\dfrac{\\sqrt{7}}{3}$일 때, 삼각형 $\\mathrm{APH}$의 넓이는 $\\dfrac{n}{m} \\sqrt{7}$이다. 이때, $m+n$의 값은? (단, 점 $\\mathrm{P}$는 제$2$사분면 위의 점이고, $m$, $n$은 서로소인 자연수이다.) [5.0점]<<IMG:image1>>",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$39$"
+        },
+        {
+          "number": 2,
+          "text": "$41$"
+        },
+        {
+          "number": 3,
+          "text": "$43$"
+        },
+        {
+          "number": 4,
+          "text": "$45$"
+        },
+        {
+          "number": 5,
+          "text": "$47$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 17,
+      "q_text": "자연수 $n$과 정수 $a$에 대하여 $-n-a$의 $n$제곱근 중 실수인 것의 개수를 $f \\left( n \\right)$이라 하자. $f \\left( 6 \\right) +f \\left( 7 \\right) + f \\left( 8 \\right) + f \\left( 9 \\right) =4$일 때, $a$의 값은? [5.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-4$"
+        },
+        {
+          "number": 2,
+          "text": "$-5$"
+        },
+        {
+          "number": 3,
+          "text": "$-6$"
+        },
+        {
+          "number": 4,
+          "text": "$-7$"
+        },
+        {
+          "number": 5,
+          "text": "$-8$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 18,
+      "q_text": "$0 \\leq x < \\pi$에서 함수 $f \\left( x \\right) = a sin 3x +b$의 그래프가 두 직선 $y=3$, $y= -1$과 만나는 점의 개수가 각각 $3$, $4$일 때, 정수 $a$, $b$에 대하여 $a^2 +b^2$의 최솟값은? [5.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$25$"
+        },
+        {
+          "number": 2,
+          "text": "$34$"
+        },
+        {
+          "number": 3,
+          "text": "$41$"
+        },
+        {
+          "number": 4,
+          "text": "$45$"
+        },
+        {
+          "number": 5,
+          "text": "$58$"
+        }
+      ],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 19,
+      "q_text": "$3^x = 8$, $36^y = 16$일 때, $\\dfrac{3}{x} - \\dfrac{2}{y}$의 값을 구하고, 풀이과정을 서술하시오. [6.0점]",
+      "q_choices": [],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 20,
+      "q_text": "부등식 $log_4 \\left( x^2 +9x + 14 \\right) \\leq log_{16} \\left( x^2 -10x +25 \\right)$를 만족시키는 모든 실수 $x$의 범위를 구하고, 풀이과정을 서술하시오. [7.0점]",
+      "q_choices": [],
+      "q_chapter": "",
+      "matches": []
+    },
+    {
+      "q_no": 21,
+      "q_text": "두 함수\t$g \\left( x \\right) = 7- log_2 \\left( x+12 \\right)$, $f \\left( x \\right) =3 sin^2 x - 3 cos x +k$\n가 있다. $0 \\leq x < 2 \\pi$에서 합성함수 $\\left( g \\circ f \\right) \\left( x \\right)$의 최솟값이 $3$일 때, $\\left( g \\circ f \\right) \\left( x \\right)$의 최댓값을 구하고, 풀이 과정을 서술하시오. (단, $k$는 상수이다.) [7.0점]\n정답",
+      "q_choices": [],
+      "q_chapter": "",
+      "matches": [
+        {
+          "best_idx": 8,
+          "tb_key": "ybm_text",
+          "tb_short": "YBM교과서",
+          "page": 99,
+          "confidence": "medium",
+          "reason": "0≤x<2π에서 f(x)=-2cos²x+4sinx+k의 최솟값이 3일 때 — sin·cos 다항 + 상수 k, 최솟값 3 동일. 다만 시험문제는 합성함수 (g∘f)(x) 형태인 점이 다름"
+        }
+      ]
+    }
+  ],
+  "광명북고": [
+    {
+      "q_no": 1,
+      "q_text": "$3^{\\frac{1}{2}} \\times 9^{-\\frac{1}{4}}$의 값은? [3.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$1$"
+        },
+        {
+          "number": 2,
+          "text": "$\\sqrt{3}$"
+        },
+        {
+          "number": 3,
+          "text": "$2$"
+        },
+        {
+          "number": 4,
+          "text": "$3$"
+        },
+        {
+          "number": 5,
+          "text": "$2\\sqrt{3}$"
+        }
+      ],
+      "q_chapter": "지수",
+      "matches": []
+    },
+    {
+      "q_no": 2,
+      "q_text": "반지름의 길이가 $6$, 중심각의 크기가 $\\dfrac{2}{3}\\pi$인 부채꼴의 호의 길이는? [3.8점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\pi$"
+        },
+        {
+          "number": 2,
+          "text": "$2\\pi$"
+        },
+        {
+          "number": 3,
+          "text": "$3\\pi$"
+        },
+        {
+          "number": 4,
+          "text": "$4\\pi$"
+        },
+        {
+          "number": 5,
+          "text": "$5\\pi$"
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "matches": [
+        {
+          "best_idx": 17,
+          "tb_key": "gojaeng",
+          "tb_short": "고쟁이",
+          "page": 81,
+          "confidence": "high",
+          "reason": "반지름의 길이가 10cm, 중심각의 크기가 (3/5)π인 부채꼴의 호의 길이와 넓이 — 같은 구조(반지름+호도 중심각으로 호의 길이) 숫자만 다름"
+        }
+      ]
+    },
+    {
+      "q_no": 3,
+      "q_text": "$\\log 1.2 = 0.0792$일 때, $\\log N = 2.0792$를 만족하는 양의 실수 $N$의 값은? [3.9점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$112$"
+        },
+        {
+          "number": 2,
+          "text": "$120$"
+        },
+        {
+          "number": 3,
+          "text": "$132$"
+        },
+        {
+          "number": 4,
+          "text": "$152$"
+        },
+        {
+          "number": 5,
+          "text": "$1200$"
+        }
+      ],
+      "q_chapter": "로그",
+      "matches": []
+    },
+    {
+      "q_no": 4,
+      "q_text": "부등식 $2\\log_{\\frac{1}{2}}(x-1) > \\log_{\\frac{1}{2}}(x+5)$의 해가 $a < x < b$일 때, $a+b$의 값은? [3.9점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$1$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$3$"
+        },
+        {
+          "number": 4,
+          "text": "$4$"
+        },
+        {
+          "number": 5,
+          "text": "$5$"
+        }
+      ],
+      "q_chapter": "로그",
+      "matches": [
+        {
+          "best_idx": 2,
+          "tb_key": "mdt_su1",
+          "tb_short": "마더텅수1",
+          "page": 105,
+          "confidence": "high",
+          "reason": "부등식 log_(1/2)(x-3)+log_(1/2)(x+1)<1+log_(1/2)9 해가 a<x<b일 때 ab의 값 — log_(1/2) 밑의 부등식, 두 근 a,b로부터 합/곱 구하기, 동일 템플릿"
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "mdt_su1",
+          "tb_short": "마더텅수1",
+          "page": 106,
+          "confidence": "high",
+          "reason": "부등식 log_(1/2)(x-5)+log_(1/2)(x-6)>-1의 해가 a<x<b일 때 a+b의 값 — 거의 동일한 구조, 같은 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 5,
+      "q_text": "$\\mathrm{pH}$는 용액의 산성 또는 염기성의 정도를 나타내는 수치로써 용액 $1L$ 속에 들어있는 수소이온농도가 $[\\mathrm{H}^{+}]\\,\\mathrm{mol}/L$일 때, $\\mathrm{pH} = -\\log[\\mathrm{H}^{+}]$로 정의한다. 어떤 용액의 수소이온농도가 $[\\mathrm{H}^{+}] = ?$일 때, 이 용액의 $\\mathrm{pH}$의 값은? (단, $\\log 2 = 0.3$으로 계산한다) [4.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$2.8$"
+        },
+        {
+          "number": 2,
+          "text": "$2.9$"
+        },
+        {
+          "number": 3,
+          "text": "$3.0$"
+        },
+        {
+          "number": 4,
+          "text": "$3.1$"
+        },
+        {
+          "number": 5,
+          "text": "$3.2$"
+        }
+      ],
+      "q_chapter": "로그",
+      "matches": [
+        {
+          "best_idx": 2,
+          "tb_key": "cj_text",
+          "tb_short": "천재교과서",
+          "page": 49,
+          "confidence": "high",
+          "reason": "pH=-log[H+] 정의문과 동일 — '용액 1L 속에 들어있는 수소 이온 농도가 [H+]mol/L일 때, pH=-log[H+]로 정한다' 거의 한 글자도 다르지 않은 instruction"
+        },
+        {
+          "best_idx": 18,
+          "tb_key": "me_text",
+          "tb_short": "미래엔교과서",
+          "page": 41,
+          "confidence": "high",
+          "reason": "pH=log(1/[H+]) 형식이지만 본질 동일. 수소 이온 농도로부터 pH 값 구하기 — 같은 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 6,
+      "q_text": "$\\log_{x^2}(-x^2+x+12)$가 정의되도록 하는 정수 $x$의 개수는? [4.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$1$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$3$"
+        },
+        {
+          "number": 4,
+          "text": "$4$"
+        },
+        {
+          "number": 5,
+          "text": "$5$"
+        }
+      ],
+      "q_chapter": "로그",
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "yhon1",
+          "tb_short": "유형ON1",
+          "page": 26,
+          "confidence": "high",
+          "reason": "log_b(-2a+14)가 정의되도록 하는 정수 a의 개수 — 동일 템플릿(밑+진수 조건, 정수 개수). 숫자만 다름"
+        },
+        {
+          "best_idx": 2,
+          "tb_key": "yhon1",
+          "tb_short": "유형ON1",
+          "page": 27,
+          "confidence": "high",
+          "reason": "log_(a-1)(x²+2ax+5a)가 정의되도록 하는 정수 a — 정의되는 정수 개수/합. 같은 템플릿"
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "me_text",
+          "tb_short": "미래엔교과서",
+          "page": 40,
+          "confidence": "high",
+          "reason": "log_(x-1)(-x²+6x-5)가 정의되도록 하는 정수 x의 개수 — 거의 동일한 구조(밑=이차식 또는 변수형, 진수=2차식). 같은 템플릿"
+        },
+        {
+          "best_idx": 10,
+          "tb_key": "cj_text",
+          "tb_short": "천재교과서",
+          "page": 35,
+          "confidence": "high",
+          "reason": "log_(a+2)(6-a)가 정의되도록 하는 정수 a — 동일 템플릿(정의 조건, 정수 값)"
+        }
+      ]
+    },
+    {
+      "q_no": 7,
+      "q_text": "다항식 $f(x) = x^2 - (7+a)x + 9$, $a > 0$에서 $f(x) \\geq 1$일 때 모든 정수 $a$의 값의 합은? [3.9점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$3$"
+        },
+        {
+          "number": 2,
+          "text": "$5$"
+        },
+        {
+          "number": 3,
+          "text": "$7$"
+        },
+        {
+          "number": 4,
+          "text": "$9$"
+        },
+        {
+          "number": 5,
+          "text": "$11$"
+        }
+      ],
+      "q_chapter": "이차부등식",
+      "matches": []
+    },
+    {
+      "q_no": 8,
+      "q_text": "함수 $y = a^x$ ($a > 0, a \\neq 1$)에 대하여 옳은 것만을 <보기>에서 있는 대로 고른 것은? [4.4점] <보기> ㄱ. ㄴ. ㄷ.",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "ㄱ"
+        },
+        {
+          "number": 2,
+          "text": "ㄴ"
+        },
+        {
+          "number": 3,
+          "text": "ㄷ"
+        },
+        {
+          "number": 4,
+          "text": "ㄱ,ㄴ"
+        },
+        {
+          "number": 5,
+          "text": "ㄴ,ㄷ"
+        }
+      ],
+      "q_chapter": "지수함수",
+      "matches": []
+    },
+    {
+      "q_no": 9,
+      "q_text": "$x$에 대한 방정식 $9^x - 2(a-3) \\cdot 3^x + a - 9 = 0$이 한 양수와 한 음수의 실근을 갖도록 하는 모든 정수 $a$의 값의 합은? [4.4점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$16$"
+        },
+        {
+          "number": 2,
+          "text": "$19$"
+        },
+        {
+          "number": 3,
+          "text": "$20$"
+        },
+        {
+          "number": 4,
+          "text": "$21$"
+        },
+        {
+          "number": 5,
+          "text": "$22$"
+        }
+      ],
+      "q_chapter": "지수방정식",
+      "matches": [
+        {
+          "best_idx": 14,
+          "tb_key": "js_silyeok",
+          "tb_short": "정석실력",
+          "page": 69,
+          "confidence": "high",
+          "reason": "5-14 'x에 관한 지수방정식 9^x+2a·3^x+2a²+a-6=0이 양의 실근 한 개와 음의 실근 한 개를 가질 때 a의 값의 범위' — 거의 동일한 템플릿(9^x, a 매개변수, 한 양/한 음의 실근 조건)"
+        },
+        {
+          "best_idx": 12,
+          "tb_key": "ol_godando",
+          "tb_short": "올림고난도",
+          "page": 26,
+          "confidence": "high",
+          "reason": "'x에 대한 방정식 4^x-k·2^x+...=0이 한 개의 양의 실근과 한 개의 음의 실근을 갖도록 하는 모든 정수 k의 개수' — 동일 템플릿(밑은 4→9 다름, 한 양·한 음 실근 조건+정수 매개변수)"
+        }
+      ]
+    },
+    {
+      "q_no": 10,
+      "q_text": "$n$이 $6$ 이하의 자연수일 때, $\\sqrt[4]{\\sqrt{n}} \\times \\sqrt[6]{\\sqrt[3]{n}}$이 자연수가 되도록 하는 $n$의 값의 합은? [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$98$"
+        },
+        {
+          "number": 2,
+          "text": "$99$"
+        },
+        {
+          "number": 3,
+          "text": "$100$"
+        },
+        {
+          "number": 4,
+          "text": "$101$"
+        },
+        {
+          "number": 5,
+          "text": "$102$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "matches": []
+    },
+    {
+      "q_no": 11,
+      "q_text": "$\\alpha + \\beta = -2, \\alpha\\beta = 2b$인 두 실수 $\\alpha, \\beta$에 대하여 ... [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-8$"
+        },
+        {
+          "number": 2,
+          "text": "$-4$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$4$"
+        },
+        {
+          "number": 5,
+          "text": "$8$"
+        }
+      ],
+      "q_chapter": "지수",
+      "matches": []
+    },
+    {
+      "q_no": 12,
+      "q_text": "좌표평면 위의 점 $\\mathrm{P}$에서 동경 $\\mathrm{OP}$가 나타내는 각의 크기가 $\\theta$일 때, 직선의 기울기 또는 점 좌표를 구하는 문제. 점 $\\mathrm{P}$의 좌표가 ... [4.6점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{\\sqrt{3}-1}{2}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\sqrt{3}-1$"
+        },
+        {
+          "number": 3,
+          "text": "$\\sqrt{3}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{\\sqrt{3}+1}{2}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\sqrt{3}+1$"
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "matches": []
+    },
+    {
+      "q_no": 13,
+      "q_text": "$1$이 아닌 세 양수 $k, l, m$이 다음 조건을 만족시킬 때, $\\log_k a + \\log_l b + \\log_m c$의 값은? [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$17$"
+        },
+        {
+          "number": 2,
+          "text": "$18$"
+        },
+        {
+          "number": 3,
+          "text": "$19$"
+        },
+        {
+          "number": 4,
+          "text": "$20$"
+        },
+        {
+          "number": 5,
+          "text": "$21$"
+        }
+      ],
+      "q_chapter": "로그",
+      "matches": []
+    },
+    {
+      "q_no": 14,
+      "q_text": "함수 $y = a^x$ 또는 $y = \\log_a x$의 그래프와 직선이 만나는 점의 좌표 또는 길이 관련 [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "지수/로그",
+      "matches": []
+    },
+    {
+      "q_no": 15,
+      "q_text": "제$1$사분면에서 직선 $y = ax - 6$에 두 점 $\\mathrm{P}, \\mathrm{Q}$가 있다. $y = \\log_a x$ 그래프와 만나는 점이 $\\mathrm{P}$, $\\mathrm{Q}$이고 ... [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$4$"
+        },
+        {
+          "number": 2,
+          "text": "$4\\sqrt{2}$"
+        },
+        {
+          "number": 3,
+          "text": "$5$"
+        },
+        {
+          "number": 4,
+          "text": "$6$"
+        },
+        {
+          "number": 5,
+          "text": "$6\\sqrt{2}$"
+        }
+      ],
+      "q_chapter": "로그함수 그래프",
+      "matches": []
+    },
+    {
+      "q_no": 16,
+      "q_text": "두 양수 $a, b$가 다음 조건을 만족시킬 때, $a, b, c$의 대소관계를 나타낸 것은? [5.0점] $(1/a)^? = b^?, (1/b)^? = ?, (1/?)^? = ?$",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$a<b<c$"
+        },
+        {
+          "number": 2,
+          "text": "$b<a<c$"
+        },
+        {
+          "number": 3,
+          "text": "$b<c<a$"
+        },
+        {
+          "number": 4,
+          "text": "$c<a<b$"
+        },
+        {
+          "number": 5,
+          "text": "$c<b<a$"
+        }
+      ],
+      "q_chapter": "지수/로그",
+      "matches": []
+    },
+    {
+      "q_no": 17,
+      "q_text": "함수 $f(x) = \\log_a x$ ($a>1$) 그래프 위의 점 $\\mathrm{A}, \\mathrm{B}, \\mathrm{C}$에 대하여 $\\overline{\\mathrm{BD}} = \\overline{\\mathrm{AC}}$가 되는 이등변삼각형이 되도록 하는 점 $\\mathrm{D}$의 좌표 또는 값은? [5.1점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{5}{3}$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$\\dfrac{11}{4}$"
+        },
+        {
+          "number": 4,
+          "text": "$3$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{10}{3}$"
+        }
+      ],
+      "q_chapter": "로그함수 그래프",
+      "matches": []
+    },
+    {
+      "q_no": 18,
+      "q_text": "자연수 $n$과 정수 $a$에 대하여 $(n-a)(n-a-?)$의 $n$ 제곱근 중 실수인 것의 개수를 $f(n)$이라 하자. $f(2) + f(3) + \\cdots + f(?)$의 값은? [5.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$3$"
+        },
+        {
+          "number": 2,
+          "text": "$5$"
+        },
+        {
+          "number": 3,
+          "text": "$6$"
+        },
+        {
+          "number": 4,
+          "text": "$7$"
+        },
+        {
+          "number": 5,
+          "text": "$8$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "matches": [
+        {
+          "best_idx": 11,
+          "tb_key": "sutuk26",
+          "tb_short": "수특26",
+          "page": 5,
+          "confidence": "high",
+          "reason": "예제: 2 이상의 자연수 n에 대하여 n-5의 n제곱근 중 실수인 것의 개수를 f(n)이라 할 때, f(2)+f(3)+...+f(k)=11을 만족시키는 자연수 k — 시험문제와 거의 동일한 템플릿(f(n) 정의, 합으로 구하기)"
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "ol_godando",
+          "tb_short": "올림고난도",
+          "page": 18,
+          "confidence": "high",
+          "reason": "2 이상의 자연수 n에 대하여 n-7의 n제곱근 중 실수인 것의 개수를 f(n)이라 할 때 Σf(n) — 같은 템플릿"
+        },
+        {
+          "best_idx": 9,
+          "tb_key": "ol_jeongug",
+          "tb_short": "올림전국연합",
+          "page": 139,
+          "confidence": "high",
+          "reason": "2 이상의 자연수 n에 대하여 2^(n+1)-8의 제곱근 / n²-12n+27의 n제곱근 중 실수인 것의 개수 f(n) 합 — 같은 템플릿"
+        },
+        {
+          "best_idx": 15,
+          "tb_key": "yhon1",
+          "tb_short": "유형ON1",
+          "page": 22,
+          "confidence": "high",
+          "reason": "2 이상의 자연수 n에 대하여 (n-2)²(n-6)의 n제곱근 중 실수의 개수를 f(n)이라 할 때 f(n)=1을 만족 — 같은 템플릿(다항식의 n제곱근 실수 개수)"
+        }
+      ]
+    },
+    {
+      "q_no": 19,
+      "q_text": "[서답형 1] $\\dfrac{\\pi}{2} < \\alpha < \\pi$이고 $\\sin\\alpha = \\dfrac{1}{3}$일 때, $\\sin 2\\alpha$의 값을 구하고, 그 과정을 서술하시오. [4.0점]",
+      "q_choices": [],
+      "q_chapter": "삼각함수",
+      "matches": []
+    },
+    {
+      "q_no": 20,
+      "q_text": "[서답형 2] $2$의 세제곱근 중 실수인 것을 $a$, $n$의 제곱근 중 양의 실수인 것을 $b$라 할 때, $\\left(\\dfrac{a}{\\sqrt{b}}\\right)^? = \\left(\\dfrac{b}{a}\\right)^?$를 만족시키는 자연수 $n$의 값을 모두 구하고, 그 과정을 서술하시오. [7.0점]",
+      "q_choices": [],
+      "q_chapter": "거듭제곱근",
+      "matches": []
+    },
+    {
+      "q_no": 21,
+      "q_text": "[서답형 3] 함수 $f(x) = \\begin{cases} a^{x-1}-1 & (x \\leq 2) \\\\ \\log_a(x-2) & (x > 2) \\end{cases}$에 대하여 함수 $y=f(x)$가 $x=2$에서 연속이고 $y=g(x)$가 ... 자연수의 개수를 구하고, 그 과정을 서술하시오. [7.0점]",
+      "q_choices": [],
+      "q_chapter": "지수/로그함수 연속",
+      "matches": []
+    }
+  ],
+  "광문고": [
+    {
+      "q_no": 1,
+      "q_text": "$\\sqrt[3]{3\\sqrt{3}} + \\sqrt[3]{?\\sqrt{?}}$ 또는 거듭제곱근 식의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\sqrt{3}$"
+        },
+        {
+          "number": 2,
+          "text": "$2\\sqrt{3}$"
+        },
+        {
+          "number": 3,
+          "text": "$3\\sqrt{3}$"
+        },
+        {
+          "number": 4,
+          "text": "$4\\sqrt{3}$"
+        },
+        {
+          "number": 5,
+          "text": "$5\\sqrt{3}$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "matches": []
+    },
+    {
+      "q_no": 2,
+      "q_text": "$\\log_2(2\\sqrt{2}) + \\log_{2\\sqrt{2}}(?)$의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{3}{2}$"
+        },
+        {
+          "number": 2,
+          "text": "$2$"
+        },
+        {
+          "number": 3,
+          "text": "$\\dfrac{5}{2}$"
+        },
+        {
+          "number": 4,
+          "text": "$3$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{7}{2}$"
+        }
+      ],
+      "q_chapter": "로그",
+      "matches": []
+    },
+    {
+      "q_no": 3,
+      "q_text": "$\\sqrt[3]{50} \\times \\sqrt[3]{?} \\div \\sqrt[3]{?}$의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\sqrt[3]{2}$"
+        },
+        {
+          "number": 2,
+          "text": "$\\sqrt[3]{3}$"
+        },
+        {
+          "number": 3,
+          "text": "$\\sqrt[3]{4}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\sqrt[3]{5}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\sqrt[3]{6}$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "matches": []
+    },
+    {
+      "q_no": 4,
+      "q_text": "그림과 같이 부채꼴 OAB의 ? 또는 부채꼴의 호의 길이/넓이 관련 [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "mirae_text",
+          "tb_short": "미래엔교과서",
+          "page": 76,
+          "confidence": "medium",
+          "reason": "부채꼴 호의 길이/넓이 공식 도입 페이지 (l=rθ, S=½r²θ). 시험 문제는 부채꼴 OAB 그림 + 호 길이/넓이 응용으로 동일 단원/도형. 문제 템플릿이 동일한지 정확한 비교 불가하나 단원·구조 일치."
+        },
+        {
+          "best_idx": 5,
+          "tb_key": "su_wansung",
+          "tb_short": "수능완성",
+          "page": 16,
+          "confidence": "medium",
+          "reason": "부채꼴의 호 길이와 넓이 단원, 반지름과 중심각이 주어진 부채꼴 넓이 구하기 문제 다수. 시험문제와 같은 템플릿 변형(숫자 차이)."
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "cheonjae",
+          "tb_short": "천재교과서",
+          "page": 72,
+          "confidence": "medium",
+          "reason": "부채꼴 OAB의 호의 길이 l=rθ, 넓이 S=½r²θ 정의 페이지. 시험 문제와 동일 개념."
+        }
+      ]
+    },
+    {
+      "q_no": 5,
+      "q_text": "$\\theta$가 제$2$사분면의 각이고 $\\sin\\theta + \\cos\\theta = ?$일 때, $\\sin\\theta\\cos\\theta$의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-\\dfrac{1}{3}$"
+        },
+        {
+          "number": 2,
+          "text": "$-\\dfrac{1}{4}$"
+        },
+        {
+          "number": 3,
+          "text": "$-\\dfrac{1}{5}$"
+        },
+        {
+          "number": 4,
+          "text": "$\\dfrac{1}{4}$"
+        },
+        {
+          "number": 5,
+          "text": "$\\dfrac{1}{3}$"
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "mirae_text",
+          "tb_short": "미래엔교과서",
+          "page": 119,
+          "confidence": "medium",
+          "reason": "이차방정식 3x²+x+k=0의 두 근이 sinθ, cosθ — 본 시험 문제(sinθ+cosθ 주어진 값일 때 sinθcosθ)와 동일 단원·동일 sinθ+cosθ vs sinθcosθ 관계식 유형."
+        },
+        {
+          "best_idx": 6,
+          "tb_key": "ybm_text",
+          "tb_short": "YBM교과서",
+          "page": 115,
+          "confidence": "high",
+          "reason": "θ가 제1사분면의 각이고 sinθ·cosθ=12/25 → sin³θ+cos³θ. 본 시험 문제와 sinθ+cosθ→sinθcosθ 전환 유형 동일. 분면만 차이."
+        },
+        {
+          "best_idx": 9,
+          "tb_key": "yhgon_2",
+          "tb_short": "유형ON2",
+          "page": 69,
+          "confidence": "medium",
+          "reason": "삼각함수 사이의 관계 — sinθ+cosθ, sinθcosθ 변환 문제 유형 집중 단원."
+        }
+      ]
+    },
+    {
+      "q_no": 6,
+      "q_text": "어느 악취의 농도가 $c\\,\\mathrm{ppm}$일 때 악취의 세기를 $r$이라 하면, $r = a + b\\log c$의 관계가 성립한다고 한다. 이 물질의 농도가 $1{,}000{,}000\\,\\mathrm{ppm}$일 때 악취의 세기를 $r_1$, 농도가 $1\\,\\mathrm{ppm}$일 때 악취의 세기를 $r_2$라 할 때 $\\dfrac{r_1}{r_2}$의 값은? [4.0점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "로그",
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "mirae_text",
+          "tb_short": "미래엔교과서",
+          "page": 37,
+          "confidence": "high",
+          "reason": "어떤 광원으로부터 d m 떨어진 지점에서의 감각의 세기 log(h/d²). 본 시험 문제(악취 농도 c와 세기 r = a + b log c) 와 동일 템플릿: 실생활 로그 관계식 + 두 농도/거리에서의 비교. 수식 형태와 풀이 구조 일치."
+        },
+        {
+          "best_idx": 2,
+          "tb_key": "matheo_su1",
+          "tb_short": "마더텅수1",
+          "page": 42,
+          "confidence": "medium",
+          "reason": "진동가속도레벨 V(dB)=20 log... 실생활 로그 관계식 — 본 시험과 같은 '실생활 로그 모델 + 두 값 비교' 유형."
+        },
+        {
+          "best_idx": 4,
+          "tb_key": "matheo_su1",
+          "tb_short": "마더텅수1",
+          "page": 43,
+          "confidence": "medium",
+          "reason": "지반 상대밀도, 먼지 농도 등 실생활 로그 관계식 응용 문제 다수. 동일 유형."
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "yhgon_2",
+          "tb_short": "유형ON2",
+          "page": 26,
+          "confidence": "high",
+          "reason": "지진의 규모 R = 0.67 log(0.37E) + 1.46, 규모가 R₁일 때 에너지는 R₂일 때의 4배, R₁-R₂의 값. 본 시험 문제(r₁/r₂ 비)와 사실상 동일 템플릿: 실생활 로그 모델 + 두 값 비 구하기."
+        }
+      ]
+    },
+    {
+      "q_no": 7,
+      "q_text": "$a > 1$이고 $a \\neq 1$인 양의 실수일 때, 함수 $f(x) = a^x$과 함수 $g(x) = \\log_a x$에 대해 옳은 것만을 <보기>에서 있는 대로 고른 것은? (단, $m, n$은 $0$보다 큰 실수이다) [4.6점] <보기> ㄱ. $f(m+n) = f(m) \\cdot f(n)$ ㄴ. $g(m \\cdot n) = g(m) + g(n)$ ㄷ. $f(m) \\cdot \\log_a f(n) = \\log_a f(m \\cdot n)$",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "ㄱ"
+        },
+        {
+          "number": 2,
+          "text": "ㄴ"
+        },
+        {
+          "number": 3,
+          "text": "ㄷ"
+        },
+        {
+          "number": 4,
+          "text": "ㄱ,ㄴ"
+        },
+        {
+          "number": 5,
+          "text": "ㄱ,ㄴ,ㄷ"
+        }
+      ],
+      "q_chapter": "지수/로그함수",
+      "matches": []
+    },
+    {
+      "q_no": 8,
+      "q_text": "$\\theta$가 제$2$사분면의 각일 때, $\\sin\\theta - \\sqrt{(\\sin\\theta - \\cos\\theta)^2} + \\cos^2\\theta$의 값을 구하시오. [4.6점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "삼각함수",
+      "matches": [
+        {
+          "best_idx": 7,
+          "tb_key": "gozaengi",
+          "tb_short": "고쟁이",
+          "page": 94,
+          "confidence": "high",
+          "reason": "θ가 제2사분면의 각일 때 |sinθ|+|tanθ|+√(sinθ-cosθ)²-√(cosθ+tanθ)² 간단히. 본 시험 문제(제2사분면 + √(sinθ-cosθ)² 포함 식 간단히)와 매우 동일한 템플릿."
+        }
+      ]
+    },
+    {
+      "q_no": 9,
+      "q_text": "지수함수 또는 삼각함수 그래프 관련 문제 [4.6점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "?",
+      "matches": []
+    },
+    {
+      "q_no": 10,
+      "q_text": "이차방정식 $x^2 - 10x + 4 = 0$의 두 근이 $\\log a$, $\\log b$일 때, $\\log_a b + \\log_b a$의 값은? (단, $a, b$는 $1$이 아닌 양의 실수이다) [4.6점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$14$"
+        },
+        {
+          "number": 2,
+          "text": "$16$"
+        },
+        {
+          "number": 3,
+          "text": "$20$"
+        },
+        {
+          "number": 4,
+          "text": "$23$"
+        },
+        {
+          "number": 5,
+          "text": "$26$"
+        }
+      ],
+      "q_chapter": "로그·이차방정식",
+      "matches": [
+        {
+          "best_idx": 6,
+          "tb_key": "yhgon_1",
+          "tb_short": "유형ON1",
+          "page": 32,
+          "confidence": "high",
+          "reason": "1이 아닌 두 양수 a, b에 대하여 이차방정식 x²-3x+1=0의 두 근이 log_b3, log_a3일 때 ab의 값. 본 시험 문제(이차방정식의 두 근이 log a, log b일 때 log_a b + log_b a)와 같은 템플릿(이차방정식의 두 근이 로그식)."
+        }
+      ]
+    },
+    {
+      "q_no": 11,
+      "q_text": "지수함수 $f(x) = 3^{?x-?}$에 대하여 부등식 $\\log_2 f(x) \\leq -2$를 만족시키는 자연수 $x$의 개수는? [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$5$"
+        },
+        {
+          "number": 2,
+          "text": "$6$"
+        },
+        {
+          "number": 3,
+          "text": "$7$"
+        },
+        {
+          "number": 4,
+          "text": "$8$"
+        },
+        {
+          "number": 5,
+          "text": "$9$"
+        }
+      ],
+      "q_chapter": "지수/로그부등식",
+      "matches": [
+        {
+          "best_idx": 5,
+          "tb_key": "jeongseok_basic",
+          "tb_short": "정석기본",
+          "page": 83,
+          "confidence": "medium",
+          "reason": "log_(1/2) x > log_(1/4) x 등의 부등식을 만족시키는 정수 x의 개수. 본 시험 문제(로그 부등식의 자연수 해 개수)와 동일 유형."
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "yhgon_1",
+          "tb_short": "유형ON1",
+          "page": 81,
+          "confidence": "medium",
+          "reason": "log_3 x · log_3 9x ≤ 24 만족시키는 자연수 x의 최댓값, (log_2 x)² - log_2 16x³ ≤ 0 등 로그 부등식의 자연수 해 문제. 동일 템플릿."
+        }
+      ]
+    },
+    {
+      "q_no": 12,
+      "q_text": "그림과 같이 두 함수 $y = \\left(\\dfrac{5}{3}\\right)^x$, $y = \\left(\\dfrac{1}{?}\\right)^x$의 그래프가 만나는 점을 각각 $\\mathrm{A}, \\mathrm{B}$라 할 때, 삼각형 $\\mathrm{AOB}$의 넓이는? (단, $\\mathrm{O}$는 원점) [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "지수함수 그래프",
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "yhgon_2",
+          "tb_short": "유형ON2",
+          "page": 32,
+          "confidence": "high",
+          "reason": "두 지수함수 그래프 교점 A, B와 삼각형 AOB의 넓이 구하기. 본 시험 문제(y=(5/3)^x, y=(1/?)^x 그래프 교점 A, B → 삼각형 AOB 넓이)와 본질적으로 동일 템플릿."
+        },
+        {
+          "best_idx": 3,
+          "tb_key": "yhgon_1",
+          "tb_short": "유형ON1",
+          "page": 50,
+          "confidence": "high",
+          "reason": "두 곡선 y=2^x, y=2^(x+1)-4가 y축과 만나는 점 A, B, 두 곡선 교점 C → 삼각형 ABC 넓이. 본 시험 문제와 매우 유사: 두 지수함수 그래프 교점 + 삼각형 넓이."
+        }
+      ]
+    },
+    {
+      "q_no": 13,
+      "q_text": "함수 $y = \\sqrt{?\\sqrt{?}}$ 또는 거듭제곱근 평행이동 관련 [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": ""
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "?",
+      "matches": []
+    },
+    {
+      "q_no": 14,
+      "q_text": "부등식 $3 - 2(?) - ?(?) < 0$ 또는 비슷한 식을 만족시키는 모든 정수 $x$의 개수는? [4.7점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$5$"
+        },
+        {
+          "number": 2,
+          "text": "$6$"
+        },
+        {
+          "number": 3,
+          "text": "$7$"
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "지수/로그부등식",
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "su_t26",
+          "tb_short": "수특26",
+          "page": 107,
+          "confidence": "high",
+          "reason": "a^(x²-3x+2) ≥ a^(2x-2) 만족시키는 모든 정수 x의 개수 유형. 본 시험 문제(부등식 만족시키는 정수 x의 개수)와 동일 템플릿."
+        },
+        {
+          "best_idx": 6,
+          "tb_key": "yhgon_2",
+          "tb_short": "유형ON2",
+          "page": 58,
+          "confidence": "high",
+          "reason": "2^(x-13) ≤ √128/8^x ≤ 4^(-x²+...) 만족시키는 모든 정수 x의 합. 본 시험 문제(지수 부등식의 정수 해 개수/합)와 동일 템플릿."
+        },
+        {
+          "best_idx": 7,
+          "tb_key": "gozaengi",
+          "tb_short": "고쟁이",
+          "page": 48,
+          "confidence": "medium",
+          "reason": "log√(5(x+1)) ≤ 1-½log(2x+5) 만족시키는 모든 정수 x의 합. 로그 부등식의 정수 해 — 동일 카테고리."
+        }
+      ]
+    },
+    {
+      "q_no": 15,
+      "q_text": "두 정수 $a, b$와 자연수 $c$에 대하여 다음을 만족시키는 모든 $a + b + c$의 값의 합은? (단, $\\sqrt{b}$는 음수 아닌 실수이다) [4.5점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$63$"
+        },
+        {
+          "number": 2,
+          "text": "$120$"
+        },
+        {
+          "number": 3,
+          "text": "$240$"
+        },
+        {
+          "number": 4,
+          "text": "$336$"
+        },
+        {
+          "number": 5,
+          "text": "$432$"
+        }
+      ],
+      "q_chapter": "거듭제곱근",
+      "matches": []
+    },
+    {
+      "q_no": 16,
+      "q_text": "서로 다른 두 실수 $\\alpha, \\beta$와 $0 < \\alpha < \\beta$가 다음을 만족시킨다. (가) $\\log_? x + 3a \\log_3 x = ?$의 두 근이 $3, 6$이다. (나) $\\log_? - 3 \\log_? = ?$의 두 근이 $\\alpha, \\beta$이다. $\\alpha + \\beta$의 값은? (단, ?는 $1$이 아닌 양의 실수이다) [5.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$-9$"
+        },
+        {
+          "number": 2,
+          "text": "$-3$"
+        },
+        {
+          "number": 3,
+          "text": "$0$"
+        },
+        {
+          "number": 4,
+          "text": "$1$"
+        },
+        {
+          "number": 5,
+          "text": "$9$"
+        }
+      ],
+      "q_chapter": "로그방정식",
+      "matches": [
+        {
+          "best_idx": 4,
+          "tb_key": "yhgon_1",
+          "tb_short": "유형ON1",
+          "page": 41,
+          "confidence": "medium",
+          "reason": "1보다 큰 세 실수 a,b,c가 log_a b = log_b c/2 = log_c a/4 만족 → log_a b + log_b c + log_c a 값. 본 시험 문제(로그방정식 두 근 α, β, α+β 구하기)와 로그 항등식 사용 유형으로 유사."
+        }
+      ]
+    },
+    {
+      "q_no": 17,
+      "q_text": "$a > 1$인 양의 실수에 대하여 $\\sin\\theta = \\log_a x$, $\\cos\\theta = \\log_a y$이고 $x \\cdot y = ?$일 때 $a$의 값은? [5.2점]",
+      "q_choices": [
+        {
+          "number": 1,
+          "text": "$\\dfrac{1}{2}$"
+        },
+        {
+          "number": 2,
+          "text": ""
+        },
+        {
+          "number": 3,
+          "text": ""
+        },
+        {
+          "number": 4,
+          "text": ""
+        },
+        {
+          "number": 5,
+          "text": ""
+        }
+      ],
+      "q_chapter": "로그·삼각함수",
+      "matches": []
+    },
+    {
+      "q_no": 18,
+      "q_text": "[서답형 1] $1$이 아닌 두 양수 $a, b$에 대하여 다음 물음에 답하시오. [6.2점] (1-1) $a^? = b^?$임을 밑의 변환을 사용하여 서술하시오 [3점]. (1-2) $0.01^? = ?$의 $abc$ 구하고 그 과정을 서술하시오 [2점].",
+      "q_choices": [],
+      "q_chapter": "로그",
+      "matches": []
+    },
+    {
+      "q_no": 19,
+      "q_text": "[서답형 2] (본문 식별 어려움)",
+      "q_choices": [],
+      "q_chapter": "?",
+      "matches": []
+    },
+    {
+      "q_no": 20,
+      "q_text": "[서답형 3] 그림과 같이 좌표평면 위에 두 점 $\\mathrm{A}, \\mathrm{B}$가 있다. $\\mathrm{P}(t, 0), \\mathrm{Q}(0, t)$에 대하여 평면도형 $\\mathrm{APQB}$의 넓이를 $f(t)$, 점 $\\mathrm{P}$와 점 $\\mathrm{Q}$ 사이의 거리를 $g(t)$라 하자. (3-1) 어떤 실수 $t$에 대하여 $f(t) = ? + 6$일 때 $t$의 값을 구하고, 그 과정을 서술하시오 [3점]. (3-2) (3-1)에서 구한 실수 $a, b, c$에 대하여 $t$에 관한 방정식 $\\log_? + \\sin? = ?$의 모든 실근의 곱을 구하고, 그 과정을 서술하시오 [5점].",
+      "q_choices": [],
+      "q_chapter": "로그·삼각함수",
+      "matches": []
+    }
+  ],
+  "명문고": [
+    {
+      "q_no": 1,
+      "q_text": "$\\log_{\\sqrt{3}} \\sqrt[?]{10}$의 값은? [4.0점]",
+      "q_choices": [],
+      "q_chapter": "로그",
+      "matches": []
+    },
+    {
+      "q_no": 2,
+      "q_text": "$(\\sqrt[3]{a^?})^?$ 또는 거듭제곱근 식의 값은? [4.0점]",
+      "q_choices": [],
+      "q_chapter": "지수",
+      "matches": []
+    },
+    {
+      "q_no": 3,
+      "q_text": "반지름의 길이가 $?$이고 중심각의 크기가 $\\dfrac{\\pi}{4}$인 부채꼴의 넓이는? [4.4점]",
+      "q_choices": [],
+      "q_chapter": "삼각함수",
+      "matches": []
+    },
+    {
+      "q_no": 4,
+      "q_text": "$x = \\log_?$, $y = \\log_?$일 때, $?$의 값은? [4.6점] 답 25",
+      "q_choices": [],
+      "q_chapter": "로그",
+      "matches": []
+    },
+    {
+      "q_no": 5,
+      "q_text": "다음 중 옳은 것은? [4.6점] 거듭제곱근의 성질에 관한 보기 5개",
+      "q_choices": [],
+      "q_chapter": "거듭제곱근",
+      "matches": []
+    },
+    {
+      "q_no": 6,
+      "q_text": "부등식 $\\log_?(2x-5) > \\log_?(7-x)$를 만족시키는 $x$값의 범위는? [4.7점]",
+      "q_choices": [],
+      "q_chapter": "로그부등식",
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "yuhyung2",
+          "tb_short": "유형ON2",
+          "page": 59,
+          "confidence": "low",
+          "reason": "로그부등식 log_a(다항) > log_a(다항) 형태의 페이지로 보이며 후보 score 100. 다만 정확히 (2x-5)>(7-x) 와 동일한 숫자 변형 문항이라고 썸네일에서 확정 불가."
+        },
+        {
+          "best_idx": 4,
+          "tb_key": "yuhyung1",
+          "tb_short": "유형ON1",
+          "page": 87,
+          "confidence": "low",
+          "reason": "로그부등식 유형 페이지. 같은 인스트럭션('만족시키는 x값의 범위') 다수 포함 가능성 있으나 확정 불가."
+        }
+      ]
+    },
+    {
+      "q_no": 7,
+      "q_text": "$\\sqrt[?]{a\\sqrt[?]{a}} = a^p$일 때 $p$의 값은? [4.6점] (또는 비슷한 거듭제곱근 식)",
+      "q_choices": [],
+      "q_chapter": "거듭제곱근",
+      "matches": []
+    },
+    {
+      "q_no": 8,
+      "q_text": "함수 $f(x) = (\\log_a x)^? - (\\log_a x) + ?$의 최댓값 $M$ 또는 최솟값 $m$ 관련 [4.7점]",
+      "q_choices": [],
+      "q_chapter": "로그함수",
+      "matches": []
+    },
+    {
+      "q_no": 9,
+      "q_text": "$\\sqrt[?]{?}\\cdot\\sqrt[?]{?} \\cdot\\sqrt[?]{?}$의 값은? [4.6점]",
+      "q_choices": [],
+      "q_chapter": "거듭제곱근",
+      "matches": []
+    },
+    {
+      "q_no": 10,
+      "q_text": "$\\theta$가 제?사분면의 각일 때, $\\frac{?}{?}$의 동경이 속할 수 있는 사분면은? [4.7점]",
+      "q_choices": [],
+      "q_chapter": "삼각함수",
+      "matches": []
+    },
+    {
+      "q_no": 11,
+      "q_text": "$\\log a = 0.7882$, $\\log b = 0.8939$일 때, $\\log$ 어떤 값은? [4.7점] (선지 7.04, 6.24 등)",
+      "q_choices": [],
+      "q_chapter": "로그",
+      "matches": []
+    },
+    {
+      "q_no": 12,
+      "q_text": "$a > 0$, $a \\neq 1$이고 $a^x = b$일 때 ... 미정계수 값 [4.8점]",
+      "q_choices": [],
+      "q_chapter": "지수/로그",
+      "matches": []
+    },
+    {
+      "q_no": 13,
+      "q_text": "기준점 함수 / 두 그래프 차이 관련 [4.8점]",
+      "q_choices": [],
+      "q_chapter": "함수",
+      "matches": []
+    },
+    {
+      "q_no": 14,
+      "q_text": "삼각함수 또는 부등식: $\\cos\\alpha - \\cos\\beta = \\dfrac{?}{?}$일 때 ... [4.8점]",
+      "q_choices": [],
+      "q_chapter": "삼각함수",
+      "matches": []
+    },
+    {
+      "q_no": 15,
+      "q_text": "좌표평면 위에 두 함수 $y = a^x$와 $y = \\log_b x$의 그래프가 만나는 점 또는 대칭 관련 [4.8점]",
+      "q_choices": [],
+      "q_chapter": "지수/로그함수 그래프",
+      "matches": []
+    },
+    {
+      "q_no": 16,
+      "q_text": "$y = \\log_b(x+?) + ?$의 그래프 평행이동 관련 [4.7점]",
+      "q_choices": [],
+      "q_chapter": "로그함수 그래프",
+      "matches": []
+    },
+    {
+      "q_no": 17,
+      "q_text": "방정식 $a^?·b^? = ?$의 두 근 $\\alpha, \\beta$일 때 [5.0점]",
+      "q_choices": [],
+      "q_chapter": "지수방정식",
+      "matches": []
+    },
+    {
+      "q_no": 18,
+      "q_text": "함수 $f(x) = \\dfrac{1}{2}x^? - 3x + ?$, $g(x) = \\log_a x$에 대하여 ... [5.0점]",
+      "q_choices": [],
+      "q_chapter": "함수",
+      "matches": []
+    },
+    {
+      "q_no": 19,
+      "q_text": "삼각형 $\\mathrm{ABC}$의 세 변 $a, b, c$에 대하여 $\\log_a + \\log_b + \\log_c = ?$일 때 [5.0점]",
+      "q_choices": [],
+      "q_chapter": "삼각함수",
+      "matches": []
+    },
+    {
+      "q_no": 20,
+      "q_text": "함수 $y = 2^x + 1$과 그래프 위의 점 A, B, C, D 또는 삼각형 ABCD의 넓이 [5.0점]",
+      "q_choices": [],
+      "q_chapter": "지수함수 그래프",
+      "matches": []
+    },
+    {
+      "q_no": 21,
+      "q_text": "[서답형 1] $A = \\{x | ax^2 + ?\\}$, $B = \\{x | ?\\}$에 대하여 $A \\cap B$ 개수 또는 합 [5.2점]",
+      "q_choices": [],
+      "q_chapter": "집합/지수",
+      "matches": []
+    }
+  ]
+}

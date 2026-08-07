@@ -1,0 +1,215 @@
+{
+  "school": "광명북고",
+  "verdicts": [
+    {
+      "q_no": 1,
+      "matches": []
+    },
+    {
+      "q_no": 2,
+      "matches": [
+        {
+          "best_idx": 17,
+          "tb_key": "gojaeng",
+          "tb_short": "고쟁이",
+          "page": 81,
+          "confidence": "high",
+          "reason": "반지름의 길이가 10cm, 중심각의 크기가 (3/5)π인 부채꼴의 호의 길이와 넓이 — 같은 구조(반지름+호도 중심각으로 호의 길이) 숫자만 다름"
+        }
+      ]
+    },
+    {
+      "q_no": 3,
+      "matches": []
+    },
+    {
+      "q_no": 4,
+      "matches": [
+        {
+          "best_idx": 2,
+          "tb_key": "mdt_su1",
+          "tb_short": "마더텅수1",
+          "page": 105,
+          "confidence": "high",
+          "reason": "부등식 log_(1/2)(x-3)+log_(1/2)(x+1)<1+log_(1/2)9 해가 a<x<b일 때 ab의 값 — log_(1/2) 밑의 부등식, 두 근 a,b로부터 합/곱 구하기, 동일 템플릿"
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "mdt_su1",
+          "tb_short": "마더텅수1",
+          "page": 106,
+          "confidence": "high",
+          "reason": "부등식 log_(1/2)(x-5)+log_(1/2)(x-6)>-1의 해가 a<x<b일 때 a+b의 값 — 거의 동일한 구조, 같은 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 5,
+      "matches": [
+        {
+          "best_idx": 2,
+          "tb_key": "cj_text",
+          "tb_short": "천재교과서",
+          "page": 49,
+          "confidence": "high",
+          "reason": "pH=-log[H+] 정의문과 동일 — '용액 1L 속에 들어있는 수소 이온 농도가 [H+]mol/L일 때, pH=-log[H+]로 정한다' 거의 한 글자도 다르지 않은 instruction"
+        },
+        {
+          "best_idx": 18,
+          "tb_key": "me_text",
+          "tb_short": "미래엔교과서",
+          "page": 41,
+          "confidence": "high",
+          "reason": "pH=log(1/[H+]) 형식이지만 본질 동일. 수소 이온 농도로부터 pH 값 구하기 — 같은 템플릿"
+        }
+      ]
+    },
+    {
+      "q_no": 6,
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "yhon1",
+          "tb_short": "유형ON1",
+          "page": 26,
+          "confidence": "high",
+          "reason": "log_b(-2a+14)가 정의되도록 하는 정수 a의 개수 — 동일 템플릿(밑+진수 조건, 정수 개수). 숫자만 다름"
+        },
+        {
+          "best_idx": 2,
+          "tb_key": "yhon1",
+          "tb_short": "유형ON1",
+          "page": 27,
+          "confidence": "high",
+          "reason": "log_(a-1)(x²+2ax+5a)가 정의되도록 하는 정수 a — 정의되는 정수 개수/합. 같은 템플릿"
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "me_text",
+          "tb_short": "미래엔교과서",
+          "page": 40,
+          "confidence": "high",
+          "reason": "log_(x-1)(-x²+6x-5)가 정의되도록 하는 정수 x의 개수 — 거의 동일한 구조(밑=이차식 또는 변수형, 진수=2차식). 같은 템플릿"
+        },
+        {
+          "best_idx": 10,
+          "tb_key": "cj_text",
+          "tb_short": "천재교과서",
+          "page": 35,
+          "confidence": "high",
+          "reason": "log_(a+2)(6-a)가 정의되도록 하는 정수 a — 동일 템플릿(정의 조건, 정수 값)"
+        }
+      ]
+    },
+    {
+      "q_no": 7,
+      "matches": []
+    },
+    {
+      "q_no": 8,
+      "matches": []
+    },
+    {
+      "q_no": 9,
+      "matches": [
+        {
+          "best_idx": 14,
+          "tb_key": "js_silyeok",
+          "tb_short": "정석실력",
+          "page": 69,
+          "confidence": "high",
+          "reason": "5-14 'x에 관한 지수방정식 9^x+2a·3^x+2a²+a-6=0이 양의 실근 한 개와 음의 실근 한 개를 가질 때 a의 값의 범위' — 거의 동일한 템플릿(9^x, a 매개변수, 한 양/한 음의 실근 조건)"
+        },
+        {
+          "best_idx": 12,
+          "tb_key": "ol_godando",
+          "tb_short": "올림고난도",
+          "page": 26,
+          "confidence": "high",
+          "reason": "'x에 대한 방정식 4^x-k·2^x+...=0이 한 개의 양의 실근과 한 개의 음의 실근을 갖도록 하는 모든 정수 k의 개수' — 동일 템플릿(밑은 4→9 다름, 한 양·한 음 실근 조건+정수 매개변수)"
+        }
+      ]
+    },
+    {
+      "q_no": 10,
+      "matches": []
+    },
+    {
+      "q_no": 11,
+      "matches": []
+    },
+    {
+      "q_no": 12,
+      "matches": []
+    },
+    {
+      "q_no": 13,
+      "matches": []
+    },
+    {
+      "q_no": 14,
+      "matches": []
+    },
+    {
+      "q_no": 15,
+      "matches": []
+    },
+    {
+      "q_no": 16,
+      "matches": []
+    },
+    {
+      "q_no": 17,
+      "matches": []
+    },
+    {
+      "q_no": 18,
+      "matches": [
+        {
+          "best_idx": 11,
+          "tb_key": "sutuk26",
+          "tb_short": "수특26",
+          "page": 5,
+          "confidence": "high",
+          "reason": "예제: 2 이상의 자연수 n에 대하여 n-5의 n제곱근 중 실수인 것의 개수를 f(n)이라 할 때, f(2)+f(3)+...+f(k)=11을 만족시키는 자연수 k — 시험문제와 거의 동일한 템플릿(f(n) 정의, 합으로 구하기)"
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "ol_godando",
+          "tb_short": "올림고난도",
+          "page": 18,
+          "confidence": "high",
+          "reason": "2 이상의 자연수 n에 대하여 n-7의 n제곱근 중 실수인 것의 개수를 f(n)이라 할 때 Σf(n) — 같은 템플릿"
+        },
+        {
+          "best_idx": 9,
+          "tb_key": "ol_jeongug",
+          "tb_short": "올림전국연합",
+          "page": 139,
+          "confidence": "high",
+          "reason": "2 이상의 자연수 n에 대하여 2^(n+1)-8의 제곱근 / n²-12n+27의 n제곱근 중 실수인 것의 개수 f(n) 합 — 같은 템플릿"
+        },
+        {
+          "best_idx": 15,
+          "tb_key": "yhon1",
+          "tb_short": "유형ON1",
+          "page": 22,
+          "confidence": "high",
+          "reason": "2 이상의 자연수 n에 대하여 (n-2)²(n-6)의 n제곱근 중 실수의 개수를 f(n)이라 할 때 f(n)=1을 만족 — 같은 템플릿(다항식의 n제곱근 실수 개수)"
+        }
+      ]
+    },
+    {
+      "q_no": 19,
+      "matches": []
+    },
+    {
+      "q_no": 20,
+      "matches": []
+    },
+    {
+      "q_no": 21,
+      "matches": []
+    }
+  ]
+}

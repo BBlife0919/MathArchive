@@ -1,0 +1,255 @@
+{
+  "school": "광문고",
+  "verdicts": [
+    {
+      "q_no": 1,
+      "matches": []
+    },
+    {
+      "q_no": 2,
+      "matches": []
+    },
+    {
+      "q_no": 3,
+      "matches": []
+    },
+    {
+      "q_no": 4,
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "mirae_text",
+          "tb_short": "미래엔교과서",
+          "page": 76,
+          "confidence": "medium",
+          "reason": "부채꼴 호의 길이/넓이 공식 도입 페이지 (l=rθ, S=½r²θ). 시험 문제는 부채꼴 OAB 그림 + 호 길이/넓이 응용으로 동일 단원/도형. 문제 템플릿이 동일한지 정확한 비교 불가하나 단원·구조 일치."
+        },
+        {
+          "best_idx": 5,
+          "tb_key": "su_wansung",
+          "tb_short": "수능완성",
+          "page": 16,
+          "confidence": "medium",
+          "reason": "부채꼴의 호 길이와 넓이 단원, 반지름과 중심각이 주어진 부채꼴 넓이 구하기 문제 다수. 시험문제와 같은 템플릿 변형(숫자 차이)."
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "cheonjae",
+          "tb_short": "천재교과서",
+          "page": 72,
+          "confidence": "medium",
+          "reason": "부채꼴 OAB의 호의 길이 l=rθ, 넓이 S=½r²θ 정의 페이지. 시험 문제와 동일 개념."
+        }
+      ]
+    },
+    {
+      "q_no": 5,
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "mirae_text",
+          "tb_short": "미래엔교과서",
+          "page": 119,
+          "confidence": "medium",
+          "reason": "이차방정식 3x²+x+k=0의 두 근이 sinθ, cosθ — 본 시험 문제(sinθ+cosθ 주어진 값일 때 sinθcosθ)와 동일 단원·동일 sinθ+cosθ vs sinθcosθ 관계식 유형."
+        },
+        {
+          "best_idx": 6,
+          "tb_key": "ybm_text",
+          "tb_short": "YBM교과서",
+          "page": 115,
+          "confidence": "high",
+          "reason": "θ가 제1사분면의 각이고 sinθ·cosθ=12/25 → sin³θ+cos³θ. 본 시험 문제와 sinθ+cosθ→sinθcosθ 전환 유형 동일. 분면만 차이."
+        },
+        {
+          "best_idx": 9,
+          "tb_key": "yhgon_2",
+          "tb_short": "유형ON2",
+          "page": 69,
+          "confidence": "medium",
+          "reason": "삼각함수 사이의 관계 — sinθ+cosθ, sinθcosθ 변환 문제 유형 집중 단원."
+        }
+      ]
+    },
+    {
+      "q_no": 6,
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "mirae_text",
+          "tb_short": "미래엔교과서",
+          "page": 37,
+          "confidence": "high",
+          "reason": "어떤 광원으로부터 d m 떨어진 지점에서의 감각의 세기 log(h/d²). 본 시험 문제(악취 농도 c와 세기 r = a + b log c) 와 동일 템플릿: 실생활 로그 관계식 + 두 농도/거리에서의 비교. 수식 형태와 풀이 구조 일치."
+        },
+        {
+          "best_idx": 2,
+          "tb_key": "matheo_su1",
+          "tb_short": "마더텅수1",
+          "page": 42,
+          "confidence": "medium",
+          "reason": "진동가속도레벨 V(dB)=20 log... 실생활 로그 관계식 — 본 시험과 같은 '실생활 로그 모델 + 두 값 비교' 유형."
+        },
+        {
+          "best_idx": 4,
+          "tb_key": "matheo_su1",
+          "tb_short": "마더텅수1",
+          "page": 43,
+          "confidence": "medium",
+          "reason": "지반 상대밀도, 먼지 농도 등 실생활 로그 관계식 응용 문제 다수. 동일 유형."
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "yhgon_2",
+          "tb_short": "유형ON2",
+          "page": 26,
+          "confidence": "high",
+          "reason": "지진의 규모 R = 0.67 log(0.37E) + 1.46, 규모가 R₁일 때 에너지는 R₂일 때의 4배, R₁-R₂의 값. 본 시험 문제(r₁/r₂ 비)와 사실상 동일 템플릿: 실생활 로그 모델 + 두 값 비 구하기."
+        }
+      ]
+    },
+    {
+      "q_no": 7,
+      "matches": []
+    },
+    {
+      "q_no": 8,
+      "matches": [
+        {
+          "best_idx": 7,
+          "tb_key": "gozaengi",
+          "tb_short": "고쟁이",
+          "page": 94,
+          "confidence": "high",
+          "reason": "θ가 제2사분면의 각일 때 |sinθ|+|tanθ|+√(sinθ-cosθ)²-√(cosθ+tanθ)² 간단히. 본 시험 문제(제2사분면 + √(sinθ-cosθ)² 포함 식 간단히)와 매우 동일한 템플릿."
+        }
+      ]
+    },
+    {
+      "q_no": 9,
+      "matches": []
+    },
+    {
+      "q_no": 10,
+      "matches": [
+        {
+          "best_idx": 6,
+          "tb_key": "yhgon_1",
+          "tb_short": "유형ON1",
+          "page": 32,
+          "confidence": "high",
+          "reason": "1이 아닌 두 양수 a, b에 대하여 이차방정식 x²-3x+1=0의 두 근이 log_b3, log_a3일 때 ab의 값. 본 시험 문제(이차방정식의 두 근이 log a, log b일 때 log_a b + log_b a)와 같은 템플릿(이차방정식의 두 근이 로그식)."
+        }
+      ]
+    },
+    {
+      "q_no": 11,
+      "matches": [
+        {
+          "best_idx": 5,
+          "tb_key": "jeongseok_basic",
+          "tb_short": "정석기본",
+          "page": 83,
+          "confidence": "medium",
+          "reason": "log_(1/2) x > log_(1/4) x 등의 부등식을 만족시키는 정수 x의 개수. 본 시험 문제(로그 부등식의 자연수 해 개수)와 동일 유형."
+        },
+        {
+          "best_idx": 8,
+          "tb_key": "yhgon_1",
+          "tb_short": "유형ON1",
+          "page": 81,
+          "confidence": "medium",
+          "reason": "log_3 x · log_3 9x ≤ 24 만족시키는 자연수 x의 최댓값, (log_2 x)² - log_2 16x³ ≤ 0 등 로그 부등식의 자연수 해 문제. 동일 템플릿."
+        }
+      ]
+    },
+    {
+      "q_no": 12,
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "yhgon_2",
+          "tb_short": "유형ON2",
+          "page": 32,
+          "confidence": "high",
+          "reason": "두 지수함수 그래프 교점 A, B와 삼각형 AOB의 넓이 구하기. 본 시험 문제(y=(5/3)^x, y=(1/?)^x 그래프 교점 A, B → 삼각형 AOB 넓이)와 본질적으로 동일 템플릿."
+        },
+        {
+          "best_idx": 3,
+          "tb_key": "yhgon_1",
+          "tb_short": "유형ON1",
+          "page": 50,
+          "confidence": "high",
+          "reason": "두 곡선 y=2^x, y=2^(x+1)-4가 y축과 만나는 점 A, B, 두 곡선 교점 C → 삼각형 ABC 넓이. 본 시험 문제와 매우 유사: 두 지수함수 그래프 교점 + 삼각형 넓이."
+        }
+      ]
+    },
+    {
+      "q_no": 13,
+      "matches": []
+    },
+    {
+      "q_no": 14,
+      "matches": [
+        {
+          "best_idx": 1,
+          "tb_key": "su_t26",
+          "tb_short": "수특26",
+          "page": 107,
+          "confidence": "high",
+          "reason": "a^(x²-3x+2) ≥ a^(2x-2) 만족시키는 모든 정수 x의 개수 유형. 본 시험 문제(부등식 만족시키는 정수 x의 개수)와 동일 템플릿."
+        },
+        {
+          "best_idx": 6,
+          "tb_key": "yhgon_2",
+          "tb_short": "유형ON2",
+          "page": 58,
+          "confidence": "high",
+          "reason": "2^(x-13) ≤ √128/8^x ≤ 4^(-x²+...) 만족시키는 모든 정수 x의 합. 본 시험 문제(지수 부등식의 정수 해 개수/합)와 동일 템플릿."
+        },
+        {
+          "best_idx": 7,
+          "tb_key": "gozaengi",
+          "tb_short": "고쟁이",
+          "page": 48,
+          "confidence": "medium",
+          "reason": "log√(5(x+1)) ≤ 1-½log(2x+5) 만족시키는 모든 정수 x의 합. 로그 부등식의 정수 해 — 동일 카테고리."
+        }
+      ]
+    },
+    {
+      "q_no": 15,
+      "matches": []
+    },
+    {
+      "q_no": 16,
+      "matches": [
+        {
+          "best_idx": 4,
+          "tb_key": "yhgon_1",
+          "tb_short": "유형ON1",
+          "page": 41,
+          "confidence": "medium",
+          "reason": "1보다 큰 세 실수 a,b,c가 log_a b = log_b c/2 = log_c a/4 만족 → log_a b + log_b c + log_c a 값. 본 시험 문제(로그방정식 두 근 α, β, α+β 구하기)와 로그 항등식 사용 유형으로 유사."
+        }
+      ]
+    },
+    {
+      "q_no": 17,
+      "matches": []
+    },
+    {
+      "q_no": 18,
+      "matches": []
+    },
+    {
+      "q_no": 19,
+      "matches": []
+    },
+    {
+      "q_no": 20,
+      "matches": []
+    }
+  ],
+  "notes": "광문고 시험문제 텍스트는 손글씨로 일부 가려져 있어(?) 정확 비교가 어렵고, 후보 텍스트도 대부분 교재 표지/머리말/단원 도입/목차 페이지로 'generic 단원 일치'만 보이는 것이 다수임. 같은 템플릿(instruction 동일 + 수식 구조 동일 + 숫자만 차이)으로 판단되는 항목만 매칭으로 포함하고, 단순 '같은 단원'은 매칭에서 제외함. confidence high는 시험문제와 1:1 변형 관계가 명확한 경우, medium은 동일 풀이 패턴/식 구조이나 변수 배치가 다른 경우, low는 동일 단원의 문제 군이나 정확한 1:1 변형은 아닌 경우(본 결과에는 포함 안 됨)."
+}

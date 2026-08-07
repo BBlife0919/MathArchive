@@ -1,0 +1,130 @@
+{
+  "school": "광문고",
+  "source": "PDF 비전 추출 (광문고 사진본, 손글씨로 다수 가려짐)",
+  "total_questions": 20,
+  "questions": [
+    {
+      "question_number": 1,
+      "question_text": "$\\sqrt[3]{3\\sqrt{3}} + \\sqrt[3]{?\\sqrt{?}}$ 또는 거듭제곱근 식의 값은? [4.0점]",
+      "choices": [{"number":1,"text":"$\\sqrt{3}$"},{"number":2,"text":"$2\\sqrt{3}$"},{"number":3,"text":"$3\\sqrt{3}$"},{"number":4,"text":"$4\\sqrt{3}$"},{"number":5,"text":"$5\\sqrt{3}$"}],
+      "chapter": "거듭제곱근"
+    },
+    {
+      "question_number": 2,
+      "question_text": "$\\log_2(2\\sqrt{2}) + \\log_{2\\sqrt{2}}(?)$의 값은? [4.0점]",
+      "choices": [{"number":1,"text":"$\\dfrac{3}{2}$"},{"number":2,"text":"$2$"},{"number":3,"text":"$\\dfrac{5}{2}$"},{"number":4,"text":"$3$"},{"number":5,"text":"$\\dfrac{7}{2}$"}],
+      "chapter": "로그"
+    },
+    {
+      "question_number": 3,
+      "question_text": "$\\sqrt[3]{50} \\times \\sqrt[3]{?} \\div \\sqrt[3]{?}$의 값은? [4.0점]",
+      "choices": [{"number":1,"text":"$\\sqrt[3]{2}$"},{"number":2,"text":"$\\sqrt[3]{3}$"},{"number":3,"text":"$\\sqrt[3]{4}$"},{"number":4,"text":"$\\sqrt[3]{5}$"},{"number":5,"text":"$\\sqrt[3]{6}$"}],
+      "chapter": "거듭제곱근"
+    },
+    {
+      "question_number": 4,
+      "question_text": "그림과 같이 부채꼴 OAB의 ? 또는 부채꼴의 호의 길이/넓이 관련 [4.0점]",
+      "choices": [{"number":1,"text":""},{"number":2,"text":""},{"number":3,"text":""},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "삼각함수",
+      "note": "손글씨 가림"
+    },
+    {
+      "question_number": 5,
+      "question_text": "$\\theta$가 제$2$사분면의 각이고 $\\sin\\theta + \\cos\\theta = ?$일 때, $\\sin\\theta\\cos\\theta$의 값은? [4.0점]",
+      "choices": [{"number":1,"text":"$-\\dfrac{1}{3}$"},{"number":2,"text":"$-\\dfrac{1}{4}$"},{"number":3,"text":"$-\\dfrac{1}{5}$"},{"number":4,"text":"$\\dfrac{1}{4}$"},{"number":5,"text":"$\\dfrac{1}{3}$"}],
+      "chapter": "삼각함수"
+    },
+    {
+      "question_number": 6,
+      "question_text": "어느 악취의 농도가 $c\\,\\mathrm{ppm}$일 때 악취의 세기를 $r$이라 하면, $r = a + b\\log c$의 관계가 성립한다고 한다. 이 물질의 농도가 $1{,}000{,}000\\,\\mathrm{ppm}$일 때 악취의 세기를 $r_1$, 농도가 $1\\,\\mathrm{ppm}$일 때 악취의 세기를 $r_2$라 할 때 $\\dfrac{r_1}{r_2}$의 값은? [4.0점]",
+      "choices": [{"number":1,"text":""},{"number":2,"text":""},{"number":3,"text":""},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "로그"
+    },
+    {
+      "question_number": 7,
+      "question_text": "$a > 1$이고 $a \\neq 1$인 양의 실수일 때, 함수 $f(x) = a^x$과 함수 $g(x) = \\log_a x$에 대해 옳은 것만을 <보기>에서 있는 대로 고른 것은? (단, $m, n$은 $0$보다 큰 실수이다) [4.6점] <보기> ㄱ. $f(m+n) = f(m) \\cdot f(n)$ ㄴ. $g(m \\cdot n) = g(m) + g(n)$ ㄷ. $f(m) \\cdot \\log_a f(n) = \\log_a f(m \\cdot n)$",
+      "choices": [{"number":1,"text":"ㄱ"},{"number":2,"text":"ㄴ"},{"number":3,"text":"ㄷ"},{"number":4,"text":"ㄱ,ㄴ"},{"number":5,"text":"ㄱ,ㄴ,ㄷ"}],
+      "chapter": "지수/로그함수"
+    },
+    {
+      "question_number": 8,
+      "question_text": "$\\theta$가 제$2$사분면의 각일 때, $\\sin\\theta - \\sqrt{(\\sin\\theta - \\cos\\theta)^2} + \\cos^2\\theta$의 값을 구하시오. [4.6점]",
+      "choices": [{"number":1,"text":""},{"number":2,"text":""},{"number":3,"text":""},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "삼각함수"
+    },
+    {
+      "question_number": 9,
+      "question_text": "지수함수 또는 삼각함수 그래프 관련 문제 [4.6점]",
+      "choices": [{"number":1,"text":""},{"number":2,"text":""},{"number":3,"text":""},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "?",
+      "note": "손글씨 가림으로 본문 식별 어려움"
+    },
+    {
+      "question_number": 10,
+      "question_text": "이차방정식 $x^2 - 10x + 4 = 0$의 두 근이 $\\log a$, $\\log b$일 때, $\\log_a b + \\log_b a$의 값은? (단, $a, b$는 $1$이 아닌 양의 실수이다) [4.6점]",
+      "choices": [{"number":1,"text":"$14$"},{"number":2,"text":"$16$"},{"number":3,"text":"$20$"},{"number":4,"text":"$23$"},{"number":5,"text":"$26$"}],
+      "chapter": "로그·이차방정식"
+    },
+    {
+      "question_number": 11,
+      "question_text": "지수함수 $f(x) = 3^{?x-?}$에 대하여 부등식 $\\log_2 f(x) \\leq -2$를 만족시키는 자연수 $x$의 개수는? [4.7점]",
+      "choices": [{"number":1,"text":"$5$"},{"number":2,"text":"$6$"},{"number":3,"text":"$7$"},{"number":4,"text":"$8$"},{"number":5,"text":"$9$"}],
+      "chapter": "지수/로그부등식"
+    },
+    {
+      "question_number": 12,
+      "question_text": "그림과 같이 두 함수 $y = \\left(\\dfrac{5}{3}\\right)^x$, $y = \\left(\\dfrac{1}{?}\\right)^x$의 그래프가 만나는 점을 각각 $\\mathrm{A}, \\mathrm{B}$라 할 때, 삼각형 $\\mathrm{AOB}$의 넓이는? (단, $\\mathrm{O}$는 원점) [4.7점]",
+      "choices": [{"number":1,"text":""},{"number":2,"text":""},{"number":3,"text":""},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "지수함수 그래프"
+    },
+    {
+      "question_number": 13,
+      "question_text": "함수 $y = \\sqrt{?\\sqrt{?}}$ 또는 거듭제곱근 평행이동 관련 [4.7점]",
+      "choices": [{"number":1,"text":""},{"number":2,"text":""},{"number":3,"text":""},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "?",
+      "note": "본문 식별 어려움"
+    },
+    {
+      "question_number": 14,
+      "question_text": "부등식 $3 - 2(?) - ?(?) < 0$ 또는 비슷한 식을 만족시키는 모든 정수 $x$의 개수는? [4.7점]",
+      "choices": [{"number":1,"text":"$5$"},{"number":2,"text":"$6$"},{"number":3,"text":"$7$"},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "지수/로그부등식"
+    },
+    {
+      "question_number": 15,
+      "question_text": "두 정수 $a, b$와 자연수 $c$에 대하여 다음을 만족시키는 모든 $a + b + c$의 값의 합은? (단, $\\sqrt{b}$는 음수 아닌 실수이다) [4.5점]",
+      "choices": [{"number":1,"text":"$63$"},{"number":2,"text":"$120$"},{"number":3,"text":"$240$"},{"number":4,"text":"$336$"},{"number":5,"text":"$432$"}],
+      "chapter": "거듭제곱근"
+    },
+    {
+      "question_number": 16,
+      "question_text": "서로 다른 두 실수 $\\alpha, \\beta$와 $0 < \\alpha < \\beta$가 다음을 만족시킨다. (가) $\\log_? x + 3a \\log_3 x = ?$의 두 근이 $3, 6$이다. (나) $\\log_? - 3 \\log_? = ?$의 두 근이 $\\alpha, \\beta$이다. $\\alpha + \\beta$의 값은? (단, ?는 $1$이 아닌 양의 실수이다) [5.2점]",
+      "choices": [{"number":1,"text":"$-9$"},{"number":2,"text":"$-3$"},{"number":3,"text":"$0$"},{"number":4,"text":"$1$"},{"number":5,"text":"$9$"}],
+      "chapter": "로그방정식"
+    },
+    {
+      "question_number": 17,
+      "question_text": "$a > 1$인 양의 실수에 대하여 $\\sin\\theta = \\log_a x$, $\\cos\\theta = \\log_a y$이고 $x \\cdot y = ?$일 때 $a$의 값은? [5.2점]",
+      "choices": [{"number":1,"text":"$\\dfrac{1}{2}$"},{"number":2,"text":""},{"number":3,"text":""},{"number":4,"text":""},{"number":5,"text":""}],
+      "chapter": "로그·삼각함수"
+    },
+    {
+      "question_number": 18,
+      "question_text": "[서답형 1] $1$이 아닌 두 양수 $a, b$에 대하여 다음 물음에 답하시오. [6.2점] (1-1) $a^? = b^?$임을 밑의 변환을 사용하여 서술하시오 [3점]. (1-2) $0.01^? = ?$의 $abc$ 구하고 그 과정을 서술하시오 [2점].",
+      "choices": [],
+      "chapter": "로그"
+    },
+    {
+      "question_number": 19,
+      "question_text": "[서답형 2] (본문 식별 어려움)",
+      "choices": [],
+      "chapter": "?"
+    },
+    {
+      "question_number": 20,
+      "question_text": "[서답형 3] 그림과 같이 좌표평면 위에 두 점 $\\mathrm{A}, \\mathrm{B}$가 있다. $\\mathrm{P}(t, 0), \\mathrm{Q}(0, t)$에 대하여 평면도형 $\\mathrm{APQB}$의 넓이를 $f(t)$, 점 $\\mathrm{P}$와 점 $\\mathrm{Q}$ 사이의 거리를 $g(t)$라 하자. (3-1) 어떤 실수 $t$에 대하여 $f(t) = ? + 6$일 때 $t$의 값을 구하고, 그 과정을 서술하시오 [3점]. (3-2) (3-1)에서 구한 실수 $a, b, c$에 대하여 $t$에 관한 방정식 $\\log_? + \\sin? = ?$의 모든 실근의 곱을 구하고, 그 과정을 서술하시오 [5점].",
+      "choices": [],
+      "chapter": "로그·삼각함수"
+    }
+  ]
+}
