@@ -184,13 +184,17 @@ def sync(dry_run: bool):
                 d["choices"] = None
             values.append(tuple(d.get(c) for c in insert_cols))
             sqlite_qids.append(r["question_id"])
-        execute_values(
+        returned = execute_values(
             pcur,
             f"INSERT INTO questions ({','.join(insert_cols)}) "
             f"VALUES %s RETURNING question_id",
             values, page_size=500, fetch=True,
         )
-        for sq, pg_row in zip(sqlite_qids, pcur.fetchall()):
+        # execute_values(fetch=True) 는 결과를 반환값으로 주고 커서 결과셋은
+        # 이미 소비한 상태라, 별도 pcur.fetchall() 을 또 호출하면 빈 리스트가
+        # 나와서 qid_map 이 통째로 비는 버그가 있었음(2026-08-11 발견 — 314개
+        # 파일 6751문항이 해설·이미지 연결 없이 들어간 사고로 발견함).
+        for sq, pg_row in zip(sqlite_qids, returned):
             qid_map[sq] = pg_row[0]
         pconn.commit()
         print(f"  questions INSERT 완료: {len(qid_map)}", flush=True)
