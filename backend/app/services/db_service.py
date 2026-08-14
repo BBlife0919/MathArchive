@@ -23,6 +23,26 @@ def get_connection():
     return _conn
 
 
+def get_dedicated_connection():
+    """공유 커넥션(_conn)을 붙잡지 않는 전용 커넥션.
+
+    전체 테이블 스캔처럼 오래 걸리는 작업이 공유 커넥션을 오래 점유하면,
+    같은 커넥션을 쓰는 다른 모든 요청(검색 등)이 그동안 응답하지 못하고
+    막힌다(2026-08-15 검수 페이지 "구조 무결성 복구" 실행 중 사이트 전체
+    응답 불가 사고로 확인). 이런 무거운 작업은 이 커넥션을 따로 열어 쓰고
+    끝나면 close_dedicated_connection()으로 반드시 닫는다.
+    """
+    return legacy_db.get_connection()
+
+
+def close_dedicated_connection(conn) -> None:
+    raw = getattr(conn, "_conn", conn)
+    try:
+        raw.close()
+    except Exception:
+        pass
+
+
 def query(sql: str, params=()):
     return get_connection().execute(sql, params).fetchall()
 

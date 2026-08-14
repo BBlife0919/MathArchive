@@ -253,22 +253,25 @@ _struct_cache: tuple[float, dict] | None = None
 def _run_bare_word_detection(min_len: int = 3) -> list:
     from detect_bare_math_words import extract_bare_words, KNOWN_TOKENS, COMMON_VARS
 
-    conn = db_service.get_connection()
-    qrows = conn.execute("SELECT question_text FROM questions").fetchall()
-    srows = conn.execute("SELECT solution_text FROM solutions").fetchall()
-
-    total = Counter()
-    for r in qrows:
-        total.update(extract_bare_words(r[0] or "", min_len))
-    for r in srows:
-        total.update(extract_bare_words(r[0] or "", min_len))
-
-    user_tokens = set()
+    conn = db_service.get_dedicated_connection()
     try:
-        rows = conn.execute("SELECT token FROM user_token_mappings").fetchall()
-        user_tokens = {r[0] for r in rows}
-    except Exception:
-        pass
+        qrows = conn.execute("SELECT question_text FROM questions").fetchall()
+        srows = conn.execute("SELECT solution_text FROM solutions").fetchall()
+
+        total = Counter()
+        for r in qrows:
+            total.update(extract_bare_words(r[0] or "", min_len))
+        for r in srows:
+            total.update(extract_bare_words(r[0] or "", min_len))
+
+        user_tokens = set()
+        try:
+            rows = conn.execute("SELECT token FROM user_token_mappings").fetchall()
+            user_tokens = {r[0] for r in rows}
+        except Exception:
+            pass
+    finally:
+        db_service.close_dedicated_connection(conn)
 
     for w in list(total.keys()):
         if w in KNOWN_TOKENS or w.lower() in KNOWN_TOKENS or w.upper() in KNOWN_TOKENS:
@@ -282,8 +285,11 @@ def _run_bare_word_detection(min_len: int = 3) -> list:
 
 
 def _run_structural_scan() -> dict:
-    conn = db_service.get_connection()
-    rows = conn.execute("SELECT question_id, question_text FROM questions").fetchall()
+    conn = db_service.get_dedicated_connection()
+    try:
+        rows = conn.execute("SELECT question_id, question_text FROM questions").fetchall()
+    finally:
+        db_service.close_dedicated_connection(conn)
 
     box_mismatch_ids = []
     code_block_ids = []
@@ -479,42 +485,44 @@ def auto_fix_structural() -> dict:
     from fix_nested_boxes import fix_text as fix_nested
     from fix_unmapped_hwp_tokens import fix_text as fix_tokens
 
-    conn = db_service.get_connection()
+    conn = db_service.get_dedicated_connection()
+    try:
+        q_updates = []
+        ch_updates = []
+        rows = conn.execute(
+            "SELECT question_id, question_text, choices FROM questions"
+        ).fetchall()
+        for r in rows:
+            qid, txt, ch_raw = r[0], r[1], r[2]
+            if txt:
+                new = fix_nested(txt)
+                new = fix_tokens(new)
+                new = _strip_leading_tabs_outside_box(new)
+                if new != txt:
+                    q_updates.append((qid, new))
+            new_ch, ch_changed = _apply_to_choices(
+                ch_raw, lambda t: fix_tokens(fix_nested(t))
+            )
+            if ch_changed:
+                ch_updates.append((qid, new_ch))
 
-    q_updates = []
-    ch_updates = []
-    rows = conn.execute(
-        "SELECT question_id, question_text, choices FROM questions"
-    ).fetchall()
-    for r in rows:
-        qid, txt, ch_raw = r[0], r[1], r[2]
-        if txt:
+        s_updates = []
+        rows = conn.execute("SELECT solution_id, solution_text FROM solutions").fetchall()
+        for r in rows:
+            sid, txt = r[0], r[1]
+            if not txt:
+                continue
             new = fix_nested(txt)
             new = fix_tokens(new)
             new = _strip_leading_tabs_outside_box(new)
             if new != txt:
-                q_updates.append((qid, new))
-        new_ch, ch_changed = _apply_to_choices(
-            ch_raw, lambda t: fix_tokens(fix_nested(t))
-        )
-        if ch_changed:
-            ch_updates.append((qid, new_ch))
+                s_updates.append((sid, new))
 
-    s_updates = []
-    rows = conn.execute("SELECT solution_id, solution_text FROM solutions").fetchall()
-    for r in rows:
-        sid, txt = r[0], r[1]
-        if not txt:
-            continue
-        new = fix_nested(txt)
-        new = fix_tokens(new)
-        new = _strip_leading_tabs_outside_box(new)
-        if new != txt:
-            s_updates.append((sid, new))
-
-    n_q = _batch_update(conn, "questions", "question_id", "question_text", q_updates)
-    n_s = _batch_update(conn, "solutions", "solution_id", "solution_text", s_updates)
-    n_ch = _batch_update(conn, "questions", "question_id", "choices", ch_updates, jsonb=True)
+        n_q = _batch_update(conn, "questions", "question_id", "question_text", q_updates)
+        n_s = _batch_update(conn, "solutions", "solution_id", "solution_text", s_updates)
+        n_ch = _batch_update(conn, "questions", "question_id", "choices", ch_updates, jsonb=True)
+    finally:
+        db_service.close_dedicated_connection(conn)
 
     return {"questions_fixed": n_q, "solutions_fixed": n_s, "choices_fixed": n_ch}
 
@@ -529,63 +537,65 @@ def _apply_mappings_bulk(tokens_actions: dict) -> dict:
     (auto_fix_structural()과 동일한 단일 스캔 패턴).
     tokens_actions: {token: (action, latex)}
     """
-    conn = db_service.get_connection()
-
-    all_tokens = list(tokens_actions.keys())
-    if all_tokens:
-        placeholders = ",".join("?" * len(all_tokens))
-        try:
-            conn.execute(
-                f"DELETE FROM user_token_mappings WHERE token IN ({placeholders})",
-                tuple(all_tokens),
+    conn = db_service.get_dedicated_connection()
+    try:
+        all_tokens = list(tokens_actions.keys())
+        if all_tokens:
+            placeholders = ",".join("?" * len(all_tokens))
+            try:
+                conn.execute(
+                    f"DELETE FROM user_token_mappings WHERE token IN ({placeholders})",
+                    tuple(all_tokens),
+                )
+            except Exception:
+                pass
+            values_sql = ",".join(["(?, ?, ?)"] * len(all_tokens))
+            params = []
+            for t in all_tokens:
+                action, latex = tokens_actions[t]
+                params += [t, action, latex if action == "map" else ""]
+            _exec_write(
+                conn,
+                f"INSERT INTO user_token_mappings (token, action, latex) VALUES {values_sql}",
+                tuple(params),
             )
-        except Exception:
-            pass
-        values_sql = ",".join(["(?, ?, ?)"] * len(all_tokens))
-        params = []
-        for t in all_tokens:
-            action, latex = tokens_actions[t]
-            params += [t, action, latex if action == "map" else ""]
-        _exec_write(
-            conn,
-            f"INSERT INTO user_token_mappings (token, action, latex) VALUES {values_sql}",
-            tuple(params),
-        )
 
-    to_sub = {
-        t: (a, latex if a == "map" else "")
-        for t, (a, latex) in tokens_actions.items() if a in ("map", "remove")
-    }
-    if not to_sub:
-        return {"affected_total": 0}
+        to_sub = {
+            t: (a, latex if a == "map" else "")
+            for t, (a, latex) in tokens_actions.items() if a in ("map", "remove")
+        }
+        if not to_sub:
+            return {"affected_total": 0}
 
-    alternation = "|".join(re.escape(t) for t in sorted(to_sub, key=len, reverse=True))
-    pattern = re.compile(rf"(?<![A-Za-z\\])({alternation})(?![A-Za-z])")
+        alternation = "|".join(re.escape(t) for t in sorted(to_sub, key=len, reverse=True))
+        pattern = re.compile(rf"(?<![A-Za-z\\])({alternation})(?![A-Za-z])")
 
-    def _sub(text: str) -> str:
-        return pattern.sub(lambda m: to_sub[m.group(1)][1], text)
+        def _sub(text: str) -> str:
+            return pattern.sub(lambda m: to_sub[m.group(1)][1], text)
 
-    q_rows = conn.execute("SELECT question_id, question_text FROM questions").fetchall()
-    q_updates = [
-        (qid, _sub(txt)) for qid, txt in q_rows if txt and pattern.search(txt)
-    ]
-    n_q = _batch_update(conn, "questions", "question_id", "question_text", q_updates)
+        q_rows = conn.execute("SELECT question_id, question_text FROM questions").fetchall()
+        q_updates = [
+            (qid, _sub(txt)) for qid, txt in q_rows if txt and pattern.search(txt)
+        ]
+        n_q = _batch_update(conn, "questions", "question_id", "question_text", q_updates)
 
-    s_rows = conn.execute("SELECT solution_id, solution_text FROM solutions").fetchall()
-    s_updates = [
-        (sid, _sub(txt)) for sid, txt in s_rows if txt and pattern.search(txt)
-    ]
-    n_s = _batch_update(conn, "solutions", "solution_id", "solution_text", s_updates)
+        s_rows = conn.execute("SELECT solution_id, solution_text FROM solutions").fetchall()
+        s_updates = [
+            (sid, _sub(txt)) for sid, txt in s_rows if txt and pattern.search(txt)
+        ]
+        n_s = _batch_update(conn, "solutions", "solution_id", "solution_text", s_updates)
 
-    ch_rows = conn.execute("SELECT question_id, choices FROM questions").fetchall()
-    ch_updates = []
-    for qid, raw in ch_rows:
-        new_ch, changed = _apply_to_choices(raw, _sub)
-        if changed:
-            ch_updates.append((qid, new_ch))
-    n_ch = _batch_update(conn, "questions", "question_id", "choices", ch_updates, jsonb=True)
+        ch_rows = conn.execute("SELECT question_id, choices FROM questions").fetchall()
+        ch_updates = []
+        for qid, raw in ch_rows:
+            new_ch, changed = _apply_to_choices(raw, _sub)
+            if changed:
+                ch_updates.append((qid, new_ch))
+        n_ch = _batch_update(conn, "questions", "question_id", "choices", ch_updates, jsonb=True)
 
-    return {"affected_total": n_q + n_s + n_ch}
+        return {"affected_total": n_q + n_s + n_ch}
+    finally:
+        db_service.close_dedicated_connection(conn)
 
 
 def _current_bare_words() -> list:
