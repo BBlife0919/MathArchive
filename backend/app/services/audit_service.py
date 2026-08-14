@@ -9,7 +9,9 @@ from __future__ import annotations
 import json
 import re
 import sys
+import threading
 import time
+import uuid
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
@@ -353,6 +355,47 @@ def force_rescan() -> None:
     global _bare_words_cache, _struct_cache
     _bare_words_cache = None
     _struct_cache = None
+
+
+# ─────────────────────────────────────────────────────────
+# 전체 자동 정리 (구조 복구 + 토큰 한방처리 통합, 백그라운드)
+# ─────────────────────────────────────────────────────────
+# 두 작업 모두 15만+ 행 전체 스캔이라 수 분씩 걸린다. 하나의 HTTP 요청으로
+# 묶어 동기 실행하면 Render 같은 PaaS 의 리버스 프록시 요청 제한시간(보통
+# 수십~100초)에 걸려 응답이 강제로 끊긴다(2026-08-15 "처리 실패: 네트워크
+# 오류" 확인). 그래서 백그라운드 스레드로 돌리고 프론트는 job_id 를 폴링한다.
+_jobs: dict[str, dict] = {}
+_JOBS_MAX = 200
+
+
+def start_full_cleanup() -> str:
+    job_id = uuid.uuid4().hex
+    if len(_jobs) >= _JOBS_MAX:
+        _jobs.clear()
+    _jobs[job_id] = {"status": "running", "result": None, "error": None}
+
+    def _run():
+        try:
+            struct_result = auto_fix_structural()
+            force_rescan()
+            token_result = bulk_auto()
+            force_rescan()
+            _jobs[job_id] = {
+                "status": "done",
+                "result": {"structural": struct_result, "tokens": token_result},
+                "error": None,
+            }
+        except Exception as e:
+            _jobs[job_id] = {"status": "error", "result": None, "error": str(e)}
+
+    threading.Thread(target=_run, daemon=True).start()
+    return job_id
+
+
+def get_job_status(job_id: str) -> dict:
+    return _jobs.get(
+        job_id, {"status": "not_found", "result": None, "error": "작업을 찾을 수 없습니다."}
+    )
 
 
 # ─────────────────────────────────────────────────────────

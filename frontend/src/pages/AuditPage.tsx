@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { ApiError } from "../api/client";
 import {
-  bulkAuto, bulkManual, fetchFlagged, fetchScan, fixAllFlagged,
-  fixFlagged, ignoreRemaining, resolveFlagged, saveBaseline, structuralFix,
+  bulkManual, fetchFlagged, fetchScan, fixAllFlagged, fixFlagged,
+  getFullCleanupStatus, ignoreRemaining, resolveFlagged, saveBaseline,
+  startFullCleanup,
   type BareWordItem, type FlaggedItem, type ScanResponse,
 } from "../api/audit";
 import Pagination from "../components/questions/Pagination";
@@ -61,37 +62,34 @@ export default function AuditPage() {
     }
   }
 
-  function handleStructuralFix() {
-    return runAction("structural-fix", async () => {
-      const res = await structuralFix();
-      showBanner(
-        "자동 복구 완료",
-        `문제 텍스트 ${res.questions_fixed}건, 해설 텍스트 ${res.solutions_fixed}건, ` +
-        `선지 ${res.choices_fixed}건 갱신됐습니다. 다음 단계: 알려진 토큰 자동 매핑 버튼을 누르세요.`,
-      );
-      loadScan(true);
-    });
-  }
-
-  function handleBulkAuto() {
-    return runAction("bulk-auto", async () => {
-      const res = await bulkAuto();
-      const total = res.mapped + res.removed + res.ignored;
-      if (total === 0) {
-        showBanner(
-          "처리할 토큰 없음",
-          "사전/패턴/도형 라벨/그리스 약어로 매칭되는 토큰이 없습니다. " +
-          "남은 미상 토큰은 표에서 dropdown으로 수동 처리해주세요.",
-          "info",
-        );
-      } else {
-        showBanner(
-          "한 방 처리 완료",
-          `매핑 ${res.mapped}개, 삭제 ${res.removed}개, 무시 ${res.ignored}개 · ` +
-          `DB 문항 변경 ${res.affected_total}건 · 남은 미상 토큰 ${res.remaining}개. ` +
-          `다음 단계: 표에 남은 미상 토큰은 dropdown으로 수동 처리 → 미상 dropdown 일괄 적용 → 베이스라인 저장.`,
-        );
+  function handleFullCleanup() {
+    return runAction("full-cleanup", async () => {
+      const { job_id } = await startFullCleanup();
+      let status = await getFullCleanupStatus(job_id);
+      while (status.status === "running") {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        status = await getFullCleanupStatus(job_id);
       }
+      if (status.status === "error") {
+        throw new ApiError(500, status.error ?? "알 수 없는 오류로 실패했습니다.");
+      }
+      if (status.status !== "done" || !status.result) {
+        throw new ApiError(500, "작업 상태를 확인할 수 없습니다. 다시 시도해주세요.");
+      }
+      const { structural, tokens } = status.result;
+      const tokenTotal = tokens.mapped + tokens.removed + tokens.ignored;
+      showBanner(
+        "전체 자동 정리 완료",
+        `구조 오류: 문제 ${structural.questions_fixed}건 · 해설 ${structural.solutions_fixed}건 · ` +
+        `선지 ${structural.choices_fixed}건 갱신. ` +
+        (tokenTotal > 0
+          ? `누락 기호: 매핑 ${tokens.mapped}개 · 삭제 ${tokens.removed}개 · 무시 ${tokens.ignored}개 ` +
+            `(DB 변경 ${tokens.affected_total}건). `
+          : "누락 기호: 자동으로 처리할 항목 없음. ") +
+        (tokens.remaining > 0
+          ? `남은 미상 토큰 ${tokens.remaining}개는 아래 표에서 dropdown으로 처리해주세요.`
+          : "남은 미상 토큰 없음."),
+      );
       loadScan(true);
       setManualState({});
     });
@@ -210,8 +208,20 @@ export default function AuditPage() {
       )}
 
       <section className="audit-card">
+        <div className="audit-eyebrow">자동 정리</div>
+        <h2 className="audit-card-title">구조 오류 + 누락 수식 기호를 한 번에 처리합니다</h2>
+        <p className="audit-caption">
+          사람 판단이 필요 없는 항목(BOX 짝 어긋남, 코드블록 오인식, 사전에 이미 등록된 기호)을 자동으로 고칩니다.
+          전체 데이터를 다 훑기 때문에 몇 분 정도 걸릴 수 있고, 처리 중에도 다른 페이지는 정상적으로 쓸 수 있습니다.
+        </p>
+        <button type="button" className="btn-primary" disabled={busy} onClick={handleFullCleanup}>
+          {busyAction === "full-cleanup" ? "정리 중... (몇 분 정도 걸릴 수 있습니다)" : "전체 자동 정리"}
+        </button>
+      </section>
+
+      <section className="audit-card">
         <div className="audit-eyebrow">구조 무결성</div>
-        <h2 className="audit-card-title">BOX 짝·코드블록 오인식을 자동으로 복구합니다</h2>
+        <h2 className="audit-card-title">BOX 짝·코드블록 오인식 현황</h2>
         <div className="audit-stat-row">
           <div className="audit-stat">
             <span className="audit-stat-label">전체 문항</span>
@@ -226,13 +236,7 @@ export default function AuditPage() {
             <span className="audit-stat-value">{struct.code_block}</span>
           </div>
         </div>
-        <button
-          type="button" className="btn-primary"
-          disabled={busy || (struct.box_mismatch === 0 && struct.code_block === 0)}
-          onClick={handleStructuralFix}
-        >
-          {busyAction === "structural-fix" ? "복구 중..." : "자동 복구"}
-        </button>
+        <p className="audit-caption">위 "전체 자동 정리"로 함께 처리됩니다.</p>
       </section>
 
       <section className="audit-card">
@@ -264,11 +268,8 @@ export default function AuditPage() {
         </div>
 
         <div className="audit-toolbar">
-          <button type="button" className="btn-primary" disabled={busy} onClick={handleBulkAuto}>
-            {busyAction === "bulk-auto" ? "처리 중..." : "① 한 방 처리 (사전+패턴+도형+그리스, 전체)"}
-          </button>
           <button type="button" className="btn-secondary" disabled={busy} onClick={handleBulkManual}>
-            {busyAction === "bulk-manual" ? "처리 중..." : "③ 미상 dropdown 일괄 적용"}
+            {busyAction === "bulk-manual" ? "처리 중..." : "미상 dropdown 일괄 적용"}
           </button>
           <button
             type="button" className="btn-secondary" disabled={busy || unknownTokens.length === 0}
@@ -278,7 +279,7 @@ export default function AuditPage() {
           </button>
         </div>
         <p className="audit-caption">
-          권장 순서: ① 한 방 처리 → ② 남은 미상 토큰은 표에서 dropdown 처리 → ③ 미상 dropdown 일괄 적용 → ④ 베이스라인 저장
+          권장 순서: 위 "전체 자동 정리" 실행 → 남은 미상 토큰은 아래 표에서 dropdown 처리 → "미상 dropdown 일괄 적용" → "이번 결과 저장"
         </p>
 
         <Expander summary="미상 토큰이란? · 처리 가이드">
@@ -317,7 +318,7 @@ export default function AuditPage() {
         <Pagination page={curPage} pageSize={TOKENS_PER_PAGE} total={totalTokens} onPageChange={setPage} />
 
         <button type="button" className="btn-primary audit-baseline-btn" disabled={busy} onClick={handleSaveBaseline}>
-          {busyAction === "save-baseline" ? "저장 중..." : "④ 이번 결과 저장 (베이스라인 갱신)"}
+          {busyAction === "save-baseline" ? "저장 중..." : "이번 결과 저장 (베이스라인 갱신)"}
         </button>
       </section>
 
@@ -404,7 +405,7 @@ function TokenRow({
       </td>
       <td>
         {hasRec ? (
-          <span className="audit-caption">[한 방 처리]로 자동 적용</span>
+          <span className="audit-caption">"전체 자동 정리"로 자동 적용</span>
         ) : (
           <select
             value={action}

@@ -74,6 +74,17 @@ export interface MessageResponse {
   message: string | null;
 }
 
+export interface FullCleanupResult {
+  structural: StructuralFixResult;
+  tokens: BulkAutoResult;
+}
+
+export interface FullCleanupStatus {
+  status: "running" | "done" | "error" | "not_found";
+  result: FullCleanupResult | null;
+  error: string | null;
+}
+
 export function fetchScan(force = false): Promise<ScanResponse> {
   return apiFetch(`/api/audit/scan${force ? "?force=true" : ""}`);
 }
@@ -84,6 +95,14 @@ export function structuralFix(): Promise<StructuralFixResult> {
 
 export function bulkAuto(): Promise<BulkAutoResult> {
   return apiFetch("/api/audit/bulk-auto", { method: "POST" });
+}
+
+export function startFullCleanup(): Promise<{ job_id: string }> {
+  return apiFetch("/api/audit/full-cleanup", { method: "POST" });
+}
+
+export function getFullCleanupStatus(jobId: string): Promise<FullCleanupStatus> {
+  return apiFetch(`/api/audit/full-cleanup/${jobId}`);
 }
 
 export function bulkManual(items: BulkManualItem[]): Promise<BulkManualResult> {

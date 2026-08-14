@@ -85,3 +85,18 @@ class FixAllFlaggedResult(BaseModel):
 class MessageResponse(BaseModel):
     ok: bool
     message: Optional[str] = None
+
+
+class FullCleanupStartResponse(BaseModel):
+    job_id: str
+
+
+class FullCleanupResult(BaseModel):
+    structural: StructuralFixResult
+    tokens: BulkAutoResult
+
+
+class FullCleanupStatusResponse(BaseModel):
+    status: str
+    result: Optional[FullCleanupResult] = None
+    error: Optional[str] = None

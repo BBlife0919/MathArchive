@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends
 from ..deps import require_admin
 from ..schemas.audit import (
     BulkAutoResult, BulkManualRequest, BulkManualResult, FixAllFlaggedResult,
-    FlaggedItem, IgnoreRemainingResult, MessageResponse, ScanResponse,
-    StructuralFixResult,
+    FlaggedItem, FullCleanupStartResponse, FullCleanupStatusResponse,
+    IgnoreRemainingResult, MessageResponse, ScanResponse, StructuralFixResult,
 )
 from ..services import audit_service
 
@@ -26,6 +26,17 @@ def structural_fix():
     res = audit_service.auto_fix_structural()
     audit_service.force_rescan()
     return res
+
+
+@router.post("/full-cleanup", response_model=FullCleanupStartResponse)
+def full_cleanup():
+    job_id = audit_service.start_full_cleanup()
+    return {"job_id": job_id}
+
+
+@router.get("/full-cleanup/{job_id}", response_model=FullCleanupStatusResponse)
+def full_cleanup_status(job_id: str):
+    return audit_service.get_job_status(job_id)
 
 
 @router.post("/bulk-auto", response_model=BulkAutoResult)
