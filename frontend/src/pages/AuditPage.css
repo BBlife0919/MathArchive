@@ -1,77 +1,264 @@
 .audit-page {
-  padding: 20px 24px;
-  max-width: 1100px;
+  padding: 24px 28px 60px;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
+.audit-header {
+  margin-bottom: 4px;
+}
+
+.audit-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.audit-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.audit-caption {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 6px 0;
+}
+
+.audit-page-caption {
+  margin-top: 12px;
+}
+
+.audit-empty {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ── 배너 ─────────────────────────────────────────── */
 .audit-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
   border: 1px solid var(--line);
+  border-left: 4px solid var(--blue);
   border-radius: 10px;
   padding: 12px 16px;
-  margin: 10px 0;
+  background: #fff;
 }
 
-.audit-banner-success { border-color: #2e7d32; }
-.audit-banner-warning { border-color: #b8860b; }
-.audit-banner-info { border-color: var(--line); }
+.audit-banner b {
+  color: var(--text);
+  font-size: 13.5px;
+}
 
 .audit-banner p {
   white-space: pre-wrap;
-  font-size: 13px;
-  margin: 6px 0 10px;
-}
-
-.audit-warning {
-  color: #b8860b;
-  font-size: 13px;
-  margin: 4px 0;
-}
-
-.audit-info {
+  font-size: 12.5px;
   color: var(--muted);
-  font-size: 13px;
-  margin: 4px 0 10px;
+  margin: 4px 0 0;
 }
 
-.audit-toolbar-header {
+.audit-banner-warning,
+.audit-banner-error {
+  border-left-color: #9c3d0a;
+}
+
+.audit-banner-info {
+  border-left-color: var(--muted);
+}
+
+/* ── 카드 ─────────────────────────────────────────── */
+.audit-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  padding: 20px 22px;
+  box-shadow: 0 1px 2px rgba(10, 16, 32, 0.03);
+}
+
+.audit-card-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin: 10px 0;
+}
+
+.audit-eyebrow {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--blue);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.audit-card-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 14px;
+}
+
+/* ── 통계 타일 ────────────────────────────────────── */
+.audit-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.audit-stat {
+  flex: 1 1 120px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: var(--paper);
+}
+
+.audit-stat-inline {
+  flex: 0 0 auto;
+  min-width: 100px;
+}
+
+.audit-stat-warn {
+  border-color: #e0b48f;
+  background: #fdf3ec;
+}
+
+.audit-stat-label {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+
+.audit-stat-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.audit-stat-warn .audit-stat-value {
+  color: #9c3d0a;
+}
+
+/* ── 버튼 ─────────────────────────────────────────── */
+.btn-primary, .btn-secondary, .btn-ghost {
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary:disabled, .btn-secondary:disabled, .btn-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  border: 1px solid var(--blue);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+  flex-shrink: 0;
 }
 
 .audit-toolbar {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+  margin: 4px 0 8px;
+}
+
+.audit-baseline-btn {
+  margin-top: 16px;
+}
+
+/* ── 토큰 표 ──────────────────────────────────────── */
+.audit-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
   margin: 10px 0;
+}
+
+.audit-token-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.audit-token-table th {
+  text-align: left;
+  padding: 9px 12px;
+  background: var(--paper);
+  color: var(--muted);
+  font-weight: 700;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.audit-token-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.audit-token-table tr:last-child td {
+  border-bottom: none;
 }
 
 .audit-token-table select,
 .audit-token-table input {
   width: 100%;
+  min-width: 120px;
   padding: 5px 8px;
   border: 1px solid var(--line);
   border-radius: 6px;
   font-size: 12px;
 }
 
+/* ── 신고함 ───────────────────────────────────────── */
 .audit-flag-card {
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   margin-top: 10px;
+}
+
+.audit-flag-meta {
+  font-size: 13px;
+  margin: 0;
 }
 
 .audit-flag-preview {
   white-space: pre-wrap;
-  background: var(--panel, #f7f7f8);
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 12px;
   font-family: inherit;
-  margin: 6px 0;
+  margin: 8px 0;
 }
 
 .audit-flag-actions {

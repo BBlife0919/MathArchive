@@ -519,58 +519,73 @@ def auto_fix_structural() -> dict:
     return {"questions_fixed": n_q, "solutions_fixed": n_s, "choices_fixed": n_ch}
 
 
-def apply_user_mapping(token: str, action: str, latex: str = "") -> dict:
+def _apply_mappings_bulk(tokens_actions: dict) -> dict:
+    """여러 토큰을 한 번의 테이블 스캔으로 일괄 치환.
+
+    토큰마다 apply_user_mapping()을 반복 호출하면 토큰 수 × (questions+solutions+choices)
+    LIKE 전체 스캔이 되어, 원격 Postgres 에서는 토큰 수십~수백 개만 되어도 수 분~수십 분이
+    걸려 사실상 요청이 응답하지 않는 것처럼 보인다 (로컬 SQLite 기준 토큰당 약 1초).
+    전체 로우를 테이블당 딱 한 번만 읽어, 모든 토큰을 하나의 정규식으로 동시에 치환한다
+    (auto_fix_structural()과 동일한 단일 스캔 패턴).
+    tokens_actions: {token: (action, latex)}
+    """
     conn = db_service.get_connection()
-    try:
-        conn.execute("DELETE FROM user_token_mappings WHERE token=?", (token,))
-    except Exception:
-        pass
-    _exec_write(
-        conn,
-        "INSERT INTO user_token_mappings (token, action, latex) VALUES (?, ?, ?)",
-        (token, action, latex),
-    )
 
-    if action == "ignore":
-        return {"affected": 0, "note": "무시 처리 — DB 변경 없음"}
+    all_tokens = list(tokens_actions.keys())
+    if all_tokens:
+        placeholders = ",".join("?" * len(all_tokens))
+        try:
+            conn.execute(
+                f"DELETE FROM user_token_mappings WHERE token IN ({placeholders})",
+                tuple(all_tokens),
+            )
+        except Exception:
+            pass
+        values_sql = ",".join(["(?, ?, ?)"] * len(all_tokens))
+        params = []
+        for t in all_tokens:
+            action, latex = tokens_actions[t]
+            params += [t, action, latex if action == "map" else ""]
+        _exec_write(
+            conn,
+            f"INSERT INTO user_token_mappings (token, action, latex) VALUES {values_sql}",
+            tuple(params),
+        )
 
-    pat = re.compile(rf"(?<![A-Za-z\\]){re.escape(token)}(?![A-Za-z])")
-    repl = latex if action == "map" else ""
+    to_sub = {
+        t: (a, latex if a == "map" else "")
+        for t, (a, latex) in tokens_actions.items() if a in ("map", "remove")
+    }
+    if not to_sub:
+        return {"affected_total": 0}
 
-    def _do_sub(text):
-        return pat.sub(lambda m: repl, text)
+    alternation = "|".join(re.escape(t) for t in sorted(to_sub, key=len, reverse=True))
+    pattern = re.compile(rf"(?<![A-Za-z\\])({alternation})(?![A-Za-z])")
 
-    n = 0
-    for table, idcol, txtcol in [
-        ("questions", "question_id", "question_text"),
-        ("solutions", "solution_id", "solution_text"),
-    ]:
-        rows = conn.execute(
-            f"SELECT {idcol}, {txtcol} FROM {table} WHERE {txtcol} LIKE ?",
-            (f"%{token}%",),
-        ).fetchall()
-        updates = []
-        for r in rows:
-            rid, txt = r[0], r[1]
-            if not txt:
-                continue
-            new = _do_sub(txt)
-            if new != txt:
-                updates.append((rid, new))
-        n += _batch_update(conn, table, idcol, txtcol, updates)
+    def _sub(text: str) -> str:
+        return pattern.sub(lambda m: to_sub[m.group(1)][1], text)
 
-    ch_rows = conn.execute(
-        "SELECT question_id, choices FROM questions WHERE CAST(choices AS TEXT) LIKE ?",
-        (f"%{token}%",),
-    ).fetchall()
+    q_rows = conn.execute("SELECT question_id, question_text FROM questions").fetchall()
+    q_updates = [
+        (qid, _sub(txt)) for qid, txt in q_rows if txt and pattern.search(txt)
+    ]
+    n_q = _batch_update(conn, "questions", "question_id", "question_text", q_updates)
+
+    s_rows = conn.execute("SELECT solution_id, solution_text FROM solutions").fetchall()
+    s_updates = [
+        (sid, _sub(txt)) for sid, txt in s_rows if txt and pattern.search(txt)
+    ]
+    n_s = _batch_update(conn, "solutions", "solution_id", "solution_text", s_updates)
+
+    ch_rows = conn.execute("SELECT question_id, choices FROM questions").fetchall()
     ch_updates = []
-    for r in ch_rows:
-        qid, raw = r[0], r[1]
-        new_ch, changed = _apply_to_choices(raw, _do_sub)
+    for qid, raw in ch_rows:
+        new_ch, changed = _apply_to_choices(raw, _sub)
         if changed:
             ch_updates.append((qid, new_ch))
     n_ch = _batch_update(conn, "questions", "question_id", "choices", ch_updates, jsonb=True)
-    return {"affected": n + n_ch, "note": f"{action} 적용 완료 (본문/해설 {n} + 선지 {n_ch})"}
+
+    return {"affected_total": n_q + n_s + n_ch}
 
 
 def _current_bare_words() -> list:
@@ -583,17 +598,21 @@ def _current_bare_words() -> list:
 def bulk_auto() -> dict:
     """"한 방 처리" — 사전+패턴+도형+그리스로 추천 있는 토큰 전부 자동 적용."""
     bare_words = _current_bare_words()
-    n_mapped = n_removed = n_ignored = n_affected_total = 0
-    mapped_examples: list[str] = []
-    ignored_examples: list[str] = []
+    tokens_actions: dict = {}
     for token, _ in bare_words:
         action, latex = lookup_token(token)
         if action is None and is_geometry_label(token):
             action, latex = "ignore", ""
         if action is None:
             continue
-        res = apply_user_mapping(token, action, latex or "")
-        n_affected_total += res.get("affected", 0)
+        tokens_actions[token] = (action, latex or "")
+
+    result = _apply_mappings_bulk(tokens_actions)
+
+    n_mapped = n_removed = n_ignored = 0
+    mapped_examples: list[str] = []
+    ignored_examples: list[str] = []
+    for token, (action, latex) in tokens_actions.items():
         if action == "map":
             n_mapped += 1
             if len(mapped_examples) < 5:
@@ -609,7 +628,7 @@ def bulk_auto() -> dict:
     remaining = max(0, len(bare_words) - total_done)
     return {
         "mapped": n_mapped, "removed": n_removed, "ignored": n_ignored,
-        "affected_total": n_affected_total, "remaining": remaining,
+        "affected_total": result["affected_total"], "remaining": remaining,
         "mapped_examples": mapped_examples, "ignored_examples": ignored_examples,
     }
 
@@ -617,8 +636,7 @@ def bulk_auto() -> dict:
 def bulk_manual(items: list[dict]) -> dict:
     """미상 dropdown 일괄 적용 — action이 '선택'이 아니고 (map 이면 latex 필수)인 항목만."""
     bare_words = _current_bare_words()
-    n_done = 0
-    n_affected = 0
+    tokens_actions: dict = {}
     for it in items:
         action = it.get("action")
         if not action or action == "선택":
@@ -626,11 +644,12 @@ def bulk_manual(items: list[dict]) -> dict:
         latex = (it.get("latex") or "").strip()
         if action == "map" and not latex:
             continue
-        res = apply_user_mapping(it["token"], action, latex)
-        n_done += 1
-        n_affected += res.get("affected", 0)
+        tokens_actions[it["token"]] = (action, latex)
+
+    result = _apply_mappings_bulk(tokens_actions)
+    n_done = len(tokens_actions)
     remaining = max(0, len(bare_words) - n_done)
-    return {"done": n_done, "affected": n_affected, "remaining": remaining}
+    return {"done": n_done, "affected": result["affected_total"], "remaining": remaining}
 
 
 def ignore_tokens_bulk(tokens: list[str]) -> int:

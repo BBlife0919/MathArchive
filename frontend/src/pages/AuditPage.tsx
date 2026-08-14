@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ApiError } from "../api/client";
 import {
   bulkAuto, bulkManual, fetchFlagged, fetchScan, fixAllFlagged,
   fixFlagged, ignoreRemaining, resolveFlagged, saveBaseline, structuralFix,
@@ -22,15 +23,17 @@ export default function AuditPage() {
   const [scan, setScan] = useState<ScanResponse | null>(null);
   const [flagged, setFlagged] = useState<FlaggedItem[] | null>(null);
   const [page, setPage] = useState(0);
-  const [busy, setBusy] = useState(false);
+  const [busyAction, setBusyAction] = useState<string | null>(null);
   const [banner, setBanner] = useState<{ title: string; body: string; kind: string } | null>(null);
   const [manualState, setManualState] = useState<Record<string, { action: string; latex: string }>>({});
 
+  const busy = busyAction !== null;
+
   function loadScan(force = false) {
-    fetchScan(force).then(setScan);
+    fetchScan(force).then(setScan).catch((e) => showApiError(e));
   }
   function loadFlagged() {
-    fetchFlagged().then(setFlagged);
+    fetchFlagged().then(setFlagged).catch((e) => showApiError(e));
   }
 
   useEffect(() => {
@@ -42,9 +45,24 @@ export default function AuditPage() {
     setBanner({ title, body, kind });
   }
 
-  async function handleStructuralFix() {
-    setBusy(true);
+  function showApiError(e: unknown) {
+    const msg = e instanceof ApiError ? e.message : "네트워크 오류로 요청이 실패했습니다. 잠시 후 다시 시도해주세요.";
+    showBanner("처리 실패", msg, "error");
+  }
+
+  async function runAction(actionKey: string, fn: () => Promise<void>) {
+    setBusyAction(actionKey);
     try {
+      await fn();
+    } catch (e) {
+      showApiError(e);
+    } finally {
+      setBusyAction(null);
+    }
+  }
+
+  function handleStructuralFix() {
+    return runAction("structural-fix", async () => {
       const res = await structuralFix();
       showBanner(
         "자동 복구 완료",
@@ -52,14 +70,11 @@ export default function AuditPage() {
         `선지 ${res.choices_fixed}건 갱신됐습니다. 다음 단계: 알려진 토큰 자동 매핑 버튼을 누르세요.`,
       );
       loadScan(true);
-    } finally {
-      setBusy(false);
-    }
+    });
   }
 
-  async function handleBulkAuto() {
-    setBusy(true);
-    try {
+  function handleBulkAuto() {
+    return runAction("bulk-auto", async () => {
       const res = await bulkAuto();
       const total = res.mapped + res.removed + res.ignored;
       if (total === 0) {
@@ -79,21 +94,18 @@ export default function AuditPage() {
       }
       loadScan(true);
       setManualState({});
-    } finally {
-      setBusy(false);
-    }
+    });
   }
 
-  async function handleBulkManual() {
-    const items = Object.entries(manualState)
-      .filter(([, v]) => v.action && v.action !== "선택")
-      .map(([token, v]) => ({ token, action: v.action, latex: v.latex }));
-    if (items.length === 0) {
-      showBanner("처리할 항목 없음", "dropdown에서 처리 방식을 선택한 토큰이 없습니다.", "warning");
-      return;
-    }
-    setBusy(true);
-    try {
+  function handleBulkManual() {
+    return runAction("bulk-manual", async () => {
+      const items = Object.entries(manualState)
+        .filter(([, v]) => v.action && v.action !== "선택")
+        .map(([token, v]) => ({ token, action: v.action, latex: v.latex }));
+      if (items.length === 0) {
+        showBanner("처리할 항목 없음", "dropdown에서 처리 방식을 선택한 토큰이 없습니다.", "warning");
+        return;
+      }
       const res = await bulkManual(items);
       if (res.done === 0) {
         showBanner("처리할 항목 없음", "dropdown에서 처리 방식을 선택한 토큰이 없습니다.", "warning");
@@ -106,14 +118,11 @@ export default function AuditPage() {
       }
       loadScan(true);
       setManualState({});
-    } finally {
-      setBusy(false);
-    }
+    });
   }
 
-  async function handleIgnoreRemaining() {
-    setBusy(true);
-    try {
+  function handleIgnoreRemaining() {
+    return runAction("ignore-remaining", async () => {
       const res = await ignoreRemaining();
       showBanner(
         "남은 미상 전체 무시 완료",
@@ -121,28 +130,22 @@ export default function AuditPage() {
         `되돌리려면 user_token_mappings 테이블에서 해당 row를 삭제하세요.`,
       );
       loadScan(true);
-    } finally {
-      setBusy(false);
-    }
+    });
   }
 
-  async function handleSaveBaseline() {
-    setBusy(true);
-    try {
+  function handleSaveBaseline() {
+    return runAction("save-baseline", async () => {
       await saveBaseline();
       showBanner(
         "베이스라인 저장 완료",
         "처리된 토큰은 화이트리스트에 반영돼 새로고침 후 사라집니다. 남은 토큰만 표시됩니다.",
       );
       loadScan(true);
-    } finally {
-      setBusy(false);
-    }
+    });
   }
 
-  async function handleFixAllFlagged() {
-    setBusy(true);
-    try {
+  function handleFixAllFlagged() {
+    return runAction("fix-all-flagged", async () => {
       const res = await fixAllFlagged();
       showBanner(
         "신고함 한 방 처리 완료",
@@ -150,23 +153,31 @@ export default function AuditPage() {
         `복구된 내용은 검색 페이지에서 확인하세요. 여전히 이상하면 다시 신고하면 됩니다.`,
       );
       loadFlagged();
-    } finally {
-      setBusy(false);
-    }
+    });
   }
 
-  async function handleFixOne(flagId: number) {
-    await fixFlagged(flagId);
-    loadFlagged();
+  function handleFixOne(flagId: number) {
+    return runAction(`fix-${flagId}`, async () => {
+      await fixFlagged(flagId);
+      loadFlagged();
+    });
   }
 
-  async function handleResolveOne(flagId: number) {
-    await resolveFlagged(flagId);
-    loadFlagged();
+  function handleResolveOne(flagId: number) {
+    return runAction(`resolve-${flagId}`, async () => {
+      await resolveFlagged(flagId);
+      loadFlagged();
+    });
   }
 
   if (scan === null || flagged === null) {
-    return <div className="audit-page"><p className="sc-empty">DB 전체 스캔 중... (첫 진입 시 1~2분)</p></div>;
+    return (
+      <div className="audit-page">
+        <p className="audit-empty">
+          {banner ? banner.body : "DB 전체 스캔 중... (첫 진입 시 1~2분 걸릴 수 있습니다)"}
+        </p>
+      </div>
+    );
   }
 
   const struct = scan.struct;
@@ -181,79 +192,97 @@ export default function AuditPage() {
 
   return (
     <div className="audit-page">
-      <h1 className="exam-builder-title">검수 · 데이터 무결성</h1>
-      <p className="sc-caption">
-        누락 토큰 · 구조 오류 · 신고함을 한 화면에서 자동 진단하고 클릭 한 번으로 일괄 처리합니다.
-      </p>
+      <header className="audit-header">
+        <h1 className="audit-title">검수 · 데이터 무결성</h1>
+        <p className="audit-subtitle">
+          누락 토큰 · 구조 오류 · 신고함을 한 화면에서 자동 진단하고 클릭 한 번으로 일괄 처리합니다.
+        </p>
+      </header>
+
       {banner && (
         <div className={`audit-banner audit-banner-${banner.kind}`}>
-          <b>{banner.title}</b>
-          <p>{banner.body}</p>
-          <button type="button" className="btn-secondary" onClick={() => setBanner(null)}>확인</button>
+          <div>
+            <b>{banner.title}</b>
+            <p>{banner.body}</p>
+          </div>
+          <button type="button" className="btn-ghost" onClick={() => setBanner(null)}>확인</button>
         </div>
       )}
 
-      <section className="sc-section">
-        <h2 className="sc-section-title">구조 무결성</h2>
-        <div className="sc-metric-row">
-          <div className="sc-metric"><span>전체 문항</span><b>{struct.total_questions.toLocaleString()}</b></div>
-          <div className="sc-metric"><span>BOX 짝 어긋남</span><b>{struct.box_mismatch}</b></div>
-          <div className="sc-metric"><span>코드블록 오인</span><b>{struct.code_block}</b></div>
-          <button
-            type="button" className="btn-primary" disabled={busy || (struct.box_mismatch === 0 && struct.code_block === 0)}
-            onClick={handleStructuralFix}
-          >
-            자동 복구
-          </button>
+      <section className="audit-card">
+        <div className="audit-eyebrow">구조 무결성</div>
+        <h2 className="audit-card-title">BOX 짝·코드블록 오인식을 자동으로 복구합니다</h2>
+        <div className="audit-stat-row">
+          <div className="audit-stat">
+            <span className="audit-stat-label">전체 문항</span>
+            <span className="audit-stat-value">{struct.total_questions.toLocaleString()}</span>
+          </div>
+          <div className="audit-stat">
+            <span className="audit-stat-label">BOX 짝 어긋남</span>
+            <span className="audit-stat-value">{struct.box_mismatch}</span>
+          </div>
+          <div className="audit-stat">
+            <span className="audit-stat-label">코드블록 오인</span>
+            <span className="audit-stat-value">{struct.code_block}</span>
+          </div>
         </div>
+        <button
+          type="button" className="btn-primary"
+          disabled={busy || (struct.box_mismatch === 0 && struct.code_block === 0)}
+          onClick={handleStructuralFix}
+        >
+          {busyAction === "structural-fix" ? "복구 중..." : "자동 복구"}
+        </button>
       </section>
 
-      <hr className="filter-divider" />
-
-      <section className="sc-section">
-        <h2 className="sc-section-title">누락 HWP 토큰</h2>
-        <div className="audit-toolbar-header">
-          <p className="sc-caption">
-            수식 안에서 백슬래시 없이 등장하는 단어. 각 행에서 처리 방식을 선택하고 적용하세요.
-          </p>
-          <button type="button" className="btn-secondary" disabled={busy} onClick={() => loadScan(true)}>다시 스캔</button>
+      <section className="audit-card">
+        <div className="audit-card-head">
+          <div>
+            <div className="audit-eyebrow">누락 HWP 토큰</div>
+            <h2 className="audit-card-title">수식 안에서 백슬래시 없이 등장하는 단어</h2>
+          </div>
+          <button type="button" className="btn-ghost" disabled={busy} onClick={() => loadScan(true)}>
+            다시 스캔
+          </button>
         </div>
-        {scan.new_count > 0 && (
-          <p className="audit-warning">지난 실행 이후 새로 등장한 토큰 {scan.new_count}개</p>
-        )}
-        {totalTokens > 0 && (
-          <p className="audit-info">현재 누락 토큰 {totalTokens}개 — 한 번에 처리하세요</p>
-        )}
+
+        <div className="audit-stat-row">
+          <div className="audit-stat">
+            <span className="audit-stat-label">현재 누락 토큰</span>
+            <span className="audit-stat-value">{totalTokens}</span>
+          </div>
+          <div className="audit-stat">
+            <span className="audit-stat-label">남은 미상 토큰</span>
+            <span className="audit-stat-value">{unknownTokens.length}</span>
+          </div>
+          {scan.new_count > 0 && (
+            <div className="audit-stat audit-stat-warn">
+              <span className="audit-stat-label">신규 등장</span>
+              <span className="audit-stat-value">{scan.new_count}</span>
+            </div>
+          )}
+        </div>
 
         <div className="audit-toolbar">
           <button type="button" className="btn-primary" disabled={busy} onClick={handleBulkAuto}>
-            한 방 처리 (사전+패턴+도형+그리스, 전체)
+            {busyAction === "bulk-auto" ? "처리 중..." : "① 한 방 처리 (사전+패턴+도형+그리스, 전체)"}
           </button>
           <button type="button" className="btn-secondary" disabled={busy} onClick={handleBulkManual}>
-            미상 dropdown 일괄 적용
+            {busyAction === "bulk-manual" ? "처리 중..." : "③ 미상 dropdown 일괄 적용"}
           </button>
-        </div>
-        <p className="sc-caption">
-          권장 순서: ① 한 방 처리 → ② 남은 미상 토큰은 표에서 dropdown 처리 → ③ 미상 dropdown 일괄 적용 → ④ 베이스라인 저장
-        </p>
-
-        <hr className="filter-divider" />
-        <div className="audit-toolbar-header">
-          <p className="sc-caption">
-            남은 미상 토큰: {unknownTokens.length}개 — 사전·패턴·도형 라벨 어디에도 안 잡힌 토큰입니다.
-            대부분 OCR·파싱 오류로 생긴 잡문자라 그냥 무시해도 안전합니다
-            (무시는 DB 변경 없음 — user_token_mappings에서 row 삭제하면 복원).
-          </p>
           <button
             type="button" className="btn-secondary" disabled={busy || unknownTokens.length === 0}
             onClick={handleIgnoreRemaining}
           >
-            남은 미상 전체 무시 (한 방 정리)
+            {busyAction === "ignore-remaining" ? "처리 중..." : "남은 미상 전체 무시"}
           </button>
         </div>
+        <p className="audit-caption">
+          권장 순서: ① 한 방 처리 → ② 남은 미상 토큰은 표에서 dropdown 처리 → ③ 미상 dropdown 일괄 적용 → ④ 베이스라인 저장
+        </p>
 
         <Expander summary="미상 토큰이란? · 처리 가이드">
-          <p className="sc-caption">
+          <p className="audit-caption">
             미상 토큰 = 사전(SYMBOL_MAP)에도 없고 패턴 인식기(영문 변수 묶음·도형 라벨 등)에도 매칭 안 된 토큰.
           </p>
           <ul>
@@ -264,67 +293,76 @@ export default function AuditPage() {
           </ul>
         </Expander>
 
-        <p className="sc-caption">
+        <p className="audit-caption audit-page-caption">
           전체 {totalTokens}개 중 {totalTokens ? start + 1 : 0}–{end}번 표시 (페이지 {curPage + 1}/{totalPages})
         </p>
         <Pagination page={curPage} pageSize={TOKENS_PER_PAGE} total={totalTokens} onPageChange={setPage} />
 
-        <table className="sc-table audit-token-table">
-          <thead>
-            <tr><th>토큰</th><th>추천</th><th>처리 방식 (미상 토큰만)</th><th>LaTeX (매핑 시만)</th></tr>
-          </thead>
-          <tbody>
-            {pageTokens.map((b) => (
-              <TokenRow
-                key={b.token} item={b}
-                manual={manualState[b.token]}
-                onManualChange={(v) => setManualState((s) => ({ ...s, [b.token]: v }))}
-              />
-            ))}
-          </tbody>
-        </table>
+        <div className="audit-table-wrap">
+          <table className="audit-token-table">
+            <thead>
+              <tr><th>토큰</th><th>추천</th><th>처리 방식 (미상 토큰만)</th><th>LaTeX (매핑 시만)</th></tr>
+            </thead>
+            <tbody>
+              {pageTokens.map((b) => (
+                <TokenRow
+                  key={b.token} item={b}
+                  manual={manualState[b.token]}
+                  onManualChange={(v) => setManualState((s) => ({ ...s, [b.token]: v }))}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
         <Pagination page={curPage} pageSize={TOKENS_PER_PAGE} total={totalTokens} onPageChange={setPage} />
+
+        <button type="button" className="btn-primary audit-baseline-btn" disabled={busy} onClick={handleSaveBaseline}>
+          {busyAction === "save-baseline" ? "저장 중..." : "④ 이번 결과 저장 (베이스라인 갱신)"}
+        </button>
       </section>
 
-      <hr className="filter-divider" />
-
-      <button type="button" className="btn-primary" disabled={busy} onClick={handleSaveBaseline}>
-        이번 결과 저장 (베이스라인 갱신)
-      </button>
-
-      <hr className="filter-divider" />
-
-      <section className="sc-section">
-        <h2 className="sc-section-title">신고함</h2>
-        <p className="sc-caption">검색·시험지에서 사용자가 직접 신고한 문항.</p>
-        <div className="sc-metric-row">
-          <div className="sc-metric"><span>미해결 신고</span><b>{flagged.length}</b></div>
+      <section className="audit-card">
+        <div className="audit-card-head">
+          <div>
+            <div className="audit-eyebrow">신고함</div>
+            <h2 className="audit-card-title">검색·시험지에서 사용자가 직접 신고한 문항</h2>
+          </div>
+          <div className="audit-stat audit-stat-inline">
+            <span className="audit-stat-label">미해결 신고</span>
+            <span className="audit-stat-value">{flagged.length}</span>
+          </div>
         </div>
 
         {flagged.length === 0 ? (
-          <p className="sc-empty">신고된 문항 없음.</p>
+          <p className="audit-empty">신고된 문항 없음.</p>
         ) : (
           <>
-            <div className="audit-toolbar-header">
-              <p className="sc-caption">
-                한 방 처리: 모든 신고({flagged.length}건)에 자동 복구(구조+토큰) 적용 후 처리완료 마킹.
-              </p>
+            <div className="audit-toolbar">
               <button type="button" className="btn-primary" disabled={busy} onClick={handleFixAllFlagged}>
-                신고함 한 방 처리 (전체)
+                {busyAction === "fix-all-flagged" ? "처리 중..." : `신고함 한 방 처리 (전체 ${flagged.length}건)`}
               </button>
             </div>
-            <hr className="filter-divider" />
             {flagged.slice(0, 20).map((f) => (
               <div key={f.flag_id} className="audit-flag-card">
-                <p>
+                <p className="audit-flag-meta">
                   <b>[{f.school}]</b> {f.year}년 {f.semester}학기 {EXAM_LABELS[f.exam_type ?? ""] ?? ""}{" "}
                   {f.question_number}번 · <code>{f.chapter}</code> · qid={f.question_id}
+                  <span className="audit-caption"> · 신고일: {f.flagged_at}</span>
                 </p>
-                <p className="sc-caption">신고일: {f.flagged_at}</p>
                 <pre className="audit-flag-preview">{(f.question_text ?? "").slice(0, 200)}</pre>
                 <div className="audit-flag-actions">
-                  <button type="button" className="btn-secondary" onClick={() => handleFixOne(f.flag_id)}>자동 복구</button>
-                  <button type="button" className="btn-primary" onClick={() => handleResolveOne(f.flag_id)}>처리완료</button>
+                  <button
+                    type="button" className="btn-secondary" disabled={busy}
+                    onClick={() => handleFixOne(f.flag_id)}
+                  >
+                    {busyAction === `fix-${f.flag_id}` ? "복구 중..." : "자동 복구"}
+                  </button>
+                  <button
+                    type="button" className="btn-primary" disabled={busy}
+                    onClick={() => handleResolveOne(f.flag_id)}
+                  >
+                    {busyAction === `resolve-${f.flag_id}` ? "처리 중..." : "처리완료"}
+                  </button>
                 </div>
               </div>
             ))}
@@ -366,7 +404,7 @@ function TokenRow({
       </td>
       <td>
         {hasRec ? (
-          <span className="sc-caption">[한 방 처리]로 자동 적용</span>
+          <span className="audit-caption">[한 방 처리]로 자동 적용</span>
         ) : (
           <select
             value={action}
@@ -385,7 +423,7 @@ function TokenRow({
             onChange={(e) => onManualChange({ action, latex: e.target.value })}
           />
         ) : (
-          <span className="sc-caption">—</span>
+          <span className="audit-caption">—</span>
         )}
       </td>
     </tr>

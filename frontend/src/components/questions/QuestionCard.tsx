@@ -3,21 +3,14 @@ import QuestionContent from "../content/QuestionContent";
 import Expander from "./Expander";
 import "./QuestionCard.css";
 
+// 적녹색약 접근성 규칙: 색만으로 구분 금지, 남색↔주황 2색만 사용 (텍스트 라벨이 1차 구분자)
 const DIFF_COLOR: Record<string, string> = {
-  "하": "#10b981", "중": "#f59e0b", "상": "#ef4444", "킬": "#0a1020",
+  "하": "#3b6ea5", "중": "#13203c", "상": "#c2703d", "킬": "#9c3d0a",
 };
 
 function shortChapter(chapter: string | null): string {
   const c = chapter ?? "";
   return c.length <= 6 ? c : `${c.slice(0, 5)}…`;
-}
-
-function contentLength(segments: QuestionCardData["content_segments"]): number {
-  return segments.reduce((sum, s) => sum + (s.type === "text" ? (s.md?.length ?? 0) : 0), 0);
-}
-
-function hasRichContent(segments: QuestionCardData["content_segments"]): boolean {
-  return segments.some((s) => s.type === "image" || s.type === "box");
 }
 
 interface Props {
@@ -28,8 +21,6 @@ interface Props {
 
 export default function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
   const diffColor = DIFF_COLOR[q.difficulty ?? ""] ?? "#94a3b8";
-  const richContent = hasRichContent(q.content_segments);
-  const longContent = contentLength(q.content_segments) > 400;
 
   return (
     <div className="question-card">
@@ -59,13 +50,7 @@ export default function QuestionCard({ question: q, isSelected, onToggleSelect }
         )}
       </div>
 
-      {richContent || longContent ? (
-        <Expander summary="문제 보기" defaultOpen={!richContent}>
-          <QuestionContent segments={q.content_segments} />
-        </Expander>
-      ) : (
-        <QuestionContent segments={q.content_segments} />
-      )}
+      <QuestionContent segments={q.content_segments} />
 
       {q.choices_text && (
         <div className="choices-caption">
