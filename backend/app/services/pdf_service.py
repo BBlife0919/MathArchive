@@ -7,7 +7,7 @@ from .. import legacy_bridge  # noqa: F401
 
 from pathlib import Path
 
-from pdf_engine import generate_book_pdf, generate_exam_pdf  # type: ignore
+from pdf_engine import generate_book_pdf, generate_exam_pdf, paginate  # type: ignore
 
 from . import db_service
 
@@ -37,6 +37,31 @@ def build_exam_pdf(question_ids: list[int], title: str = "수학 시험지",
         subtitle=subtitle,
         logo_path=_resolve_logo(include_logo),
     )
+
+
+def build_layout_preview(question_ids: list[int], overrides: dict | None = None,
+                         preserve_order: bool = False) -> list:
+    """실시간 미리보기용 — Playwright 없이 실제 PDF와 동일한 지면 배치
+    (estimate_layout/paginate)만 계산해서 [page][col][slot] 구조를 그대로
+    JSON 으로 내려준다. app/pdf_engine.py 의 로직은 건드리지 않고 그대로
+    재사용한다(위 build_exam_pdf 와 동일 원칙)."""
+    rows = db_service.fetch_questions_for_preview(question_ids, preserve_order)
+    questions = [dict(r) for r in rows]
+    pages = paginate(questions, overrides or {})
+    return [
+        {
+            "columns": [
+                {
+                    "slots": [
+                        {"question_id": q["question_id"], "layout": layout}
+                        for q, layout in col
+                    ],
+                }
+                for col in page
+            ],
+        }
+        for page in pages
+    ]
 
 
 def build_book_pdf(question_ids: list[int], title: str = "수학 교재",

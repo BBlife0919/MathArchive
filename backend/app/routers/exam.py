@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Response
 
 from ..deps import require_approved
-from ..schemas.exam import BookPdfRequest, ExamPdfRequest
+from ..schemas.exam import BookPdfRequest, ExamPdfRequest, LayoutPreviewRequest, LayoutPreviewResponse
 from ..services import pdf_service
 
 router = APIRouter(
@@ -30,6 +30,17 @@ def exam_pdf(req: ExamPdfRequest):
         media_type="application/pdf",
         headers={"Content-Disposition": 'attachment; filename="exam.pdf"'},
     )
+
+
+@router.post("/layout-preview", response_model=LayoutPreviewResponse)
+def layout_preview(req: LayoutPreviewRequest):
+    # Playwright 없이 순수 파이썬 배치 계산만 하므로 가볍다 — 실시간 미리보기용.
+    pages = pdf_service.build_layout_preview(
+        req.question_ids,
+        overrides=req.overrides,
+        preserve_order=req.preserve_order,
+    )
+    return {"pages": pages}
 
 
 @router.post("/book-pdf")

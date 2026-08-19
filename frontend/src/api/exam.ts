@@ -1,4 +1,4 @@
-import { apiFetchBlob } from "./client";
+import { apiFetch, apiFetchBlob } from "./client";
 
 export interface ExamPdfRequest {
   question_ids: number[];
@@ -40,6 +40,35 @@ export interface BookPdfRequest {
 
 export function downloadBookPdf(req: BookPdfRequest): Promise<Blob> {
   return apiFetchBlob("/api/exam/book-pdf", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+
+export interface LayoutPreviewRequest {
+  question_ids: number[];
+  preserve_order?: boolean;
+}
+
+export interface LayoutSlot {
+  question_id: number;
+  layout: "half" | "full";
+}
+
+export interface LayoutColumn {
+  slots: LayoutSlot[];
+}
+
+export interface LayoutPage {
+  columns: LayoutColumn[];
+}
+
+export interface LayoutPreviewResponse {
+  pages: LayoutPage[];
+}
+
+export function fetchLayoutPreview(req: LayoutPreviewRequest): Promise<LayoutPreviewResponse> {
+  return apiFetch<LayoutPreviewResponse>("/api/exam/layout-preview", {
     method: "POST",
     body: JSON.stringify(req),
   });

@@ -34,3 +34,26 @@ class BookPdfRequest(BaseModel):
     divider_footer_title: Optional[str] = None
     divider_footer_sub: Optional[str] = None
     overrides: dict[int, str] = {}
+
+
+class LayoutPreviewRequest(BaseModel):
+    question_ids: list[int]
+    overrides: dict[int, str] = {}
+    preserve_order: bool = False
+
+
+class LayoutSlot(BaseModel):
+    question_id: int
+    layout: Literal["half", "full"]
+
+
+class LayoutColumn(BaseModel):
+    slots: list[LayoutSlot]
+
+
+class LayoutPage(BaseModel):
+    columns: list[LayoutColumn]
+
+
+class LayoutPreviewResponse(BaseModel):
+    pages: list[LayoutPage]

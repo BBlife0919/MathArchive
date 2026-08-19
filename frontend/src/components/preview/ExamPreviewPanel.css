@@ -21,6 +21,14 @@
   border-bottom: 1px solid var(--line);
 }
 
+.live-preview-unavailable {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
 @media (max-width: 900px) {
   .exam-preview {
     flex-direction: column;

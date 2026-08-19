@@ -4,6 +4,7 @@ import { useSelection } from "../../context/SelectionContext";
 import QuestionList from "../questions/QuestionList";
 import PdfOptionsForm from "./PdfOptionsForm";
 import BookOptionsForm from "./BookOptionsForm";
+import LivePreviewPanel from "./LivePreviewPanel";
 import "./ExamPreviewPanel.css";
 
 export type PdfMode = "exam" | "book";
@@ -93,6 +94,13 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
           <PdfOptionsForm questionIds={ids} preserveOrder={preserveOrder} />
         ) : (
           <BookOptionsForm questionIds={ids} />
+        )}
+        {pdfMode === "exam" ? (
+          <LivePreviewPanel items={items} questionIds={ids} preserveOrder={preserveOrder} />
+        ) : (
+          <p className="live-preview-unavailable">
+            교재 표지·챕터 구성은 미리보기가 지원되지 않습니다 — 다운로드 후 확인해주세요.
+          </p>
         )}
       </div>
     </div>
