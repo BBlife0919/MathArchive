@@ -6,6 +6,7 @@ export interface ExamPdfRequest {
   subtitle?: string | null;
   include_source: boolean;
   include_logo: boolean;
+  preserve_order?: boolean;
 }
 
 export function downloadExamPdf(req: ExamPdfRequest): Promise<Blob> {

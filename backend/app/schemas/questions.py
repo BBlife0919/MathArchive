@@ -56,6 +56,7 @@ class SearchResponse(BaseModel):
 
 class ByIdsRequest(BaseModel):
     question_ids: list[int]
+    preserve_order: bool = False
 
 
 class ByIdsResponse(BaseModel):

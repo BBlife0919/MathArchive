@@ -23,8 +23,9 @@ def build_exam_pdf(question_ids: list[int], title: str = "수학 시험지",
                    include_source: bool = True,
                    subtitle: str | None = None,
                    include_logo: bool = False,
-                   overrides: dict | None = None) -> bytes:
-    rows = db_service.fetch_questions_for_preview(question_ids)
+                   overrides: dict | None = None,
+                   preserve_order: bool = False) -> bytes:
+    rows = db_service.fetch_questions_for_preview(question_ids, preserve_order)
     # main.py:1663 과 동일하게 dict 로 변환 후 전달
     # (raw Row 객체는 pdf_engine 내부의 `.get()` 호출과 호환 안 됨).
     questions = [dict(r) for r in rows]

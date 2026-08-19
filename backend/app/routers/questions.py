@@ -121,6 +121,6 @@ def mini_test(req: MiniTestRequest):
 
 @router.post("/by-ids", response_model=ByIdsResponse)
 def questions_by_ids(req: ByIdsRequest):
-    rows = db_service.fetch_questions_for_preview(req.question_ids)
+    rows = db_service.fetch_questions_for_preview(req.question_ids, req.preserve_order)
     items = question_builder.build_question_cards(rows)
     return ByIdsResponse(items=items)

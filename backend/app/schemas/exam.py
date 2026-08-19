@@ -12,6 +12,7 @@ class ExamPdfRequest(BaseModel):
     include_source: bool = True
     include_logo: bool = False
     overrides: dict[int, str] = {}
+    preserve_order: bool = False
 
 
 class BookPdfRequest(BaseModel):

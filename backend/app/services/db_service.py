@@ -179,8 +179,13 @@ def fetch_questions_page(question_ids: list[int]) -> list:
     return [by_id[qid] for qid in question_ids if qid in by_id]
 
 
-def fetch_questions_for_preview(question_ids: list[int]) -> list:
-    """시험지 미리보기용 — main.py:1244-1269 SQL + 정렬 로직 그대로."""
+def fetch_questions_for_preview(question_ids: list[int], preserve_order: bool = False) -> list:
+    """시험지 미리보기용 — main.py:1244-1269 SQL + 정렬 로직 그대로.
+
+    preserve_order=True 면 단원/난이도 자동 정렬 대신 question_ids 가 온
+    순서를 그대로 유지한다 (시험지 미리보기에서 사용자가 드래그로 정한
+    순서를 반영할 때 사용, fetch_questions_page() 와 동일한 패턴).
+    """
     if not question_ids:
         return []
     placeholders = ",".join("?" * len(question_ids))
@@ -194,6 +199,10 @@ def fetch_questions_for_preview(question_ids: list[int]) -> list:
         LEFT JOIN solutions s ON q.question_id = s.question_id
         WHERE q.question_id IN ({placeholders})
     """, list(question_ids))
+
+    if preserve_order:
+        by_id = {r["question_id"]: r for r in rows}
+        return [by_id[qid] for qid in question_ids if qid in by_id]
 
     all_minors = curr.all_minor_chapters_in_subjects(curr.subjects())
     chap_idx = {c: i for i, c in enumerate(all_minors)}

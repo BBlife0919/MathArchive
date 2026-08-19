@@ -23,6 +23,7 @@ def exam_pdf(req: ExamPdfRequest):
         subtitle=req.subtitle,
         include_logo=req.include_logo,
         overrides=req.overrides,
+        preserve_order=req.preserve_order,
     )
     return Response(
         content=pdf_bytes,

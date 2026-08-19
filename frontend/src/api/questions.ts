@@ -92,10 +92,13 @@ export function searchQuestionIds(req: SearchRequest): Promise<SearchIdsResponse
   });
 }
 
-export function fetchQuestionsByIds(questionIds: number[]): Promise<ByIdsResponse> {
+export function fetchQuestionsByIds(
+  questionIds: number[],
+  preserveOrder = false,
+): Promise<ByIdsResponse> {
   return apiFetch<ByIdsResponse>("/api/questions/by-ids", {
     method: "POST",
-    body: JSON.stringify({ question_ids: questionIds }),
+    body: JSON.stringify({ question_ids: questionIds, preserve_order: preserveOrder }),
   });
 }
 

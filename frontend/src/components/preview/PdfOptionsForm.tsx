@@ -5,9 +5,10 @@ import "./PdfOptionsForm.css";
 
 interface Props {
   questionIds: number[];
+  preserveOrder?: boolean;
 }
 
-export default function PdfOptionsForm({ questionIds }: Props) {
+export default function PdfOptionsForm({ questionIds, preserveOrder = false }: Props) {
   const [title, setTitle] = useState("수학 시험지");
   const [showSubtitle, setShowSubtitle] = useState(false);
   const [subtitle, setSubtitle] = useState("");
@@ -26,6 +27,7 @@ export default function PdfOptionsForm({ questionIds }: Props) {
         subtitle: showSubtitle ? subtitle : null,
         include_source: includeSource,
         include_logo: includeLogo,
+        preserve_order: preserveOrder,
       });
       triggerDownload(blob, "exam.pdf");
     } catch {

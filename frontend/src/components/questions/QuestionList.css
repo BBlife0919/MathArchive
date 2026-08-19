@@ -3,3 +3,31 @@
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 10px;
 }
+
+.sortable-card .question-card {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.drag-handle-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 20px;
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1;
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle-bar:active {
+  cursor: grabbing;
+}
