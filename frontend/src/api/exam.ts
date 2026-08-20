@@ -1,4 +1,4 @@
-import { apiFetch, apiFetchBlob } from "./client";
+import { apiFetchBlob, apiFetchText } from "./client";
 
 export interface ExamPdfRequest {
   question_ids: number[];
@@ -11,6 +11,15 @@ export interface ExamPdfRequest {
 
 export function downloadExamPdf(req: ExamPdfRequest): Promise<Blob> {
   return apiFetchBlob("/api/exam/pdf", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+
+// 실물 미리보기용 — Playwright 없이 실제 PDF와 같은 HTML을 그대로 받아
+// iframe에 넣는다(다운로드 집계에 안 잡히도록 별도 엔드포인트).
+export function fetchExamHtmlPreview(req: ExamPdfRequest): Promise<string> {
+  return apiFetchText("/api/exam/html-preview", {
     method: "POST",
     body: JSON.stringify(req),
   });
@@ -49,31 +58,10 @@ export function downloadBookPdf(req: BookPdfRequest): Promise<Blob> {
   });
 }
 
-export interface LayoutPreviewRequest {
-  question_ids: number[];
-  preserve_order?: boolean;
-}
-
-export interface LayoutSlot {
-  question_id: number;
-  layout: "half" | "full";
-}
-
-export interface LayoutColumn {
-  slots: LayoutSlot[];
-}
-
-export interface LayoutPage {
-  columns: LayoutColumn[];
-}
-
-export interface LayoutPreviewResponse {
-  pages: LayoutPage[];
-}
-
-export function fetchLayoutPreview(req: LayoutPreviewRequest): Promise<LayoutPreviewResponse> {
-  return apiFetch<LayoutPreviewResponse>("/api/exam/layout-preview", {
+export function fetchBookHtmlPreview(req: BookPdfRequest): Promise<string> {
+  return apiFetchText("/api/exam/book-html-preview", {
     method: "POST",
     body: JSON.stringify(req),
   });
 }
+

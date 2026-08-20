@@ -30,6 +30,28 @@ export async function apiFetch<T>(
   return res.json() as Promise<T>;
 }
 
+export async function apiFetchText(
+  path: string,
+  options: RequestInit = {},
+): Promise<string> {
+  const res = await fetch(`${API_BASE}${path}`, {
+    credentials: "include",
+    headers: { "Content-Type": "application/json", ...options.headers },
+    ...options,
+  });
+  if (!res.ok) {
+    let message = `요청 실패 (${res.status})`;
+    try {
+      const body = await res.json();
+      if (body?.detail) message = body.detail;
+    } catch {
+      // 응답이 JSON 이 아닌 경우 기본 메시지 사용
+    }
+    throw new ApiError(res.status, message);
+  }
+  return res.text();
+}
+
 export async function apiFetchBlob(
   path: string,
   options: RequestInit = {},

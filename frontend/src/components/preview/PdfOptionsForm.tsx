@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { downloadExamPdf } from "../../api/exam";
+import { downloadExamPdf, fetchExamHtmlPreview, type ExamPdfRequest } from "../../api/exam";
 import { triggerDownload } from "../../utils/download";
+import RealPagePreview from "./RealPagePreview";
 import "./PdfOptionsForm.css";
 
 interface Props {
@@ -17,18 +18,20 @@ export default function PdfOptionsForm({ questionIds, preserveOrder = false }: P
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const request: ExamPdfRequest = {
+    question_ids: questionIds,
+    title,
+    subtitle: showSubtitle ? subtitle : null,
+    include_source: includeSource,
+    include_logo: includeLogo,
+    preserve_order: preserveOrder,
+  };
+
   async function handleDownload() {
     setGenerating(true);
     setError(null);
     try {
-      const blob = await downloadExamPdf({
-        question_ids: questionIds,
-        title,
-        subtitle: showSubtitle ? subtitle : null,
-        include_source: includeSource,
-        include_logo: includeLogo,
-        preserve_order: preserveOrder,
-      });
+      const blob = await downloadExamPdf(request);
       triggerDownload(blob, "exam.pdf");
     } catch {
       setError("PDF 생성 중 오류가 발생했습니다.");
@@ -84,6 +87,11 @@ export default function PdfOptionsForm({ questionIds, preserveOrder = false }: P
       </button>
 
       {error && <p className="pdf-error">{error}</p>}
+
+      <RealPagePreview
+        fetchHtml={questionIds.length > 0 ? () => fetchExamHtmlPreview(request) : null}
+        depsKey={JSON.stringify(request)}
+      />
     </div>
   );
 }

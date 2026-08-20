@@ -1294,6 +1294,17 @@ h2.exam-subtitle {
     letter-spacing: 8pt;
 }
 .book-cover .bc-title-big {
+    /* .book-cover 는 .page(flex column) 라 자식 block 요소가 기본적으로
+       cross-axis(가로)로 stretch 된다 — width를 content 크기로 고정 안 하면
+       글자 길이와 무관하게 박스가 항상 부모 폭까지 늘어나서, 아래 축소
+       스크립트(el.scrollWidth vs 부모폭*0.82)가 "글자가 길어서 넘친다"고
+       매번 오판정해 최대 40회까지 무조건 축소해버리는 사고가 있었다
+       (2026-08-20 발견 — 기본값 "FINAL"도 거의 안 보이는 크기로 뭉개짐).
+       width:fit-content 로 박스를 글자 크기에 맞추고 auto 마진으로 가운데
+       정렬 유지. */
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
     margin-top: 10mm;
     font-size: 96pt;
@@ -1622,6 +1633,81 @@ h2.exam-subtitle {
 }
 """
 
+# 표지 큰워드/디바이더 제목/해설 KaTeX 자동축소 — 원래 html_to_pdf_bytes() 안에서
+# Playwright 의 page.evaluate() 로만 실행되던 후처리였다(아래 세 블록, 로직은
+# 완전히 동일하게 옮김). 이 JS를 HTML 자체에 self-executing <script> 로 심어두면
+# Playwright든 일반 브라우저(iframe 실물 미리보기)든 이 HTML을 여는 즉시 똑같이
+# 실행되어, 실물 미리보기와 실제 PDF가 항상 일치한다(2026-08-20, 미리보기에서
+# 표지 "FINAL" 같은 큰 글자가 축소 안 된 채로 보이는 불일치 발견 후 수정).
+# html_to_pdf_bytes() 쪽 page.evaluate() 호출은 그대로 남겨둔다 — 아래 세
+# while 루프는 "이미 맞으면 0회 반복"이라 두 번 실행해도 안전(멱등)하지만,
+# window.__typeset 은 여기 절대 넣지 않는다 — scripts/build_pyeongjwapyo_by_
+# difficulty.py 의 TYPESET_JS(보기/조건 박스 재작성)가 멱등이 아니라서, 이
+# 스크립트가 자동 실행 후 html_to_pdf_bytes() 가 또 명시적으로 __typeset()을
+# 부르면 실제 PDF에서 박스 구조가 이중으로 감싸지는 손상이 생긴다(교차검수로
+# 발견됨). __typeset 은 애초에 인쇄(A4) 뷰포트 기준으로 설계된 측정 로직이라
+# screen 상태인 미리보기 iframe에서 돌려봐야 어차피 실제 PDF와 안 맞기도 하다.
+_PREVIEW_POSTPROCESS_JS = """
+(function () {
+  function runPostProcess() {
+    try {
+      document.querySelectorAll('.bc-title-big, .dcov-title').forEach(function (el) {
+        var maxWidth = (el.parentElement || document.documentElement).clientWidth * 0.82;
+        var guard = 0;
+        while (el.scrollWidth > maxWidth && guard < 40) {
+          var cur = parseFloat(getComputedStyle(el).fontSize);
+          el.style.fontSize = (cur * 0.95) + 'px';
+          guard++;
+        }
+      });
+    } catch (e) {}
+    try {
+      document.querySelectorAll('.cd-section-title, .cd-major').forEach(function (el) {
+        var guard = 0;
+        while (el.scrollWidth > el.clientWidth + 2 && guard < 20) {
+          var cur = parseFloat(getComputedStyle(el).fontSize) || 38;
+          el.style.fontSize = (cur * 0.95) + 'px';
+          guard++;
+        }
+      });
+    } catch (e) {}
+    try {
+      document.querySelectorAll('.sol-item, .q-body, .kp-right').forEach(function (el) {
+        var guard = 0;
+        while (el.scrollWidth > el.clientWidth + 2 && guard < 20) {
+          var kts = el.querySelectorAll('.katex');
+          if (!kts.length) break;
+          kts.forEach(function (k) {
+            var cur = parseFloat(getComputedStyle(k).fontSize) || 11;
+            k.style.setProperty('font-size', (cur * 0.95) + 'px', 'important');
+          });
+          guard++;
+        }
+      });
+    } catch (e) {}
+    window.__previewPostprocessDone = true;
+  }
+  function waitAndRun() {
+    var start = Date.now();
+    function check() {
+      var katexOk = window.__katexReady === true;
+      var fontsOk = !window.document.fonts || document.fonts.status === 'loaded';
+      if ((katexOk && fontsOk) || Date.now() - start > 8000) {
+        runPostProcess();
+      } else {
+        setTimeout(check, 50);
+      }
+    }
+    check();
+  }
+  if (document.readyState === 'complete') {
+    waitAndRun();
+  } else {
+    window.addEventListener('load', waitAndRun);
+  }
+})();
+"""
+
 _HTML_WRAP = """<!doctype html>
 <html lang="ko"><head>
 <meta charset="utf-8">
@@ -1637,6 +1723,7 @@ _HTML_WRAP = """<!doctype html>
 <style>{css}</style>
 </head><body class="{body_class}">
 {body}
+<script>{postprocess_script}</script>
 </body></html>
 """
 
@@ -1988,7 +2075,7 @@ def build_exam_html(questions: list[dict], title: str, include_source: bool,
     )
     return _HTML_WRAP.format(
         title=_html.escape(title), css=_CSS, body=body,
-        body_class="",
+        body_class="", postprocess_script=_PREVIEW_POSTPROCESS_JS,
     )
 
 
@@ -2352,7 +2439,7 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
         body += f'\n<script>{extra_js}</script>'
     return _HTML_WRAP.format(
         title=_html.escape(title), css=_CSS, body=body,
-        body_class="book-summit",
+        body_class="book-summit", postprocess_script=_PREVIEW_POSTPROCESS_JS,
     )
 
 
@@ -2642,6 +2729,7 @@ def build_designed_exam_html(questions: list[dict],
     return _HTML_WRAP.format(
         title=_html.escape(meta.cover_main_title()),
         css=css, body=full_body, body_class="",
+        postprocess_script=_PREVIEW_POSTPROCESS_JS,
     )
 
 

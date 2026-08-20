@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Response
+from fastapi.responses import HTMLResponse
 
 from ..deps import require_approved
-from ..schemas.exam import BookPdfRequest, ExamPdfRequest, LayoutPreviewRequest, LayoutPreviewResponse
+from ..schemas.exam import BookPdfRequest, ExamPdfRequest
 from ..services import db_service, pdf_service
 
 router = APIRouter(
@@ -33,15 +34,49 @@ def exam_pdf(req: ExamPdfRequest, user: dict = Depends(require_approved)):
     )
 
 
-@router.post("/layout-preview", response_model=LayoutPreviewResponse)
-def layout_preview(req: LayoutPreviewRequest):
-    # Playwright 없이 순수 파이썬 배치 계산만 하므로 가볍다 — 실시간 미리보기용.
-    pages = pdf_service.build_layout_preview(
+@router.post("/html-preview", response_class=HTMLResponse)
+def exam_html_preview(req: ExamPdfRequest):
+    # Playwright 없이 build_exam_html() 이 만드는 HTML 그대로 반환 — 프론트가
+    # iframe에 넣어 "실제 페이지" 미리보기로 쓴다. 미리보기 단계라
+    # log_exam_generation() 은 호출하지 않는다(실제 다운로드 시점에만 기록).
+    html = pdf_service.build_exam_html_preview(
         req.question_ids,
+        title=req.title,
+        include_source=req.include_source,
+        subtitle=req.subtitle,
+        include_logo=req.include_logo,
         overrides=req.overrides,
         preserve_order=req.preserve_order,
     )
-    return {"pages": pages}
+    return HTMLResponse(content=html)
+
+
+@router.post("/book-html-preview", response_class=HTMLResponse)
+def book_html_preview(req: BookPdfRequest):
+    html = pdf_service.build_book_html_preview(
+        req.question_ids,
+        title=req.title,
+        include_source=req.include_source,
+        subtitle=req.subtitle,
+        include_logo=req.include_logo,
+        cover_style=req.cover_style,
+        cover_kicker=req.cover_kicker,
+        cover_big_word=req.cover_big_word,
+        cover_footer_main=req.cover_footer_main,
+        cover_footer_sub=req.cover_footer_sub,
+        dcov_subject=req.dcov_subject,
+        dcov_level=req.dcov_level,
+        kicker_mark=req.kicker_mark,
+        kicker_text=req.kicker_text,
+        divider_meta_top=req.divider_meta_top,
+        divider_footer_title=req.divider_footer_title,
+        divider_footer_sub=req.divider_footer_sub,
+        overrides=req.overrides,
+        book_mode=req.book_mode,
+        flat_layout=req.flat_layout,
+        preserve_order=req.preserve_order,
+    )
+    return HTMLResponse(content=html)
 
 
 @router.post("/book-pdf")

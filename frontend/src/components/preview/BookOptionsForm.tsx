@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { downloadBookPdf, type CoverStyle } from "../../api/exam";
+import {
+  downloadBookPdf, fetchBookHtmlPreview, type BookPdfRequest, type CoverStyle,
+} from "../../api/exam";
 import { triggerDownload } from "../../utils/download";
+import RealPagePreview from "./RealPagePreview";
 import "./PdfOptionsForm.css";
 
 interface Props {
@@ -53,31 +56,33 @@ export default function BookOptionsForm({ questionIds }: Props) {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const request: BookPdfRequest = {
+    question_ids: questionIds,
+    title,
+    subtitle: showSubtitle ? orNull(subtitle) : null,
+    include_source: includeSource,
+    include_logo: includeLogo,
+    cover_style: coverStyle,
+    cover_kicker: coverStyle === "final" ? orNull(finalKicker) : orNull(diagKicker),
+    cover_big_word: coverStyle === "final" ? orNull(finalBigWord) : null,
+    cover_footer_main: coverStyle === "final" ? orNull(finalFooterMain) : orNull(diagFooterMain),
+    cover_footer_sub: coverStyle === "final" ? orNull(finalFooterSub) : null,
+    dcov_subject: coverStyle === "diagonal" ? orNull(diagSubject) : null,
+    dcov_level: coverStyle === "diagonal" ? orNull(diagLevel) : null,
+    kicker_mark: showKicker ? orNull(kickerMark) : null,
+    kicker_text: showKicker ? orNull(kickerText) : null,
+    divider_meta_top: orNull(dividerMetaTop),
+    divider_footer_title: orNull(dividerFooterTitle),
+    divider_footer_sub: orNull(dividerFooterSub),
+    book_mode: layoutMode === "chapter" ? "chapter" : "flat",
+    flat_layout: layoutMode === "flat_full" ? "full" : "half",
+  };
+
   async function handleDownload() {
     setGenerating(true);
     setError(null);
     try {
-      const blob = await downloadBookPdf({
-        question_ids: questionIds,
-        title,
-        subtitle: showSubtitle ? orNull(subtitle) : null,
-        include_source: includeSource,
-        include_logo: includeLogo,
-        cover_style: coverStyle,
-        cover_kicker: coverStyle === "final" ? orNull(finalKicker) : orNull(diagKicker),
-        cover_big_word: coverStyle === "final" ? orNull(finalBigWord) : null,
-        cover_footer_main: coverStyle === "final" ? orNull(finalFooterMain) : orNull(diagFooterMain),
-        cover_footer_sub: coverStyle === "final" ? orNull(finalFooterSub) : null,
-        dcov_subject: coverStyle === "diagonal" ? orNull(diagSubject) : null,
-        dcov_level: coverStyle === "diagonal" ? orNull(diagLevel) : null,
-        kicker_mark: showKicker ? orNull(kickerMark) : null,
-        kicker_text: showKicker ? orNull(kickerText) : null,
-        divider_meta_top: orNull(dividerMetaTop),
-        divider_footer_title: orNull(dividerFooterTitle),
-        divider_footer_sub: orNull(dividerFooterSub),
-        book_mode: layoutMode === "chapter" ? "chapter" : "flat",
-        flat_layout: layoutMode === "flat_full" ? "full" : "half",
-      });
+      const blob = await downloadBookPdf(request);
       triggerDownload(blob, "book.pdf");
     } catch {
       setError("PDF 생성 중 오류가 발생했습니다.");
@@ -225,6 +230,11 @@ export default function BookOptionsForm({ questionIds }: Props) {
       </button>
 
       {error && <p className="pdf-error">{error}</p>}
+
+      <RealPagePreview
+        fetchHtml={questionIds.length > 0 ? () => fetchBookHtmlPreview(request) : null}
+        depsKey={JSON.stringify(request)}
+      />
     </div>
   );
 }

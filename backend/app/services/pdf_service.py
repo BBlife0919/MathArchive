@@ -7,7 +7,9 @@ from .. import legacy_bridge  # noqa: F401
 
 from pathlib import Path
 
-from pdf_engine import generate_book_pdf, generate_exam_pdf, paginate  # type: ignore
+from pdf_engine import (  # type: ignore
+    build_book_html, build_exam_html, generate_book_pdf, generate_exam_pdf,
+)
 
 from . import db_service
 
@@ -39,29 +41,74 @@ def build_exam_pdf(question_ids: list[int], title: str = "수학 시험지",
     )
 
 
-def build_layout_preview(question_ids: list[int], overrides: dict | None = None,
-                         preserve_order: bool = False) -> list:
-    """실시간 미리보기용 — Playwright 없이 실제 PDF와 동일한 지면 배치
-    (estimate_layout/paginate)만 계산해서 [page][col][slot] 구조를 그대로
-    JSON 으로 내려준다. app/pdf_engine.py 의 로직은 건드리지 않고 그대로
-    재사용한다(위 build_exam_pdf 와 동일 원칙)."""
+def build_exam_html_preview(question_ids: list[int], title: str = "수학 시험지",
+                            include_source: bool = True,
+                            subtitle: str | None = None,
+                            include_logo: bool = False,
+                            overrides: dict | None = None,
+                            preserve_order: bool = False) -> str:
+    """실물 미리보기용 — Playwright 렌더링(html_to_pdf_bytes) 없이 build_exam_html()
+    이 만드는 HTML 문자열 그대로를 반환한다. app/pdf_engine.py 의 CSS 는
+    @media print 전용 규칙이 없는 일반 CSS라(조사로 확인됨) 브라우저가 이
+    HTML을 그대로 그리면 실제 PDF와 거의 동일하게 보인다."""
     rows = db_service.fetch_questions_for_preview(question_ids, preserve_order)
     questions = [dict(r) for r in rows]
-    pages = paginate(questions, overrides or {})
-    return [
-        {
-            "columns": [
-                {
-                    "slots": [
-                        {"question_id": q["question_id"], "layout": layout}
-                        for q, layout in col
-                    ],
-                }
-                for col in page
-            ],
-        }
-        for page in pages
-    ]
+    return build_exam_html(
+        questions,
+        title=title,
+        include_source=include_source,
+        overrides=overrides or {},
+        subtitle=subtitle,
+        logo_path=_resolve_logo(include_logo),
+    )
+
+
+def build_book_html_preview(question_ids: list[int], title: str = "수학 교재",
+                            include_source: bool = True,
+                            subtitle: str | None = None,
+                            include_logo: bool = False,
+                            cover_style: str = "final",
+                            cover_kicker: str | None = None,
+                            cover_big_word: str | None = None,
+                            cover_footer_main: str | None = None,
+                            cover_footer_sub: str | None = None,
+                            dcov_subject: str | None = None,
+                            dcov_level: str | None = None,
+                            kicker_mark: str | None = None,
+                            kicker_text: str | None = None,
+                            divider_meta_top: str | None = None,
+                            divider_footer_title: str | None = None,
+                            divider_footer_sub: str | None = None,
+                            overrides: dict | None = None,
+                            book_mode: str = "chapter",
+                            flat_layout: str = "half",
+                            preserve_order: bool = False) -> str:
+    rows = db_service.fetch_questions_for_preview(
+        question_ids, preserve_order and book_mode == "flat",
+    )
+    questions = [dict(r) for r in rows]
+    return build_book_html(
+        questions,
+        title=title,
+        include_source=include_source,
+        overrides=overrides or {},
+        subtitle=subtitle,
+        logo_path=_resolve_logo(include_logo),
+        cover_style=cover_style,
+        cover_kicker=cover_kicker,
+        cover_big_word=cover_big_word,
+        cover_footer_main=cover_footer_main,
+        cover_footer_sub=cover_footer_sub,
+        dcov_subject=dcov_subject,
+        dcov_level=dcov_level,
+        kicker_mark=kicker_mark,
+        kicker_text=kicker_text,
+        divider_meta_top=divider_meta_top,
+        divider_footer_title=divider_footer_title,
+        divider_footer_sub=divider_footer_sub,
+        book_mode=book_mode,
+        flat_layout=flat_layout,
+    )
 
 
 def build_book_pdf(question_ids: list[int], title: str = "수학 교재",
