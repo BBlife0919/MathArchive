@@ -19,13 +19,15 @@
   color: var(--muted);
 }
 
-.pdf-field input {
+.pdf-field input,
+.pdf-field select {
   padding: 7px 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
   font-size: 13px;
   font-weight: 400;
   color: var(--text);
+  background: #fff;
 }
 
 .pdf-toggle {
@@ -50,8 +52,14 @@
 }
 
 .pdf-error {
-  color: #ef4444;
+  color: #9c3d0a;
   font-size: 12px;
+}
+
+.pdf-caption {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
 }
 
 .pdf-section-title {

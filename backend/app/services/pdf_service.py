@@ -80,8 +80,17 @@ def build_book_pdf(question_ids: list[int], title: str = "수학 교재",
                    divider_meta_top: str | None = None,
                    divider_footer_title: str | None = None,
                    divider_footer_sub: str | None = None,
-                   overrides: dict | None = None) -> bytes:
-    rows = db_service.fetch_questions_for_preview(question_ids)
+                   overrides: dict | None = None,
+                   book_mode: str = "chapter",
+                   flat_layout: str = "half",
+                   preserve_order: bool = False) -> bytes:
+    # 챕터모드는 _group_by_chapter()가 "입력 순서를 그대로 보고 인접한 같은
+    # chapter만 묶는" 방식이라, 드래그한 임의 순서를 그대로 넣으면 같은
+    # 단원이 흩어져 챕터 디바이더가 중복 생성될 수 있다. 순서 보존은
+    # 챕터 그룹화가 없는 일반(flat)모드에서만 의미가 있고 안전하다.
+    rows = db_service.fetch_questions_for_preview(
+        question_ids, preserve_order and book_mode == "flat",
+    )
     questions = [dict(r) for r in rows]
     return generate_book_pdf(
         questions,
@@ -102,4 +111,6 @@ def build_book_pdf(question_ids: list[int], title: str = "수학 교재",
         divider_meta_top=divider_meta_top,
         divider_footer_title=divider_footer_title,
         divider_footer_sub=divider_footer_sub,
+        book_mode=book_mode,
+        flat_layout=flat_layout,
     )

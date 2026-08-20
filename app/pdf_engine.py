@@ -2247,12 +2247,19 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      extra_css: str = "",
                      extra_js: str = "",
                      running_numbering: bool = False,
-                     major_hint: str | None = None) -> str:
-    """교재 HTML: 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설.
+                     major_hint: str | None = None,
+                     book_mode: str = "chapter",
+                     flat_layout: str = "half") -> str:
+    """교재 HTML: 표지 → (챕터모드: 챕터 디바이더+문제) | (일반모드: 문제만, 연속) → 빠른정답 → 해설.
 
     cover_style: 'final' (기본, KERNEL POINT 스타일) | 'diagonal' (평면좌표 스타일)
     dcov_subject/dcov_level: diagonal 스타일 전용 필드 (subject·level)
     running_numbering: True 면 letter prefix 없이 통번호 (01, 02, ..., 챕터 이어감)
+    book_mode: 'chapter'(기본, 챕터별 디바이더 페이지 + 문항별 적응형 half/full 배치)
+      | 'flat'(디바이더 없이 전 문항을 하나의 연속 배치로, flat_layout 강제 적용)
+    flat_layout: book_mode='flat' 일 때 전 문항에 강제 적용할 레이아웃('half'|'full').
+      half='2단 4분할'(한 열에 반쪽 2문항씩, 페이지당 4문항), full='2단 2분할'
+      (한 열에 문항 1개씩, 페이지당 2문항).
     """
     logo_uri = _logo_data_uri(logo_path)
     # 디바이더 메타 디폴트
@@ -2280,36 +2287,49 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
             footer_left_sub=cover_footer_sub or "필수유형으로 끝내는 기말 마무리",
             logo_uri=logo_uri,
         )
-    # 챕터별 그룹화 → (major_no, section_no, letter, major, minor, qs) 시퀀스
-    sections = _build_chapter_sections(questions, major_hint=major_hint)
-    body_parts: list[str] = [cover_html]
     running_left = page_running_left or title or "KERNEL POINT"
-    running_slot = 1
-    for major_no, section_no, letter, major, minor, ch_qs in sections:
-        body_parts.append(_render_chapter_divider(
-            major_no, section_no, major, minor,
-            meta_top=divider_meta_top or "",
-            footer_title=divider_footer_title or "",
-            footer_sub=divider_footer_sub or "",
-            logo_uri=logo_uri,
-        ))
-        # 매 페이지 헤더/우측 인덱스 클로저
-        def _hdr(idx_, total_, _p=major_no, _m=major):
-            return _render_book_page_head(running_left, _p, _m)
-        side = _render_book_page_side(major_no, letter, chapter_name=major)
-        # 슬롯 번호: 기본은 letter마다 1부터 (A·01), running_numbering=True 면 전체 통번호
-        body_html, next_slot = _problem_pages_html(
-            ch_qs, include_source, overrides, "",
+    body_parts: list[str] = [cover_html]
+    if book_mode == "flat":
+        # 챕터 디바이더 없이 전 문항을 하나의 연속 배치로. flat_layout 을 모든
+        # 문항에 강제 적용(기존 overrides 가 있으면 그게 우선하도록 뒤에 merge).
+        forced = {q.get("question_id"): flat_layout for q in questions}
+        merged_overrides = {**forced, **(overrides or {})}
+        header = _render_header(title, subtitle, logo_uri, kicker_mark, kicker_text)
+        body_html, _ = _problem_pages_html(
+            questions, include_source, merged_overrides, header,
             include_difficulty=True,
-            per_page_header_fn=_hdr,
             page_class="bp-page",
-            side_html=side,
-            start_slot=running_slot if running_numbering else 1,
-            slot_letter="" if running_numbering else letter,
         )
-        if running_numbering:
-            running_slot = next_slot
         body_parts.append(body_html)
+    else:
+        # 챕터별 그룹화 → (major_no, section_no, letter, major, minor, qs) 시퀀스
+        sections = _build_chapter_sections(questions, major_hint=major_hint)
+        running_slot = 1
+        for major_no, section_no, letter, major, minor, ch_qs in sections:
+            body_parts.append(_render_chapter_divider(
+                major_no, section_no, major, minor,
+                meta_top=divider_meta_top or "",
+                footer_title=divider_footer_title or "",
+                footer_sub=divider_footer_sub or "",
+                logo_uri=logo_uri,
+            ))
+            # 매 페이지 헤더/우측 인덱스 클로저
+            def _hdr(idx_, total_, _p=major_no, _m=major):
+                return _render_book_page_head(running_left, _p, _m)
+            side = _render_book_page_side(major_no, letter, chapter_name=major)
+            # 슬롯 번호: 기본은 letter마다 1부터 (A·01), running_numbering=True 면 전체 통번호
+            body_html, next_slot = _problem_pages_html(
+                ch_qs, include_source, overrides, "",
+                include_difficulty=True,
+                per_page_header_fn=_hdr,
+                page_class="bp-page",
+                side_html=side,
+                start_slot=running_slot if running_numbering else 1,
+                slot_letter="" if running_numbering else letter,
+            )
+            if running_numbering:
+                running_slot = next_slot
+            body_parts.append(body_html)
     qa_html = (
         '<section class="page qa-page">'
         '<h2 class="section-title">빠른 정답</h2>'
@@ -2664,8 +2684,10 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       extra_css: str = "",
                       extra_js: str = "",
                       running_numbering: bool = False,
-                      major_hint: str | None = None) -> bytes:
-    """교재 PDF 생성. 표지 → 챕터 디바이더 → 문제 → 빠른정답 → 해설 순."""
+                      major_hint: str | None = None,
+                      book_mode: str = "chapter",
+                      flat_layout: str = "half") -> bytes:
+    """교재 PDF 생성. 표지 → (챕터모드: 챕터 디바이더+문제 | 일반모드: 문제만) → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
         subtitle=subtitle, logo_path=logo_path,
@@ -2687,5 +2709,7 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         extra_js=extra_js,
         running_numbering=running_numbering,
         major_hint=major_hint,
+        book_mode=book_mode,
+        flat_layout=flat_layout,
     )
     return html_to_pdf_bytes(html)

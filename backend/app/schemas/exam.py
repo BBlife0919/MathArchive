@@ -34,6 +34,9 @@ class BookPdfRequest(BaseModel):
     divider_footer_title: Optional[str] = None
     divider_footer_sub: Optional[str] = None
     overrides: dict[int, str] = {}
+    book_mode: Literal["chapter", "flat"] = "chapter"
+    flat_layout: Literal["half", "full"] = "half"
+    preserve_order: bool = False
 
 
 class LayoutPreviewRequest(BaseModel):

@@ -65,6 +65,9 @@ def book_pdf(req: BookPdfRequest):
         divider_footer_title=req.divider_footer_title,
         divider_footer_sub=req.divider_footer_sub,
         overrides=req.overrides,
+        book_mode=req.book_mode,
+        flat_layout=req.flat_layout,
+        preserve_order=req.preserve_order,
     )
     return Response(
         content=pdf_bytes,

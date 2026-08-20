@@ -12,7 +12,18 @@ function orNull(s: string): string | null {
   return trimmed ? trimmed : null;
 }
 
+// 챕터모드: 기존 그대로(챕터 디바이더 + 문항별 적응형 half/full).
+// 일반모드: 디바이더 없이 연속 배치, 전 문항에 강제로 half(2단 4분할=페이지당
+// 4문항)/full(2단 2분할=페이지당 2문항) 적용.
+type BookLayoutMode = "chapter" | "flat_half" | "flat_full";
+const LAYOUT_LABELS: Record<BookLayoutMode, string> = {
+  chapter: "챕터모드 (단원별 디바이더)",
+  flat_half: "일반모드 (2단 4분할)",
+  flat_full: "일반모드 (2단 2분할)",
+};
+
 export default function BookOptionsForm({ questionIds }: Props) {
+  const [layoutMode, setLayoutMode] = useState<BookLayoutMode>("chapter");
   const [title, setTitle] = useState("수학 교재");
   const [showSubtitle, setShowSubtitle] = useState(false);
   const [subtitle, setSubtitle] = useState("");
@@ -64,6 +75,8 @@ export default function BookOptionsForm({ questionIds }: Props) {
         divider_meta_top: orNull(dividerMetaTop),
         divider_footer_title: orNull(dividerFooterTitle),
         divider_footer_sub: orNull(dividerFooterSub),
+        book_mode: layoutMode === "chapter" ? "chapter" : "flat",
+        flat_layout: layoutMode === "flat_full" ? "full" : "half",
       });
       triggerDownload(blob, "book.pdf");
     } catch {
@@ -100,6 +113,18 @@ export default function BookOptionsForm({ questionIds }: Props) {
       <label className="pdf-toggle">
         <input type="checkbox" checked={includeLogo} onChange={(e) => setIncludeLogo(e.target.checked)} />
         로고 표시
+      </label>
+
+      <label className="pdf-field">
+        <span>교재모드</span>
+        <select
+          value={layoutMode}
+          onChange={(e) => setLayoutMode(e.target.value as BookLayoutMode)}
+        >
+          {(Object.keys(LAYOUT_LABELS) as BookLayoutMode[]).map((m) => (
+            <option key={m} value={m}>{LAYOUT_LABELS[m]}</option>
+          ))}
+        </select>
       </label>
 
       <div className="pdf-section-title">표지 스타일 & 커스텀</div>
@@ -172,6 +197,12 @@ export default function BookOptionsForm({ questionIds }: Props) {
       )}
 
       <div className="pdf-section-title">챕터 디바이더 메타</div>
+      {layoutMode !== "chapter" && (
+        <p className="pdf-caption">
+          일반모드는 디바이더 페이지가 없어 "우상단"·"좌하단 제목"은 무시되고,
+          "좌하단 부제"만 표지 강사명으로 쓰입니다.
+        </p>
+      )}
       <label className="pdf-field">
         <span>우상단</span>
         <input type="text" value={dividerMetaTop} onChange={(e) => setDividerMetaTop(e.target.value)} />

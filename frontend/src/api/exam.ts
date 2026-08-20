@@ -17,6 +17,8 @@ export function downloadExamPdf(req: ExamPdfRequest): Promise<Blob> {
 }
 
 export type CoverStyle = "final" | "diagonal";
+export type BookMode = "chapter" | "flat";
+export type FlatLayout = "half" | "full";
 
 export interface BookPdfRequest {
   question_ids: number[];
@@ -36,6 +38,8 @@ export interface BookPdfRequest {
   divider_meta_top?: string | null;
   divider_footer_title?: string | null;
   divider_footer_sub?: string | null;
+  book_mode?: BookMode;
+  flat_layout?: FlatLayout;
 }
 
 export function downloadBookPdf(req: BookPdfRequest): Promise<Blob> {
