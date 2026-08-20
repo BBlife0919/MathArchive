@@ -45,6 +45,7 @@ class SearchRequest(BaseModel):
     keyword: str = ""
     page: int = 0
     page_size: int = 15
+    exclude_recent_days: Optional[int] = None
 
 
 class SearchResponse(BaseModel):
@@ -76,3 +77,20 @@ class MiniTestRequest(SearchRequest):
 class MiniTestResponse(BaseModel):
     question_ids: list[int]
     pool_size: int
+
+
+class EvenDistributeRequest(SearchRequest):
+    count: int = Field(default=20, ge=1, le=150)
+    granularity: Literal["major", "minor"] = "major"
+
+
+class EvenDistributeResult(BaseModel):
+    group: str
+    target: int
+    picked: int
+    pool: int
+
+
+class EvenDistributeResponse(BaseModel):
+    question_ids: list[int]
+    results: list[EvenDistributeResult]

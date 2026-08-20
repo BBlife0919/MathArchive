@@ -7,8 +7,9 @@ from fastapi import APIRouter, Depends
 from .. import legacy_bridge  # noqa: F401
 from ..deps import require_approved
 from ..schemas.questions import (
-    ByIdsRequest, ByIdsResponse, MiniTestRequest, MiniTestResponse,
-    SearchIdsResponse, SearchRequest, SearchResponse,
+    ByIdsRequest, ByIdsResponse, EvenDistributeRequest, EvenDistributeResponse,
+    MiniTestRequest, MiniTestResponse, SearchIdsResponse, SearchRequest,
+    SearchResponse,
 )
 from ..services import db_service, question_builder
 
@@ -51,6 +52,13 @@ def _resolve_matching_meta(req: SearchRequest) -> list[dict]:
         eff_schools = []
 
     sel_chapters = curr.expand_to_minors(req.subjects, req.majors, req.minors)
+    if not sel_chapters and (req.subjects or req.majors or req.minors):
+        # 위 학교 케이스와 동일한 함정: expand_to_minors()는 "선택 안 함(전체)"과
+        # "선택했는데 커리큘럼에 없는 값이라 매칭 0건"을 똑같이 빈 리스트로
+        # 반환한다. 후자를 그대로 두면 _build_search_where가 "단원 필터 없음"
+        # 으로 오인해 전체 DB가 나온다 — 실제로 선택을 했는데 하나도 안
+        # 걸리면 검색 자체를 0건으로 조기 반환.
+        return []
     is_subjective = _QUESTION_TYPE_TO_IS_SUBJECTIVE[req.question_type]
 
     return db_service.search_question_ids(
@@ -59,6 +67,7 @@ def _resolve_matching_meta(req: SearchRequest) -> list[dict]:
         years=tuple(eff_years), grades=tuple(eff_grades),
         semesters=tuple(eff_semesters), exam_types=tuple(eff_exam_types),
         is_subjective=is_subjective, keyword=req.keyword,
+        exclude_recent_days=req.exclude_recent_days,
     )
 
 
@@ -117,6 +126,72 @@ def mini_test(req: MiniTestRequest):
             picks.extend(random.sample(all_pool, min(need, len(all_pool))))
 
     return MiniTestResponse(question_ids=picks, pool_size=len(all_meta))
+
+
+def _chapter_to_major_map() -> dict[str, str]:
+    """중단원명 → 대단원명 역매핑 (curr.CURRICULUM 정본 기준).
+
+    DB questions.chapter 원본에는 오탈자·구교육과정명 등 커리큘럼과 안 맞는
+    값이 약 30% 섞여있음(실측 확인됨) — 이 매핑에 없는 chapter 값은 "어느
+    대단원인지 판단 불가"로 취급해 균등배분 그룹핑에서 제외한다(원본 chapter
+    distinct 값을 그대로 그룹 키로 쓰면 노이즈가 그룹을 오염시키기 때문).
+    """
+    mapping: dict[str, str] = {}
+    for majors in curr.CURRICULUM.values():
+        for major, minors in majors.items():
+            for minor in minors:
+                mapping[minor] = major
+    return mapping
+
+
+@router.post("/even-distribute", response_model=EvenDistributeResponse)
+def even_distribute(req: EvenDistributeRequest):
+    """선택 범위 안에서 대단원(또는 중단원) 별로 문항 수를 고르게 나눠 뽑는다.
+
+    mini_test() 와 동일하게 매 호출마다 새로 랜덤 추출한다. 그룹은 항상
+    curr.CURRICULUM 정본 기준으로만 정의한다(원본 chapter 값을 그대로 쓰지
+    않음 — _chapter_to_major_map() 참고).
+    """
+    all_meta = _resolve_matching_meta(req)
+    if not all_meta:
+        return EvenDistributeResponse(question_ids=[], results=[])
+
+    if req.granularity == "major":
+        chapter_to_group = _chapter_to_major_map()
+    else:
+        known_minors = {m for majors in curr.CURRICULUM.values()
+                        for minors in majors.values() for m in minors}
+        chapter_to_group = {m: m for m in known_minors}
+
+    groups: dict[str, list[int]] = {}
+    for r in all_meta:
+        group = chapter_to_group.get(r["chapter"])
+        if group is None:
+            continue
+        groups.setdefault(group, []).append(r["question_id"])
+
+    if not groups:
+        return EvenDistributeResponse(question_ids=[], results=[])
+
+    ordered_names = sorted(groups.keys())
+    n = len(ordered_names)
+    base, remainder = divmod(req.count, n)
+    # 나머지 몫(+1)을 매번 가나다순 앞쪽 그룹이 고정으로 가져가면 같은 조건으로
+    # 반복 생성할 때마다 항상 같은 단원만 1문항씩 더 나오는 편향이 생긴다.
+    # 표시 순서(ordered_names)는 그대로 유지하되 보너스 수령 그룹만 매 호출
+    # 랜덤으로 뽑는다.
+    bonus_names = set(random.sample(ordered_names, remainder)) if remainder else set()
+
+    picks: list[int] = []
+    results: list[dict] = []
+    for name in ordered_names:
+        pool = groups[name]
+        target = base + (1 if name in bonus_names else 0)
+        take = min(target, len(pool))
+        picks.extend(random.sample(pool, take))
+        results.append({"group": name, "target": target, "picked": take, "pool": len(pool)})
+
+    return EvenDistributeResponse(question_ids=picks, results=results)
 
 
 @router.post("/by-ids", response_model=ByIdsResponse)

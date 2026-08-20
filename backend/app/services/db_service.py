@@ -60,6 +60,28 @@ def execute_write(sql: str, params=()) -> int:
     return cur.lastrowid if hasattr(cur, "lastrowid") else 0
 
 
+def log_exam_generation(question_ids: list[int], source: str, user_id: int | None = None) -> None:
+    """시험지/교재 PDF 다운로드가 실제로 성공했을 때만 호출 — "기존 출제 문제
+    제외" 필터(search_question_ids 의 exclude_recent_days)의 근거 데이터.
+    검색/미리보기 단계에서는 호출하지 않는다. 기록 실패가 PDF 다운로드
+    자체를 막으면 안 되므로 예외는 삼킨다(마이그레이션 전 배포 등 대비)."""
+    if not question_ids:
+        return
+    now = int(time.time())
+    values_sql = ",".join(["(?, ?, ?, ?)"] * len(question_ids))
+    params: list = []
+    for qid in question_ids:
+        params += [qid, source, user_id, now]
+    try:
+        execute_write(
+            "INSERT INTO exam_generation_log "
+            f"(question_id, source, generated_by, generated_at) VALUES {values_sql}",
+            tuple(params),
+        )
+    except Exception:
+        pass
+
+
 DIFF_VALID = ["하", "중", "상", "킬"]
 
 # ── 필터 옵션 (main.py:161-204 SQL 그대로, TTL 캐시만 수동 구현) ──────
@@ -128,16 +150,21 @@ _SEARCH_IDS_CACHE_MAX = 500  # 필터 조합이 무한히 쌓이는 걸 방지�
 
 def search_question_ids(schools, chapters, difficulties, regions,
                         years=(), grades=(), semesters=(), exam_types=(),
-                        is_subjective=None, keyword=""):
+                        is_subjective=None, keyword="", exclude_recent_days=None):
+    # exclude_recent_days 는 "방금 다운로드한 문항은 빼고" 용도라, 5분 캐시를
+    # 그대로 쓰면 직전에 다운로드한 문항이 재검색에서 계속 다시 나오는(캐시가
+    # log_exam_generation() 기록을 못 따라잡는) 문제가 생긴다. 이 옵션이 켜져
+    # 있을 때만 캐시를 건너뛰어 항상 최신 상태로 조회한다.
     cache_key = (
         tuple(schools), tuple(chapters), tuple(difficulties), tuple(regions),
         tuple(years), tuple(grades), tuple(semesters), tuple(exam_types),
         is_subjective, keyword,
     )
     now = time.time()
-    cached = _SEARCH_IDS_CACHE.get(cache_key)
-    if cached and now - cached[0] < _SEARCH_IDS_TTL:
-        return cached[1]
+    if not exclude_recent_days:
+        cached = _SEARCH_IDS_CACHE.get(cache_key)
+        if cached and now - cached[0] < _SEARCH_IDS_TTL:
+            return cached[1]
 
     where, params = legacy_main._build_search_where(
         list(schools), list(chapters), list(difficulties), list(regions),
@@ -145,17 +172,29 @@ def search_question_ids(schools, chapters, difficulties, regions,
         semesters=list(semesters), exam_types=list(exam_types),
         is_subjective=is_subjective, keyword=keyword,
     )
+    params = list(params)
+    exclude_sql = ""
+    if exclude_recent_days:
+        # generated_at 은 unix epoch(초) 정수라 SQLite/Postgres 방언 차이 없이
+        # 그대로 정수 비교(cutoff 도 파이썬에서 정수로 계산).
+        cutoff = int(now) - int(exclude_recent_days) * 86400
+        exclude_sql = (
+            " AND q.question_id NOT IN "
+            "(SELECT question_id FROM exam_generation_log WHERE generated_at > ?)"
+        )
+        params.append(cutoff)
     sql = f"""
-        SELECT q.question_id, q.difficulty
+        SELECT q.question_id, q.difficulty, q.chapter
         FROM questions q
-        WHERE {where}
+        WHERE {where}{exclude_sql}
         ORDER BY q.school, q.year DESC, q.semester, q.exam_type,
                  q.question_number
     """
     result = [dict(r) for r in query(sql, params)]
-    if len(_SEARCH_IDS_CACHE) >= _SEARCH_IDS_CACHE_MAX:
-        _SEARCH_IDS_CACHE.clear()
-    _SEARCH_IDS_CACHE[cache_key] = (now, result)
+    if not exclude_recent_days:
+        if len(_SEARCH_IDS_CACHE) >= _SEARCH_IDS_CACHE_MAX:
+            _SEARCH_IDS_CACHE.clear()
+        _SEARCH_IDS_CACHE[cache_key] = (now, result)
     return result
 
 

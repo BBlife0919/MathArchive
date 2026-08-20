@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Response
 
 from ..deps import require_approved
 from ..schemas.exam import BookPdfRequest, ExamPdfRequest, LayoutPreviewRequest, LayoutPreviewResponse
-from ..services import pdf_service
+from ..services import db_service, pdf_service
 
 router = APIRouter(
     prefix="/api/exam", tags=["exam"],
@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.post("/pdf")
-def exam_pdf(req: ExamPdfRequest):
+def exam_pdf(req: ExamPdfRequest, user: dict = Depends(require_approved)):
     # 동기 def — Playwright(sync_playwright)가 블로킹 호출이라 FastAPI 의
     # threadpool 로 오프로드되어야 다른 요청(로그인 등)을 막지 않는다.
     pdf_bytes = pdf_service.build_exam_pdf(
@@ -25,6 +25,7 @@ def exam_pdf(req: ExamPdfRequest):
         overrides=req.overrides,
         preserve_order=req.preserve_order,
     )
+    db_service.log_exam_generation(req.question_ids, "exam_pdf", user["user_id"])
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
@@ -44,7 +45,7 @@ def layout_preview(req: LayoutPreviewRequest):
 
 
 @router.post("/book-pdf")
-def book_pdf(req: BookPdfRequest):
+def book_pdf(req: BookPdfRequest, user: dict = Depends(require_approved)):
     # 동기 def — 위 exam_pdf 와 동일한 이유(Playwright 블로킹 호출).
     pdf_bytes = pdf_service.build_book_pdf(
         req.question_ids,
@@ -69,6 +70,7 @@ def book_pdf(req: BookPdfRequest):
         flat_layout=req.flat_layout,
         preserve_order=req.preserve_order,
     )
+    db_service.log_exam_generation(req.question_ids, "book_pdf", user["user_id"])
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
