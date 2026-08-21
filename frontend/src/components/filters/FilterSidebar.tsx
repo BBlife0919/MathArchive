@@ -1,4 +1,5 @@
 import MultiSelectField from "./MultiSelectField";
+import DifficultyButtonGroup from "./DifficultyButtonGroup";
 import CurriculumCascade from "./CurriculumCascade";
 import QuickSearchBox from "./QuickSearchBox";
 import type { FiltersResponse, QuestionType } from "../../api/questions";
@@ -18,6 +19,7 @@ export interface FilterState {
   difficulties: string[];
   questionType: QuestionType;
   keyword: string;
+  excludeRecentDays: boolean;
 }
 
 export const EMPTY_FILTER_STATE: FilterState = {
@@ -34,7 +36,13 @@ export const EMPTY_FILTER_STATE: FilterState = {
   difficulties: [],
   questionType: "all",
   keyword: "",
+  excludeRecentDays: false,
 };
+
+// 백엔드 exclude_recent_days 파라미터에 실어 보낼 고정 기간(일). 최근 이
+// 기간 안에 실제로 출제(PDF 다운로드)된 문항을 검색/미니테스트/균등배분
+// 결과에서 제외한다.
+export const EXCLUDE_RECENT_DAYS = 30;
 
 const EXAM_TYPE_LABEL: Record<string, string> = { a: "중간", b: "기말" };
 
@@ -110,9 +118,8 @@ export default function FilterSidebar({
           onChange({ ...state, subjects, majors, minors })}
       />
 
-      <MultiSelectField
-        label="난이도"
-        options={filters.difficulties.map((d) => ({ value: d, label: d }))}
+      <DifficultyButtonGroup
+        options={filters.difficulties}
         selected={state.difficulties}
         onChange={(v) => onChange({ ...state, difficulties: v })}
       />
@@ -142,6 +149,17 @@ export default function FilterSidebar({
         value={state.keyword}
         onChange={(e) => onChange({ ...state, keyword: e.target.value })}
       />
+
+      <hr className="filter-divider" />
+      <div className="filter-section-label">추가 옵션</div>
+      <label className="exclude-recent-checkbox">
+        <input
+          type="checkbox"
+          checked={state.excludeRecentDays}
+          onChange={(e) => onChange({ ...state, excludeRecentDays: e.target.checked })}
+        />
+        기존 출제 문제 제외 (최근 {EXCLUDE_RECENT_DAYS}일)
+      </label>
 
       <hr className="filter-divider" />
       <div className="cart-summary">

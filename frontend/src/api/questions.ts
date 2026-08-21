@@ -47,6 +47,7 @@ export interface SearchRequest {
   keyword: string;
   page: number;
   page_size: number;
+  exclude_recent_days?: number | null;
 }
 
 export interface SearchResponse {
@@ -72,6 +73,25 @@ export interface MiniTestRequest extends SearchRequest {
 export interface MiniTestResponse {
   question_ids: number[];
   pool_size: number;
+}
+
+export type EvenDistributeGranularity = "major" | "minor";
+
+export interface EvenDistributeRequest extends SearchRequest {
+  count: number;
+  granularity: EvenDistributeGranularity;
+}
+
+export interface EvenDistributeResult {
+  group: string;
+  target: number;
+  picked: number;
+  pool: number;
+}
+
+export interface EvenDistributeResponse {
+  question_ids: number[];
+  results: EvenDistributeResult[];
 }
 
 export function fetchFilters(): Promise<FiltersResponse> {
@@ -104,6 +124,13 @@ export function fetchQuestionsByIds(
 
 export function generateMiniTest(req: MiniTestRequest): Promise<MiniTestResponse> {
   return apiFetch<MiniTestResponse>("/api/questions/mini-test", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+
+export function evenDistribute(req: EvenDistributeRequest): Promise<EvenDistributeResponse> {
+  return apiFetch<EvenDistributeResponse>("/api/questions/even-distribute", {
     method: "POST",
     body: JSON.stringify(req),
   });

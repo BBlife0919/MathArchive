@@ -1,0 +1,85 @@
+.even-dist-caption {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.even-dist-count-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.even-dist-count {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.even-dist-presets {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.even-dist-preset {
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.even-dist-preset.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.even-dist-count-input {
+  width: 60px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.even-dist-granularity {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.even-dist-granularity-options {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+}
+
+.even-dist-granularity-options label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.even-dist-granularity-options label.even-dist-disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.even-dist-message {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--blue);
+}
+
+.even-dist-message.error {
+  color: #ef4444;
+}

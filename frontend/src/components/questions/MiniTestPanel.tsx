@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { generateMiniTest } from "../../api/questions";
-import type { FilterState } from "../filters/FilterSidebar";
+import { EXCLUDE_RECENT_DAYS, type FilterState } from "../filters/FilterSidebar";
 import Expander from "./Expander";
 import "./MiniTestPanel.css";
 
@@ -35,6 +35,7 @@ export default function MiniTestPanel({ filterState, onGenerated }: Props) {
         keyword: filterState.keyword,
         page: 0,
         page_size: 15,
+        exclude_recent_days: filterState.excludeRecentDays ? EXCLUDE_RECENT_DAYS : undefined,
         mini_count: count,
         mini_easy_pct: easyPct,
       });

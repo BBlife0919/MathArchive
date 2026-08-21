@@ -6,11 +6,12 @@ import {
   type FiltersResponse, type QuestionCard, type SearchRequest,
 } from "../api/questions";
 import FilterSidebar, {
-  EMPTY_FILTER_STATE, type FilterState,
+  EMPTY_FILTER_STATE, EXCLUDE_RECENT_DAYS, type FilterState,
 } from "../components/filters/FilterSidebar";
 import QuestionList from "../components/questions/QuestionList";
 import Pagination from "../components/questions/Pagination";
 import MiniTestPanel from "../components/questions/MiniTestPanel";
+import EvenDistributePanel from "../components/questions/EvenDistributePanel";
 import ExamPreviewPanel, { type PdfMode } from "../components/preview/ExamPreviewPanel";
 import "./ExamBuilderPage.css";
 
@@ -35,6 +36,7 @@ function buildSearchRequest(state: FilterState, page: number): SearchRequest {
     keyword: state.keyword,
     page,
     page_size: PAGE_SIZE,
+    exclude_recent_days: state.excludeRecentDays ? EXCLUDE_RECENT_DAYS : undefined,
   };
 }
 
@@ -68,7 +70,7 @@ export default function ExamBuilderPage() {
       filterState.grades, filterState.years, filterState.semesters,
       filterState.examTypes, filterState.subjects, filterState.majors,
       filterState.minors, filterState.difficulties, filterState.questionType,
-      debouncedKeyword,
+      filterState.excludeRecentDays, debouncedKeyword,
     ],
   );
 
@@ -104,6 +106,11 @@ export default function ExamBuilderPage() {
 
   function handleMiniTestGenerated(ids: number[]) {
     // main.py: 미니테스트는 기존 선택을 대체하고 시험지(exam) 모드를 강제한다.
+    replaceAll(ids);
+    setPdfMode("exam");
+  }
+
+  function handleEvenDistributeGenerated(ids: number[]) {
     replaceAll(ids);
     setPdfMode("exam");
   }
@@ -144,6 +151,7 @@ export default function ExamBuilderPage() {
         {!error && tab === "list" && (
           <>
             <MiniTestPanel filterState={searchDeps} onGenerated={handleMiniTestGenerated} />
+            <EvenDistributePanel filterState={searchDeps} onGenerated={handleEvenDistributeGenerated} />
             <div className="result-bar">
               <p className="result-caption">
                 {loading ? "검색 중..." : `검색 결과: ${total}문항 · ${start}–${end}번 표시`}

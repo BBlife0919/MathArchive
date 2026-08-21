@@ -1,0 +1,27 @@
+.diff-btn-field {
+  margin-bottom: 10px;
+}
+
+.diff-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.diff-btn {
+  flex: 1;
+  padding: 7px 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.diff-btn.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  border-width: 2px;
+  color: #fff;
+}
