@@ -64,3 +64,63 @@
   color: #ef4444;
   font-size: 13px;
 }
+
+.wizard-steps {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.wizard-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.wizard-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  font-size: 12px;
+  font-weight: 800;
+  box-sizing: border-box;
+}
+
+.wizard-step.active {
+  color: var(--ink);
+}
+
+.wizard-step.active .wizard-step-num {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.wizard-step-arrow {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.wizard-next-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.wizard-next-bar .btn-primary {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.wizard-back-btn {
+  margin-bottom: 14px;
+}

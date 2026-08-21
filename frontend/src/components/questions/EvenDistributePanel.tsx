@@ -53,7 +53,7 @@ export default function EvenDistributePanel({ filterState, onGenerated }: Props)
         const groupCount = res.results.length;
         onGenerated(res.question_ids);
         setMessage({
-          text: `${res.question_ids.length}문항 자동 선택됨 (${groupCount}개 단원에 고르게 배분) → '시험지 미리보기' 탭에서 PDF 생성`,
+          text: `${res.question_ids.length}문항 자동 선택됨 (${groupCount}개 단원에 고르게 배분) → 아래 '다음' 버튼으로 학습지 설정에서 PDF 생성`,
           isError: false,
         });
       }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { downloadExamPdf, fetchExamHtmlPreview, type ExamPdfRequest } from "../../api/exam";
 import { triggerDownload } from "../../utils/download";
 import RealPagePreview from "./RealPagePreview";
+import { TEMPLATE_OPTIONS, type TemplateId } from "./templates";
 import "./PdfOptionsForm.css";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function PdfOptionsForm({ questionIds, preserveOrder = false }: Props) {
+  const [template, setTemplate] = useState<TemplateId>("default");
   const [title, setTitle] = useState("수학 시험지");
   const [showSubtitle, setShowSubtitle] = useState(false);
   const [subtitle, setSubtitle] = useState("");
@@ -42,6 +44,15 @@ export default function PdfOptionsForm({ questionIds, preserveOrder = false }: P
 
   return (
     <div className="pdf-options">
+      <label className="pdf-field">
+        <span>학습지 템플릿</span>
+        <select value={template} onChange={(e) => setTemplate(e.target.value as TemplateId)}>
+          {TEMPLATE_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      </label>
+
       <label className="pdf-field">
         <span>제목</span>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />

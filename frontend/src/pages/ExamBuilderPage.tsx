@@ -17,7 +17,7 @@ import "./ExamBuilderPage.css";
 
 const PAGE_SIZE = 15;
 
-type Tab = "list" | "preview";
+type WizardStep = 1 | 2;
 
 function buildSearchRequest(state: FilterState, page: number): SearchRequest {
   return {
@@ -43,7 +43,7 @@ function buildSearchRequest(state: FilterState, page: number): SearchRequest {
 export default function ExamBuilderPage() {
   const { selectedIds, count, toggle, bulkAdd, replaceAll, clear } = useSelection();
 
-  const [tab, setTab] = useState<Tab>("list");
+  const [step, setStep] = useState<WizardStep>(1);
   const [pdfMode, setPdfMode] = useState<PdfMode>("exam");
   const [filters, setFilters] = useState<FiltersResponse | null>(null);
   const [filterState, setFilterState] = useState<FilterState>(EMPTY_FILTER_STATE);
@@ -131,24 +131,21 @@ export default function ExamBuilderPage() {
       <main className="exam-builder-main">
         <h1 className="exam-builder-title">문제은행 · 시험지 · 교재 제작</h1>
 
-        <div className="tab-bar">
-          <button
-            type="button" className={tab === "list" ? "tab-btn active" : "tab-btn"}
-            onClick={() => setTab("list")}
-          >
-            문제 목록
-          </button>
-          <button
-            type="button" className={tab === "preview" ? "tab-btn active" : "tab-btn"}
-            onClick={() => setTab("preview")}
-          >
-            시험지 미리보기{count > 0 ? ` (${count})` : ""}
-          </button>
+        <div className="wizard-steps">
+          <div className={step === 1 ? "wizard-step active" : "wizard-step"}>
+            <span className="wizard-step-num">1</span>
+            범위·조건 선택
+          </div>
+          <span className="wizard-step-arrow">→</span>
+          <div className={step === 2 ? "wizard-step active" : "wizard-step"}>
+            <span className="wizard-step-num">2</span>
+            학습지 설정 · 미리보기{count > 0 ? ` (${count}문항)` : ""}
+          </div>
         </div>
 
         {error && <p className="exam-builder-error">{error}</p>}
 
-        {!error && tab === "list" && (
+        {!error && step === 1 && (
           <>
             <MiniTestPanel filterState={searchDeps} onGenerated={handleMiniTestGenerated} />
             <EvenDistributePanel filterState={searchDeps} onGenerated={handleEvenDistributeGenerated} />
@@ -168,11 +165,27 @@ export default function ExamBuilderPage() {
             )}
             <QuestionList items={items} selectedIds={selectedIds} onToggleSelect={toggle} />
             <Pagination page={page} pageSize={PAGE_SIZE} total={total} onPageChange={setPage} />
+            <div className="wizard-next-bar">
+              <button
+                type="button" className="btn-primary" disabled={count === 0}
+                onClick={() => setStep(2)}
+              >
+                다음: 학습지 설정{count > 0 ? ` (${count}문항)` : ""} →
+              </button>
+            </div>
           </>
         )}
 
-        {!error && tab === "preview" && (
-          <ExamPreviewPanel pdfMode={pdfMode} onPdfModeChange={setPdfMode} />
+        {!error && step === 2 && (
+          <>
+            <button
+              type="button" className="btn-secondary wizard-back-btn"
+              onClick={() => setStep(1)}
+            >
+              ← 이전 단계로
+            </button>
+            <ExamPreviewPanel pdfMode={pdfMode} onPdfModeChange={setPdfMode} />
+          </>
         )}
       </main>
     </div>

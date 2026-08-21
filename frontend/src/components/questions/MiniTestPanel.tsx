@@ -46,7 +46,7 @@ export default function MiniTestPanel({ filterState, onGenerated }: Props) {
       } else {
         onGenerated(res.question_ids);
         setMessage({
-          text: `${res.question_ids.length}문항 자동 선택됨 → '시험지 미리보기' 탭에서 PDF 생성`,
+          text: `${res.question_ids.length}문항 자동 선택됨 → 아래 '다음' 버튼으로 학습지 설정에서 PDF 생성`,
           isError: false,
         });
       }

@@ -4,6 +4,7 @@ import {
 } from "../../api/exam";
 import { triggerDownload } from "../../utils/download";
 import RealPagePreview from "./RealPagePreview";
+import { TEMPLATE_OPTIONS, type TemplateId } from "./templates";
 import "./PdfOptionsForm.css";
 
 interface Props {
@@ -26,6 +27,7 @@ const LAYOUT_LABELS: Record<BookLayoutMode, string> = {
 };
 
 export default function BookOptionsForm({ questionIds }: Props) {
+  const [template, setTemplate] = useState<TemplateId>("default");
   const [layoutMode, setLayoutMode] = useState<BookLayoutMode>("chapter");
   const [title, setTitle] = useState("수학 교재");
   const [showSubtitle, setShowSubtitle] = useState(false);
@@ -93,6 +95,15 @@ export default function BookOptionsForm({ questionIds }: Props) {
 
   return (
     <div className="pdf-options">
+      <label className="pdf-field">
+        <span>학습지 템플릿</span>
+        <select value={template} onChange={(e) => setTemplate(e.target.value as TemplateId)}>
+          {TEMPLATE_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      </label>
+
       <label className="pdf-field">
         <span>제목</span>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
