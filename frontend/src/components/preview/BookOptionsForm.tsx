@@ -95,6 +95,11 @@ export default function BookOptionsForm({ questionIds }: Props) {
 
   return (
     <div className="pdf-options">
+      <RealPagePreview
+        fetchHtml={questionIds.length > 0 ? () => fetchBookHtmlPreview(request) : null}
+        depsKey={JSON.stringify(request)}
+      />
+
       <label className="pdf-field">
         <span>학습지 템플릿</span>
         <select value={template} onChange={(e) => setTemplate(e.target.value as TemplateId)}>
@@ -241,11 +246,6 @@ export default function BookOptionsForm({ questionIds }: Props) {
       </button>
 
       {error && <p className="pdf-error">{error}</p>}
-
-      <RealPagePreview
-        fetchHtml={questionIds.length > 0 ? () => fetchBookHtmlPreview(request) : null}
-        depsKey={JSON.stringify(request)}
-      />
     </div>
   );
 }
