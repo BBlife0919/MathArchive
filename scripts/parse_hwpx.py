@@ -115,7 +115,7 @@ SYMBOL_MAP = {
     "VERT": r"|", "vert": r"|",
     "MID": r"\mid", "mid": r"\mid",
     "lim": r"\lim", "LIM": r"\lim",
-    "inf": r"\infty",
+    "inf": r"\infty", "INF": r"\infty", "Inf": r"\infty",
 }
 
 # LaTeX 명령으로 보존해야 하는 화이트리스트
@@ -357,7 +357,7 @@ def hwp_eq_to_latex(script: str) -> str:
            "forall", "FORALL", "exists", "EXISTS",
            "sum", "SUM", "prod", "PROD", "int", "INT",
            "partial", "PARTIAL", "nabla", "NABLA",
-           "lim", "LIM", "inf"]
+           "lim", "LIM", "inf", "INF", "Inf"]
     )
     _kw_pat = "|".join(_all_hwp_kw)
     # 키워드끼리 연속 (alphabar, gammadelta 등) — 여러 번 반복해 3개 이상 대비
