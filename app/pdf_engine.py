@@ -356,8 +356,16 @@ def _normalize_math_inner(s: str) -> str:
     # (예: `x \toa` → `x \to a`)
     s = re.sub(r"\\to(?=[a-zA-Z0-9\\])", r"\\to ", s)
     # `\lim_x\to0-` → `\lim_{x \to 0-}` : 리미트 subscript 가 brace 없이 붙은 케이스
+    # 극한점 그룹에 순수 `\`를 넣으면 뒤에 오는 `\dfrac` 등 명령어 이름까지
+    # 통째로 삼켜 `\lim_{x \to 2\dfrac}{...}{...}`로 깨짐 (2026-09-09 발견,
+    # 마플시너지 원본 오타로 극한점이 빈 케이스에서 재현). 극한점으로 실제 쓰이는
+    # 건 `\infty`/그리스문자뿐(DB 전수조사: \infty 1982, \pi 18, \beta 11,
+    # \alpha 7 — 그 외 없음)이라 이들만 명시 허용, `\dfrac`류는 차단.
+    _LIM_PT_CMD = (r"\\(?:infty|alpha|beta|gamma|delta|epsilon|zeta|eta|theta|"
+                   r"iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|"
+                   r"chi|psi|omega)")
     s = re.sub(
-        r"\\lim_([a-zA-Z])\s*\\to\s*([0-9a-zA-Z\+\-\∞\\]+)",
+        rf"\\lim_([a-zA-Z])\s*\\to\s*({_LIM_PT_CMD}|[0-9a-zA-Z\+\-]+)",
         r"\\lim_{\1 \\to \2}",
         s,
     )
@@ -420,6 +428,11 @@ def _normalize_math_inner(s: str) -> str:
     s = re.sub(r"\\frac(?![a-zA-Z])", r"\\dfrac", s)
     s = _BARE_FUNC.sub(r"\\\1", s)
     s = _LOOSE_SUP.sub(r"\1", s)
+    # 식 맨 끝에 인자 없는 첨자 연산자 `_`/`^`만 덩그러니 남은 경우 — 항상
+    # 원본 오타/편집잔재이지 의도된 표기일 수 없음(첨자는 반드시 뒤에
+    # 내용이 와야 함) → 제거. KaTeX 파싱 자체가 실패해 raw 노출되던 케이스
+    # (2026-09-09 마플시너지 함수의 연속 19번 발견).
+    s = re.sub(r"[_^]\s*$", "", s)
     for i, b in enumerate(blocks):
         s = s.replace(f"\x00B{i}\x00", b)
     return s

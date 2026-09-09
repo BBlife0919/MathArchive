@@ -114,6 +114,8 @@ SYMBOL_MAP = {
     "TO": r"\to", "to": r"\to",
     "VERT": r"|", "vert": r"|",
     "MID": r"\mid", "mid": r"\mid",
+    "lim": r"\lim", "LIM": r"\lim",
+    "inf": r"\infty",
 }
 
 # LaTeX 명령으로 보존해야 하는 화이트리스트
@@ -136,6 +138,12 @@ _LATEX_KEEP = {
     "overrightarrow", "overleftarrow",
     "circ", "degree", "neq", "ne", "le", "ge", "boxed",
     "square", "Box", "phantom",
+    "to", "lim",
+    # SYMBOL_MAP 이 만들어내는 명령인데 화이트리스트 누락으로
+    # _strip_unknown 에 즉시 되잘리던 것들 (2026-09-09 발견 — int/sum/prod
+    # 등은 SYMBOL_MAP 매핑 자체는 정상 동작했지만 여기 없어서 매번 원상복귀됨).
+    "int", "sum", "prod", "partial", "nabla", "mid", "not", "notin",
+    "bigcap", "bigcup", "bigcirc", "overbrace", "underbrace",
 }
 
 
@@ -276,6 +284,49 @@ def hwp_eq_to_latex(script: str) -> str:
 
     s = script.strip()
 
+    # -1.7) HWP 전용 PUA(Private Use Area) 특수문자 — 심볼 글꼴 코드가 그대로
+    #      유니코드로 남아 KaTeX가 못 읽음. 집합기호 "such that" 세로선으로 확인.
+    #      (2026-09-09 마플시너지 함수의 극한에서 발견, U+E04D)
+    s = s.replace("", r"\mid")
+
+    # -1.5) lim 극한 관용구: "lim_x->a-", "lim _{x->a-}" 등 (한/양쪽 괄호,
+    #      한쪽극한 부호 유무 다양) → `\lim_{x \to a^{-}}` 로 통일 구성.
+    #      HWP 수식편집기에서 자유 입력되는 "->" 화살표 + 좌우극한 부호는
+    #      일반 전처리(문자경계 분리)로는 못 잡아 별도 처리 필요
+    #      (2026-09-09 마플시너지 수학2 시리즈에서 발견 — "함수의 극한"
+    #      단원 전체에 고빈도로 등장, raw "->" 노출 원인).
+    def _lim_repl(m):
+        var = m.group("var")
+        pt = m.group("pt")
+        sign = m.group("sign") or ""
+        pt = re.sub(r"(?<![A-Za-z\\])inf(?![A-Za-z])", r"\\infty", pt)
+        sup = f"^{{{sign}}}" if sign else ""
+        return f"\\lim _{{{var} \\to {pt}{sup}}}"
+
+    _LIM_VAR = r"[A-Za-z]"
+    # 음수 극한점(-1, -inf 등)도 허용 — 뒤따르는 부호(한쪽극한 +/-)와는
+    # 별도 그룹이라 역참조 없이도 "->-1-" 처럼 안전하게 분리 매칭됨.
+    _LIM_PT = r"-?(?:\\infty|inf|[A-Za-z0-9]+)"
+    _ARROW = r"(?:->|[Rr][Aa][Rr][Rr][Oo][Ww])"
+    s = re.sub(
+        rf"lim\s*_\s*\{{\s*(?P<var>{_LIM_VAR})\s*{_ARROW}\s*(?P<pt>{_LIM_PT})\s*(?P<sign>[+-])?\s*\}}",
+        _lim_repl, s,
+    )
+    s = re.sub(
+        rf"lim\s*_\s*(?P<var>{_LIM_VAR})\s*{_ARROW}\s*(?P<pt>{_LIM_PT})\s*(?P<sign>[+-])?(?![A-Za-z0-9])",
+        _lim_repl, s,
+    )
+    # 위 관용구에 안 걸린 나머지 화살표 "->" (lim 아닌 문맥 등) → \to
+    s = re.sub(r"-+>", r" \\to ", s)
+
+    # -1) pile → matrix 별칭. HWP 수식편집기의 배열(array) 구문으로
+    #     `matrix{}`와 동일하게 동작하지만 일부 강사가 `pile{...}`로 표기.
+    #     반드시 다른 전처리(0-c의 le/ge/ne 비교연산자 분리 등)보다 먼저 치환해야
+    #     함 — 안 그러면 "pile"의 "le"가 비교연산자로 오인되어 "pi le"로
+    #     쪼개진 뒤 GREEK_MAP("pi"→\pi)+SYMBOL_MAP("le"→\leq)가 순서대로
+    #     적용되어 `\pi \leq{...}`로 깨짐 (2026-08-14 실제 발견된 사고).
+    s = re.sub(r"(?<![A-Za-z\\])pile(?=\s*\{)", "matrix", s)
+
     # 0) 전처리: 붙어있는 키워드 분리 (}over{, 2overX, overY 등)
     #    LaTeX 명령(overline, overrightarrow, overleftarrow)은 보존.
     #    좌우 양쪽이 붙어있는 경우: 양쪽에 공백 삽입
@@ -305,7 +356,8 @@ def hwp_eq_to_latex(script: str) -> str:
            "circ", "CIRC",
            "forall", "FORALL", "exists", "EXISTS",
            "sum", "SUM", "prod", "PROD", "int", "INT",
-           "partial", "PARTIAL", "nabla", "NABLA"]
+           "partial", "PARTIAL", "nabla", "NABLA",
+           "lim", "LIM", "inf"]
     )
     _kw_pat = "|".join(_all_hwp_kw)
     # 키워드끼리 연속 (alphabar, gammadelta 등) — 여러 번 반복해 3개 이상 대비
@@ -372,17 +424,22 @@ def hwp_eq_to_latex(script: str) -> str:
         s = s.replace(f"\x01CMD{i}\x02", v)
 
     # 1) LEFT / RIGHT 괄호 (대소문자 모두)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\)", r"\\right)", s)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\[", r"\\left[", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\]", r"\\right]", s)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\{", r"\\left\\{", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\}", r"\\right\\}", s)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\|", r"\\left|", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\|", r"\\right|", s)
+    #    기존 \b(단어경계) 기준이었으나, "mLEFT(x+1 RIGHT)"처럼 계수/변수 바로 뒤에 공백 없이
+    #    LEFT가 붙는 실제 정상 패턴(예: "m(x+1)")에서 "m"과 "L"이 둘 다 단어문자라 경계가
+    #    안 생겨 LEFT가 전혀 인식 안 되고 \left/\right 개수가 안 맞아 _balance_left_right가
+    #    엉뚱하게 "\left."을 끼워넣는 사고가 있었다(2026-08-29 발견). 앞에 대문자만 없으면
+    #    (다른 전대문자 키워드 중간에 우연히 끼는 경우만 방지) 매칭하도록 완화.
+    s = re.sub(r"(?<![A-Z])[Ll][Ee][Ff][Tt]\s*\(", r"\\left(", s)
+    s = re.sub(r"(?<![A-Z])[Rr][Ii][Gg][Hh][Tt]\s*\)", r"\\right)", s)
+    s = re.sub(r"(?<![A-Z])[Ll][Ee][Ff][Tt]\s*\[", r"\\left[", s)
+    s = re.sub(r"(?<![A-Z])[Rr][Ii][Gg][Hh][Tt]\s*\]", r"\\right]", s)
+    s = re.sub(r"(?<![A-Z])[Ll][Ee][Ff][Tt]\s*\{", r"\\left\\{", s)
+    s = re.sub(r"(?<![A-Z])[Rr][Ii][Gg][Hh][Tt]\s*\}", r"\\right\\}", s)
+    s = re.sub(r"(?<![A-Z])[Ll][Ee][Ff][Tt]\s*\|", r"\\left|", s)
+    s = re.sub(r"(?<![A-Z])[Rr][Ii][Gg][Hh][Tt]\s*\|", r"\\right|", s)
     # LEFT. / RIGHT. (보이지 않는 delimiter)
-    s = re.sub(r"\b[Ll][Ee][Ff][Tt]\s*\.", r"\\left.", s)
-    s = re.sub(r"\b[Rr][Ii][Gg][Hh][Tt]\s*\.", r"\\right.", s)
+    s = re.sub(r"(?<![A-Z])[Ll][Ee][Ff][Tt]\s*\.", r"\\left.", s)
+    s = re.sub(r"(?<![A-Z])[Rr][Ii][Gg][Hh][Tt]\s*\.", r"\\right.", s)
 
     # 2) cases 환경: cases{...#...} → \begin{cases}...\\ ...\end{cases}
     #    중첩 중괄호를 수동 매칭으로 처리
@@ -491,6 +548,11 @@ def hwp_eq_to_latex(script: str) -> str:
                 else:
                     post = post_strip[len(r"\right\}"):]
                 s = pre + r"\begin{cases}" + body + r"\end{cases}" + post
+            elif pre_strip.endswith(r"\left\{") and post_strip.startswith(r"\right."):
+                # 연립방정식/부등식 표기: LEFT{...RIGHT. (보이지 않는 닫힘) — 동일하게 cases로 승격
+                pre = pre_strip[:-len(r"\left\{")]
+                post = post_strip[len(r"\right."):]
+                s = pre + r"\begin{cases}" + body + r"\end{cases}" + post
             else:
                 s = pre + r"\begin{" + env + "}" + body + r"\end{" + env + "}" + post
 
@@ -533,7 +595,15 @@ def hwp_eq_to_latex(script: str) -> str:
             break
         s = new_s
 
-    # 4) root → sqrt 별칭
+    # 4) root {n} of {x} → n제곱근 (\sqrt[n]{x}). 반드시 일반 root→sqrt 별칭 치환보다 먼저 처리
+    #    (안 그러면 아래 별칭 규칙이 "root {n}"만 sqrt{n}으로 먹어버리고 "of {x}"가 떨어져나감)
+    s = re.sub(
+        r"(?<![A-Za-z])root\s*\{\s*([^{}]+)\s*\}\s*of\s*\{",
+        lambda m: r"\sqrt[" + m.group(1).strip() + r"]{",
+        s,
+    )
+
+    # 4-b) root → sqrt 별칭
     s = re.sub(r"(?<![A-Za-z])root\s*\{", r"sqrt{", s)
     s = re.sub(
         r"(?<![A-Za-z])root\s*(-?\s*[A-Za-z0-9]+)",
@@ -670,6 +740,20 @@ def hwp_eq_to_latex(script: str) -> str:
     s = s.replace("`", r"\,")
     s = re.sub(r"~+", " ", s)
 
+    # 14-a) `_` 바로 뒤에 `\,`(thin space)만 오는 경우 — 첨자 연산자에 실질
+    #      인자가 없어 KaTeX가 "Got function '\mskip' with no arguments as
+    #      subscript"로 실패. cases 블록 셀 끝 정렬용으로 쓰인 흔글 언더스코어가
+    #      원인 추정 — 첨자 의도가 아니므로 `_`만 제거(`\,`는 유지).
+    #      (2026-09-09 마플시너지 "함수의 극대 극소와 그래프" 22번에서 발견)
+    s = re.sub(r"_(?=\\,)", "", s)
+
+    # 14-b) `\,'` (thin space 바로 뒤 프라임) 은 KaTeX 0.16.9에서 100% parse
+    #      error ("Got group of unknown type: 'internal'") — 버전 자체 버그.
+    #      도함수 f`'(x) 처럼 흔글에서 백틱+프라임으로 입력된 경우 재현.
+    #      시각적으로 프라임 앞 얇은 공백은 없어도 무방하므로 그냥 제거.
+    #      (2026-09-09 마플시너지 "미분계수와 도함수" 등에서 다량 발견)
+    s = re.sub(r"\\,\s*'", "'", s)
+
     # 15) & 제거, # → \\
     # matrix/cases/array 환경 내부의 `&`(열 구분자)는 보존해야 하므로
     # placeholder로 임시 치환 → & 제거 → 복원.
@@ -689,8 +773,12 @@ def hwp_eq_to_latex(script: str) -> str:
         s = s.replace(f"\x01ENV{i}\x02", v)
 
     # 16) 끝에 매달린 단독 백슬래시 제거
-    s = re.sub(r"\\(?=\s|$)", "", s)
-    s = re.sub(r"\\$", "", s)
+    #     단, `\\`(LaTeX 줄바꿈, matrix/cases 행 구분자) 짝의 두 번째 백슬래시는
+    #     보존 — (?<!\\) 없이는 "\\\\ "에서 두 번째 `\`가 "단독"으로 오인되어
+    #     제거돼 행렬/cases 줄바꿈이 깨지는 사고가 있었음 (2026-08-14 발견,
+    #     기존에는 cases만 21번 단계에서 사후 복구하고 matrix는 방치돼 있었음).
+    s = re.sub(r"(?<!\\)\\(?=\s|$)", "", s)
+    s = re.sub(r"(?<!\\)\\$", "", s)
 
     # 17) 괄호 짝 보정
     s = _balance_braces(s)
@@ -1498,13 +1586,23 @@ def parse_answer_value(raw: str) -> dict:
 
 
 def _split_compressed_values(block: str) -> list:
-    """압축된 선택지 값을 분리한다."""
+    """압축된 선택지 값을 분리한다.
+
+    ① $1$$2$$3$ 처럼 $...$ 구간만 이어붙은 진짜 압축형만 분리 대상이다.
+    "① 지불해야 할 금액이 더 큰 사람은 $C\\,$이다." 같은 문장형 선지는
+    문장 안에 $...$가 여러 번 나와도 전체가 한 선지 텍스트이므로 분리하면
+    안 된다 — $...$ 구간을 전부 제거했을 때 공백 외 잔여 텍스트(한글/문장
+    부호 등)가 남으면 문장형으로 보고 통째로 반환한다.
+    """
     block = block.strip()
     if not block:
         return []
     vals = re.findall(r"\$([^$]+)\$", block)
     if vals:
-        return [f"${v.strip()}$" for v in vals if v.strip()]
+        residue = re.sub(r"\$[^$]+\$", "", block)
+        if residue.strip() == "":
+            return [f"${v.strip()}$" for v in vals if v.strip()]
+        return [block]
     parts = [p.strip() for p in re.split(r"\$\$+|\s{2,}|\t", block) if p.strip()]
     return parts
 
