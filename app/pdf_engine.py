@@ -80,11 +80,17 @@ def format_choices(choices_json, book_mode: bool = False, images: dict | None = 
         return text
 
     if book_mode:
-        # 가로 flex — .q-choices 의 gap으로 간격 조정
+        # 가로 flex — .q-choices 의 gap으로 간격 조정.
+        # 본문(수식+한글이 섞인 텍스트 노드)을 .circ 와 나란히 flex 컨테이너의
+        # 직계 자식으로 두면, KaTeX auto-render 가 만든 <span class="katex">
+        # 사이사이의 순수 공백 텍스트 노드가 flex 익명 아이템 경계에서 사라져
+        # "또는" 앞뒤 공백이 통째로 없어지는 사고가 있었다(2026-09-10 발견).
+        # 본문을 별도 span으로 한 번 더 감싸 flex 컨텍스트 밖(일반 inline
+        # 흐름)에 두면 공백이 정상 보존된다.
         return "".join(
             f'<span class="choice">'
             f'<span class="circ">{circle.get(c.get("number"), c.get("number"))}</span>'
-            f'{_ct(c)}'
+            f'<span class="choice-body">{_ct(c)}</span>'
             f'</span>'
             for c in choices
         )
@@ -400,7 +406,10 @@ def _normalize_math_inner(s: str) -> str:
     # bare `\over`는 좌우 경계가 없어 등호·부등호까지 통째로 분자/분모로
     # 삼켜버리는 사고가 있다(예: `P(X\leq4)\leq1 \over2` → 분수선이 부등식
     # 전체를 덮음, 2026-09-10 발견). 숫자만이라도 안전하게 되돌린다.
-    s = re.sub(r"(-?\d+)\s*\\over\s*(-?\d+)(?![A-Za-z}\d])", r"\\dfrac{\1}{\2}", s)
+    # 좌변이 지수/첨자(^6, _6)의 일부면 스킵 — `3^6 \over 2` 를
+    # `3^\dfrac{6}{2}`로 잘못 쪼개는 사고 방지(2026-09-10 검수에서 발견).
+    s = re.sub(r"(?<![\d\^_])(-?\d+)\s*\\over\s*(-?\d+)(?![A-Za-z}\d^])",
+               r"\\dfrac{\1}{\2}", s)
     # sin/cos/tan/log/ln 뒤 pi 가 백슬래시 없이 raw 5글자 식별자로 들어간 케이스
     # ($y=sinpix$ 등): 함수명·그리스·변수 분리
     s = re.sub(r"\b(sin|cos|tan|sec|csc|cot|log|ln)pi([a-zA-Z])\b", r"\\\1\\pi \2", s)
@@ -495,6 +504,16 @@ def _normalize_math_text(text: str) -> str:
     # 한글 문장 끝에 수식이 바로 이어지는 형태. 독립식 (= or \\frac 등) 만 대상.
     def _has_sig(body):
         return any(s in body for s in SIGS) and len(body) > 5
+    # 수식 바로 뒤에 공백 없이 붙는 한글은 실제 새 문장인 경우가 거의 없고
+    # 거의 항상 앞 수식에 문법적으로 붙는 조사/어미(이면·이다·와·의·는 등)다
+    # — 한국어에서 진짜 새 문장이 시작될 땐 보통 마침표나 공백을 둔다.
+    # "$f(x)=2$이면 ...이다"/"$..a$와 $..b$의 값이"처럼 조사 하나만 다음 줄에
+    # 덩그러니 남아 부자연스러워짐(2026-09-10 발견, 조사 화이트리스트 방식은
+    # 은/는/이/가/을/를/의/와/과/도 등 전부 나열해야 해서 fragile — 대신
+    # "진짜 새 문장"을 여는 접속부사만 명시적으로 골라 그때만 줄바꿈).
+    _KO_NEW_SENTENCE = re.compile(
+        r"^(그러므로|따라서|그런데|그러나|하지만|또한|그리고|이때|한편|즉|"
+        r"단,|단 )")
     def _split_korean_then_math(m):
         before, dollar = m.group(1), m.group(2)
         body = dollar[1:-1]
@@ -502,9 +521,14 @@ def _normalize_math_text(text: str) -> str:
     def _split_math_then_korean(m):
         dollar, after = m.group(1), m.group(2)
         body = dollar[1:-1]
+        if not _KO_NEW_SENTENCE.match(after):
+            return m.group(0)
         return (dollar + "\n" + after) if _has_sig(body) else m.group(0)
     text = re.sub(r"([가-힣])(\$[^$\n]+\$)", _split_korean_then_math, text)
-    text = re.sub(r"(\$[^$\n]+\$)([가-힣])", _split_math_then_korean, text)
+    # 조사 판별에 뒤 글자 몇 개가 더 필요해 한 글자가 아니라 이어지는 한글
+    # 어절 전체를 캡처(원래는 한 글자만 봤지만 결과적으로 어절 전체가 다음
+    # 줄로 넘어가는 건 동일 — 판별 정확도만 개선).
+    text = re.sub(r"(\$[^$\n]+\$)([가-힣]+)", _split_math_then_korean, text)
     return text
 
 
@@ -885,16 +909,17 @@ h2.exam-subtitle {
     border: 1px solid #c7d3e6;
     padding: 3.5mm 2mm;
     text-align: center;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 .quick-answers td.qa-num {
     background: #eef3fa;
     font-weight: 700;
-    width: 6%;
     color: #103a63;
     letter-spacing: -0.3px;
+    white-space: nowrap;
 }
 .quick-answers td.qa-ans {
-    width: 14%;
     font-weight: 600;
     color: #1a1a1a;
 }
@@ -1545,6 +1570,7 @@ h2.exam-subtitle {
 .slot.book-kp .q-choices .choice .katex {
     max-width: 100%;
     overflow-x: hidden;
+    white-space: nowrap;
 }
 .slot.book-kp .q-choices {
     margin-top: 3mm;
@@ -1564,6 +1590,7 @@ h2.exam-subtitle {
 .slot.book-kp .q-choices .choice {
     white-space: normal;
     overflow-wrap: break-word;
+    word-break: keep-all;
     display: flex;
     align-items: baseline;
 }
@@ -2112,11 +2139,25 @@ _CIRCLE_ANS = {"1": "①", "2": "②", "3": "③", "4": "④", "5": "⑤"}
 
 
 def _render_quick_answer_table(questions: list[dict], cols: int = 5) -> str:
-    """빠른 정답 표: 5열, 문항 번호 + 정답을 순서대로.
+    """빠른 정답 표: cols열, 문항 번호 + 정답을 순서대로.
 
     각 셀 쌍은 `번호 | 답`. 예) 1행 = [1|②, 2|①, 3|③, 4|⑤, 5|④].
     행 수는 문항 수에 따라 자동 (34문항 → 7행, 46문항 → 10행).
+
+    열 너비: 기존엔 CSS 고정 %(qa-num 6%/qa-ans 14%, cols=5 전제)라
+    cols 를 바꾸면(예: 문항 많은 책에서 cols=10) 합이 100%를 안 넘어서
+    브라우저가 열마다 제각각 맞춰버려 너비가 들쭉날쭉해짐(2026-09-10 발견,
+    특정 셀에 긴 텍스트 답("정답 해설 참조" 등) 있으면 그 열만 확 넓어짐).
+    cols 기준으로 매번 계산한 colgroup + table-layout:fixed 로 고정.
     """
+    # qa-num 은 최대 3자리 숫자(예: "100")까지 나와야 해서 기존 30%보다
+    # 넉넉하게 — 안 그러면 딱 그 숫자만 줄바꿈돼 세로로 쪼개짐(2026-09-10 발견).
+    num_pct = 36 / cols
+    ans_pct = 64 / cols
+    colgroup = "".join(
+        f'<col style="width:{num_pct:.3f}%"><col style="width:{ans_pct:.3f}%">'
+        for _ in range(cols)
+    )
     rows: list[str] = []
     n = len(questions)
     for r in range(0, n, cols):
@@ -2135,7 +2176,8 @@ def _render_quick_answer_table(questions: list[dict], cols: int = 5) -> str:
                 cells.append('<td class="qa-num"></td><td class="qa-ans"></td>')
         rows.append(f'<tr>{"".join(cells)}</tr>')
     return (
-        '<table class="quick-answers">'
+        '<table class="quick-answers" style="table-layout:fixed">'
+        f'<colgroup>{colgroup}</colgroup>'
         f'{"".join(rows)}'
         '</table>'
     )
