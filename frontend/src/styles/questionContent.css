@@ -37,3 +37,15 @@
   color: var(--muted, #5f6c87);
   font-size: 10pt;
 }
+
+.question-content table {
+  border-collapse: collapse;
+  margin: 0.5em 0;
+}
+
+.question-content table th,
+.question-content table td {
+  border: 1px solid var(--line, #94a3b8);
+  padding: 4px 10px;
+  text-align: center;
+}

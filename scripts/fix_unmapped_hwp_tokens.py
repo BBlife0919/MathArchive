@@ -7,12 +7,18 @@
 잔여 토큰만 정리한다.
 
 사용법:
-    python3 scripts/fix_unmapped_hwp_tokens.py            # 미리보기
-    python3 scripts/fix_unmapped_hwp_tokens.py --apply
+    python3 scripts/fix_unmapped_hwp_tokens.py                     # 로컬 미리보기
+    python3 scripts/fix_unmapped_hwp_tokens.py --apply              # 로컬 적용
+    python3 scripts/fix_unmapped_hwp_tokens.py --target pg          # 운영 미리보기
+    python3 scripts/fix_unmapped_hwp_tokens.py --target pg --apply  # 운영 적용
+
+question_text/solution_text 뿐 아니라 choices(선지) JSON 의 각 항목 text 도
+같이 정리한다(본문·해설·선지 3영역 동일 정규화 원칙).
 """
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sqlite3
 
@@ -59,6 +65,15 @@ REPLACE = [
     # 여기선 단순 \\over 로 두고 KaTeX 가 \over 처리하도록.
     (re.compile(r"(?<![A-Za-z\\])OVER(?=[A-Za-z])"), r"\\over "),
     (re.compile(r"(?<![A-Za-z\\])OVER(?![A-Za-z])"), r"\\over"),
+    # 위에서 만든(혹은 예전 실행에서 이미 만들어져 DB에 남아있던) bare `\over`
+    # 중 좌우가 단순 숫자인 경우만 `\dfrac{a}{b}`로 재교정.
+    # bare `\over`는 좌우 경계가 없어 수식 전체(등호·부등호 포함)를 통째로
+    # 분자/분모로 삼켜버리는 사고가 있다(예: `P(X\leq4)\leq1 \over2` → 분수선이
+    # 부등식 전체를 덮음, 2026-09-10 발견). 숫자만이라도 안전하게 되돌린다.
+    # 좌변이 지수/첨자(^6, _6)의 일부면 스킵 — `3^6 \over 2` 를
+    # `3^\dfrac{6}{2}`로 잘못 쪼개는 사고 방지(2026-09-10 검수에서 발견).
+    (re.compile(r"(?<![\d\^_])(-?\d+)\s*\\over\s*(-?\d+)(?![A-Za-z}\d^])"),
+     r"\\dfrac{\1}{\2}"),
     (re.compile(r"(?<![A-Za-z\\])UNDER(?=[A-Za-z])"), r"\\under "),
     (re.compile(r"(?<![A-Za-z\\])UNDER(?![A-Za-z])"), r"\\under"),
     # cap/cup 부착 케이스 (`A CAPB`, `X CUPY`)
@@ -212,11 +227,63 @@ MATH_ONLY_REPLACE = [
     (re.compile(r"(?<![A-Za-z\\])BECAUSE(?![A-Za-z])"), r"\\because"),
     (re.compile(r"(?<![A-Za-z\\])div(?![A-Za-z])"), r"\\div"),
     (re.compile(r"(?<![A-Za-z\\])DIV(?![A-Za-z])"), r"\\div"),
+    # IT (italic 토글) 대문자 잔재 — 소문자 it 은 parse_hwpx.py 에서 이미
+    # 제거되지만 대문자 IT 는 누락돼 "P IT (X=x)" 처럼 노출됨(2026-09-10 발견).
+    (re.compile(r"\bIT\s+"), r""),
+    (re.compile(r"\bIT(?=[+-])"), r""),
+]
+
+# lim 극한 관용구 + 잔여 화살표 — parse_hwpx.py hwp_eq_to_latex() 의 동일 로직
+# 재사용(2026-09-09 파서 수정 이전에 적재된 구버전 행에는 미반영이라 DB에
+# "lim _{x-> -1}" 처럼 원본 그대로 남아있음). 수식($...$) 영역에서만 적용.
+_LIM_VAR = r"[A-Za-z]"
+_LIM_PT = r"-?(?:\\infty|inf|[A-Za-z0-9]+)"
+_ARROW = r"(?:->|[Rr][Aa][Rr][Rr][Oo][Ww])"
+
+
+def _lim_repl(m: re.Match) -> str:
+    var = m.group("var")
+    pt = m.group("pt")
+    sign = m.group("sign") or ""
+    pt = re.sub(r"(?<![A-Za-z\\])inf(?![A-Za-z])", r"\\infty", pt)
+    sup = f"^{{{sign}}}" if sign else ""
+    return f"\\lim _{{{var} \\to {pt}{sup}}}"
+
+
+_LIM_PATTERNS = [
+    re.compile(
+        rf"lim\s*_\s*\{{\s*(?P<var>{_LIM_VAR})\s*{_ARROW}\s*"
+        rf"(?P<pt>{_LIM_PT})\s*(?P<sign>[+-])?\s*\}}"
+    ),
+    re.compile(
+        rf"lim\s*_\s*(?P<var>{_LIM_VAR})\s*{_ARROW}\s*"
+        rf"(?P<pt>{_LIM_PT})\s*(?P<sign>[+-])?(?![A-Za-z0-9])"
+    ),
 ]
 
 
-def _apply_in_math_spans(text: str) -> str:
-    """수식 ($...$) 안에서만 MATH_ONLY_REPLACE 적용.
+def _fix_lim_and_arrows(span: str) -> str:
+    for pat in _LIM_PATTERNS:
+        span = pat.sub(_lim_repl, span)
+    # 위 관용구에 안 걸린 나머지 화살표 "->" (lim 아닌 문맥) → \to
+    span = re.sub(r"-+>", r" \\to ", span)
+    return span
+
+
+# 이계도함수 등에서 "prime prime"(공백 포함 연속 프라임) → "''" 로 병합.
+# KaTeX는 공백으로 분리된 두 개의 독립 위첨자를 Double superscript 에러로
+# 처리해 렌더링이 통째로 깨진다(2026-09-10 발견, f''(x) 있는 문제 전반).
+_PRIME_RUN = re.compile(r"'(?:\s+')+")
+
+
+def _transform_math_only(span: str) -> str:
+    for pat, repl in MATH_ONLY_REPLACE:
+        span = pat.sub(repl, span)
+    return span
+
+
+def _apply_in_math_spans(text: str, transform=_transform_math_only) -> str:
+    """수식 ($...$) 안에서만 transform 적용.
 
     영어 단어(`in`, `sum`, `int` 등)와 충돌을 피하기 위해 수식 영역 한정.
     """
@@ -231,9 +298,7 @@ def _apply_in_math_spans(text: str) -> str:
         if text[i] == "$":
             if in_math:
                 # 수식 종료 — span 처리
-                span = text[span_start:i]
-                for pat, repl in MATH_ONLY_REPLACE:
-                    span = pat.sub(repl, span)
+                span = transform(text[span_start:i])
                 out.append(span)
                 out.append("$")
                 in_math = False
@@ -268,113 +333,177 @@ def fix_text(text: str) -> str:
     # 2) 전역 안전 토큰 → LaTeX
     for pat, repl in REPLACE:
         text = pat.sub(repl, text)
+    # 2.5) 공백으로 분리된 연속 프라임(') 병합 — Double superscript 방지
+    text = _PRIME_RUN.sub(lambda m: "'" * m.group(0).count("'"), text)
     # 3) 영어 단어와 충돌 위험 있는 토큰 — 수식 컨텍스트 한정
-    text = _apply_in_math_spans(text)
+    text = _apply_in_math_spans(text, _transform_math_only)
+    # 3.5) lim 극한 관용구 + 잔여 화살표 — 수식 컨텍스트 한정
+    text = _apply_in_math_spans(text, _fix_lim_and_arrows)
     # 4) 다중 공백 정리
     text = re.sub(r"  +", " ", text)
     return text
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--db", default="db/mathdb.sqlite")
-    ap.add_argument("--apply", action="store_true")
-    ap.add_argument("--show", type=int, default=3)
-    args = ap.parse_args()
+def _fix_choices(raw, placeholder: str):
+    """choices(JSON) — sqlite 는 문자열, Postgres(jsonb) 는 이미 list/dict.
 
-    conn = sqlite3.connect(args.db)
+    반환: (변경여부, DB에 넣을 값). sqlite 는 json 문자열, pg 는 그대로 객체
+    (psycopg2.extras.Json 으로 감싸는 건 호출부에서 처리).
+    """
+    if not raw:
+        return False, raw
+    is_str = isinstance(raw, str)
+    try:
+        items = json.loads(raw) if is_str else raw
+    except Exception:
+        return False, raw
+    if not isinstance(items, list):
+        return False, raw
+    changed = False
+    new_items = []
+    for it in items:
+        if isinstance(it, dict) and isinstance(it.get("text"), str):
+            new_text = fix_text(it["text"])
+            if new_text != it["text"]:
+                changed = True
+                it = {**it, "text": new_text}
+        new_items.append(it)
+    if not changed:
+        return False, raw
+    return True, (json.dumps(new_items, ensure_ascii=False) if is_str else new_items)
+
+
+def _run_sqlite(db_path: str, apply: bool, show: int) -> int:
+    conn = sqlite3.connect(db_path)
     cur = conn.cursor()
+    grand = 0
 
-    targets = [
+    for table, idcol, txtcol in [
         ("questions", "question_id", "question_text"),
         ("solutions", "solution_id", "solution_text"),
-    ]
-
-    grand = 0
-    for table, idcol, txtcol in targets:
-        rows = cur.execute(
-            f"SELECT {idcol}, {txtcol} FROM {table} "
-            f"WHERE {txtcol} GLOB '*SMALLINTER*' "
-            f"   OR {txtcol} GLOB '*SMALLUNION*' "
-            f"   OR {txtcol} GLOB '*UNDERBRACE*' "
-            f"   OR {txtcol} GLOB '*OVERBRACE*' "
-            f"   OR {txtcol} GLOB '*BIGCAP*' "
-            f"   OR {txtcol} GLOB '*BIGCUP*' "
-            f"   OR {txtcol} GLOB '*NOTSUBSET*' "
-            f"   OR {txtcol} GLOB '*[LGN]EQ*' "
-            f"   OR {txtcol} GLOB '*sqrt[a-zA-Z]*' "
-            f"   OR {txtcol} GLOB '*OVER*' "
-            f"   OR {txtcol} GLOB '*UNDER*' "
-            f"   OR {txtcol} GLOB '*CAP*' "
-            f"   OR {txtcol} GLOB '*CUP*' "
-            f"   OR {txtcol} GLOB '*bold*' "
-            f"   OR {txtcol} GLOB '*BIGCIRC*' "
-            f"   OR {txtcol} GLOB '*triang*' "
-            f"   OR {txtcol} GLOB '*[LGN]E*' "
-            f"   OR {txtcol} GLOB '*rarrow*' "
-            f"   OR {txtcol} GLOB '*RARROW*' "
-            f"   OR {txtcol} GLOB '*larrow*' "
-            f"   OR {txtcol} GLOB '*LARROW*' "
-            f"   OR {txtcol} GLOB '*subset*' "
-            f"   OR {txtcol} GLOB '*supset*' "
-            f"   OR {txtcol} GLOB '*SUBSET*' "
-            f"   OR {txtcol} GLOB '*SUPSET*' "
-            f"   OR {txtcol} GLOB '*notin*' "
-            f"   OR {txtcol} GLOB '*NOTIN*' "
-            f"   OR {txtcol} GLOB '*circ*' "
-            f"   OR {txtcol} GLOB '*CIRC*' "
-            f"   OR {txtcol} GLOB '*cdots*' "
-            f"   OR {txtcol} GLOB '*CDOTS*' "
-            f"   OR {txtcol} GLOB '*vdots*' "
-            f"   OR {txtcol} GLOB '*ddots*' "
-            f"   OR {txtcol} GLOB '*therefore*' "
-            f"   OR {txtcol} GLOB '*THEREFORE*' "
-            f"   OR {txtcol} GLOB '*because*' "
-            f"   OR {txtcol} GLOB '*BECAUSE*' "
-            f"   OR {txtcol} GLOB '*forall*' "
-            f"   OR {txtcol} GLOB '*FORALL*' "
-            f"   OR {txtcol} GLOB '*exists*' "
-            f"   OR {txtcol} GLOB '*EXISTS*' "
-            f"   OR {txtcol} GLOB '*partial*' "
-            f"   OR {txtcol} GLOB '*nabla*' "
-            f"   OR {txtcol} GLOB '*approx*' "
-            f"   OR {txtcol} GLOB '*equiv*' "
-            f"   OR {txtcol} GLOB '*sim*' "
-            f"   OR {txtcol} GLOB '*div*' "
-            f"   OR {txtcol} GLOB '* sum *' "
-            f"   OR {txtcol} GLOB '* int *' "
-            f"   OR {txtcol} GLOB '* in *'"
-        ).fetchall()
-        print(f"[{table}] 후보 {len(rows)}건")
-        changed = 0
-        shown = 0
+    ]:
+        rows = cur.execute(f"SELECT {idcol}, {txtcol} FROM {table}").fetchall()
+        changed = shown = 0
         for rid, txt in rows:
             new = fix_text(txt or "")
             if new != txt:
                 changed += 1
-                if shown < args.show:
-                    diff_lines = []
-                    for o, n in zip(txt.split("\n"), new.split("\n")):
-                        if o != n:
-                            diff_lines.append(f"    -{o[:140]}")
-                            diff_lines.append(f"    +{n[:140]}")
-                    print(f"\n  --- {idcol}={rid} ---")
-                    print("\n".join(diff_lines[:6]))
+                if shown < show:
+                    _print_diff(idcol, rid, txt, new)
                     shown += 1
-                if args.apply:
-                    cur.execute(
-                        f"UPDATE {table} SET {txtcol}=? WHERE {idcol}=?",
-                        (new, rid),
-                    )
-        print(f"[{table}] 실제 변경: {changed}/{len(rows)}건")
+                if apply:
+                    cur.execute(f"UPDATE {table} SET {txtcol}=? WHERE {idcol}=?", (new, rid))
+        print(f"[{table}.{txtcol}] 후보 {len(rows)}건 중 변경 {changed}건")
         grand += changed
 
-    if args.apply:
+    rows = cur.execute("SELECT question_id, choices FROM questions").fetchall()
+    changed = shown = 0
+    for rid, raw in rows:
+        did_change, new_val = _fix_choices(raw, "?")
+        if did_change:
+            changed += 1
+            if shown < show:
+                print(f"\n  --- questions.choices id={rid} ---")
+                print(f"    -{raw[:140]}")
+                print(f"    +{new_val[:140]}")
+                shown += 1
+            if apply:
+                cur.execute("UPDATE questions SET choices=? WHERE question_id=?", (new_val, rid))
+    print(f"[questions.choices] 후보 {len(rows)}건 중 변경 {changed}건")
+    grand += changed
+
+    if apply:
         conn.commit()
+    conn.close()
+    return grand
+
+
+def _run_pg(apply: bool, show: int) -> int:
+    from pathlib import Path
+
+    import psycopg2
+    from psycopg2.extras import Json
+
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
+    import os
+    conn = psycopg2.connect(os.environ["SUPABASE_DB_URL"])
+    cur = conn.cursor()
+    grand = 0
+
+    for table, idcol, txtcol in [
+        ("questions", "question_id", "question_text"),
+        ("solutions", "solution_id", "solution_text"),
+    ]:
+        cur.execute(f"SELECT {idcol}, {txtcol} FROM {table}")
+        rows = cur.fetchall()
+        changed = shown = 0
+        for rid, txt in rows:
+            new = fix_text(txt or "")
+            if new != txt:
+                changed += 1
+                if shown < show:
+                    _print_diff(idcol, rid, txt, new)
+                    shown += 1
+                if apply:
+                    cur.execute(f"UPDATE {table} SET {txtcol}=%s WHERE {idcol}=%s", (new, rid))
+        print(f"[{table}.{txtcol}] 후보 {len(rows)}건 중 변경 {changed}건")
+        grand += changed
+
+    cur.execute("SELECT question_id, choices FROM questions")
+    rows = cur.fetchall()
+    changed = shown = 0
+    for rid, raw in rows:
+        did_change, new_val = _fix_choices(raw, "%s")
+        if did_change:
+            changed += 1
+            if shown < show:
+                print(f"\n  --- questions.choices id={rid} ---")
+                print(f"    -{str(raw)[:140]}")
+                print(f"    +{str(new_val)[:140]}")
+                shown += 1
+            if apply:
+                cur.execute(
+                    "UPDATE questions SET choices=%s WHERE question_id=%s",
+                    (Json(new_val), rid),
+                )
+    print(f"[questions.choices] 후보 {len(rows)}건 중 변경 {changed}건")
+    grand += changed
+
+    if apply:
+        conn.commit()
+    conn.close()
+    return grand
+
+
+def _print_diff(idcol: str, rid, old: str, new: str) -> None:
+    diff_lines = []
+    for o, n in zip(old.split("\n"), new.split("\n")):
+        if o != n:
+            diff_lines.append(f"    -{o[:140]}")
+            diff_lines.append(f"    +{n[:140]}")
+    print(f"\n  --- {idcol}={rid} ---")
+    print("\n".join(diff_lines[:6]))
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--db", default="db/mathdb.sqlite")
+    ap.add_argument("--target", choices=["sqlite", "pg"], default="sqlite")
+    ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--show", type=int, default=3)
+    args = ap.parse_args()
+
+    if args.target == "pg":
+        grand = _run_pg(args.apply, args.show)
+    else:
+        grand = _run_sqlite(args.db, args.apply, args.show)
+
+    if args.apply:
         print(f"\n✅ 적용 완료. 총 {grand}건 갱신.")
     else:
         print(f"\n[미리보기] 총 {grand}건 변경 예정.")
-    conn.close()
 
 
 if __name__ == "__main__":

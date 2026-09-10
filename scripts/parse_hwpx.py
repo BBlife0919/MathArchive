@@ -703,6 +703,12 @@ def hwp_eq_to_latex(script: str) -> str:
     # 백틱을 남기면 뒤 단계(14번, `→\,)에서 `\mathrm{A}\,'` 가 되어 KaTeX가
     # 깨진 텍스트로 렌더(사고 사례: 도형의 이동 09번 A'B'C').
     s = re.sub(r"`?\bprime", "'", s)
+    # `prime prime`(이계도함수 f'')처럼 원본에 공백이 있던 자리는 치환 후
+    # "' '"(프라임-공백-프라임)로 남는데, KaTeX는 공백으로 분리된 두 개의
+    # 독립 위첨자를 "Double superscript" 에러로 처리해 렌더링이 통째로
+    # 깨진다(빨간 원본 텍스트 노출). 공백을 지워 인접한 "''"로 합쳐야
+    # 하나의 위첨자로 인식된다 (2026-09-10 발견 — f''(x) 있는 문제 전반).
+    s = re.sub(r"'(?:\s+')+", lambda m: "'" * m.group(0).count("'"), s)
 
     # 11) it (italic) — LaTeX 수학모드 기본이므로 제거
     s = re.sub(r"\bit\s+", "", s)

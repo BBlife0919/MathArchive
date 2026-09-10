@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkBreaks from "remark-breaks";
 import rehypeKatex from "rehype-katex";
@@ -41,7 +42,7 @@ function Segment({ segment }: { segment: ContentSegment }) {
   const md = segment.md ?? "";
   const body = (
     <ReactMarkdown
-      remarkPlugins={[remarkMath, remarkBreaks]}
+      remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
       rehypePlugins={[rehypeKatex, rehypeRaw]}
     >
       {md}
