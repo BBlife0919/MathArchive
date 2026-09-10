@@ -239,6 +239,13 @@ def _match_balanced_brace(s: str, start: int):
     return None
 
 
+_OWNED_BRACE_PRECEDING = re.compile(
+    r"(?:[_^]|\\?(?:overline|underline|overrightarrow|overleftarrow|"
+    r"mathrm|mathbf|mathit|mathbb|text|mbox|sqrt|root|bar|hat|vec|dot|ddot|"
+    r"tilde|boxed|phantom|begin|end))$"
+)
+
+
 def _convert_over_fractions(s: str) -> str:
     """`{A} over {B}` → `\\frac{A}{B}`, A/B 안에 중첩 중괄호가 몇 겹이든 허용.
 
@@ -248,11 +255,20 @@ def _convert_over_fractions(s: str) -> str:
     분수가 아니라 슬래시로 깨져 렌더링됨 (2026-09-10 발견, 마플시너지
     43/50/69/79/80/85번 등에서 재현 — sqrt 안에 지수가 있는 분모 패턴 다발).
     좌우 괄호 카운팅으로 직접 스캔해 중첩 깊이 제한 없이 매칭한다.
+
+    단, `_{5}`/`^{2}`/`bar{AB}`처럼 첨자·단항 명령의 "필수 인자" 중괄호는
+    그 자체로 독립된 분자/분모 후보가 아니므로 건드리지 않는다 — 안 그러면
+    `P_{5} / {...}` 가 `P_\\frac{5}{...}` 로 깨짐(2026-09-10 발견, DB
+    감사 중 재현).
     """
     out = []
     i, n = 0, len(s)
     while i < n:
         if s[i] == "{":
+            if _OWNED_BRACE_PRECEDING.search(s[:i]):
+                out.append(s[i])
+                i += 1
+                continue
             end = _match_balanced_brace(s, i)
             if end is not None:
                 j = end
@@ -636,12 +652,19 @@ def hwp_eq_to_latex(script: str) -> str:
     PAREN_TOK = rf"(?:\([^()]*(?:\([^()]*\)[^()]*)*\){SUP_SUB})"
     OPERAND = rf"(?:{SQRT_TOK}|{SQRT_BARE}|{BRACE_TOK}|{PAREN_TOK}|{SIMPLE_TOK})"
     over_no_brace = re.compile(rf"({OPERAND})\s*over\s*({OPERAND})")
+    def _over_no_brace_repl(m):
+        # 분자 쪽이 `{...}` 통째로 매칭됐는데 그 `{`가 첨자(_^)나 단항
+        # 명령(bar/sqrt/overline 등)의 필수 인자였다면 건드리지 않음 —
+        # 안 그러면 `bar{AB}_{n} over c` 의 `{n}`만 떨어져 나와
+        # `\overline{AB}_\frac{n}{c}` 로 깨짐(2026-09-10, DB 감사 중 발견).
+        g1 = m.group(1)
+        if g1.startswith("{") and _OWNED_BRACE_PRECEDING.search(s[:m.start(1)]):
+            return m.group(0)
+        return (r"\frac{" + _strip_outer_braces(g1.strip()) +
+                r"}{" + _strip_outer_braces(m.group(2).strip()) + r"}")
+
     for _ in range(5):
-        new_s = over_no_brace.sub(
-            lambda m: r"\frac{" + _strip_outer_braces(m.group(1).strip()) +
-                      r"}{" + _strip_outer_braces(m.group(2).strip()) + r"}",
-            s,
-        )
+        new_s = over_no_brace.sub(_over_no_brace_repl, s)
         if new_s == s:
             break
         s = new_s
@@ -847,9 +870,19 @@ def hwp_eq_to_latex(script: str) -> str:
     s = _postprocess_latex(s)
 
     # 19) 남은 over 강제 처리 — 이미 변환된 LaTeX 명령(\alpha 등)도 OPERAND로 인식
+    def _final_over_repl(m):
+        # 여기서도 3-b와 동일하게 "owned brace"(첨자·단항명령 인자) 보호 —
+        # 이 단계는 bar→\overline 변환(20번) 이후라 명령이 이미 백슬래시
+        # 붙은 채로 들어옴(2026-09-10 발견, 세 번째 over→frac 변환처에서
+        # 같은 버그 재발 확인).
+        g1 = m.group(1)
+        if g1.startswith("{") and _OWNED_BRACE_PRECEDING.search(s[:m.start(1)]):
+            return m.group(0)
+        return r"\frac{" + _strip_outer_braces(g1) + r"}{" + _strip_outer_braces(m.group(2)) + r"}"
+
     s = re.sub(
         r"(\{[^{}]*\}|\\[A-Za-z]+|[A-Za-z0-9+\-]+)\s*over\s*(\{[^{}]*\}|\\[A-Za-z]+|[A-Za-z0-9+\-]+)",
-        lambda m: r"\frac{" + _strip_outer_braces(m.group(1)) + r"}{" + _strip_outer_braces(m.group(2)) + r"}",
+        _final_over_repl,
         s,
     )
     # 최종 방어선: 남은 단독 over 키워드(양옆이 영문자 아님)는 '/'로 변환
@@ -962,10 +995,15 @@ def _postprocess_latex(s: str) -> str:
     NESTED = r"\{(?:[^{}]|\{[^{}]*\})*\}"
     SQRT_TOK = r"\\?sqrt\{[^{}]*\}"
     OPERAND = rf"(?:{SQRT_TOK}|{NESTED}|\\[A-Za-z]+|[A-Za-z0-9]+)"
+    def _final_over_repl2(m):
+        g1 = m.group(1)
+        if g1.startswith("{") and _OWNED_BRACE_PRECEDING.search(s[:m.start(1)]):
+            return m.group(0)
+        return r"\frac{" + _strip_outer_braces(g1) + r"}{" + _strip_outer_braces(m.group(2)) + r"}"
+
     s = re.sub(
         rf"({OPERAND})\s*over\s*({OPERAND})",
-        lambda m: r"\frac{" + _strip_outer_braces(m.group(1)) +
-                   r"}{" + _strip_outer_braces(m.group(2)) + r"}",
+        _final_over_repl2,
         s,
     )
     # 최종 방어선: 남은 단독 over 키워드(양옆이 영문자 아님)는 '/'로 변환
