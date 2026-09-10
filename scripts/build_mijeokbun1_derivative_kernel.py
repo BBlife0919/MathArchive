@@ -4,10 +4,18 @@
 발행사 자체 시리즈 번호일 뿐 과목명이 아님. 실제 과목은 미적분1. [정답]기준
 문항분리는 기출 파서와 동일 구조라 parse_hwpx._extract_questions_from_xml 재사용).
 "유형 NN 제목" 라벨은 파일 안에 결번(빈 제목 스텁)이 많아 실제 제목 있는 유형만
-추출 후 파일별로 1부터 재연번(사용자 지시: "유형 넘버만 땡겨줘").
+추출 후 5개 파일 전체에서 등장순으로 1부터 통연번(사용자 지시: "유형 넘버만 땡겨줘"
++ "문항번호도 이어붙여서 1번부터 쭉").
 
 표지/CSS/빠른정답/해설 파이프라인은 scripts/top_class_reference/build_topban_kp_workbook.py
 (기준완성본 "공수2 평면좌표_KERNEL+WORKBOOK_합본.pdf"를 만든 스크립트)의 KP 절반을 그대로 재사용.
+
+구조 (2026-09-10 재작업): 5개 챕터를 개별 generate_book_pdf() 호출 후 이어붙이던 방식은
+"문제-해설-문제-해설"이 챕터마다 반복돼 사용자가 반려 — 전체 362문제를 ONE
+generate_book_pdf() 호출로 합쳐서 표지→(5개 대단원 디바이더+유형 소단원 디바이더+문제,
+통번호)→빠른정답(1개, 전체)→해설(1개, 전체) 구조로 변경. 대단원 그루핑은
+pdf_engine._minor_to_major 를 몽키패치해서 "유형 NN · 제목"(minor) → 실제 5개 단원명
+(major) 역매핑 테이블로 해결(major_hint 는 단일 문자열이라 여러 대단원 동시 처리 불가).
 """
 import sys, os, zipfile, json, base64, re
 from collections import Counter
@@ -16,6 +24,7 @@ sys.path.insert(0, "/Users/youngwoolee/MathDB/scripts")
 import xml.etree.ElementTree as ET
 from parse_hwpx import _extract_questions_from_xml
 import build_pyeongjwapyo_by_difficulty as tpl
+import pdf_engine
 from pdf_engine import generate_book_pdf
 from PIL import Image as PIL
 import fitz
@@ -62,13 +71,18 @@ CROME_CSS = f"""
 .slot.book-kp .q-choices .choice {{ font-family: 'HCR Batang', serif !important; font-size: 10pt !important; }}
 .slot.book-kp .katex, .katex {{ font-size: 11pt !important; }}
 .q-body .katex {{ white-space: nowrap; }}
+/* 빠른정답 표 압축 (362문제라 기본 크기면 여러 페이지 잡아먹음, 2026-09-10 사용자 요청) */
+.quick-answers td {{ padding: 1.3mm 1mm !important; }}
+.quick-answers {{ font-size: 8.5pt !important; }}
+.quick-answers td.qa-num {{ font-weight: 700 !important; }}
 """
 
 
-def parse_types_section(texts):
-    """유형 헤더(제목 있는 것만) → 파일 내 등장순으로 1부터 재연번.
+def parse_types_section(texts, start_num):
+    """유형 헤더(제목 있는 것만) → 전체 파일 통틀어 등장순으로 start_num부터 통연번.
 
-    반환: qnum(1부터, "정답" 등장 순서) -> (새 유형번호, 제목)
+    반환: (qnum(1부터, "정답" 등장 순서) -> (새 유형번호, 제목) 딕셔너리, 이 파일에서
+    쓴 유형 개수, 다음 파일이 이어 쓸 start_num)
     """
     real_types = []  # [(orig_num, title)] 등장 순
     seen_orig = set()
@@ -86,7 +100,7 @@ def parse_types_section(texts):
         seen_orig.add(key)
         real_types.append((orig, title))
 
-    renum = {orig_title: i + 1 for i, orig_title in enumerate(real_types)}
+    renum = {orig_title: start_num + i for i, orig_title in enumerate(real_types)}
 
     q_to_type = {}
     qnum, current = 0, None
@@ -105,18 +119,20 @@ def parse_types_section(texts):
     return q_to_type, len(real_types)
 
 
-def build_kp(cfg):
+def extract_chapter_rows(cfg, type_offset):
+    """한 hwpx 파일 → (rows, 이 파일이 쓴 유형 개수). chapter 필드는 전역 유형번호로 부여."""
     z = zipfile.ZipFile(cfg["hwpx"])
     xml_str = z.read("Contents/section0.xml").decode("utf-8", errors="ignore")
     root = ET.fromstring(xml_str)
     rows = _extract_questions_from_xml(root, watermark_images=set(), debug=False)
 
     texts = re.findall(r"<hp:t>([^<]*)</hp:t>", xml_str)
-    q_to_type, n_types = parse_types_section(texts)
+    q_to_type, n_types = parse_types_section(texts, type_offset)
     for idx, q in enumerate(rows, 1):
         tp = q_to_type.get(idx)
         q['chapter'] = f"유형 {tp[0]:02d} · {tp[1]}" if tp else "유형 기타"
-    print(f"[PARSE:{cfg['tag']}] {cfg['chapter']}: 유형 {n_types}개, 문제 {len(rows)}개")
+        q['_major'] = cfg["chapter"]
+    print(f"[PARSE:{cfg['tag']}] {cfg['chapter']}: 유형 {n_types}개(전역 {type_offset:02d}~{type_offset+n_types-1:02d}), 문제 {len(rows)}개")
 
     # 원본 소스 자체의 중괄호 구조 오류 2건(미분계수와 도함수, "{ \left\{...} \right\}"
     # 형태로 바깥 여분 중괄호가 \left\{/\right\} 짝을 깨서 KaTeX 파싱 실패).
@@ -224,7 +240,7 @@ def build_kp(cfg):
     print(f"[IMG:{cfg['tag']}] 참조={len(referenced)} 배지={len(BADGES)} 이관={len(IMG_URL)}")
 
     out_rows = []
-    for i, q in enumerate(rows, 1):
+    for q in rows:
         qt = q.get('question_text', '') or ''
         st = q.get('solution_text', '') or ''
         for k in BADGES:
@@ -241,39 +257,18 @@ def build_kp(cfg):
                 t = t.replace(f"<<IMG:{k}>>", "")
             new_choices.append({**c, 'text': t})
         out_rows.append({
-            'question_id': i,
             'question_text': tpl.typeset_body(qt),
             'solution_text': st,
             'answer': q.get('answer', ''),
             'choices': json.dumps(new_choices, ensure_ascii=False),
             'chapter': q.get('chapter', '기타'),
+            '_major': q['_major'],
             'difficulty': '', 'school': '', 'year': None,
             'semester': '', 'exam_type': '',
-            'question_number': i,
             'has_image': bool(q_imgs),
             'images': q_imgs,
         })
-
-    overrides = {r['question_id']: 'full' for r in out_rows}
-    pdf_bytes = generate_book_pdf(
-        out_rows, title=cfg["chapter"], subtitle="미적분1 KERNEL POINT",
-        include_source=False, overrides=overrides, logo_path=None,
-        kicker_mark=None, kicker_text=None,
-        divider_meta_top=f"미적분1 · {cfg['chapter']} · KERNEL POINT",
-        divider_footer_title=f"미적분1 · {cfg['chapter']} · KERNEL POINT",
-        divider_footer_sub="이영우 T",
-        cover_main_title="핵심유형 총정리", cover_tagline=f"미적분1 {cfg['chapter']}",
-        cover_big_word="KERNEL POINT", cover_kicker="MATHOLOGY · 2026",
-        cover_footer_main="MATHOLOGY · 2026",
-        cover_footer_sub=f"미적분1 · {cfg['chapter']} · KERNEL POINT",
-        page_running_left=f"미적분1 {cfg['chapter']} · KERNEL POINT",
-        extra_css=CROME_CSS, extra_js=tpl.TYPESET_JS,
-        running_numbering=True, major_hint=cfg["chapter"],
-    )
-    out = f"/tmp/mijeokbun1_kp_{cfg['tag']}.pdf"
-    open(out, "wb").write(pdf_bytes)
-    print(f"[OK] KP:{cfg['tag']} {len(out_rows)}문제 → {out}")
-    return out, len(out_rows), n_types
+    return out_rows, n_types
 
 
 def html_to_pdf(html):
@@ -362,44 +357,91 @@ li {{ display:flex; align-items:baseline; padding:11pt 0; border-bottom:0.5pt do
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
-    built = []
-    for cfg in CHAPTERS:
-        out_pdf, n_q, n_types = build_kp(cfg)
-        built.append((cfg, out_pdf, n_q, n_types))
 
-    # 표지 + 목차(2p) 뒤에 각 챕터 본문을 이어붙인다 (각자 자체 표지는 버림).
+    all_rows = []
+    minor_to_major = {}
+    type_offset = 1
+    total_types = 0
+    for cfg in CHAPTERS:
+        rows, n_types = extract_chapter_rows(cfg, type_offset)
+        for q in rows:
+            minor_to_major[q['chapter']] = q['_major']
+        all_rows.extend(rows)
+        type_offset += n_types
+        total_types += n_types
+
+    for i, q in enumerate(all_rows, 1):
+        q['question_id'] = i
+        q['question_number'] = i
+    print(f"\n[MERGE] 총 유형 {total_types}개, 총 문제 {len(all_rows)}개 — 1번부터 통번호 부여 완료")
+
+    # major_hint 는 문자열 하나만 받아서 5개 대단원을 동시에 못 살림 — 실제 대단원
+    # 역매핑 테이블로 _minor_to_major 를 몽키패치(이 프로세스 안에서만 유효).
+    _orig_minor_to_major = pdf_engine._minor_to_major
+    def _patched_minor_to_major(chapter):
+        return minor_to_major.get(chapter) or _orig_minor_to_major(chapter)
+    pdf_engine._minor_to_major = _patched_minor_to_major
+
+    overrides = {r['question_id']: 'full' for r in all_rows}
+    pdf_bytes = generate_book_pdf(
+        all_rows, title="미적분1 함수의 극한과 미분", subtitle="미적분1 KERNEL POINT",
+        include_source=False, overrides=overrides, logo_path=None,
+        kicker_mark=None, kicker_text=None,
+        divider_meta_top="미적분1 · KERNEL POINT",
+        divider_footer_title="미적분1 · 함수의 극한과 미분 · KERNEL POINT",
+        divider_footer_sub="이영우 T",
+        cover_main_title="핵심유형 총정리", cover_tagline="미적분1 함수의 극한과 미분",
+        cover_big_word="KERNEL POINT", cover_kicker="MATHOLOGY · 2026",
+        cover_footer_main="MATHOLOGY · 2026",
+        cover_footer_sub="미적분1 · 함수의 극한과 미분 · KERNEL POINT",
+        page_running_left="미적분1 KERNEL POINT",
+        extra_css=CROME_CSS, extra_js=tpl.TYPESET_JS,
+        running_numbering=True, major_hint=None,
+        qa_cols=10,
+    )
+    pdf_engine._minor_to_major = _orig_minor_to_major  # 원복
+
+    body_path = "/tmp/mijeokbun1_kp_body.pdf"
+    open(body_path, "wb").write(pdf_bytes)
+
+    body = fitz.open(body_path)
+    body.delete_page(0)  # generate_book_pdf 자체 표지 제거(내 커스텀 표지로 교체)
+
+    # 대단원(CHAPTER · 0N) 전환 지점을 실제 렌더 결과에서 스캔해 TOC 페이지번호 확정.
+    chapter_first_page = {}
+    for i in range(body.page_count):
+        # letter-spacing CSS 탓에 "C H A P T E R  ·  0 1"처럼 글자마다 공백이 끼어
+        # 나온다 — 공백 다 지우고 매칭(2026-09-10 실측 확인).
+        txt_nospace = re.sub(r"\s+", "", body[i].get_text())
+        m = re.search(r"CHAPTER·0?(\d+)", txt_nospace)
+        if m:
+            n = int(m.group(1))
+            if n not in chapter_first_page:
+                chapter_first_page[n] = i  # 0-indexed, body 기준(표지 제거 후)
+
+    FRONT_OFFSET = 2  # 커스텀 표지(1) + 목차(1)
+    entries = [
+        {"name": cfg["chapter"], "page": chapter_first_page[i + 1] + 1 + FRONT_OFFSET}
+        for i, cfg in enumerate(CHAPTERS) if (i + 1) in chapter_first_page
+    ]
+
     final = fitz.open()
     cover_pdf = fitz.open("pdf", html_to_pdf(cover_html()))
     final.insert_pdf(cover_pdf, start_at=0)
     cover_pdf.close()
 
-    FRONT_OFFSET = 2  # 표지(1) + 목차(1)
-    entries = []
-    page_cursor = FRONT_OFFSET + 1  # 목차 다음 페이지(1-indexed) — 표지=p.1, 목차=p.2, 챕터1=p.3
-    chapter_docs = []
-    for cfg, out_pdf, n_q, n_types in built:
-        doc = fitz.open(out_pdf)
-        doc.delete_page(0)  # 개별 KP 자체 표지 제거
-        chapter_docs.append(doc)
-        entries.append({"name": cfg["chapter"], "page": page_cursor})
-        page_cursor += doc.page_count
-
     toc_pdf = fitz.open("pdf", html_to_pdf(toc_html(entries)))
     final.insert_pdf(toc_pdf)
     toc_pdf.close()
 
-    total_q, total_types = 0, 0
-    for (cfg, out_pdf, n_q, n_types), doc in zip(built, chapter_docs):
-        final.insert_pdf(doc)
-        doc.close()
-        total_q += n_q
-        total_types += n_types
+    final.insert_pdf(body)
+    body.close()
 
     final.save(OUT_PATH, deflate=True, garbage=4)
     final.close()
     os.system(f"xattr -c '{OUT_PATH}'")
     print(f"\n[DONE] {OUT_PATH}")
-    print(f"  총 유형 {total_types}개, 총 문제 {total_q}개, 총 {sum(1 for _ in fitz.open(OUT_PATH))}페이지")
+    print(f"  총 유형 {total_types}개, 총 문제 {len(all_rows)}개, 총 {sum(1 for _ in fitz.open(OUT_PATH))}페이지")
     for e in entries:
         print(f"   - {e['name']}: p.{e['page']}")
 

@@ -336,6 +336,10 @@ def _normalize_math_inner(s: str) -> str:
     # 경우(예: `A'B'C'`가 `A\,primeB\,primeC\,'`로 저장된 구 DB 레코드) 복구.
     s = re.sub(r"\\,\s*prime(?=[A-Za-z가-힣])", "'", s)
     s = re.sub(r"(?<![A-Za-z])\bprime(?=[A-Z])", "'", s)
+    # 공백으로 분리된 연속 프라임(이계도함수 f'' 등) 병합 — KaTeX 는 공백으로
+    # 나뉜 두 개의 독립 위첨자를 Double superscript 에러로 처리해 수식 전체가
+    # 원본 텍스트 그대로(빨간 글씨) 노출된다(2026-09-10 발견).
+    s = re.sub(r"'(?:\s+')+", lambda m: "'" * m.group(0).count("'"), s)
 
     s = _TEXT_BLOCK.sub(_stash, s)
     # HWP 변환 잔재: raw 'to' 마커 제거.
@@ -348,6 +352,11 @@ def _normalize_math_inner(s: str) -> str:
     s = re.sub(r"(\d)\s*to\b(?![a-zA-Z])", r"\1", s)
     # 문자·사분면 등 한글 앞 raw 'to' — `1to사분면` 케이스
     s = re.sub(r"(\d|[a-zA-Z\}\)])to(?=[가-힣])", r"\1", s)
+    # HWP 변환 잔재: raw 화살표 "->" (lim 극한점 표기 등) → \to.
+    # `\lim` 자체는 아래 _BARE_FUNC 에서 변환되지만 화살표는 별개 토큰이라
+    # 여기서 처리 안 하면 "\lim_{x-> -1}"처럼 화살표만 raw로 남는다
+    # (2026-09-10 발견).
+    s = re.sub(r"-+>", r" \\to ", s)
     # HWP 변환 잔재: `\overline{...\pm...}` — 선분 PM 을 \pm(±)로 오변환.
     # `\overline{\pm}` `\overline{\mathrm{\pm}}` → `\overline{PM}` 복구.
     s = re.sub(r"\\overline\{\s*\\mathrm\{\s*\\pm\s*\}\s*\}", r"\\overline{PM}", s)
@@ -386,6 +395,12 @@ def _normalize_math_inner(s: str) -> str:
     s = re.sub(r"(?<!\\)\bSQRT\{([^}]+)\}", r"\\sqrt{\1}", s, flags=re.IGNORECASE)
     # HWP 변환 잔재: OVER{a}{b} → \dfrac{a}{b}
     s = re.sub(r"\bOVER\{([^}]+)\}\{([^}]+)\}", r"\\dfrac{\1}{\2}", s, flags=re.IGNORECASE)
+    # bare `\over`(중괄호 없는 OVER 가 폴백으로 변환된 것, DB에 기존 저장된
+    # 것 포함) 중 좌우가 단순 숫자인 경우만 `\dfrac{a}{b}`로 재교정.
+    # bare `\over`는 좌우 경계가 없어 등호·부등호까지 통째로 분자/분모로
+    # 삼켜버리는 사고가 있다(예: `P(X\leq4)\leq1 \over2` → 분수선이 부등식
+    # 전체를 덮음, 2026-09-10 발견). 숫자만이라도 안전하게 되돌린다.
+    s = re.sub(r"(-?\d+)\s*\\over\s*(-?\d+)(?![A-Za-z}\d])", r"\\dfrac{\1}{\2}", s)
     # sin/cos/tan/log/ln 뒤 pi 가 백슬래시 없이 raw 5글자 식별자로 들어간 케이스
     # ($y=sinpix$ 등): 함수명·그리스·변수 분리
     s = re.sub(r"\b(sin|cos|tan|sec|csc|cot|log|ln)pi([a-zA-Z])\b", r"\\\1\\pi \2", s)
@@ -2293,15 +2308,23 @@ def _render_book_cover(
 
 
 def _render_book_page_head(running_left: str, part_no: int,
-                            major_name: str) -> str:
-    """본문 페이지 좌상단 / 우상단 머릿말."""
+                            major_name: str, minor_name: str = "") -> str:
+    """본문 페이지 좌상단 / 우상단 머릿말.
+
+    minor_name 이 있으면(소단원/유형 단위) 우측을 major 대신 minor 로 표시 —
+    major 는 우측 세로 사이드바(_render_book_page_side)에 항상 떠 있어
+    중복이라, 페이지 넘길 때 바뀌는 minor(유형명)를 보여주는 쪽이 더 유용함
+    (2026-09-10, 사용자 요청: "각 페이지 머리말에 해당 유형명").
+    """
+    right = (
+        f'<span class="roman">PART {part_no}</span> · {_html.escape(minor_name)}'
+        if minor_name else
+        f'<span class="roman">PART {part_no}</span> · {_html.escape(major_name)}'
+    )
     return (
         '<header class="bp-head">'
         f'<span class="bp-head-left">{_html.escape(running_left)}</span>'
-        '<span class="bp-head-right">'
-        f'<span class="roman">PART {part_no}</span>'
-        f'· {_html.escape(major_name)}'
-        '</span>'
+        f'<span class="bp-head-right">{right}</span>'
         '</header>'
     )
 
@@ -2349,7 +2372,8 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      running_numbering: bool = False,
                      major_hint: str | None = None,
                      book_mode: str = "chapter",
-                     flat_layout: str = "half") -> str:
+                     flat_layout: str = "half",
+                     qa_cols: int = 5) -> str:
     """교재 HTML: 표지 → (챕터모드: 챕터 디바이더+문제) | (일반모드: 문제만, 연속) → 빠른정답 → 해설.
 
     cover_style: 'final' (기본, KERNEL POINT 스타일) | 'diagonal' (평면좌표 스타일)
@@ -2414,8 +2438,8 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                 logo_uri=logo_uri,
             ))
             # 매 페이지 헤더/우측 인덱스 클로저
-            def _hdr(idx_, total_, _p=major_no, _m=major):
-                return _render_book_page_head(running_left, _p, _m)
+            def _hdr(idx_, total_, _p=major_no, _m=major, _n=minor):
+                return _render_book_page_head(running_left, _p, _m, _n)
             side = _render_book_page_side(major_no, letter, chapter_name=major)
             # 슬롯 번호: 기본은 letter마다 1부터 (A·01), running_numbering=True 면 전체 통번호
             body_html, next_slot = _problem_pages_html(
@@ -2433,7 +2457,7 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
     qa_html = (
         '<section class="page qa-page">'
         '<h2 class="section-title">빠른 정답</h2>'
-        f'{_render_quick_answer_table(questions)}'
+        f'{_render_quick_answer_table(questions, cols=qa_cols)}'
         '</section>'
     )
     sol_html = (
@@ -2787,7 +2811,8 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       running_numbering: bool = False,
                       major_hint: str | None = None,
                       book_mode: str = "chapter",
-                      flat_layout: str = "half") -> bytes:
+                      flat_layout: str = "half",
+                      qa_cols: int = 5) -> bytes:
     """교재 PDF 생성. 표지 → (챕터모드: 챕터 디바이더+문제 | 일반모드: 문제만) → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
@@ -2812,5 +2837,6 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         major_hint=major_hint,
         book_mode=book_mode,
         flat_layout=flat_layout,
+        qa_cols=qa_cols,
     )
     return html_to_pdf_bytes(html)
