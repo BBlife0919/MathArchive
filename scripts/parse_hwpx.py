@@ -224,6 +224,57 @@ def _balance_braces(t: str) -> str:
     return t
 
 
+def _match_balanced_brace(s: str, start: int):
+    """s[start] == '{' 전제. 짝 맞는 '}' 바로 다음 인덱스를 반환(못 찾으면 None)."""
+    depth = 0
+    i = start
+    while i < len(s):
+        if s[i] == "{":
+            depth += 1
+        elif s[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return None
+
+
+def _convert_over_fractions(s: str) -> str:
+    """`{A} over {B}` → `\\frac{A}{B}`, A/B 안에 중첩 중괄호가 몇 겹이든 허용.
+
+    기존 정규식 기반 변환(고정 1단 중첩만 지원)은 분모에 `sqrt{...^{2}}`처럼
+    2단 이상 중첩된 중괄호가 있으면 매칭 실패 → "over"가 안 지워진 채
+    남아있다가 최종 fallback(`over`→` / `)에 걸려 "5x/√2+4ax^2-3a"처럼
+    분수가 아니라 슬래시로 깨져 렌더링됨 (2026-09-10 발견, 마플시너지
+    43/50/69/79/80/85번 등에서 재현 — sqrt 안에 지수가 있는 분모 패턴 다발).
+    좌우 괄호 카운팅으로 직접 스캔해 중첩 깊이 제한 없이 매칭한다.
+    """
+    out = []
+    i, n = 0, len(s)
+    while i < n:
+        if s[i] == "{":
+            end = _match_balanced_brace(s, i)
+            if end is not None:
+                j = end
+                while j < n and s[j] in " \t\n":
+                    j += 1
+                if s[j:j + 4] == "over" and (j + 4 >= n or not (s[j + 4].isalnum() or s[j + 4] == "_")):
+                    k = j + 4
+                    while k < n and s[k] in " \t\n":
+                        k += 1
+                    if k < n and s[k] == "{":
+                        end2 = _match_balanced_brace(s, k)
+                        if end2 is not None:
+                            num = _convert_over_fractions(s[i + 1:end - 1])
+                            den = _convert_over_fractions(s[k + 1:end2 - 1])
+                            out.append(r"\frac{" + num + "}{" + den + "}")
+                            i = end2
+                            continue
+        out.append(s[i])
+        i += 1
+    return "".join(out)
+
+
 def _balance_left_right(t: str) -> str:
     """\\left / \\right 짝 보정.
 
@@ -556,15 +607,11 @@ def hwp_eq_to_latex(script: str) -> str:
             else:
                 s = pre + r"\begin{" + env + "}" + body + r"\end{" + env + "}" + post
 
-    # 3) 분수: {num} over {den} → \frac{num}{den} (중첩 허용)
-    for _ in range(5):
-        new_s = re.sub(
-            r"\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}\s*over\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}",
-            r"\\frac{\1}{\2}", s
-        )
-        if new_s == s:
-            break
-        s = new_s
+    # 3) 분수: {num} over {den} → \frac{num}{den} (중첩 몇 겹이든 허용 —
+    #    괄호 카운팅 기반 _convert_over_fractions, 2026-09-10 교체.
+    #    기존 정규식(1단 중첩만 지원)은 분모에 sqrt{...^{2}} 처럼 2단 이상
+    #    중첩되면 매칭 실패했음.)
+    s = _convert_over_fractions(s)
 
     # 3-a) frac{A}{B} → \frac{A}{B} (HWP가 `frac{..}{..}` 표기하는 변형)
     s = re.sub(
@@ -579,7 +626,11 @@ def hwp_eq_to_latex(script: str) -> str:
     SUP_SUB = r"(?:[\^_](?:\{[^{}]*\}|[A-Za-z0-9]))*"  # ^2, ^{n+1}, _k 등
     # over 기반 분수 분자/분모 후보 토큰. LaTeX 명령의 꼬리(line/right/left)를
     # 제외해 `x overline{y}` 같은 입력에서 line이 분모로 잡히는 사고 방지.
-    SIMPLE_TOK = rf"(?:(?!(?:line|right|left)\b)[A-Za-z0-9]+{SUP_SUB})"
+    # 함수적용 표기(g(2), f(x) 등) 뒤에 괄호가 바로 붙는 경우까지 한 토큰으로 —
+    # 안 그러면 "g(2)overf(2)"에서 "(2)"만 OPERAND로 잡혀 "g"/"(2)"가 분수
+    # 밖으로 떨어져 나가는 사고(2026-09-10 발견, "g(2) over f(2)" 패턴).
+    _FUNC_ARGS = r"(?:\([^()]*(?:\([^()]*\)[^()]*)*\))*"
+    SIMPLE_TOK = rf"(?:(?!(?:line|right|left)\b)[A-Za-z0-9]+{_FUNC_ARGS}{SUP_SUB})"
     BRACE_TOK = r"(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})"
     # 소괄호 그룹 (지수/첨자 후속 허용): (b+c), (b+c)^2 등
     PAREN_TOK = rf"(?:\([^()]*(?:\([^()]*\)[^()]*)*\){SUP_SUB})"
