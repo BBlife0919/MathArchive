@@ -1,6 +1,7 @@
-"""공통수학2 KERNEL POINT — 함수의 극한~함수의 극대극소와 그래프 (마플시너지 5파일 합본).
+"""미적분1 KERNEL POINT — 함수의 극한~함수의 극대극소와 그래프 (마플시너지 5파일 합본).
 
-소스: 마플시너지-수학2-0{1..5}.*.hwpx (사용자 다운로드 폴더, 유형서 — [정답]기준
+소스: 마플시너지-수학2-0{1..5}.*.hwpx (사용자 다운로드 폴더, 유형서 — 파일명의 "수학2"는
+발행사 자체 시리즈 번호일 뿐 과목명이 아님. 실제 과목은 미적분1. [정답]기준
 문항분리는 기출 파서와 동일 구조라 parse_hwpx._extract_questions_from_xml 재사용).
 "유형 NN 제목" 라벨은 파일 안에 결번(빈 제목 스텁)이 많아 실제 제목 있는 유형만
 추출 후 파일별로 1부터 재연번(사용자 지시: "유형 넘버만 땡겨줘").
@@ -21,8 +22,8 @@ import fitz
 from playwright.sync_api import sync_playwright
 
 SRC_DIR = "/Users/youngwoolee/Downloads"
-OUT_DIR = "/Users/youngwoolee/클로드교재/02_공수2"
-OUT_PATH = f"{OUT_DIR}/공수2_함수의극한_미분_KERNEL_POINT.pdf"
+OUT_DIR = "/Users/youngwoolee/클로드교재/04_미적분1"
+OUT_PATH = f"{OUT_DIR}/미적분1_함수의극한_미분_KERNEL_POINT.pdf"
 CW, CH = 595.9199, 842.8800
 
 CHAPTERS = [
@@ -148,7 +149,7 @@ def build_kp(cfg):
             choices.sort(key=lambda c: c.get('number'))
 
     # BinData 이미지 전량 추출
-    SRC_IMG = f"/tmp/gongsu2_kp_bin_{cfg['tag']}"
+    SRC_IMG = f"/tmp/mijeokbun1_kp_bin_{cfg['tag']}"
     os.makedirs(SRC_IMG, exist_ok=True)
     for n in z.namelist():
         if n.startswith("BinData/") and not n.endswith("/"):
@@ -156,7 +157,7 @@ def build_kp(cfg):
                 open(f"{SRC_IMG}/{os.path.basename(n)}", "wb").write(f.read())
     z.close()
 
-    SMALL_DIR = f"/tmp/gongsu2_kp_small_{cfg['tag']}"
+    SMALL_DIR = f"/tmp/mijeokbun1_kp_small_{cfg['tag']}"
     os.makedirs(SMALL_DIR, exist_ok=True)
 
     referenced = set()
@@ -255,21 +256,21 @@ def build_kp(cfg):
 
     overrides = {r['question_id']: 'full' for r in out_rows}
     pdf_bytes = generate_book_pdf(
-        out_rows, title=cfg["chapter"], subtitle="공통수학2 KERNEL POINT",
+        out_rows, title=cfg["chapter"], subtitle="미적분1 KERNEL POINT",
         include_source=False, overrides=overrides, logo_path=None,
         kicker_mark=None, kicker_text=None,
-        divider_meta_top=f"공통수학2 · {cfg['chapter']} · KERNEL POINT",
-        divider_footer_title=f"공통수학2 · {cfg['chapter']} · KERNEL POINT",
+        divider_meta_top=f"미적분1 · {cfg['chapter']} · KERNEL POINT",
+        divider_footer_title=f"미적분1 · {cfg['chapter']} · KERNEL POINT",
         divider_footer_sub="이영우 T",
-        cover_main_title="2학기 기말대비", cover_tagline=f"공통수학2 {cfg['chapter']}",
+        cover_main_title="핵심유형 총정리", cover_tagline=f"미적분1 {cfg['chapter']}",
         cover_big_word="KERNEL POINT", cover_kicker="MATHOLOGY · 2026",
         cover_footer_main="MATHOLOGY · 2026",
-        cover_footer_sub=f"공통수학2 · {cfg['chapter']} · KERNEL POINT",
-        page_running_left=f"공통수학2 {cfg['chapter']} · KERNEL POINT",
+        cover_footer_sub=f"미적분1 · {cfg['chapter']} · KERNEL POINT",
+        page_running_left=f"미적분1 {cfg['chapter']} · KERNEL POINT",
         extra_css=CROME_CSS, extra_js=tpl.TYPESET_JS,
         running_numbering=True, major_hint=cfg["chapter"],
     )
-    out = f"/tmp/gongsu2_kp_{cfg['tag']}.pdf"
+    out = f"/tmp/mijeokbun1_kp_{cfg['tag']}.pdf"
     open(out, "wb").write(pdf_bytes)
     print(f"[OK] KP:{cfg['tag']} {len(out_rows)}문제 → {out}")
     return out, len(out_rows), n_types
@@ -318,12 +319,12 @@ body {{ margin:0; padding:0; width:{CW}pt; height:{CH}pt; position:relative; bac
   </g></svg>
 <div class="corner tl"></div><div class="corner br"></div><div class="sidebar"></div>
 <div class="title-block">
-  <div class="kicker">2 학 기  기 말 대 비</div>
+  <div class="kicker">핵 심 유 형  총 정 리</div>
   <div class="title">KERNEL<br>POINT</div>
   <div class="rule"></div>
-  <div class="sub">공통수학2_함수의 극한과 미분</div>
+  <div class="sub">미적분1_함수의 극한과 미분</div>
 </div>
-<div class="brand">공통수학2</div>
+<div class="brand">미적분1</div>
 <div class="author">이영우 <span class="t">T</span></div>
 <div class="mathology">M A T H O L O G Y  ·  2 0 2 6</div>
 </body></html>"""
@@ -353,7 +354,7 @@ li {{ display:flex; align-items:baseline; padding:11pt 0; border-bottom:0.5pt do
 <div class="side"></div>
 <div class="tag">C O N T E N T S</div>
 <div class="h1">차 례</div>
-<div class="sub">공통수학2 · 함수의 극한과 미분 · KERNEL POINT</div>
+<div class="sub">미적분1 · 함수의 극한과 미분 · KERNEL POINT</div>
 <hr>
 <ul>{rows}</ul>
 </body></html>"""
