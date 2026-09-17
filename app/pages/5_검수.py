@@ -359,25 +359,6 @@ def _exec_write(conn, sql, params=()):
 # ─────────────────────────────────────────────────────────
 # 자동 처리 함수들
 # ─────────────────────────────────────────────────────────
-def _strip_leading_tabs_outside_box(text: str) -> str:
-    """BOX 외부 줄들의 leading tab/4-space 제거. BOX 내부는 보존
-    (markdown 표는 들여쓰기 의미 없음, BOX 표는 자체 구조 보존)."""
-    if not text:
-        return text
-    parts = re.split(r"(<<BOX_START>>.*?<<BOX_END>>)", text, flags=re.S)
-    out = []
-    for part in parts:
-        if part.startswith("<<BOX_START>>"):
-            out.append(part)
-        else:
-            # 줄별 leading tab/4-space 제거
-            part = "\n".join(
-                re.sub(r"^[\t ]+", "", ln) for ln in part.split("\n")
-            )
-            out.append(part)
-    return "".join(out)
-
-
 def _batch_update(conn, table: str, idcol: str, txtcol: str,
                   updates: list, *, jsonb: bool = False) -> int:
     """배치 UPDATE — Postgres 는 execute_values, SQLite 는 executemany.
@@ -523,7 +504,6 @@ def auto_fix_structural() -> dict:
         if txt:
             new = fix_nested(txt)
             new = fix_tokens(new)
-            new = _strip_leading_tabs_outside_box(new)
             if new != txt:
                 q_updates.append((qid, new))
         new_ch, ch_changed = _apply_to_choices(
@@ -542,7 +522,6 @@ def auto_fix_structural() -> dict:
             continue
         new = fix_nested(txt)
         new = fix_tokens(new)
-        new = _strip_leading_tabs_outside_box(new)
         if new != txt:
             s_updates.append((sid, new))
 

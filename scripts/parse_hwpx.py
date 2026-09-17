@@ -386,6 +386,47 @@ def hwp_eq_to_latex(script: str) -> str:
     # 위 관용구에 안 걸린 나머지 화살표 "->" (lim 아닌 문맥 등) → \to
     s = re.sub(r"-+>", r" \\to ", s)
 
+    # -1.6) sum/int/prod FROM {lower} TO {upper} 관용구 (구간합/구간적분 범위).
+    #      HWP 원본은 "sum from x=0 to 3 {...}"처럼 위/아래끝을 from/to로
+    #      표기하는데, from은 SYMBOL_MAP에 없어 그대로 남고 sum/to만 개별
+    #      변환돼 "\sum from x=0 \to 3"처럼 구조가 깨진다(2026-09-17 발견 —
+    #      확통 조건부확률·이항정리 단원 다수). 반드시 SYMBOL_MAP(13번, sum/to
+    #      개별 변환)보다 먼저 실행해야 raw "sum"/"from"/"to" 상태에서 통째로
+    #      잡는다.
+    def _strip_outer_braces_range(t: str) -> str:
+        t = t.strip()
+        if t.startswith("{") and t.endswith("}"):
+            return t[1:-1].strip()
+        return t
+
+    def _range_op_repl(m):
+        op = m.group("op").lower()
+        lower = _strip_outer_braces_range(m.group("lower"))
+        upper = _strip_outer_braces_range(m.group("upper"))
+        upper = re.sub(r"(?<![A-Za-z\\])inf(?![A-Za-z])", r"\\infty", upper,
+                        flags=re.IGNORECASE)
+        latex_op = {"sum": r"\sum", "int": r"\int", "prod": r"\prod"}[op]
+        return f"{latex_op} _{{{lower}}} ^{{{upper}}}"
+
+    _RANGE_OP = r"(?P<op>[Ss][Uu][Mm]|[Ii][Nn][Tt]|[Pp][Rr][Oo][Dd])"
+    # 위/아래끝이 "n-1"/"2n+1"처럼 붙어있는 간단한 사칙연산 식일 수도 있음 —
+    # 단일 토큰([A-Za-z0-9]+)만 허용하면 "to n-1"에서 "-1"이 범위 밖으로
+    # 떨어져나가 `^{n}-1`처럼 의미가 바뀌는 사고가 난다(2026-09-17 검수에서
+    # 발견). +/- 로 이어지는 붙어있는 항은 전부 하나의 식으로 묶는다.
+    _SIMPLE_EXPR = r"[A-Za-z0-9\\]+(?:[+-][A-Za-z0-9\\]+)*"
+    # 중괄호 형태는 1단 중첩까지 허용 — {a_{1}}처럼 첨자가 낀 하한/상한도
+    # 실사용되므로, 안 그러면 매치가 통째로 실패해 뒤쪽 bare "to"→\to
+    # 치환이 그 잔여물을 더 어중간하게 만든다(2026-09-17 2차 검수에서 발견).
+    _BRACED = r"\{(?:[^{}]|\{[^{}]*\})*\}"
+    # 괄호 없는 형태(x=0)와 HWP 타이핑 스킬이 자주 쓰는 중괄호 형태({k=1}) 모두 허용.
+    _RANGE_LOWER = rf"(?:{_BRACED}|[A-Za-z0-9]+(?:=[+-]?{_SIMPLE_EXPR})?)"
+    _RANGE_UPPER = rf"(?:{_BRACED}|-?(?:\\infty|infty|inf|INF|Inf|{_SIMPLE_EXPR}))"
+    s = re.sub(
+        rf"(?<![A-Za-z]){_RANGE_OP}\s*from\s*(?P<lower>{_RANGE_LOWER})"
+        rf"\s*(?<![A-Za-z])to(?![A-Za-z])\s*(?P<upper>{_RANGE_UPPER})",
+        _range_op_repl, s,
+    )
+
     # -1) pile → matrix 별칭. HWP 수식편집기의 배열(array) 구문으로
     #     `matrix{}`와 동일하게 동작하지만 일부 강사가 `pile{...}`로 표기.
     #     반드시 다른 전처리(0-c의 le/ge/ne 비교연산자 분리 등)보다 먼저 치환해야
@@ -412,6 +453,10 @@ def hwp_eq_to_latex(script: str) -> str:
            "le", "ge", "ne", "LE", "GE", "NE", "LEQ", "GEQ", "NEQ",
            "rarrow", "RARROW", "larrow", "LARROW",
            "cdot", "cdots", "ldots", "vdots", "ddots",
+           # 강조기호(accent) — bar는 있었는데 hat/vec/dot/ddot/tilde가 빠져
+           # "2vec{AP}"처럼 숫자 바로 뒤에 붙으면 분리가 안 돼 \b가 실패하고
+           # 변환도 안 됐다(2026-09-17 발견 — 벡터 문항 다수에서 재발).
+           "hat", "vec", "ddot", "dot", "tilde",
            "times", "pm", "mp", "infty", "angle", "triangle",
            "perp", "parallel", "therefore", "because",
            "vert", "VERT", "mid", "cap", "cup", "emptyset",
@@ -464,6 +509,10 @@ def hwp_eq_to_latex(script: str) -> str:
     _protected_cmds = [
         "overline", "overrightarrow", "overleftarrow",
         "underline", "underrightarrow", "underleftarrow",
+        # TRIANGLE/ANGLE(대소문자 모두) — 끝 두 글자가 "LE"라 보호 안 하면
+        # 위 le/LE 분리 루프에 걸려 "TRIANG \leq"/"ang \leq"로 깨진다
+        # (2026-09-17 발견, 도형 문제 일부에서 실제 확인됨).
+        "TRIANGLE", "triangle", "ANGLE", "angle",
     ]
     _cmd_stash = []
     def _stash_cmd(m):
@@ -701,59 +750,49 @@ def hwp_eq_to_latex(script: str) -> str:
     # KaTeX에서 \sqrt\frac{..}{..}는 \sqrt{\frac{..}{..}}와 동일 렌더.
     s = re.sub(r"(?<![A-Za-z\\])sqrt\s*(?=\\frac)", r"\\sqrt", s)
 
-    # 6) bar → overline
-    s = re.sub(r"\bbar\s*\{", r"\\overline{", s)
+    # 6-7) 강조기호(bar/hat/vec/dot/ddot/tilde) — bar만 6가지 케이스(중괄호·
+    #      공백+식별자·숫자직접접합·공백+숫자·음수·LaTeX명령인자·괄호그룹)를
+    #      전부 처리했고 hat/vec/dot/ddot/tilde는 처음 2가지만 처리해
+    #      "vec \dfrac{a}{b}"(over 변환 후 명령이 붙는 경우) 같은 패턴을
+    #      놓쳤다 — bar와 동일하게 전부 적용해 통일 (2026-09-17 발견).
+    _ACCENTS = {"bar": "overline", "hat": "hat", "vec": "vec",
+                "dot": "dot", "ddot": "ddot", "tilde": "tilde"}
+    # rm(로만체) 뒤에 accent 키워드가 바로 오면 아래 8번 rm 변환이 accent
+    # 키워드 자체를 인자로 통째로 삼켜 `\mathrm{vec}{OQ}`처럼 깨진다
+    # (2026-09-17 발견, 벡터 문항 다수). accent 앞의 rm은 의미가 없으므로
+    # accent 처리 전에 미리 제거 — rm 변환(8번)이 손댈 게 없어짐.
     s = re.sub(
-        r"\bbar\s+([A-Za-z]\w*)",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
+        rf"\brm\s+(?=(?:{'|'.join(_ACCENTS)})(?![A-Za-z]))", "", s,
     )
-    # bar 뒤 영숫자 직접 접합 (bar2z → \overline{2z})
-    s = re.sub(
-        r"(?<![A-Za-z\\])bar(?=[0-9])([0-9A-Za-z]+)",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
-    )
-    # bar 뒤 공백 + 숫자/혼합 (bar 4i → \overline{4i}, bar 2 → \overline{2})
-    s = re.sub(
-        r"\bbar\s+([0-9][A-Za-z0-9]*)",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
-    )
-    # bar 뒤 `-숫자` (bar-3 → \overline{-3})
-    s = re.sub(
-        r"\bbar(-[0-9]+)",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
-    )
-    s = re.sub(
-        r"\bbar\s+(-[0-9]+)",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
-    )
-    # bar 뒤 LaTeX 명령 (bar \frac{..}{..} → \overline{\frac{..}{..}})
-    # 공백 있든 없든 모두 처리 (bar\frac... 또는 bar \frac...)
-    s = re.sub(
-        r"\bbar\s*(\\[A-Za-z]+(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}){1,2})",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
-    )
-    # bar + (표현식) — 괄호로 묶인 식
-    s = re.sub(
-        r"\bbar\s*(\([^()]*\))",
-        lambda m: r"\overline{" + m.group(1) + r"}",
-        s,
-    )
-
-    # 7) hat, vec, dot, ddot, tilde
-    for accent in ["hat", "vec", "dot", "ddot", "tilde"]:
-        s = re.sub(rf"\b{accent}\s*\{{", rf"\\{accent}{{", s)
-        # 중괄호 없이 공백+단일문자 (vec a → \vec{a})
+    for hwp_name, latex_name in _ACCENTS.items():
+        def _wrap(m, a=latex_name):
+            return rf"\{a}{{" + m.group(1) + "}"
+        s = re.sub(rf"\b{hwp_name}\s*\{{", rf"\\{latex_name}{{", s)
+        # 공백 + 식별자 (vec a → \vec{a})
         s = re.sub(
-            rf"(?<![A-Za-z\\])(?:\\mathrm\{{)?{accent}(?:\}})?\s+([A-Za-z][A-Za-z0-9]*)",
-            lambda m, a=accent: rf"\{a}{{" + m.group(1) + "}",
-            s,
+            rf"(?<![A-Za-z\\])(?:\\mathrm\{{)?{hwp_name}(?:\}})?\s+([A-Za-z][A-Za-z0-9]*)",
+            _wrap, s,
         )
+        # 뒤 영숫자 직접 접합 (bar2z → \overline{2z})
+        s = re.sub(
+            rf"(?<![A-Za-z\\]){hwp_name}(?=[0-9])([0-9A-Za-z]+)",
+            _wrap, s,
+        )
+        # 공백 + 숫자/혼합 (bar 4i → \overline{4i})
+        s = re.sub(
+            rf"\b{hwp_name}\s+([0-9][A-Za-z0-9]*)",
+            _wrap, s,
+        )
+        # `-숫자` (bar-3 → \overline{-3})
+        s = re.sub(rf"\b{hwp_name}(-[0-9]+)", _wrap, s)
+        s = re.sub(rf"\b{hwp_name}\s+(-[0-9]+)", _wrap, s)
+        # 뒤 LaTeX 명령 (vec \dfrac{..}{..} → \vec{\dfrac{..}{..}})
+        s = re.sub(
+            rf"\b{hwp_name}\s*(\\[A-Za-z]+(?:\{{[^{{}}]*(?:\{{[^{{}}]*\}}[^{{}}]*)*\}}){{1,2}})",
+            _wrap, s,
+        )
+        # 괄호로 묶인 식
+        s = re.sub(rf"\b{hwp_name}\s*(\([^()]*\))", _wrap, s)
 
     # 8) rm{...} → \mathrm{...}
     s = re.sub(r"\brm\s*\{", r"\\mathrm{", s)
@@ -1478,6 +1517,33 @@ def serialize_items(items: list) -> str:
     return "".join(parts)
 
 
+_BOX_REGION = re.compile(r"<<BOX_START>>.*?<<BOX_END>>", re.S)
+# CommonMark 스펙상 "빈 줄 바로 뒤 + 탭 또는 4칸 이상 공백"으로 시작하는
+# 줄만 진짜 코드블록으로 오인된다(빈 줄 없이 이어지는 줄은 lazy continuation
+# 이라 안전, 1~3칸 공백도 안전 — 2026-09-17 실제 remark 파이프라인으로 검증).
+# 그 좁은 조건만 잡아야 한다 — 처음에 `^[ \t]+`(줄 시작 공백 아무거나)로
+# 짰다가 흔한 한 칸 들여쓰기까지 전부 걸려 DB 절반 이상이 바뀌는 사고가
+# 났었다(2026-09-17, /근본 검수 전 dry-run에서 발견).
+_LEADING_LINE_WS = re.compile(r"(?<=\n\n)(?:\t|[ ]{4,})[ \t]*(?=\S)")
+
+
+def _strip_leading_line_ws(text: str) -> str:
+    """빈 줄 뒤 탭/4칸+ 공백 들여쓰기 제거 (BOX 밖 본문만).
+
+    HWP의 <hp:tab>이 줄바꿈 직후에 오면 그 줄이 tab/4-space 들여쓰기로
+    시작하는데, 바로 앞줄이 빈 줄이면 markdown이 이를 코드블록으로 오인해
+    수식이 렌더링되지 않고 원본 텍스트가 그대로 노출된다(2026-09-17 발견).
+    BOX(조건틀 등) 안은 줄 정렬에 탭이 쓰이므로 건드리지 않는다.
+    """
+    if not text or "<<BOX_START>>" not in text:
+        return _LEADING_LINE_WS.sub("", text) if text else text
+    parts = re.split(r"(<<BOX_START>>.*?<<BOX_END>>)", text, flags=re.S)
+    for i, part in enumerate(parts):
+        if not part.startswith("<<BOX_START>>"):
+            parts[i] = _LEADING_LINE_WS.sub("", part)
+    return "".join(parts)
+
+
 def sanitize_outside_math(text: str) -> str:
     """수식($...$) 바깥은 백슬래시 정리, 안쪽은 LaTeX 잔여 정리."""
     parts = re.split(r"(\$[^$]*\$)", text)
@@ -1995,6 +2061,13 @@ def _extract_questions_from_xml(section_root, watermark_images, debug=False):
         solution_text = sanitize_outside_math(solution_text)
         for c in choices:
             c["text"] = sanitize_outside_math(c["text"])
+
+        # 줄 시작 탭/공백 제거 — 빈 줄 뒤에 오면 markdown이 코드블록으로
+        # 오인해 수식이 원본 텍스트로 노출되는 사고 방지.
+        question_text = _strip_leading_line_ws(question_text)
+        solution_text = _strip_leading_line_ws(solution_text)
+        for c in choices:
+            c["text"] = _strip_leading_line_ws(c["text"])
 
         # 글머리 기호(⦁·●·■) 앞에 줄바꿈을 강제해 한 줄로 붙는 것을 방지.
         # 같은 <p> 안에 여러 항목을 나열한 원본의 시각 구조를 복원.

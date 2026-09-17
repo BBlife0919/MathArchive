@@ -22,6 +22,8 @@ import json
 import re
 import sqlite3
 
+from parse_hwpx import _strip_leading_line_ws  # noqa: E402 (BOX 인식 줄바꿈 정리 재사용)
+
 # (pattern, replacement). RULES_BEFORE 는 부착 분리(앞쪽 영숫자 → 공백 삽입)
 # RULES_AFTER 는 토큰 치환. 두 단계로 나눠서 안전하게 정리.
 #
@@ -276,6 +278,106 @@ def _fix_lim_and_arrows(span: str) -> str:
 _PRIME_RUN = re.compile(r"'(?:\s+')+")
 
 
+# sum/int/prod FROM {lower} TO {upper} 관용구 (구간합/구간적분 범위).
+# HWP 원본(및 "타이핑" 스킬로 직접 입력한 해설)이 "sum from x=0 to 3 {...}"
+# 처럼 위/아래끝을 from/to로 표기하는데 from은 SYMBOL_MAP에 없어 그대로
+# 남고 sum/to만 개별 변환돼 "\sum from x=0 to 3"처럼 구조가 깨진다
+# (2026-09-17 발견 — 파서(parse_hwpx.py)는 이미 수정됨. 여기서는 DB에
+# 이미 들어있는 잔여분만 정리). op은 이미 "\sum"로 변환됐을 수도, 아직
+# bare "sum"일 수도 있어 둘 다 허용.
+_RANGE_OP = r"(?P<op>\\?(?:[Ss][Uu][Mm]|[Ii][Nn][Tt]|[Pp][Rr][Oo][Dd]))"
+# 위/아래끝이 "n-1"/"2n+1"처럼 붙어있는 사칙연산 식일 수도 있음 — 단일
+# 토큰만 허용하면 "to n-1"의 "-1"이 범위 밖으로 떨어져나가 `^{n}-1`처럼
+# 의미가 바뀐다(2026-09-17 검수에서 발견, parse_hwpx.py와 동일 수정).
+_SIMPLE_EXPR = r"[A-Za-z0-9\\]+(?:[+-][A-Za-z0-9\\]+)*"
+# 중괄호 형태는 1단 중첩까지 허용 — {a_{1}}처럼 첨자가 낀 하한/상한 대비
+# (2026-09-17 2차 검수에서 발견, parse_hwpx.py와 동일 수정).
+_BRACED = r"\{(?:[^{}]|\{[^{}]*\})*\}"
+_RANGE_LOWER = rf"(?:{_BRACED}|[A-Za-z0-9]+(?:=[+-]?{_SIMPLE_EXPR})?)"
+_RANGE_UPPER = rf"(?:{_BRACED}|-?(?:\\infty|infty|inf|INF|Inf|{_SIMPLE_EXPR}))"
+_RANGE_PAT = re.compile(
+    rf"(?<![A-Za-z]){_RANGE_OP}\s*from\s*(?P<lower>{_RANGE_LOWER})"
+    rf"\s*(?:\\to|(?<![A-Za-z])to(?![A-Za-z]))\s*(?P<upper>{_RANGE_UPPER})"
+)
+_RANGE_LATEX_OP = {"sum": r"\sum", "int": r"\int", "prod": r"\prod"}
+
+
+def _strip_outer_braces_range(t: str) -> str:
+    t = t.strip()
+    if t.startswith("{") and t.endswith("}"):
+        return t[1:-1].strip()
+    return t
+
+
+def _range_repl(m: re.Match) -> str:
+    op = m.group("op").lstrip("\\").lower()
+    lower = _strip_outer_braces_range(m.group("lower"))
+    upper = _strip_outer_braces_range(m.group("upper"))
+    upper = re.sub(r"(?<![A-Za-z\\])inf(?![A-Za-z])", r"\\infty", upper,
+                    flags=re.IGNORECASE)
+    return f"{_RANGE_LATEX_OP[op]} _{{{lower}}} ^{{{upper}}}"
+
+
+def _fix_sum_range(span: str) -> str:
+    return _RANGE_PAT.sub(_range_repl, span)
+
+
+def _fix_bare_to_arrow(span: str) -> str:
+    """_fix_sum_range가 못 잡은 나머지 bare 'to'(화살표 문맥) → \\to."""
+    return re.sub(r"(?<![A-Za-z\\])to(?![A-Za-z])", r"\\to", span)
+
+
+# 강조기호(bar/hat/vec/dot/ddot/tilde) — 파서(parse_hwpx.py)와 동일한 6가지
+# 케이스(중괄호·공백+식별자·숫자직접접합·공백+숫자·음수·LaTeX명령인자·괄호
+# 그룹). DB에 이미 저장된 "2vec{AP}"(숫자 바로 붙음), "vec \dfrac{a}{b}"
+# (over 변환 후 명령이 뒤에 붙는 경우) 등 잔여분 정리 (2026-09-17 발견).
+_ACCENT_LATEX = {"bar": "overline", "hat": "hat", "vec": "vec",
+                 "dot": "dot", "ddot": "ddot", "tilde": "tilde"}
+_ACCENT_KW_PAT = "|".join(_ACCENT_LATEX.keys())
+
+
+def _fix_accents(span: str) -> str:
+    # 숫자 바로 뒤 accent 분리 (2vec{AP} → 2 vec{AP})
+    span = re.sub(rf"(\d)({_ACCENT_KW_PAT})(?![A-Za-z])", r"\1 \2", span)
+    # rm(로만체) 변환이 accent 키워드를 통째로 삼켜 `\mathrm{vec}{OQ}`처럼
+    # 된 사고 복원 (2026-09-17 발견, 벡터 문항 다수).
+    for hwp_name, latex_name in _ACCENT_LATEX.items():
+        span = re.sub(
+            rf"\\mathrm\{{{hwp_name}\}}\s*\{{([^{{}}]*)\}}",
+            lambda m, a=latex_name: rf"\{a}{{" + m.group(1) + "}",
+            span,
+        )
+        span = re.sub(
+            rf"\\mathrm\{{{hwp_name}\}}\s+([A-Za-z][A-Za-z0-9]*)",
+            lambda m, a=latex_name: rf"\{a}{{" + m.group(1) + "}",
+            span,
+        )
+    for hwp_name, latex_name in _ACCENT_LATEX.items():
+        def _wrap(m, a=latex_name):
+            return rf"\{a}{{" + m.group(1) + "}"
+        span = re.sub(rf"(?<![A-Za-z\\])\b{hwp_name}\s*\{{",
+                       rf"\\{latex_name}{{", span)
+        span = re.sub(
+            rf"(?<![A-Za-z\\])(?:\\mathrm\{{)?{hwp_name}(?:\}})?"
+            rf"\s+([A-Za-z][A-Za-z0-9]*)",
+            _wrap, span,
+        )
+        span = re.sub(rf"(?<![A-Za-z\\]){hwp_name}(?=[0-9])([0-9A-Za-z]+)",
+                       _wrap, span)
+        span = re.sub(rf"(?<![A-Za-z\\])\b{hwp_name}\s+([0-9][A-Za-z0-9]*)",
+                       _wrap, span)
+        span = re.sub(rf"(?<![A-Za-z\\])\b{hwp_name}(-[0-9]+)", _wrap, span)
+        span = re.sub(rf"(?<![A-Za-z\\])\b{hwp_name}\s+(-[0-9]+)", _wrap, span)
+        span = re.sub(
+            rf"(?<![A-Za-z\\])\b{hwp_name}\s*"
+            rf"(\\[A-Za-z]+(?:\{{[^{{}}]*(?:\{{[^{{}}]*\}}[^{{}}]*)*\}}){{1,2}})",
+            _wrap, span,
+        )
+        span = re.sub(rf"(?<![A-Za-z\\])\b{hwp_name}\s*(\([^()]*\))",
+                       _wrap, span)
+    return span
+
+
 def _transform_math_only(span: str) -> str:
     for pat, repl in MATH_ONLY_REPLACE:
         span = pat.sub(repl, span)
@@ -339,8 +441,19 @@ def fix_text(text: str) -> str:
     text = _apply_in_math_spans(text, _transform_math_only)
     # 3.5) lim 극한 관용구 + 잔여 화살표 — 수식 컨텍스트 한정
     text = _apply_in_math_spans(text, _fix_lim_and_arrows)
+    # 3.6) sum/int/prod FROM~TO 구간 관용구 — 수식 컨텍스트 한정.
+    #      반드시 아래 bare "to"→\to 치환보다 먼저 실행 (먼저 하면 "to"가
+    #      개별 \to 로 바뀌어 from/to 쌍을 못 찾음).
+    text = _apply_in_math_spans(text, _fix_sum_range)
+    # 3.7) 위에서 못 잡은 나머지 bare "to"(화살표 문맥) — 수식 컨텍스트 한정
+    text = _apply_in_math_spans(text, _fix_bare_to_arrow)
+    # 3.8) 강조기호(bar/hat/vec/dot/ddot/tilde) 잔여분 — 수식 컨텍스트 한정
+    text = _apply_in_math_spans(text, _fix_accents)
     # 4) 다중 공백 정리
     text = re.sub(r"  +", " ", text)
+    # 5) 줄 시작 탭/공백 제거(빈 줄 뒤 들여쓰기가 markdown 코드블록으로
+    #    오인되는 사고 방지) — BOX(조건틀 등) 밖 본문에서만.
+    text = _strip_leading_line_ws(text)
     return text
 
 
