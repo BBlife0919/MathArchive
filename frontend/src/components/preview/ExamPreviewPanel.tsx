@@ -32,6 +32,16 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
       setItems([]);
       return;
     }
+    // 이미 로드된 문항이면(제거·드래그 재정렬처럼 집합의 부분집합/순서만
+    // 바뀐 경우) 서버 재요청 없이 즉시 반영 — 매번 재요청하면 로딩 중
+    // QuestionList가 통째로 unmount돼 "제거 누를 때마다 새로고침되는"
+    // 것처럼 보이는 문제가 있었다(2026-09-19 발견).
+    const currentMap = new Map(items.map((it) => [it.question_id, it]));
+    const missingIds = ids.filter((id) => !currentMap.has(id));
+    if (missingIds.length === 0) {
+      setItems(ids.map((id) => currentMap.get(id)!));
+      return;
+    }
     setLoading(true);
     setError(null);
     fetchQuestionsByIds(ids, preserveOrder)
@@ -71,6 +81,7 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
           <QuestionList
             items={items} selectedIds={selectedIds} onToggleSelect={toggle}
             sortable={pdfMode === "exam"} onReorder={handleReorder}
+            layout="list"
           />
         )}
       </div>

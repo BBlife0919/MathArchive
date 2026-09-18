@@ -4,6 +4,15 @@
   gap: 10px;
 }
 
+/* 담은 문제 미리보기처럼 정독이 필요한 화면 — 좁은 카드 폭이 박스·선지
+   줄바꿈을 잦게 만들어 가독성이 떨어진다는 피드백으로 한 열 전체폭 사용
+   (2026-09-19). */
+.question-list-single {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .sortable-card .question-card {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
