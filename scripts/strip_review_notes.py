@@ -28,6 +28,12 @@ _REVIEW_KW = (
     r"|벌점사항|해당\s*번호|내역표|수정\s*전\s*\||수정\s*후\s*\||오타\s*및\s*오답"
     r"|서술형\s*양식|총점\s*삭제|바탕글\s*이외|배점\s*위치|스타일\s*삭제"
     r"|안\s*띄우기|한\s*줄\s*띄|오탈자\s*수정|특이사항|편집팀|편집자|<\d{4,}>"
+    # "수정내용" 표(N번 해설 OO 수정 내역을 한 셀에 몰아넣은 표) — 2026-09-21
+    # 발견. 오검/벌점 어휘가 전혀 없어 기존 배치 스캔(LIKE '%오검%'/'%벌점%')
+    # 에도 안 걸리고 파서 적재 시에도 그대로 남아 시험지 PDF에 그대로
+    # 노출됐다(가정고 168125 등, 651건 확인). 표 셀이 "수정<br>내용"처럼
+    # <br>로 줄바꿈되는 경우가 많아 \s* 만으론 안 걸림 — <br> 태그까지 허용.
+    r"|수정(?:\s|<br>)*내용"
 )
 # 리뷰표 헤더를 담은 <<BOX_START>>…<<BOX_END>> 만 제거.
 # ── 화살표(->,→,⇨)는 정상 수학박스(보기/조건/함수/작도)에도 흔하므로 트리거 금지.
@@ -50,6 +56,8 @@ _ANCHOR_RE = re.compile(
 _DANGLING_RE = re.compile(
     r"\n*해\d+\.\s*정답을?\s*$"
     r"|\n*\d+번\s*[^\n$]{0,12}(?:조정|변경|교체)\s*$"
+    # "수정내용" 박스 뒤에 남는 채점 배점 메모 (예: "총점 6점") — 2026-09-21 발견.
+    r"|\n*총점\s*\d+(?:\.\d+)?\s*점\s*$"
 )
 # 실제 문제의 종결부 (배점 [ …점 ] / 전각 【 …점 】 / 종결 서술어)
 _TERM_RE = re.compile(
@@ -97,6 +105,37 @@ def strip_review_notes(text: str | None) -> str:
     return result
 
 
+def _fix_choices(raw):
+    """choices(JSON) 각 항목의 text에도 동일하게 적용.
+
+    sqlite는 문자열 컬럼, Postgres(jsonb)는 이미 list로 넘어옴 — 둘 다 처리.
+    반환: (changed: bool, new_value). sqlite는 json 문자열, Postgres는
+    파이썬 객체 그대로(호출부에서 Json()으로 감싸 UPDATE).
+    """
+    import json
+    if not raw:
+        return False, raw
+    is_str = isinstance(raw, str)
+    try:
+        items = json.loads(raw) if is_str else raw
+    except (TypeError, ValueError):
+        return False, raw
+    if not isinstance(items, list):
+        return False, raw
+    changed = False
+    new_items = []
+    for it in items:
+        if isinstance(it, dict) and isinstance(it.get("text"), str):
+            new_text = strip_review_notes(it["text"])
+            if new_text != it["text"]:
+                changed = True
+                it = {**it, "text": new_text}
+        new_items.append(it)
+    if not changed:
+        return False, raw
+    return True, (json.dumps(new_items, ensure_ascii=False) if is_str else new_items)
+
+
 def _run(apply: bool, cloud: bool = False):
     import sqlite3
     conn = sqlite3.connect(DB_PATH)
@@ -109,11 +148,12 @@ def _run(apply: bool, cloud: bool = False):
     overcut = []    # 삭제분에 오검/벌점 없음 → 과다삭제 의심
     verbcut = []    # 삭제분에 문제 종결어(구하시오 등) → 본문 삭제 의심
     undercut = []   # 유지분에 오검/벌점 잔존 → 미삭제
-    kw = re.compile(r"오검|벌점")
+    kw = re.compile(r"오검|벌점|수정(?:\s|<br>)*내용|총점\s*\d")
     verb = re.compile(r"구하시오|구하여라|서술하시오|논술하시오|답하시오|나타내시오|증명하시오|쓰시오")
-    left = re.compile(r"오검|벌점")
+    left = re.compile(r"오검|벌점|수정(?:\s|<br>)*내용")
 
-    LIKE = "(question_text LIKE '%오검%' OR question_text LIKE '%벌점%')"
+    LIKE = "(question_text LIKE '%오검%' OR question_text LIKE '%벌점%' " \
+           "OR question_text LIKE '%수정%내용%' OR question_text LIKE '%총점%점%')"
 
     # questions
     q_updates = []
@@ -141,15 +181,26 @@ def _run(apply: bool, cloud: bool = False):
     # solutions
     s_updates = []
     for r in cur.execute("SELECT solution_id, solution_text FROM solutions "
-                         "WHERE solution_text LIKE '%오검%' OR solution_text LIKE '%벌점%'"):
+                         "WHERE solution_text LIKE '%오검%' OR solution_text LIKE '%벌점%' "
+                         "OR solution_text LIKE '%수정%내용%' OR solution_text LIKE '%총점%점%'"):
         orig = r["solution_text"]
         new = strip_review_notes(orig)
         if new != orig:
             stats["s_changed"] += 1
             s_updates.append((new, r["solution_id"]))
 
+    # choices (본문·해설과 동일 원칙 — 3영역 정규화)
+    ch_updates = []
+    for r in cur.execute("SELECT question_id, choices FROM questions "
+                         "WHERE choices LIKE '%오검%' OR choices LIKE '%벌점%' "
+                         "OR choices LIKE '%수정%내용%' OR choices LIKE '%총점%점%'"):
+        changed, new_val = _fix_choices(r["choices"])
+        if changed:
+            stats["ch_changed"] = stats.get("ch_changed", 0) + 1
+            ch_updates.append((new_val, r["question_id"]))
+
     print(f"[통계] 문항 변경 {stats['q_changed']} / 그중 본문 거의 빔(<15자) {stats['q_emptied']}")
-    print(f"       해설 변경 {stats['s_changed']}")
+    print(f"       해설 변경 {stats['s_changed']} · 선지 변경 {stats.get('ch_changed', 0)}")
     print(f"[검증] 과다삭제 의심(삭제분에 오검/벌점 없음): {len(overcut)}  {overcut[:15]}")
     print(f"[검증] 본문삭제 의심(삭제분에 문제종결어): {len(verbcut)}  {verbcut[:15]}")
     print(f"[검증] 미삭제(유지분에 오검/벌점 잔존): {len(undercut)}  {undercut[:15]}")
@@ -167,12 +218,13 @@ def _run(apply: bool, cloud: bool = False):
         print(f"\n[APPLY] 로컬 백업 → {bak.name}")
         cur.executemany("UPDATE questions SET question_text=? WHERE question_id=?", q_updates)
         cur.executemany("UPDATE solutions SET solution_text=? WHERE solution_id=?", s_updates)
+        cur.executemany("UPDATE questions SET choices=? WHERE question_id=?", ch_updates)
         # 본문 유실(오검메모만) 항목 플래그
         cur.executemany(
             "UPDATE questions SET error_note=COALESCE(error_note,'')||'[본문없음:오검메모만] ' "
             "WHERE question_id=?", [(q,) for q in empties])
         conn.commit()
-        print(f"  로컬 완료: 문항 {len(q_updates)} · 해설 {len(s_updates)} · 빈문항플래그 {len(empties)}")
+        print(f"  로컬 완료: 문항 {len(q_updates)} · 해설 {len(s_updates)} · 선지 {len(ch_updates)} · 빈문항플래그 {len(empties)}")
     else:
         print("\n(드라이런 — --apply 로 로컬 적용)")
     conn.close()
@@ -199,7 +251,8 @@ def _apply_cloud():
     cur = conn.cursor()
 
     cur.execute("SELECT question_id, question_text FROM questions "
-                "WHERE question_text LIKE '%오검%' OR question_text LIKE '%벌점%'")
+                "WHERE question_text LIKE '%오검%' OR question_text LIKE '%벌점%' "
+                "OR question_text LIKE '%수정%내용%' OR question_text LIKE '%총점%점%'")
     q_up, empties = [], []
     for qid, t in cur.fetchall():
         n = strip_review_notes(t)
@@ -209,18 +262,30 @@ def _apply_cloud():
                 empties.append(qid)
 
     cur.execute("SELECT solution_id, solution_text FROM solutions "
-                "WHERE solution_text LIKE '%오검%' OR solution_text LIKE '%벌점%'")
+                "WHERE solution_text LIKE '%오검%' OR solution_text LIKE '%벌점%' "
+                "OR solution_text LIKE '%수정%내용%' OR solution_text LIKE '%총점%점%'")
     s_up = [(strip_review_notes(t), sid) for sid, t in cur.fetchall()
             if strip_review_notes(t) != t]
+
+    from psycopg2.extras import Json
+    cur.execute("SELECT question_id, choices FROM questions "
+                "WHERE choices::text LIKE '%오검%' OR choices::text LIKE '%벌점%' "
+                "OR choices::text LIKE '%수정%내용%' OR choices::text LIKE '%총점%점%'")
+    ch_up = []
+    for qid, raw in cur.fetchall():
+        changed, new_val = _fix_choices(raw)
+        if changed:
+            ch_up.append((Json(new_val), qid))
 
     cur2 = conn.cursor()
     cur2.executemany("UPDATE questions SET question_text=%s WHERE question_id=%s", q_up)
     cur2.executemany("UPDATE solutions SET solution_text=%s WHERE solution_id=%s", s_up)
+    cur2.executemany("UPDATE questions SET choices=%s WHERE question_id=%s", ch_up)
     cur2.executemany(
         "UPDATE questions SET error_note=COALESCE(error_note,'')||'[본문없음:오검메모만] ' "
         "WHERE question_id=%s", [(q,) for q in empties])
     conn.commit()
-    print(f"  클라우드 완료: 문항 {len(q_up)} · 해설 {len(s_up)} · 빈문항플래그 {len(empties)}")
+    print(f"  클라우드 완료: 문항 {len(q_up)} · 해설 {len(s_up)} · 선지 {len(ch_up)} · 빈문항플래그 {len(empties)}")
     cur.close(); cur2.close(); conn.close()
 
 
