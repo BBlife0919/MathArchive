@@ -2415,8 +2415,14 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
                      major_hint: str | None = None,
                      book_mode: str = "chapter",
                      flat_layout: str = "half",
-                     qa_cols: int = 5) -> str:
+                     qa_cols: int = 5,
+                     include_difficulty: bool = True) -> str:
     """교재 HTML: 표지 → (챕터모드: 챕터 디바이더+문제) | (일반모드: 문제만, 연속) → 빠른정답 → 해설.
+
+    include_difficulty: True(기본)면 "A·01" 번호 + 1차/2차/3차/OX 체크박스 +
+      KEY POINT/MEMO 박스가 붙는 정식 교재 슬롯. False면 시험지 모드와 동일한
+      플레인 슬롯("N번 [출처]" 헤더만)으로 — 해설은 그대로 포함하되 학습용
+      체크박스/메모 없이 깔끔하게 훑어볼 연습용 자료에 사용(2026-09-21 추가).
 
     cover_style: 'final' (기본, KERNEL POINT 스타일) | 'diagonal' (평면좌표 스타일)
     dcov_subject/dcov_level: diagonal 스타일 전용 필드 (subject·level)
@@ -2463,7 +2469,7 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
         header = _render_header(title, subtitle, logo_uri, kicker_mark, kicker_text)
         body_html, _ = _problem_pages_html(
             questions, include_source, merged_overrides, header,
-            include_difficulty=True,
+            include_difficulty=include_difficulty,
             page_class="bp-page",
         )
         body_parts.append(body_html)
@@ -2486,7 +2492,7 @@ def build_book_html(questions: list[dict], title: str, include_source: bool = Tr
             # 슬롯 번호: 기본은 letter마다 1부터 (A·01), running_numbering=True 면 전체 통번호
             body_html, next_slot = _problem_pages_html(
                 ch_qs, include_source, overrides, "",
-                include_difficulty=True,
+                include_difficulty=include_difficulty,
                 per_page_header_fn=_hdr,
                 page_class="bp-page",
                 side_html=side,
@@ -2854,7 +2860,8 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
                       major_hint: str | None = None,
                       book_mode: str = "chapter",
                       flat_layout: str = "half",
-                      qa_cols: int = 5) -> bytes:
+                      qa_cols: int = 5,
+                      include_difficulty: bool = True) -> bytes:
     """교재 PDF 생성. 표지 → (챕터모드: 챕터 디바이더+문제 | 일반모드: 문제만) → 빠른정답 → 해설 순."""
     html = build_book_html(
         questions, title, include_source=include_source, overrides=overrides,
@@ -2880,5 +2887,6 @@ def generate_book_pdf(questions: list[dict], title: str = "수학 교재",
         book_mode=book_mode,
         flat_layout=flat_layout,
         qa_cols=qa_cols,
+        include_difficulty=include_difficulty,
     )
     return html_to_pdf_bytes(html)
