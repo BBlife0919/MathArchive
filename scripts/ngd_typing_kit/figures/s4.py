@@ -1,0 +1,17 @@
+from figlib import *
+def make():
+    ang=np.arcsin(5/13)
+    Pp=P(0,0); O=P(13,0)
+    A=12*P(np.cos(ang),np.sin(ang)); B=P(A[0],-A[1])
+    f=Fig('s4',15000,(-1.6,18.6),(-7.3,7.6))
+    f.circle(O,5)
+    uA=unit(A-Pp); uB=unit(B-Pp)
+    f.seg(Pp,A+uA*4.6); f.seg(Pp,B+uB*4.6)
+    f.seg(A,B); f.seg(O,A); f.seg(O,B)
+    f.dot(O)
+    f.dimarc_pt(Pp,A,+1,'12',pt=10)
+    f.dimarc_pt(A,O,+1,'5',pt=10)
+    f.lab('P',Pp,-9,0); f.lab('A',A,-1,10); f.lab('B',B,-1,-10); f.lab('O',O,10,-1)
+    f.ngd_on(Pp,B,0.5)
+    return f.save()
+if __name__=='__main__': print(make())

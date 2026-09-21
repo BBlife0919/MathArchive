@@ -1,0 +1,18 @@
+from figlib import *
+def make():
+    A=P(0,1); B=P(0,0); C=P(1,0); D=P(1,1)
+    a=np.radians(38)
+    R=C+P(-np.cos(a),np.sin(a)); Pp=P(0,np.tan(a))
+    f=Fig('q13',12800,(-0.32,1.38),(-0.3,1.3))
+    f.poly([A,B,C,D])
+    f.arc(C,1.0,90,180,lw=LW)          # 사분원 (B에서 D까지)
+    f.seg(Pp,C)
+    # 오른쪽 변 길이 1 표시(점선 곡선)
+    f.dimarc_pt(C,D,-1,'1',pt=8,fs=9.5)
+    f.lab('A',A,-8,8); f.lab('D',D,8,8); f.lab('B',B,-8,-9); f.lab('C',C,8,-9)
+    f.lab('P',Pp,-9,0); f.lab('R',R,14,4)
+    f.angle(C,R,B,0.2,'38°',fs=8.5)
+    f.angle(Pp,B,C,0.14)   # P의 각 표시 호(수치는 원본상 손글씨)
+    f.ngd_on(A,D,0.5)
+    return f.save()
+if __name__=='__main__': print(make())

@@ -1,0 +1,15 @@
+from figlib import *
+def make():
+    s5=np.sqrt(5)
+    A=P(0,0); D=P(5,0); B=P(9,0); C=P(5,2*s5)
+    f=Fig('s2',15000,(-1.2,10.4),(-1.6,5.8))
+    f.poly([A,B,C])
+    f.seg(C,D)
+    f.rightangle(C,A,B,0.42); f.rightangle(D,C,B,0.35)
+    f.dimarc_pt(A,C,+1,'x',pt=10,italic=True)
+    f.dimarc_pt(C,D,+1,'y',pt=10,italic=True)
+    f.dimarc_pt(D,B,-1,'4',pt=10)
+    f.lab('A',A,-8,0); f.lab('B',B,8,1); f.lab('C',C,0,9); f.lab('D',D,0,-9)
+    f.ngd_on(A,B,0.25)
+    return f.save()
+if __name__=='__main__': print(make())
