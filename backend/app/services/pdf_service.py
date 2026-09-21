@@ -21,6 +21,25 @@ def _resolve_logo(include_logo: bool) -> str | None:
     return str(DEFAULT_LOGO_PATH) if include_logo and DEFAULT_LOGO_PATH.exists() else None
 
 
+def _attach_images(questions: list[dict]) -> list[dict]:
+    """각 문항 dict에 images={image_ref: url} 를 채워 넣는다.
+
+    pdf_engine.py의 render_question_body()는 q.get("images")가 없으면
+    무조건 '[그림]' placeholder를 그린다 — fetch_questions_for_preview()의
+    SELECT에는 images 테이블이 안 끼어있어(question_text 등 텍스트 컬럼만
+    조회) 이 단계에서 채워주지 않으면 실제 그림이 R2에 정상 업로드돼
+    있어도 항상 placeholder만 나온다(2026-09-21 발견 — 시험지/교재 PDF
+    다운로드·실물 미리보기 둘 다 영향받는 근본 버그, 구 Streamlit
+    main.py에도 동일하게 있었음).
+    """
+    if not questions:
+        return questions
+    image_map = db_service.image_maps_for([q["question_id"] for q in questions])
+    for q in questions:
+        q["images"] = image_map.get(q["question_id"], {})
+    return questions
+
+
 def build_exam_pdf(question_ids: list[int], title: str = "수학 시험지",
                    include_source: bool = True,
                    subtitle: str | None = None,
@@ -30,7 +49,7 @@ def build_exam_pdf(question_ids: list[int], title: str = "수학 시험지",
     rows = db_service.fetch_questions_for_preview(question_ids, preserve_order)
     # main.py:1663 과 동일하게 dict 로 변환 후 전달
     # (raw Row 객체는 pdf_engine 내부의 `.get()` 호출과 호환 안 됨).
-    questions = [dict(r) for r in rows]
+    questions = _attach_images([dict(r) for r in rows])
     return generate_exam_pdf(
         questions,
         title=title,
@@ -52,7 +71,7 @@ def build_exam_html_preview(question_ids: list[int], title: str = "수학 시험
     @media print 전용 규칙이 없는 일반 CSS라(조사로 확인됨) 브라우저가 이
     HTML을 그대로 그리면 실제 PDF와 거의 동일하게 보인다."""
     rows = db_service.fetch_questions_for_preview(question_ids, preserve_order)
-    questions = [dict(r) for r in rows]
+    questions = _attach_images([dict(r) for r in rows])
     return build_exam_html(
         questions,
         title=title,
@@ -86,7 +105,7 @@ def build_book_html_preview(question_ids: list[int], title: str = "수학 교재
     rows = db_service.fetch_questions_for_preview(
         question_ids, preserve_order and book_mode == "flat",
     )
-    questions = [dict(r) for r in rows]
+    questions = _attach_images([dict(r) for r in rows])
     return build_book_html(
         questions,
         title=title,
@@ -138,7 +157,7 @@ def build_book_pdf(question_ids: list[int], title: str = "수학 교재",
     rows = db_service.fetch_questions_for_preview(
         question_ids, preserve_order and book_mode == "flat",
     )
-    questions = [dict(r) for r in rows]
+    questions = _attach_images([dict(r) for r in rows])
     return generate_book_pdf(
         questions,
         title=title,
