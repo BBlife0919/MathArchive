@@ -34,6 +34,16 @@ _REVIEW_KW = (
     # 노출됐다(가정고 168125 등, 651건 확인). 표 셀이 "수정<br>내용"처럼
     # <br>로 줄바꿈되는 경우가 많아 \s* 만으론 안 걸림 — <br> 태그까지 허용.
     r"|수정(?:\s|<br>)*내용"
+    # 박스(표) 없이 평문으로만 붙는 편집메모 변형들 — 2026-09-21 2차 발견.
+    # "N번문제/N번해설"처럼 문항 종결부([N점]) 뒤에 박스 없이 바로 이어지는
+    # 평문 노트라 위 _BOX_RE 로는 못 잡고, 반드시 이 키워드들로 앵커를
+    # 잡아야 아래 커트 로직(마지막 종결부에서 자르기)이 동작한다.
+    r"|수고하셨습니다|총\s*감점|중단원명"
+    # 바로 뒤에 "]"가 오면 "[문제표기오타]"처럼 본문 맨 앞의 대괄호 인라인
+    # 태그일 가능성 — 이 경우 진짜 문항이 태그 "뒤"에 이어지는데 현재 커트
+    # 로직은 앵커 "앞"만 보존하므로 문항 전체가 삭제된다(qid 141226에서
+    # 실제 재현 확인, 2026-09-21). "오타"만 이 형태에서 제외.
+    r"|(?<![A-Za-z\\])오타(?![A-Za-z\]])"
 )
 # 리뷰표 헤더를 담은 <<BOX_START>>…<<BOX_END>> 만 제거.
 # ── 화살표(->,→,⇨)는 정상 수학박스(보기/조건/함수/작도)에도 흔하므로 트리거 금지.
@@ -50,6 +60,9 @@ _ANCHOR_RE = re.compile(
     _REVIEW_KW
     + r"|(?m:^[ \t]*\[?\s*(?:문제|해설|풀이|서술형)?\s*\d+\s*번?[^\n]*"
       r"(?:수정|오타|삭제|추가|누락|조정|변경|교체|->|→|⇨))"
+    # "#배점표시 오른쪽 정렬" 처럼 줄 맨 앞이 #으로 시작하는 편집 주석
+    # (일반 문제 본문에는 절대 안 나오는 표기) — 2026-09-21 발견.
+    + r"|(?m:^\s*#)"
 )
 # 박스 제거 후에도 남는 짧은 편집메모 잔여 조각(예: "해5. 정답을",
 # "N번 OO조정" 등 — 원본 리뷰노트가 잘려서 본문 뒤에 붙은 경우) 정리용.
@@ -148,12 +161,12 @@ def _run(apply: bool, cloud: bool = False):
     overcut = []    # 삭제분에 오검/벌점 없음 → 과다삭제 의심
     verbcut = []    # 삭제분에 문제 종결어(구하시오 등) → 본문 삭제 의심
     undercut = []   # 유지분에 오검/벌점 잔존 → 미삭제
-    kw = re.compile(r"오검|벌점|수정(?:\s|<br>)*내용|총점\s*\d")
+    kw = re.compile(r"오검|벌점|수정(?:\s|<br>)*내용|총점\s*\d|오타|수고하셨습니다|중단원명|(?m:^\s*#)")
     verb = re.compile(r"구하시오|구하여라|서술하시오|논술하시오|답하시오|나타내시오|증명하시오|쓰시오")
-    left = re.compile(r"오검|벌점|수정(?:\s|<br>)*내용")
+    left = re.compile(r"오검|벌점|수정(?:\s|<br>)*내용|오타|수고하셨습니다|중단원명")
 
     LIKE = "(question_text LIKE '%오검%' OR question_text LIKE '%벌점%' " \
-           "OR question_text LIKE '%수정%내용%' OR question_text LIKE '%총점%점%')"
+           "OR question_text LIKE '%수정%내용%' OR question_text LIKE '%총점%점%' OR question_text LIKE '%오타%' OR question_text LIKE '%수고하셨습니다%' OR question_text LIKE '%중단원명%' OR question_text LIKE '%#%' OR question_text LIKE '%감점%')"
 
     # questions
     q_updates = []
@@ -182,7 +195,7 @@ def _run(apply: bool, cloud: bool = False):
     s_updates = []
     for r in cur.execute("SELECT solution_id, solution_text FROM solutions "
                          "WHERE solution_text LIKE '%오검%' OR solution_text LIKE '%벌점%' "
-                         "OR solution_text LIKE '%수정%내용%' OR solution_text LIKE '%총점%점%'"):
+                         "OR solution_text LIKE '%수정%내용%' OR solution_text LIKE '%총점%점%' OR solution_text LIKE '%오타%' OR solution_text LIKE '%수고하셨습니다%' OR solution_text LIKE '%중단원명%' OR solution_text LIKE '%#%' OR solution_text LIKE '%감점%'"):
         orig = r["solution_text"]
         new = strip_review_notes(orig)
         if new != orig:
@@ -193,7 +206,7 @@ def _run(apply: bool, cloud: bool = False):
     ch_updates = []
     for r in cur.execute("SELECT question_id, choices FROM questions "
                          "WHERE choices LIKE '%오검%' OR choices LIKE '%벌점%' "
-                         "OR choices LIKE '%수정%내용%' OR choices LIKE '%총점%점%'"):
+                         "OR choices LIKE '%수정%내용%' OR choices LIKE '%총점%점%' OR choices LIKE '%오타%' OR choices LIKE '%수고하셨습니다%' OR choices LIKE '%중단원명%' OR choices LIKE '%#%' OR choices LIKE '%감점%'"):
         changed, new_val = _fix_choices(r["choices"])
         if changed:
             stats["ch_changed"] = stats.get("ch_changed", 0) + 1
@@ -252,7 +265,7 @@ def _apply_cloud():
 
     cur.execute("SELECT question_id, question_text FROM questions "
                 "WHERE question_text LIKE '%오검%' OR question_text LIKE '%벌점%' "
-                "OR question_text LIKE '%수정%내용%' OR question_text LIKE '%총점%점%'")
+                "OR question_text LIKE '%수정%내용%' OR question_text LIKE '%총점%점%' OR question_text LIKE '%오타%' OR question_text LIKE '%수고하셨습니다%' OR question_text LIKE '%중단원명%' OR question_text LIKE '%#%' OR question_text LIKE '%감점%'")
     q_up, empties = [], []
     for qid, t in cur.fetchall():
         n = strip_review_notes(t)
@@ -263,14 +276,14 @@ def _apply_cloud():
 
     cur.execute("SELECT solution_id, solution_text FROM solutions "
                 "WHERE solution_text LIKE '%오검%' OR solution_text LIKE '%벌점%' "
-                "OR solution_text LIKE '%수정%내용%' OR solution_text LIKE '%총점%점%'")
+                "OR solution_text LIKE '%수정%내용%' OR solution_text LIKE '%총점%점%' OR solution_text LIKE '%오타%' OR solution_text LIKE '%수고하셨습니다%' OR solution_text LIKE '%중단원명%' OR solution_text LIKE '%#%' OR solution_text LIKE '%감점%'")
     s_up = [(strip_review_notes(t), sid) for sid, t in cur.fetchall()
             if strip_review_notes(t) != t]
 
     from psycopg2.extras import Json
     cur.execute("SELECT question_id, choices FROM questions "
                 "WHERE choices::text LIKE '%오검%' OR choices::text LIKE '%벌점%' "
-                "OR choices::text LIKE '%수정%내용%' OR choices::text LIKE '%총점%점%'")
+                "OR choices::text LIKE '%수정%내용%' OR choices::text LIKE '%총점%점%' OR choices::text LIKE '%오타%' OR choices::text LIKE '%수고하셨습니다%' OR choices::text LIKE '%중단원명%' OR choices::text LIKE '%#%' OR choices::text LIKE '%감점%'")
     ch_up = []
     for qid, raw in cur.fetchall():
         changed, new_val = _fix_choices(raw)
