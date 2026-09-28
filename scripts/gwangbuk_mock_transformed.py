@@ -63,11 +63,14 @@ TRANSFORMED = {
 ),
 5: dict(
     chapter="직선의 방정식", difficulty="중", points=4, is_subjective=True,
+    # 2026-09-29 국어표현 검수로 수정: 조건 박스가 질문 문장 뒤에 있으면
+    # "조건을 만족시킬 때"라고 해놓고 조건이 나중에 나오는 순서가 됨 —
+    # 같은 유형인 원본 9,10,16번처럼 박스를 질문 앞으로 이동.
     question_text=r"좌표평면 위의 네 점 $A(0,2)$, $B(0,5)$, $C(\sqrt2,p)$, $D(3\sqrt2,q)$가 다음 "
-                   r"조건을 만족시킬 때, $p+q$의 값을 구하시오."
+                   r"조건을 만족시킨다."
                    r"<<BOX_START>>(가) 직선 CD의 기울기는 음수이다.<br>"
                    r"(나) $\overline{AB}=\overline{CD}$이고 $\overline{AD}\parallel\overline{BC}$이다."
-                   r"<<BOX_END>>",
+                   r"<<BOX_END>>$p+q$의 값을 구하시오.",
     choices=None, answer="11",
     solution_text=r"$\overline{AB}=3$, $\overline{CD}=\sqrt{8+(q-p)^2}$이므로 $9=8+(q-p)^2$에서 "
                   r"$(q-p)^2=1$이다.<br>"

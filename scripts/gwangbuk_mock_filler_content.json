@@ -6,7 +6,7 @@
   "difficulty": "중",
   "points": 4.8,
   "question_text": "어느 수련원의 $\\mathrm{A}$동은 정문으로부터 동쪽으로 $40 \\mathrm{m}$ 떨어져 있고, $\\mathrm{B}$동은 정문으로부터 북쪽으로 $30 \\mathrm{m}$ 떨어져 있고, $\\mathrm{A}$동과 $\\mathrm{B}$동은 산책로로 서로 연결되어 있다. 정문에서 동쪽으로 $20 \\mathrm{m}$, 북쪽으로 $30 \\mathrm{m}$ 떨어진 지점에 $\\mathrm{C}$동을 새로 건설하고 $\\mathrm{A}$동과 $\\mathrm{B}$동을 연결하는 산책로와 $\\mathrm{C}$동 사이를 최단 거리로 연결하는 산책로를 새로 놓으려고 한다. 이 때, 새로운 산책로의 길이는? (단, 산책로는 직선상에 있다.) [$4.8$점]",
-  "choices": "[{\"number\": 1, \"text\": \"$10 \\\\mathrm{m}$\"}, {\"number\": 2, \"text\": \"$12m$\"}, {\"number\": 3, \"text\": \"$14 \\\\mathrm{m}$\"}, {\"number\": 4, \"text\": \"$16 \\\\mathrm{m}$\"}, {\"number\": 5, \"text\": \"$18m$\"}]",
+  "choices": "[{\"number\": 1, \"text\": \"$10 \\\\mathrm{m}$\"}, {\"number\": 2, \"text\": \"$12 \\\\mathrm{m}$\"}, {\"number\": 3, \"text\": \"$14 \\\\mathrm{m}$\"}, {\"number\": 4, \"text\": \"$16 \\\\mathrm{m}$\"}, {\"number\": 5, \"text\": \"$18 \\\\mathrm{m}$\"}]",
   "answer": "2",
   "answer_type": "choice",
   "is_subjective": 0,
@@ -31,7 +31,7 @@
   "chapter": "평면좌표",
   "difficulty": "중",
   "points": 4.4,
-  "question_text": "점 $(2, 0)$을 $x$축의 방향으로 $k-1$만큼, $y$축의 방향으로 $k$만큼 평행이동한 점이 이차함수 $y=x^2 -5x+4$의 그래프 위에 있도록 하는 모든 실수 $k$의 값의 합은.? [$4.4$점]",
+  "question_text": "점 $(2, 0)$을 $x$축의 방향으로 $k-1$만큼, $y$축의 방향으로 $k$만큼 평행이동한 점이 이차함수 $y=x^2 -5x+4$의 그래프 위에 있도록 하는 모든 실수 $k$의 값의 합은? [$4.4$점]",
   "choices": "[{\"number\": 1, \"text\": \"$0$\"}, {\"number\": 2, \"text\": \"$1$\"}, {\"number\": 3, \"text\": \"$2$\"}, {\"number\": 4, \"text\": \"$4$\"}, {\"number\": 5, \"text\": \"$8$\"}]",
   "answer": "4",
   "answer_type": "choice",
@@ -317,12 +317,12 @@
   "chapter": "평면좌표",
   "difficulty": "하",
   "points": 4.1,
-  "question_text": "두 점 ${\\mathrm{A}(3, -2)}$, ${\\mathrm{B}(9, 16)}$에 대하여 선분 $\\mathrm{ AB }$의 중점 $\\mathrm{ M }$의 좌표는? [$4.1$점]",
+  "question_text": "두 점 ${\\mathrm{A}(3, -2)}$, ${\\mathrm{B}(9, 16)}$에 대하여 선분 $\\mathrm{AB}$의 중점 $\\mathrm{M}$의 좌표는? [$4.1$점]",
   "choices": "[{\"number\": 1, \"text\": \"$(6, 6)$\"}, {\"number\": 2, \"text\": \"$(6, 7)$\"}, {\"number\": 3, \"text\": \"$(6, 14)$\"}, {\"number\": 4, \"text\": \"$(12, 7)$\"}, {\"number\": 5, \"text\": \"$(12, 14)$\"}]",
   "answer": "2",
   "answer_type": "choice",
   "is_subjective": 0,
-  "solution_text": "$\\mathrm{\\mathrm{A}(3, -2)}$, $\\mathrm{\\mathrm{B}(9, 16)}$에 대하여 선분 $\\mathrm{AB}$의 중점 $\\mathrm{M}$의 좌표는\n$\\left( \\dfrac{3 + 9}{2}, \\dfrac{-2 + 16}{2} \\right) = \\left( 6, 7 \\right)$"
+  "solution_text": "$\\mathrm{A}(3, -2)}$, $\\mathrm{B}(9, 16)}$에 대하여 선분 $\\mathrm{AB}$의 중점 $\\mathrm{M}$의 좌표는\n$\\left( \\dfrac{3 + 9}{2}, \\dfrac{-2 + 16}{2} \\right) = \\left( 6, 7 \\right)$"
  },
  "201986": {
   "question_id": 201986,
@@ -343,12 +343,12 @@
   "chapter": "원의 방정식",
   "difficulty": "중",
   "points": 4.9,
-  "question_text": "직선 $x + 2y + 1 =0$에 수직인 직선이 원 $x^{2} + y^{2} = 15$와 점 ${\\mathrm{A}(a, b)}$에서 접할 때, $ab$의 값은?(단, 점 $\\mathrm{ A }$는 제 $2$사분면 위의 점이다.) [$4.9$점]",
+  "question_text": "직선 $x + 2y + 1 =0$에 수직인 직선이 원 $x^{2} + y^{2} = 15$와 점 ${\\mathrm{A}(a, b)}$에서 접할 때, $ab$의 값은?(단, 점 $\\mathrm{A}$는 제$2$사분면 위의 점이다.) [$4.9$점]",
   "choices": "[{\"number\": 1, \"text\": \"$-12$\"}, {\"number\": 2, \"text\": \"$-10$\"}, {\"number\": 3, \"text\": \"$-8$\"}, {\"number\": 4, \"text\": \"$-6$\"}, {\"number\": 5, \"text\": \"$-4$\"}]",
   "answer": "4",
   "answer_type": "choice",
   "is_subjective": 0,
-  "solution_text": "직선 $x + 2y + 1=0$의 기울기는 $-\\dfrac{1}{2}$이므로, 이에 수직인 접선의 기울기는 $2$이다.\n원 $x^{2} + y^{2} = 15$ 위의 점 $\\mathrm{\\mathrm{A}(a, b)}$에서의 접선은 $ax + by = 15$\n이 접선의 기울기가 $2$이므로 $-\\dfrac{a}{b} = 2$, 즉 $a=-2b$.\n점 $\\mathrm{A}$가 원 위에 있으므로 $a^{2} + b^{2} = 15$\n $4b^{2} + b^{2} = 15$, $b^{2} = 3$, $b = +-\\sqrt{3}$\n점 $\\mathrm{A}$가 제$2$사분면 위의 점이므로 $a < 0$, $b > 0$.\n$\\therefore b = \\sqrt{3}$, $a=-2 \\sqrt{3}$\n $ab=-2 \\sqrt{3} \\times \\sqrt{3}=-6$"
+  "solution_text": "직선 $x + 2y + 1=0$의 기울기는 $-\\dfrac{1}{2}$이므로, 이에 수직인 접선의 기울기는 $2$이다.\n원 $x^{2} + y^{2} = 15$ 위의 점 $\\mathrm{A}(a, b)}$에서의 접선은 $ax + by = 15$\n이 접선의 기울기가 $2$이므로 $-\\dfrac{a}{b} = 2$, 즉 $a=-2b$.\n점 $\\mathrm{A}$가 원 위에 있으므로 $a^{2} + b^{2} = 15$\n $4b^{2} + b^{2} = 15$, $b^{2} = 3$, $b = +-\\sqrt{3}$\n점 $\\mathrm{A}$가 제$2$사분면 위의 점이므로 $a < 0$, $b > 0$.\n$\\therefore b = \\sqrt{3}$, $a=-2 \\sqrt{3}$\n $ab=-2 \\sqrt{3} \\times \\sqrt{3}=-6$"
  },
  "201996": {
   "question_id": 201996,
@@ -369,7 +369,7 @@
   "chapter": "원의 방정식",
   "difficulty": "하",
   "points": 4.0,
-  "question_text": "점 $(-4, 2)$를 중심으로 하고, 점 $(-1, 6)$을 지나는 원의 방정식은?[$4.0$점]",
+  "question_text": "점 $(-4, 2)$를 중심으로 하고, 점 $(-1, 6)$을 지나는 원의 방정식은? [$4.0$점]",
   "choices": "[{\"number\": 1, \"text\": \"$(x+4)^{2}+(y-2)^{2}=5$\"}, {\"number\": 2, \"text\": \"$(x-4)^{2}+(y+2)^{2}=5$\"}, {\"number\": 3, \"text\": \"$(x+4)^{2}+(y-2)^{2}=25$\"}, {\"number\": 4, \"text\": \"$(x-4)^{2}+(y+2)^{2}=25$\"}, {\"number\": 5, \"text\": \"$(x+4)^{2}+(y-2)^{2}=45$\"}]",
   "answer": "3",
   "answer_type": "choice",
