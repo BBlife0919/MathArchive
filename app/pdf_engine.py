@@ -338,8 +338,11 @@ def _normalize_math_inner(s: str) -> str:
     # `\,` 가 한 번이 아니라 `\,\,` 처럼 중복으로 붙는 레코드도 있음(2026-09-21
     # 발견, 서울여고 등 — `C\,\,'` 가 KaTeX Double superscript류 에러 없이도
     # 그냥 파싱 실패해 raw 노출됨) → (?:\\,)+ 로 반복 허용.
+    # 밑변수와 `\,` 사이에 공백이 낀 경우도 매칭(예: `f \,' (x)` — 광명 지역
+    # 기출 미적분 도함수 활용 문항에서 발견, 2026-09-27). 공백 없이 붙은
+    # 기존 케이스도 그대로 포괄한다.
     s = re.sub(r"(?:\\,)+\s*'\s*(?:\\,)+", "'", s)
-    s = re.sub(r"([a-zA-Z0-9}])(?:\\,)+\s*'", r"\1'", s)
+    s = re.sub(r"([a-zA-Z0-9}])\s*(?:\\,)+\s*'", r"\1'", s)
     s = re.sub(r"'\s*(?:\\,)+", "'", s)
     # HWP 변환 잔재(구버전 파서): prime 이 다음 변수명에 바로 붙어 미변환 노출된
     # 경우(예: `A'B'C'`가 `A\,primeB\,primeC\,'`로 저장된 구 DB 레코드) 복구.
@@ -1999,9 +2002,10 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
         f'<span class="q-meta">{format_source(q, include_difficulty)}</span>'
         if include_source else ""
     )
+    slot_header_label = q.get("display_label") or f"{i}번"
     return (
         f'<div class="slot {layout}">'
-        f'<div class="q-header">{i}번{meta}</div>'
+        f'<div class="q-header">{_html.escape(slot_header_label)}{meta}</div>'
         f'<div class="q-body">{body_html}</div>'
         + (f'<div class="q-choices">{choices_html}</div>' if choices_html else "")
         + '</div>'
@@ -2170,9 +2174,14 @@ def _render_quick_answer_table(questions: list[dict], cols: int = 5) -> str:
             if idx < n:
                 q = questions[idx]
                 raw = q.get("answer")
-                ans = _CIRCLE_ANS.get(str(raw), raw if raw is not None else "-")
+                # 서술형(주관식) 답이 1~5인 숫자값일 때 객관식 원문자(①~⑤)로
+                # 잘못 둔갑하는 사고 방지 — 원문자 변환은 객관식에만 적용
+                # (2026-09-28 발견: 서술형 정답 "3"이 "③"으로 표시됨).
+                ans = (raw if q.get("is_subjective") else
+                       _CIRCLE_ANS.get(str(raw), raw)) if raw is not None else "-"
+                qa_label = q.get("display_label") or str(idx + 1)
                 cells.append(
-                    f'<td class="qa-num">{idx + 1}</td>'
+                    f'<td class="qa-num">{_html.escape(qa_label)}</td>'
                     f'<td class="qa-ans">{_html.escape(str(ans))}</td>'
                 )
             else:
@@ -2200,12 +2209,20 @@ def _render_solution_items(questions: list[dict], include_source: bool,
             else '<p class="no-sol">해설 없음</p>'
         )
         raw_ans = q.get("answer")
-        ans = _CIRCLE_ANS.get(str(raw_ans), raw_ans if raw_ans is not None else "-")
+        # 서술형 숫자 정답이 객관식 원문자로 둔갑하는 사고 방지 (위 quick-answer
+        # 표와 동일한 이유, 2026-09-28).
+        ans = (raw_ans if q.get("is_subjective") else
+               _CIRCLE_ANS.get(str(raw_ans), raw_ans)) if raw_ans is not None else "-"
+        display_label = q.get("display_label")
+        num_html = (
+            f'<span class="sol-num">{_html.escape(display_label)}</span>'
+            if display_label else
+            f'<span class="sol-num">{i}</span><span class="sol-num-label">번</span>'
+        )
         items.append(
             f'<div class="sol-item">'
             f'<div class="sol-header">'
-            f'<span class="sol-num">{i}</span>'
-            f'<span class="sol-num-label">번</span>'
+            f'{num_html}'
             f'<span class="sol-answer-inline">정답 <b>{_html.escape(str(ans))}</b></span>'
             f'</div>'
             f'<div class="sol-body">{sol_body}</div>'
@@ -2772,7 +2789,7 @@ def build_designed_exam_html(questions: list[dict],
     body_class = ""
     if inner_spec:
         needs_count = inner_spec.get("needs_page_count")
-        total_pages_for_design = n_body_pages + 1  # 표지 포함
+        total_pages_for_design = n_body_pages  # 표지(별지)는 쪽수에 포함 안 함
         if needs_count:
             inner_header = inner_spec["first_header"](
                 meta, total_pages_for_design

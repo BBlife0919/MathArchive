@@ -354,6 +354,19 @@ INNER_EUM_CSS = r"""
 .inner-eum-instructions ul { padding-left: 4mm; margin: 0; }
 .inner-eum-instructions li { margin: 0.6mm 0; }
 .inner-eum-instructions .red { color: #c0392b; }
+
+/* 매 페이지 하단 고사 정보 + 저작권 박스 (Image #고1 실전 동형모고) */
+.inner-eum-footer {
+  margin-top: 4mm;
+  font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+}
+.inner-eum-footer .ief-line {
+  text-align: center; font-size: 9pt; margin-bottom: 2mm;
+}
+.inner-eum-footer .ief-copyright {
+  border: 0.7pt solid #444; padding: 1.5mm 3mm;
+  font-size: 7.3pt; line-height: 1.5; text-align: center;
+}
 """
 
 
@@ -570,6 +583,23 @@ def render_mock_page_header(meta: ExamMeta, page_idx: int,
 """.strip()
 
 
+def render_eum_footer(meta: ExamMeta, page_idx: int, total_pages: int) -> str:
+    """이음고 내지 — 매 페이지 하단 고사 정보 + 저작권 박스."""
+    return f"""
+<div class="inner-eum-footer">
+  <div class="ief-line">
+    {meta.school_year}학년도 {meta.semester}학기 {meta.session}회고사
+    제 {meta.grade}학년 (수학) 총 {total_pages}쪽 중 {page_idx}쪽
+  </div>
+  <div class="ief-copyright">
+    이 시험문제의 저작권은 {_html_escape(meta.school_full_name)}에 있습니다.
+    저작권법에 의해 보호받는 저작물이므로 전재와 복제는 금지되며,
+    이를 어길시 저작권법에 의거 처벌될 수 있습니다.
+  </div>
+</div>
+""".strip()
+
+
 def render_mock_page_footer(meta: ExamMeta, page_idx: int,
                              total_pages: int) -> str:
     """수능형 모의고사 페이지 푸터 — 페이지번호 박스(SVG 빗금) + 저작권."""
@@ -615,6 +645,7 @@ INNER_DESIGNS: dict = {
     "이음고 내지 (Image #177)": {
         "first_header": render_inner_eum_first_page_header,
         "first_col_extra": render_inner_eum_first_col_extra,
+        "per_page_footer_fn": render_eum_footer,
         "css": INNER_EUM_CSS,
         "needs_page_count": True,
         "body_class": "",
