@@ -135,12 +135,12 @@
   "chapter": "도형의 이동",
   "difficulty": "중",
   "points": 4.3,
-  "question_text": "점 $\\mathrm{A}\\left( -9,\\,\\,\\,\\,5 \\right)$와 원 $x\\,^{ 2 } + \\left(y - 3 \\right)^{ 2 } = 1$ 위의 점 $\\mathrm{B}$에 대하여 점 $\\mathrm{P}$가 직선 $y = x$ 위를 움직일 때, $\\overline{\\mathrm{AP}}+\\overline{\\mathrm{BP}}$의 최솟값은? [$4.3$점]",
+  "question_text": "점 $\\mathrm{A}\\left( -9,\\,\\,\\,\\,5 \\right)$와 원 $x\\,^{ 2 } + \\left(y - 3 \\right)^{ 2 } = 1$ 위의 점 $\\mathrm{B}$에 대하여 점 $\\mathrm{P}$가 직선 $y = x$ 위를 움직일 때, $\\overline{\\mathrm{AP}} +\\overline{\\mathrm{BP}}$의 최솟값은? [$4.3$점]",
   "choices": "[{\"number\": 1, \"text\": \"$8$\"}, {\"number\": 2, \"text\": \"$9$\"}, {\"number\": 3, \"text\": \"$10$\"}, {\"number\": 4, \"text\": \"$11$\"}, {\"number\": 5, \"text\": \"$12$\"}]",
   "answer": "5",
   "answer_type": "choice",
   "is_subjective": 0,
-  "solution_text": "원 $x\\,^{ 2 } + \\left(y - 3 \\right)^{ 2 } = 1$의 중심을 $\\mathrm{C}\\left(0,\\,3 \\right)$, 반지름을 $r = 1$이라 하자.\n직선 $y = x$에 대하여 점 $\\mathrm{A}\\left( -9,\\,5 \\right)$의 대칭점 $\\mathrm{A}\\,{ ' }$을 구하면\n직선 $y = x$에 대한 대칭은 $\\left(x,\\,y \\right) \\rightarrow \\left(y,\\,x \\right)$이므로\n$\\mathrm{A}\\,{ ' } = \\left(5,\\, - 9 \\right)$\n $\\mathrm{P}$가 직선 $y = x$ 위의 점이므로\n$\\overline{\\mathrm{AP}} = \\overline{\\mathrm{A'P}}$\n따라서\n$\\overline{\\mathrm{AP}}+\\overline{\\mathrm{BP}} = \\overline{\\mathrm{A'P}}+\\overline{\\mathrm{BP}} \\ge \\overline{\\mathrm{A'B}}$\n\n $\\overline{\\mathrm{A'B}} \\ge \\overline{\\mathrm{A'C}} - r$\n $\\mathrm{A}\\,{ ' } = \\left(5,\\, - 9 \\right)$, $\\mathrm{C}= \\left(0,\\,3 \\right)$이므로\n$\\overline{\\mathrm{A'C}} = \\sqrt{ \\left(5 - 0 \\right)^{ 2 } + \\left( -9 - 3 \\right)^{ 2 } }$ $= \\sqrt{ 25 + 144 } = \\sqrt{ 169 } = 13$\n따라서\n$\\overline{\\mathrm{AP}}+\\overline{\\mathrm{BP}}$의 최솟값은 $12$"
+  "solution_text": "원 $x\\,^{ 2 } + \\left(y - 3 \\right)^{ 2 } = 1$의 중심을 $\\mathrm{C}\\left(0,\\,3 \\right)$, 반지름을 $r = 1$이라 하자.\n직선 $y = x$에 대하여 점 $\\mathrm{A}\\left( -9,\\,5 \\right)$의 대칭점 $\\mathrm{A}\\,{ ′ }$을 구하면\n직선 $y = x$에 대한 대칭은 $\\left(x,\\,y \\right) \\rightarrow \\left(y,\\,x \\right)$이므로\n$\\mathrm{A}\\,{ ′ } = \\left(5,\\, - 9 \\right)$\n $\\mathrm{P}$가 직선 $y = x$ 위의 점이므로\n$\\overline{\\mathrm{AP}} = \\overline{\\mathrm{A′P}}$\n따라서\n$\\overline{\\mathrm{AP}} +\\overline{\\mathrm{BP}} = \\overline{\\mathrm{A′P}} +\\overline{\\mathrm{BP}} \\geq\\overline{\\mathrm{A′B}}$\n\n $\\overline{\\mathrm{A′B}} \\geq\\overline{\\mathrm{A′C}} - r$\n $\\mathrm{A}\\,{ ′ } = \\left(5,\\, - 9 \\right)$, $\\mathrm{C}= \\left(0,\\,3 \\right)$이므로\n$\\overline{\\mathrm{A′C}} = \\sqrt{ \\left(5 - 0 \\right)^{ 2 } + \\left( -9 - 3 \\right)^{ 2 } }$ $= \\sqrt{ 25 + 144 } = \\sqrt{ 169 } = 13$\n따라서\n$\\overline{\\mathrm{AP}} +\\overline{\\mathrm{BP}}$의 최솟값은 $12$"
  },
  "199281": {
   "question_id": 199281,
@@ -266,7 +266,7 @@
   "difficulty": "하",
   "points": 4.3,
   "question_text": "점 $\\left( 1, 2 \\right)$를 $x$축의 방향으로 $3$만큼, $y$축의 방향으로 $4$만큼 평행이동한 점의 좌표는? [$4.3$점]",
-  "choices": "[{\"number\": 1, \"text\": \"$\\\\left( -2, -2 \\\\right)$\"}, {\"number\": 2, \"text\": \"$\\\\left( 0, 4 \\\\right)$\"}, {\"number\": 3, \"text\": \"$\\\\left( 3, 4 \\\\right)$\"}, {\"number\": 4, \"text\": \"$\\\\left( 4. 6 \\\\right)$\"}, {\"number\": 5, \"text\": \"$\\\\left( 5, 5 \\\\right)$\"}]",
+  "choices": "[{\"number\": 1, \"text\": \"$\\\\left( -2, -2 \\\\right)$\"}, {\"number\": 2, \"text\": \"$\\\\left( 0, 4 \\\\right)$\"}, {\"number\": 3, \"text\": \"$\\\\left( 3, 4 \\\\right)$\"}, {\"number\": 4, \"text\": \"$\\\\left( 4, 6 \\\\right)$\"}, {\"number\": 5, \"text\": \"$\\\\left( 5, 5 \\\\right)$\"}]",
   "answer": "4",
   "answer_type": "choice",
   "is_subjective": 0,
@@ -514,7 +514,7 @@
   "points": 4.5,
   "question_text": "두 점 $\\mathrm{{A}}(-2, 0)$, $\\mathrm{{B}}(3, 0)$에 대하여 $\\overline{\\mathrm{PA}} : \\overline{\\mathrm{PB}}$ $=3\\,\\,:\\,\\,2$를 만족시키는 점 $\\mathrm{P}$가 나타내는 도형의 넓이를 구하시오. [$4.5$점]",
   "choices": "[]",
-  "answer": "36",
+  "answer": "$36\\pi$",
   "answer_type": "short_answer",
   "is_subjective": 1,
   "solution_text": "점 $\\mathrm{P}$의 좌표를 $(x, y)$라 하면\n$\\overline{\\mathrm{PA}} : \\overline{\\mathrm{PB}}$ $=3\\,\\,:\\,\\,2$\n $2 \\overline{\\mathrm{PA}}$ $=3 \\overline{\\mathrm{PB}}$\n $4 {\\overline{\\mathrm{PA}}} ^{2}$ $=9 {\\overline{\\mathrm{PB}}} ^{2}$\n $4 \\left\\{ (x+2)^{2} +y ^{2} \\right\\}$ $=9 \\left\\{ (x-3)^{2} +y ^{2} \\right\\}$\n $x ^{2} +y ^{2} -14x+13$ $=0$\n $(x-7)^{2} +y ^{2}$ $=36$\n따라서 원의 넓이는 $\\pi \\times 6 ^{2}$ $=36 \\pi$"
