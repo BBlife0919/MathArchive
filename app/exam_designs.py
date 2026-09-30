@@ -70,6 +70,7 @@ class ExamMeta:
     school_org_name: str = "이음학원"  # 표지 하단 학원명
     school_motto: str = "생각을 잇고 성장을 이루다."
     instructor_name: str = "이영우"   # → "with 이영우T"
+    copyright_holder: str | None = None  # 저작권 표기 주체. None이면 school_full_name 사용
     logo_path: str | None = None
     inner_title: str = "수학영역"      # 모의고사 스타일 내지 제목
 
@@ -592,7 +593,7 @@ def render_eum_footer(meta: ExamMeta, page_idx: int, total_pages: int) -> str:
     제 {meta.grade}학년 (수학) 총 {total_pages}쪽 중 {page_idx}쪽
   </div>
   <div class="ief-copyright">
-    이 시험문제의 저작권은 {_html_escape(meta.school_full_name)}에 있습니다.
+    이 시험문제의 저작권은 {_html_escape(meta.copyright_holder or meta.school_full_name)}에 있습니다.
     저작권법에 의해 보호받는 저작물이므로 전재와 복제는 금지되며,
     이를 어길시 저작권법에 의거 처벌될 수 있습니다.
   </div>

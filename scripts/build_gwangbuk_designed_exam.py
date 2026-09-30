@@ -81,6 +81,20 @@ def _redact(page, rect, pad=1.0):
     page.add_redact_annot(r, fill=(1, 1, 1))
 
 
+_COPYRIGHT_MARK = "© Youngwoo Lee"
+
+
+def _stamp_copyright(page) -> None:
+    """표지 우측 하단에 저작권 표기를 삽입 (이미 있으면 중복 삽입 안 함 —
+    표지 원본이 없을 때 기존 출력물을 재사용하는 폴백 경로가 있어서, 매번
+    새로 찍지 않으면 재빌드할 때마다 겹쳐 찍힐 수 있음)."""
+    if _COPYRIGHT_MARK in page.get_text():
+        return
+    r = page.rect
+    page.insert_text((r.x1 - 140, r.y1 - 20), _COPYRIGHT_MARK,
+                      fontsize=9, fontname="helv", color=(0.4, 0.4, 0.4))
+
+
 def build_cover_b4(set_no: int, n_obj: int, n_subj: int) -> bytes:
     """원본 표지(A4)를 패치한 뒤 B4 페이지에 맞게 스케일링해서 반환.
 
@@ -95,6 +109,7 @@ def build_cover_b4(set_no: int, n_obj: int, n_subj: int) -> bytes:
             out = fitz.open()
             out.insert_pdf(old, from_page=0, to_page=0)
             old.close()
+            _stamp_copyright(out[0])
             return out.tobytes()
         raise FileNotFoundError(
             f"{COVER_SRC} 없음 + 재사용할 기존 출력물도 없음 — 표지 원본을 다시 받아야 함"
@@ -125,6 +140,7 @@ def build_cover_b4(set_no: int, n_obj: int, n_subj: int) -> bytes:
     b4_page = b4.new_page(width=729.12, height=1032)
     src = fitz.open(stream=a4_bytes, filetype="pdf")
     b4_page.show_pdf_page(b4_page.rect, src, 0)
+    _stamp_copyright(b4_page)
     out_bytes = b4.tobytes()
     src.close(); b4.close()
     return out_bytes
@@ -151,7 +167,7 @@ def build_one(set_no: int):
         subject=f"공통수학2 {set_no}회", exam_date=date(2026, 10, 1), exam_hour=17, period=1,
         code_number="02", n_choice=n_obj, n_essay=n_subj,
         school_name_short="이음", school_org_name="이음학원",
-        instructor_name="이영우",
+        instructor_name="이영우", copyright_holder="이영우",
     )
 
     # 표지는 원본 PDF 그대로 패치(고정 "1차" 문구 유지) + B4 스케일링
