@@ -27,7 +27,7 @@ TRANSFORMED = {
 2: dict(
     # 2026-10-01 서술형 구조 재편: 단일 단계라 서술형(소문항)에 부적합해 객관식으로 전환
     # (대신 11번을 소문항 2개짜리 서술형으로 전환 — 아래 11번 주석 참고).
-    chapter="직선의 방정식", difficulty="하", points=4.2, is_subjective=False,
+    chapter="직선의 방정식", difficulty="하", points=3.8, is_subjective=False,
     question_text=r"직선 $y=(13-3k)x-4$와 직선 $y=4x+2$가 서로 평행할 때, 상수 $k$의 값은?",
     choices=[{"number":1,"text":"$1$"},{"number":2,"text":"$2$"},{"number":3,"text":"$3$"},
              {"number":4,"text":"$4$"},{"number":5,"text":"$5$"}],
@@ -48,7 +48,7 @@ TRANSFORMED = {
                   r"이를 만족하는 정수 $m$은 $-6,-5,\dots,3$으로 모두 $10$개이다.",
 ),
 4: dict(
-    chapter="직선의 방정식", difficulty="중", points=4, is_subjective=False,
+    chapter="직선의 방정식", difficulty="중", points=3.6, is_subjective=False,
     question_text=r"그림과 같이 $\angle A=\angle B=90^\circ$, $\overline{AB}=4$, $\overline{BC}=12$인 "
                    r"사다리꼴 ABCD에 대하여 선분 AD를 $1:2$로 내분하는 점을 P라 하자. 두 직선 AC, "
                    r"BP가 점 Q에서 서로 수직으로 만날 때, 삼각형 AQD의 넓이는?",
@@ -66,7 +66,7 @@ TRANSFORMED = {
                   r"\cdot\dfrac25=\dfrac45$이다.",
 ),
 5: dict(
-    chapter="직선의 방정식", difficulty="중", points=4, is_subjective=True,
+    chapter="직선의 방정식", difficulty="중", points=6.6, is_subjective=True,
     # 2026-09-29 국어표현 검수로 수정: 조건 박스가 질문 문장 뒤에 있으면
     # "조건을 만족시킬 때"라고 해놓고 조건이 나중에 나오는 순서가 됨 —
     # 같은 유형인 원본 9,10,16번처럼 박스를 질문 앞으로 이동.
@@ -85,7 +85,7 @@ TRANSFORMED = {
                   r"따라서 $q=5$이므로 $p+q=11$이다.",
 ),
 6: dict(
-    chapter="직선의 방정식", difficulty="중", points=4, is_subjective=True,
+    chapter="직선의 방정식", difficulty="중", points=6.6, is_subjective=True,
     question_text=r"그림과 같이 좌표평면 위에 직선 $l_1:x-2y-6=0$과 평행하고 $y$절편이 양수인 직선 "
                    r"$l_2$가 있다. 직선 $l_1$이 $x$축, $y$축과 만나는 점을 각각 A, B라 하고 직선 "
                    r"$l_2$가 $x$축, $y$축과 만나는 점을 각각 C, D라 할 때, 사각형 ADCB의 넓이가 "
@@ -100,7 +100,7 @@ TRANSFORMED = {
                   r"$d^2=80$이다.",
 ),
 7: dict(
-    chapter="직선의 방정식", difficulty="중", points=4, is_subjective=False,
+    chapter="직선의 방정식", difficulty="중", points=3.6, is_subjective=False,
     question_text=r"그림과 같이 좌표평면 위에 세 점 $A(-9,a)$, $B(9,4)$, $C(-10,0)$이 있다. 선분 AB를 "
                    r"$2:1$로 내분하는 점을 P라 할 때, 직선 PC가 삼각형 AOB의 넓이를 이등분한다. 양수 "
                    r"$a$의 값은? (단, O는 원점이다.)",
@@ -120,7 +120,7 @@ TRANSFORMED = {
                   r"정리하면 $39a=31(a+8)$에서 $8a=248$이므로 $a=31$이다.",
 ),
 8: dict(
-    chapter="직선의 방정식", difficulty="상", points=5.2, is_subjective=False,
+    chapter="직선의 방정식", difficulty="상", points=4.7, is_subjective=False,
     question_text=r"그림과 같이 기울기와 $y$절편이 모두 양수인 직선 $l$과 이차함수 $y=2x^2$의 그래프가 "
                    r"서로 다른 두 점 A, B에서 만난다. 원점 O에 대하여 삼각형 AOB가 $\angle AOB=90^\circ$"
                    r"이고 넓이가 $3$인 직각삼각형일 때, 직선 $l$의 $y$절편은? (단, 점 A는 제2사분면 "
@@ -138,7 +138,7 @@ TRANSFORMED = {
                   r"실제로 존재함을 보장해 준다.)",
 ),
 9: dict(
-    chapter="평면좌표", difficulty="상", points=5.2, is_subjective=False,
+    chapter="평면좌표", difficulty="상", points=4.6, is_subjective=False,
     question_text=(
         r"0이 아닌 실수 $a$에 대하여 좌표평면 위의 서로 다른 세 점 $A(4a,0)$, $B$, $C$가 다음 "
         r"조건을 만족시킨다."
@@ -205,11 +205,11 @@ TRANSFORMED = {
     # 2026-10-01 서술형 구조 재편: 2번(단일단계) 대신 이쪽을 소문항 2개짜리 서술형으로
     # 전환 — 풀이에 "접하는 원 인식 → 반지름 식 → k 역산"의 두 단계가 자연스럽게
     # 나뉘어 있어 소문항 배점을 주기에 적합함.
-    chapter="원의 방정식", difficulty="중", points=4, is_subjective=True,
+    chapter="원의 방정식", difficulty="중", points=6.2, is_subjective=True,
     question_text=r"중심이 원점이고 직선 $y=-3x+k$ ($k$는 양의 상수)와 만나는 원 중에서 넓이가 "
                    r"최소인 원을 C라 하자. 다음 물음에 답하시오.<br>"
-                   r"(1) 원 C의 반지름을 $k$에 대한 식으로 나타내시오. [2.0점]<br>"
-                   r"(2) 원 C의 넓이가 $40\pi$일 때, $k$의 값을 구하시오. [2.0점]",
+                   r"(1) 원 C의 반지름을 $k$에 대한 식으로 나타내시오. [3.1점]<br>"
+                   r"(2) 원 C의 넓이가 $40\pi$일 때, $k$의 값을 구하시오. [3.1점]",
     choices=None, answer="20",
     solution_text=r"(1) 직선 $y=-3x+k$와 만나면서 넓이가 최소인 원은 이 직선에 접하는 원이다. 그 "
                   r"반지름은 원점과 직선 $3x+y-k=0$ 사이의 거리와 같으므로 $\dfrac{k}{\sqrt{10}}$"
@@ -218,7 +218,7 @@ TRANSFORMED = {
                   r"$\dfrac{k}{\sqrt{10}}=2\sqrt{10}$에서 $k=20$이다.",
 ),
 12: dict(
-    chapter="원의 방정식", difficulty="중", points=4, is_subjective=False,
+    chapter="원의 방정식", difficulty="중", points=3.7, is_subjective=False,
     question_text=r"곡선 $y=-x^2+10x$ 위의 서로 다른 두 점 A, B를 지름의 양 끝점으로 하는 원을 C라 "
                    r"하자. 원 C의 넓이가 $32\pi$이고, 점 A를 지나고 기울기가 $1$인 직선이 원 C에 접할 "
                    r"때, 직선 AB의 $y$절편은?",
@@ -238,12 +238,12 @@ TRANSFORMED = {
 ),
 13: dict(
     # 2026-10-01 서술형 구조 재편: 기존 단일질문(풀이4단계)을 소문항 2개로 분리.
-    chapter="원의 방정식", difficulty="중", points=5, is_subjective=True,
+    chapter="원의 방정식", difficulty="중", points=7.6, is_subjective=True,
     question_text=r"좌표평면에서 두 직선 $y=x+9$, $y=-x+9$에 모두 접하고 점 $(3,0)$을 지나는 서로 "
                    r"다른 두 원의 중심을 $O_1$, $O_2$라 하자. 다음 물음에 답하시오.<br>"
                    r"(1) 두 원의 중심이 모두 $y$축 위의 점 $(0,b)$ 꼴임을 이용하여 $b$에 대한 "
-                   r"방정식을 세우고, $b$의 값을 모두 구하시오. [3.0점]<br>"
-                   r"(2) 선분 $\overline{O_1O_2}$의 길이를 구하시오. [2.0점]",
+                   r"방정식을 세우고, $b$의 값을 모두 구하시오. [4.6점]<br>"
+                   r"(2) 선분 $\overline{O_1O_2}$의 길이를 구하시오. [3.0점]",
     choices=None, answer="24",
     solution_text=r"(1) 두 직선 $y=x+9$, $y=-x+9$는 $y$축에 대하여 대칭이므로, 두 직선에 모두 "
                   r"접하는 원의 중심은 $y$축 위의 점 $(0,b)$ 꼴이다. 직선 $x-y+9=0$까지의 거리가 "
@@ -253,7 +253,7 @@ TRANSFORMED = {
                   r"(2) 따라서 $\overline{O_1O_2}=|3-(-21)|=24$이다.",
 ),
 14: dict(
-    chapter="원의 방정식", difficulty="하", points=4.2, is_subjective=True,
+    chapter="원의 방정식", difficulty="하", points=6.8, is_subjective=True,
     question_text=r"좌표평면에서 원 $x^2+y^2=169$ 위의 점 $(5,-12)$에서의 접선이 원 "
                    r"$(x-8)^2+(y+2)^2=r^2$과 만나도록 하는 자연수 $r$의 최솟값을 구하시오.",
     choices=None, answer="9",
@@ -264,7 +264,7 @@ TRANSFORMED = {
                   r"$\dfrac{105}{13}=8.07\cdots$이므로 이보다 크거나 같은 자연수 $r$의 최솟값은 $9$이다.",
 ),
 15: dict(
-    chapter="원의 방정식", difficulty="중", points=4, is_subjective=False,
+    chapter="원의 방정식", difficulty="중", points=3.6, is_subjective=False,
     question_text=r"좌표평면 위에 세 점 A(0,8), B(8,8), C(8,0)이 있다. 세 선분 OA, AB, BC를 $m:n$ "
                    r"($m>0$, $n>0$)으로 내분하는 점을 각각 P, Q, R라 하고, 세 점 P, Q, R를 지나는 원을 "
                    r"C라 할 때, <보기>에서 옳은 것만을 있는 대로 고른 것은? (단, O는 원점이다.)"
@@ -291,7 +291,7 @@ TRANSFORMED = {
                   r"따라서 옳은 것은 ㄱ, ㄴ, ㄷ이다.",
 ),
 16: dict(
-    chapter="원의 방정식", difficulty="상", points=5.2, is_subjective=False,
+    chapter="원의 방정식", difficulty="상", points=4.6, is_subjective=False,
     question_text=r"좌표평면 위의 제1, 2사분면에 있는 점 A를 중심으로 하고 원점 O를 지나는 원 "
                    r"$C_1$이 있다. $C_1$을 원점에 대하여 대칭이동한 원을 $C_2$라 할 때, 두 원 "
                    r"$C_1,C_2$가 다음 조건을 만족시킨다."
@@ -328,7 +328,7 @@ TRANSFORMED = {
     # 유도해야 해서 서술형으로는 과중했음(6단계 이상). "원 → 두 축 교점 → 대각선
     # 공식으로 사각형 넓이" 라는 같은 핵심 기법은 유지하되, 원을 직접 제시해
     # 유도 단계를 덜어내고 적당한 난이도로 재설계함.
-    chapter="원의 방정식", difficulty="중", points=3, is_subjective=True,
+    chapter="원의 방정식", difficulty="중", points=4.1, is_subjective=True,
     question_text=r"원 O: $(x-6)^2+(y-6)^2=100$이 $x$축과 두 점 A, B에서, $y$축과 두 점 C, D에서 "
                    r"만난다. (단, 점 A의 $x$좌표는 점 B의 $x$좌표보다 작고, 점 C의 $y$좌표는 점 D의 "
                    r"$y$좌표보다 작다.) 사각형 ACBD의 넓이를 구하시오.",
@@ -369,7 +369,7 @@ TRANSFORMED = {
 
 # ── 3. 도형의 이동 (원본 19~28) ──────────────────────────────────────
 19: dict(
-    chapter="도형의 이동", difficulty="중", points=4, is_subjective=False,
+    chapter="도형의 이동", difficulty="중", points=3.7, is_subjective=False,
     question_text=r"직선 $y=ax+2$를 $x$축의 방향으로 $3$만큼 평행이동한 후, $y$축에 대하여 대칭이동한 "
                    r"직선이 원 $(x+2)^2+(y+6)^2=9$의 넓이를 이등분할 때, 상수 $a$의 값은?",
     choices=[{"number":1,"text":"$2$"},{"number":2,"text":"$4$"},{"number":3,"text":"$6$"},
@@ -385,12 +385,12 @@ TRANSFORMED = {
 20: dict(
     # 2026-10-01 서술형 구조 재편: "점 평행이동→직선 결정" / "직선 평행이동→y절편" 두
     # 단계로 자연히 나뉘어 소문항 2개로 분리.
-    chapter="도형의 이동", difficulty="하", points=4, is_subjective=True,
+    chapter="도형의 이동", difficulty="하", points=6.2, is_subjective=True,
     question_text=r"좌표평면의 점 $A(2,3)$을 $x$축의 방향으로 $3$만큼, $y$축의 방향으로 $-6$만큼 "
                    r"평행이동한 점을 B라 하자. 다음 물음에 답하시오.<br>"
-                   r"(1) 점 B의 좌표와 직선 AB의 방정식을 구하시오. [2.0점]<br>"
+                   r"(1) 점 B의 좌표와 직선 AB의 방정식을 구하시오. [3.1점]<br>"
                    r"(2) 직선 AB를 $x$축의 방향으로 $2$만큼, $y$축의 방향으로 $3$만큼 평행이동한 "
-                   r"직선의 $y$절편을 구하시오. [2.0점]",
+                   r"직선의 $y$절편을 구하시오. [3.1점]",
     choices=None, answer="14",
     solution_text=r"(1) 점 B의 좌표는 $(2+3,3-6)=(5,-3)$이다. 직선 AB의 기울기는 "
                   r"$\dfrac{-3-3}{5-2}=-2$이므로 방정식은 $y=-2x+7$이다.<br>"
@@ -398,7 +398,7 @@ TRANSFORMED = {
                   r"$y-3=-2(x-2)+7$, 즉 $y=-2x+14$이다. 따라서 $y$절편은 $14$이다.",
 ),
 21: dict(
-    chapter="도형의 이동", difficulty="중", points=4.4, is_subjective=False,
+    chapter="도형의 이동", difficulty="중", points=4, is_subjective=False,
     question_text=r"좌표평면 위에 원 $C:(x-10)^2+(y-9)^2=2$와 점 $A(2,3)$이 있다. 원 C 위의 점 P, "
                    r"직선 $y=x$ 위의 점 Q에 대하여 $\overline{AQ}+\overline{QP}$의 최솟값은?",
     choices=[{"number":1,"text":"$4\\sqrt2$"},{"number":2,"text":"$5\\sqrt2$"},
@@ -414,7 +414,7 @@ TRANSFORMED = {
                   r"최솟값은 $7\sqrt2-\sqrt2=6\sqrt2$이다.",
 ),
 22: dict(
-    chapter="도형의 이동", difficulty="중", points=4.2, is_subjective=False,
+    chapter="도형의 이동", difficulty="중", points=3.7, is_subjective=False,
     question_text=r"좌표평면 위에 두 점 $A(-4,3)$, $B(3,7)$이 있다. $\overline{PQ}=2$인 $x$축 위의 두 "
                    r"점 P, Q에 대하여 $\overline{AP}+\overline{QB}$의 최솟값은? (단, 점 P의 $x$좌표는 "
                    r"점 Q의 $x$좌표보다 작다.)",
@@ -437,7 +437,7 @@ TRANSFORMED = {
     # (즉 15-2-3=10 은 삼각부등식상 하한일 뿐 달성 불가능한 값이었음). 두 대칭이동
     # 중심을 잇는 선분이 x축→y=x 순서로 실제로 교차하는 좌표로 전수 재설계하고
     # 좌표 하나하나 교차 유효성(0≤t≤1)까지 프로그램으로 검증한 뒤 확정함.
-    chapter="도형의 이동", difficulty="상", points=4.8, is_subjective=False,
+    chapter="도형의 이동", difficulty="상", points=4.3, is_subjective=False,
     question_text=r"좌표평면 위에 두 원 $C_1:(x+14)^2+(y+2)^2=4$, $C_2:(x+10)^2+(y+5)^2=9$와 직선 "
                    r"$y=x$가 있다. 점 A는 원 $C_1$ 위에 있고, 점 B는 원 $C_2$ 위에 있다. 점 P는 $x$축 "
                    r"위에 있고, 점 Q는 직선 $y=x$ 위에 있을 때, $\overline{AP}+\overline{PQ}+"
@@ -455,7 +455,7 @@ TRANSFORMED = {
                   r"따라서 최솟값은 $15-2-3=10$이다.",
 ),
 24: dict(
-    chapter="도형의 이동", difficulty="중", points=4, is_subjective=False,
+    chapter="도형의 이동", difficulty="중", points=3.6, is_subjective=False,
     question_text=r"이차함수 $y=-x^2$의 그래프를 $x$축에 대하여 대칭이동한 후, $x$축의 방향으로 $3$만큼, "
                    r"$y$축의 방향으로 $m$만큼 평행이동한 그래프가 직선 $y=4x+5$에 접할 때, 상수 $m$의 "
                    r"값은?",
@@ -488,7 +488,7 @@ TRANSFORMED = {
                   r"따라서 $\overline{AB}=\sqrt{34}$이다.",
 ),
 26: dict(
-    chapter="도형의 이동", difficulty="상", points=5.2, is_subjective=False,
+    chapter="도형의 이동", difficulty="상", points=4.6, is_subjective=False,
     question_text=r"원 $(x-5)^2+y^2=r^2$ 위를 움직이는 두 점 P, Q가 있다. 점 P를 $y$축에 대하여 "
                    r"대칭이동한 점의 좌표를 $(x_1,y_1)$이라 하고, 점 Q를 $y$축의 방향으로 $k$만큼 "
                    r"평행이동한 점의 좌표를 $(x_2,y_2)$라 하자. $\dfrac{y_2-y_1}{x_2-x_1}$의 최솟값이 "
@@ -518,7 +518,7 @@ TRANSFORMED = {
                   r"따라서 $k=2r=2$이므로 $|r+k|=|1+2|=3$이다.",
 ),
 27: dict(
-    chapter="도형의 이동", difficulty="상", points=5.2, is_subjective=False,
+    chapter="도형의 이동", difficulty="상", points=4.6, is_subjective=False,
     question_text=r"함수 $f(x)=x^2+ax+b$에 대하여 방정식 $f(x)=0$이 서로 다른 두 실근 $\alpha,\beta$ "
                    r"$(0<\alpha<\beta)$를 갖는다. 함수 $g(x)$"
                    r"<<BOX_START>>$g(x)=\begin{cases}-f(-x+3\alpha)&(x<2\alpha)\\f(x-\alpha)&(x\ge2"
@@ -550,7 +550,7 @@ TRANSFORMED = {
     # 실제로 적분이 필요했음(공통수학2 "도형의 이동" 단원 범위 밖). 곡선을
     # 절댓값(V자형 선분)으로 바꿔 같은 "평행이동+대칭이동 인식 후 넓이" 구조를
     # 유지하면서 직사각형에서 삼각형 두 개를 빼는 순수 도형 계산으로 대체.
-    chapter="도형의 이동", difficulty="상", points=5.2, is_subjective=False,
+    chapter="도형의 이동", difficulty="상", points=4.6, is_subjective=False,
     question_text=r"$x,y$에 대한 식 $f(x,y)=y-(2-|x|)$에 대하여, $-1\le x\le1$에서 방정식 "
                    r"$f(x,y)=0$이 나타내는 도형 C가 있다. 두 방정식 $f(x-3,y+3)=0$, $f(x-3,3-y)=0$이 "
                    r"나타내는 도형과 두 직선 $x=2$, $x=4$로 둘러싸인 부분의 넓이는?",
