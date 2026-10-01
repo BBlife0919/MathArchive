@@ -72,6 +72,99 @@ QUESTION = dict(
     images_sol={},
 )
 
+QUESTION2 = dict(
+    question_id=2,
+    file_source="구조변형_원점대칭탈피_2",
+    school=None, grade=1, year=2026, semester=2, exam_type="a",
+    subject="공수2",
+    question_number=2,
+    question_text=(
+        r"원 $C_1:x^2+y^2=25$를 $x$축의 방향으로 $a$, $y$축의 방향으로 $b$"
+        r" ($a>0$, $b>0$)만큼 평행이동한 원을 $C_2$라 하자. 두 원의 중심을 "
+        r"잇는 선분의 기울기가 $\dfrac34$이고, 두 원 $C_1$, $C_2$가 서로 다른 "
+        r"두 점에서 만나 그 두 점 사이의 거리가 $5\sqrt3$일 때, $a+b$의 값은? "
+        r"(단, $a,b$는 양수이다.) [4.0점]"
+    ),
+    choices=[
+        {"number": 1, "text": "$5$"},
+        {"number": 2, "text": "$6$"},
+        {"number": 3, "text": "$7$"},
+        {"number": 4, "text": "$8$"},
+        {"number": 5, "text": "$9$"},
+    ],
+    answer="3",
+    answer_type="choice",
+    is_subjective=0,
+    points=4.0,
+    chapter="원의 방정식",
+    difficulty="중",
+    has_image=0,
+    images={},
+    solution_text=(
+        r"$C_1$의 중심은 $O(0,0)$, 반지름은 $5$이고, $C_2$는 $C_1$을 평행이동한 "
+        r"것이므로 반지름은 똑같이 $5$이고 중심은 $O'(a,b)$이다.<br>"
+        r"두 원의 반지름이 같으므로 공통현(두 교점을 잇는 선분)은 두 중심을 잇는 "
+        r"선분 $\overline{OO'}$의 수직이등분선 위에 있고, 공통현의 중점을 M이라 "
+        r"하면 $\overline{OM}=\overline{O'M}=\dfrac12\overline{OO'}$이다.<br>"
+        r"직각삼각형에서 $\overline{OM}^2=5^2-\left(\dfrac{5\sqrt3}{2}\right)^2"
+        r"=25-\dfrac{75}{4}=\dfrac{25}{4}$이므로 $\overline{OM}=\dfrac52$이고, "
+        r"$\overline{OO'}=2\overline{OM}=5$이다.<br>"
+        r"중심을 잇는 선분의 기울기가 $\dfrac34$이므로 $b=\dfrac34a$이고, "
+        r"$\overline{OO'}=\sqrt{a^2+b^2}=\sqrt{a^2+\dfrac9{16}a^2}=\dfrac54a=5$"
+        r"에서 $a=4$이다.<br>"
+        r"$b=\dfrac34\times4=3$이므로 $a+b=4+3=7$이다."
+    ),
+    images_sol={},
+)
+
+QUESTION3 = dict(
+    question_id=3,
+    file_source="구조변형_원점대칭탈피_3",
+    school=None, grade=1, year=2026, semester=2, exam_type="a",
+    subject="공수2",
+    question_number=3,
+    question_text=(
+        r"좌표평면 위의 세 점 $\mathrm{A}(2,10)$, $\mathrm{B}(1,1)$, "
+        r"$\mathrm{C}(9,5)$에 대하여 선분 BC의 중점을 D라 하자. 점 A를 점 D에 "
+        r"대하여 대칭이동한 점을 E라 할 때, 사각형 ABEC의 넓이는? [4.0점]"
+    ),
+    choices=[
+        {"number": 1, "text": "$60$"},
+        {"number": 2, "text": "$64$"},
+        {"number": 3, "text": "$68$"},
+        {"number": 4, "text": "$72$"},
+        {"number": 5, "text": "$76$"},
+    ],
+    answer="3",
+    answer_type="choice",
+    is_subjective=0,
+    points=4.0,
+    chapter="도형의 이동",
+    difficulty="중",
+    has_image=0,
+    images={},
+    solution_text=(
+        r"점 D는 선분 BC의 중점이므로 $D=\left(\dfrac{1+9}2,\dfrac{1+5}2\right)"
+        r"=(5,3)$이다.<br>"
+        r"점 A를 점 D에 대하여 대칭이동한 점 E는 D가 선분 AE의 중점이 되도록 "
+        r"하는 점이므로 $E=(2\times5-2,\,2\times3-10)=(8,-4)$이다.<br>"
+        r"점 D에 대한 대칭이동은 길이를 보존하는 변환이고, D가 선분 BC의 중점"
+        r"이므로 이 변환에서 점 A는 E로, 점 B는 C로, 점 C는 B로 옮겨진다. 즉 "
+        r"삼각형 ABC 전체가 삼각형 ECB로 옮겨지므로 두 삼각형은 합동이고 넓이가 "
+        r"서로 같다. 따라서 사각형 ABEC의 넓이는 삼각형 ABC 넓이의 $2$배이다."
+        r"<br>"
+        r"직선 BC의 방정식은 기울기가 $\dfrac{5-1}{9-1}=\dfrac12$이므로 "
+        r"$y-1=\dfrac12(x-1)$, 즉 $x-2y+1=0$이다.<br>"
+        r"$\overline{BC}=\sqrt{(9-1)^2+(5-1)^2}=\sqrt{64+16}=4\sqrt5$이고, 점 "
+        r"A와 직선 BC 사이의 거리는 $\dfrac{|2-20+1|}{\sqrt{1^2+(-2)^2}}"
+        r"=\dfrac{17}{\sqrt5}$이다.<br>"
+        r"삼각형 ABC의 넓이는 $\dfrac12\times4\sqrt5\times\dfrac{17}{\sqrt5}"
+        r"=\dfrac12\times4\times17=34$이다.<br>"
+        r"따라서 사각형 ABEC의 넓이는 $34\times2=68$이다."
+    ),
+    images_sol={},
+)
+
 
 def render_answer_key_html(questions: list[dict]) -> str:
     qa = pe._render_quick_answer_table(questions, cols=4)
@@ -89,11 +182,11 @@ def render_answer_key_html(questions: list[dict]) -> str:
 
 
 def main():
-    questions = [QUESTION]
+    questions = [QUESTION, QUESTION2, QUESTION3]
     exam_pdf = pe.generate_exam_pdf(
         questions,
         title="구조변형 연습문항",
-        subtitle="공통수학2 · 평면좌표~도형의 이동 · 대칭이동+두 점 사이 거리",
+        subtitle="공통수학2 · 평면좌표~도형의 이동 · 구조변형 3종(함수 대칭·원 공통현·점대칭 넓이)",
         include_source=False,
     )
     key_html = render_answer_key_html(questions)
