@@ -1,0 +1,20 @@
+from gbm26_common import *
+def make():
+    f = Fig('uv26_q03', 13000, (-1.0, 5.35), (-0.85, 3.85))
+    axes(f, -0.6, 4.55, -0.45, 3.6)
+    f.seg(P(-0.5, 2), P(0.45, 2), lw=LW)
+    curve(f, lambda x: 2 - ((x - 0.45) / 0.55) ** 2, 0.45, 1.0)
+    curve(f, lambda x: 3 * (1 - (3 - x) ** 2 / 4), 1.0, 3.0)
+    f.seg(P(3, 2), P(4.1, 2))
+    f.dashed(P(0, 3), P(3, 3)); f.dashed(P(0, 2), P(3, 2)); f.dashed(P(0, 1), P(3, 1))
+    f.dashed(P(1, 0), P(1, 1)); f.dashed(P(3, 0), P(3, 3))
+    f.dot(P(1, 0), 1.5); f.dot(P(3, 1), 1.5)
+    open_dot(f, P(1, 1)); open_dot(f, P(3, 3)); open_dot(f, P(3, 2))
+    f.lab('O', P(0, 0), -7, -9); f.lab('1', P(1, 0), 0, -10); f.lab('3', P(3, 0), 0, -10)
+    f.lab('3', P(0, 3), -7, 0); f.lab('2', P(0, 2), -7, 4); f.lab('1', P(0, 1), -7, 0)
+    f.lab('$x$', P(4.55, 0), 6, -7); f.lab('$y$', P(0, 3.6), -7, 2)
+    f.lab('$y=f(x)$', P(3.15, 3.2), 0, 0, ha='left')
+    f.ngd_on(P(3.3, 2), P(4.0, 2), 0.5)
+    return f.save()
+if __name__ == '__main__':
+    print(make())
