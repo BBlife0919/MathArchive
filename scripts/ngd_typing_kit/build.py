@@ -13,13 +13,13 @@ FIG = os.path.join(SP, 'figures', 'png')
 OUTDIR = os.path.join(SP, 'out')
 os.makedirs(OUTDIR, exist_ok=True)
 
-SCHOOL_TITLE = '2025년 2학기 기말'
-SCHOOL = '포산 중학교'
-COURSE = '3학년'
-UNITS = '삼각비 ~ 원의 성질'
+SCHOOL_TITLE = '2024년 2학기 중간'
+SCHOOL = '명문고등학교'
+COURSE = '2학년 수학Ⅱ'
+UNITS = '함수의 극한 ~ 함수의 그래프'
 PROD_DATE = '2026년 09월 19일'
-FILENAME_STEM = '[02054][중][2025][3-2-b][대구][포산중][삼각비-원의성질][02054][그림22-0-22-0]'
-DOC_TITLE = '2025년 2학기 기말 포산중학교 3학년 삼각비~원의 성질'
+FILENAME_STEM = '[고][2024][2-2-a][경기광명시][명문고][수2][함수의극한-함수의그래프][그림1]'
+DOC_TITLE = '2024년 2학기 중간 명문고등학교 2학년 함수의극한~함수의그래프'
 
 COL_W = 30188          # 단 폭(HWPUNIT)
 LINE_W = 29000         # 줄바꿈 판정 폭(안전 여유)
@@ -33,9 +33,13 @@ _UP = 880
 _LOW = {'a': 623, 'b': 552, 'c': 529, 'd': 666, 'e': 635, 'f': 702, 'g': 595, 'h': 638, 'i': 380, 'j': 380, 'k': 630, 'l': 410,
         'm': 977, 'n': 735, 'o': 640, 'p': 620, 'q': 538, 'r': 466, 's': 556, 't': 471, 'u': 706, 'v': 650, 'w': 842, 'x': 677,
         'y': 629, 'z': 620}
-_KW0 = {'rm', 'it', 'left', 'right', 'bold', 'over', 'sqrt', 'bar', 'arch'}
+_KW0 = {'rm', 'it', 'left', 'right', 'LEFT', 'RIGHT', 'bold', 'over', 'sqrt', 'bar', 'arch',
+        'RM', 'IT', 'BAR'}
 _KW = {'DEG': 800, 'angle': 800, 'ANGLE': 800, 'triangle': 900, 'TRIANGLE': 900, 'therefore': 1000, 'times': 1050, 'pi': 640,
-       'prime': 250, 'sin': 1300, 'cos': 1350, 'tan': 1350, 'cdot': 400, 'div': 1050, 'nabla': 800}
+       'prime': 250, 'sin': 1300, 'cos': 1350, 'tan': 1350, 'cdot': 400, 'div': 1050, 'nabla': 800,
+       'THEREFORE': 1000, 'BECAUSE': 1000, 'LEQ': 1174, 'GEQ': 1174, 'NEQ': 1174, 'CIRC': 900,
+       'SUBSET': 1174, 'EMPTYSET': 900, 'CAP': 900, 'cap': 900, 'CUP': 900, 'cup': 900,
+       'IN': 900, 'SIM': 1000, 'TIMES': 1050, 'cot': 1350}
 _TOK = re.compile(r'\{|\}|\^|_|~|`|[A-Za-z]+|\d+\.?\d*|.', re.S)
 
 
@@ -310,6 +314,68 @@ def sim_lines(items, first_indent=0, width=LINE_W):
     return lines
 
 
+def flow_items(items, width=LINE_W, first_indent=0):
+    """items를 어절 단위로 줄바꿈하여 (line_items, height) 리스트로 재구성.
+    한 <hp:p>에 여러 줄을 몰아넣지 않기 위해(2026-09-14 오버랩 버그 방지),
+    실제 물리적 줄 단위로 쪼개서 반환한다."""
+    words = []  # (word_items, word_width, trailing_space_bool)
+    cur, cur_w = [], 0
+    for k, v in items:
+        if k in ('t', 'u'):
+            for ch in re.split(r'( )', v):
+                if ch == ' ':
+                    words.append((cur, cur_w, True))
+                    cur, cur_w = [], 0
+                elif ch:
+                    cur.append((k, ch))
+                    cur_w += tw(ch)
+        elif k == 'eq':
+            cur.append((k, v))
+            cur_w += eqw(v) + 112
+        elif k == 'raw':
+            cur.append((k, v))
+    words.append((cur, cur_w, False))
+    lines = []
+    curline, curx, curh = [], 0, 1000
+    line_no = 0
+    for w_items, w_w, has_space in words:
+        if not w_items:
+            continue
+        limit = width - (first_indent if line_no == 0 else 0)
+        if curx > 0 and curx + w_w > limit:
+            lines.append((curline, curh))
+            curline, curx, curh = [], 0, 1000
+            line_no += 1
+        curline = curline + w_items
+        curx += w_w
+        for k, v in w_items:
+            if k == 'eq':
+                curh = max(curh, eq_metrics(v)[1])
+        if has_space:
+            curline.append(('t', ' '))
+            curx += 260
+    if curline:
+        lines.append((curline, curh))
+    if not lines:
+        lines = [([], 1000)]
+    return lines
+
+
+def flow_paras(items, width=LINE_W, first_indent=0, pr='0', prefix_run=''):
+    """items(또는 마크업 문자열)를 물리적 줄 단위 <hp:p> 리스트로 렌더링.
+    반환: (paras_xml_list, total_height)"""
+    if isinstance(items, str):
+        items = parse_mix(items)
+    lines = flow_items(items, width=width, first_indent=first_indent)
+    paras = []
+    total = 0
+    for i, (litems, h) in enumerate(lines):
+        runs = (prefix_run if i == 0 else '') + runs_xml(litems)
+        paras.append(para(runs, pr=pr, vertsize=h))
+        total += pitch(h)
+    return paras, total
+
+
 # ------------------------------------------------------------------ 문단
 def lineseg(vertpos=0, vertsize=1000, horz=COL_W):
     bl = int(vertsize * 0.85)
@@ -356,13 +422,10 @@ def endnote_xml(q, num):
         warns.append(f'정답줄 폭 초과 추정 {1400 + aw}')
     for line in q['sol']:
         items = parse_mix(line)
-        w = item_w(items)
-        h = item_h(items)
-        if w > LINE_W:
-            warns.append(f'해설줄 폭 초과 {w}: {line}')
-        paras.append(f'<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">'
-                     f'{runs_xml(items)}{lineseg(vp, h)}</hp:p>')
-        vp += pitch(h)
+        for litems, h in flow_items(items, width=LINE_W):
+            paras.append(f'<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">'
+                         f'{runs_xml(litems)}{lineseg(vp, h)}</hp:p>')
+            vp += pitch(h)
     xml = (f'<hp:ctrl><hp:endNote number="{num}" suffixChar="46" instId="{inst}"><hp:subList id="" textDirection="HORIZONTAL" '
            f'lineWrap="BREAK" vertAlign="TOP" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" '
            f'hasTextRef="0" hasNumRef="0">{"".join(paras)}</hp:subList></hp:endNote></hp:ctrl>')
@@ -475,12 +538,56 @@ def bogi_box(items):
     b = xml.index('</hp:p>', m3) + len('</hp:p>')
     labels = ['ㄱ. ', 'ㄴ. ', 'ㄷ. ']
     ps = []
+    total_h = 0
     for lab, s in zip(labels, items):
         its = [('t', lab)] + parse_mix(s)
-        ps.append(f'<hp:p id="2147483648" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">'
-                  f'{runs_xml(its)}{lineseg(0, item_h(its), 27800)}</hp:p>')
+        for litems, h in flow_items(its, width=27800):
+            ps.append(f'<hp:p id="2147483648" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">'
+                      f'{runs_xml(litems)}{lineseg(0, h, 27800)}</hp:p>')
+            total_h += pitch(h)
     xml = xml[:a] + ''.join(ps) + xml[b:]
-    return xml
+    return xml, total_h
+
+
+# ------------------------------------------------------------------ 조건틀(NGD 매뉴얼 hp:rect clone)
+JOGEON_RAW = open(os.path.join(SP, 'jogeon_box_manual.xml'), encoding='utf8').read()
+_JG_I = JOGEON_RAW.find('<hp:p ')
+_JG_J = JOGEON_RAW.rfind('</hp:p>') + len('</hp:p>')
+JOGEON_HEAD = JOGEON_RAW[:_JG_I]
+JOGEON_TAIL = JOGEON_RAW[_JG_J:]
+JOGEON_LABELS = ['(가) ', '(나) ', '(다) ', '(라) ']
+
+
+def jogeon_box(items, width=29437):
+    ps = []
+    max_h = 1000
+    for lab, s in zip(JOGEON_LABELS, items):
+        its = [('t', lab)] + parse_mix(s)
+        h = item_h(its)
+        max_h = max(max_h, h)
+        ps.append(para(runs_xml(its), pr='0', vertsize=h, horz=width - 1700))
+    line_pitch = 3180 if max_h > 2000 else 1725
+    height = len(items) * line_pitch + 1700 + 1418
+    height = max(height, 4000)
+    rid = IDS.picid()
+    iid = IDS.instid()
+    zid = IDS.zo()
+    head = JOGEON_HEAD.replace('id="1159475994"', f'id="{rid}"', 1)
+    head = head.replace('zOrder="1" numberingType', f'zOrder="{zid}" numberingType', 1)
+    head = head.replace('instid="85734171"', f'instid="{iid}"', 1)
+    head = head.replace('<hp:orgSz width="28644" height="12587"/>', f'<hp:orgSz width="{width}" height="{height}"/>')
+    head = head.replace('<hp:curSz width="29437" height="11450"/>', f'<hp:curSz width="{width}" height="{height}"/>')
+    head = head.replace('<hc:scaMatrix e1="1.027685" e2="0" e3="0" e4="0" e5="0.909669" e6="0"/>',
+                         '<hc:scaMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/>')
+    tail = JOGEON_TAIL.replace(
+        '<hc:pt1 x="28644" y="0"/><hc:pt2 x="28644" y="12587"/><hc:pt3 x="0" y="12587"/>',
+        f'<hc:pt1 x="{width}" y="0"/><hc:pt2 x="{width}" y="{height}"/><hc:pt3 x="0" y="{height}"/>')
+    tail = tail.replace('<hp:sz width="29437" widthRelTo="ABSOLUTE" height="6468" heightRelTo="ABSOLUTE" protect="0"/>',
+                         f'<hp:sz width="{width}" widthRelTo="ABSOLUTE" height="{height}" heightRelTo="ABSOLUTE" protect="0"/>')
+    box_xml = head + ''.join(ps) + tail
+    p = (f'<hp:p id="2147483648" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">'
+         f'<hp:run charPrIDRef="1">{box_xml}<hp:t/></hp:run>{lineseg(0, height)}</hp:p>')
+    return p, height
 
 
 # ------------------------------------------------------------------ 문항 블록
@@ -501,11 +608,11 @@ def build_block(q, num, imgmap):
     en, w = endnote_xml(q, num)
     B.warns += [f'Q{q["id"]}: {x}' for x in w]
     items = parse_mix(q['text'])
-    body_runs = f'<hp:run charPrIDRef="1">{en}</hp:run>' + runs_xml(items)
-    B.paras.append(para(body_runs))
-    lines = sim_lines(items, first_indent=1300)
-    B.h += sum(pitch(x) for x in lines)
-    B.h_lines = len(lines)
+    prefix_run = f'<hp:run charPrIDRef="1">{en}</hp:run>'
+    body_paras, body_h = flow_paras(items, width=LINE_W, first_indent=1300, prefix_run=prefix_run)
+    B.paras += body_paras
+    B.h += body_h
+    B.h_lines = len(body_paras)
     B.paras.append(blank())
     B.h += PITCH_BLANK
     if q.get('fig'):
@@ -515,10 +622,23 @@ def build_block(q, num, imgmap):
         B.paras.append(blank())
         B.h += PITCH_BLANK
     if q.get('box'):
-        B.paras.append(bogi_box(q['box_items']))
-        B.h += 3 * PITCH_EQ + 1926 + 1100
+        bx, bh = bogi_box(q['box_items'])
+        B.paras.append(bx)
+        B.h += bh + 1926 + 1100
         B.paras.append(blank())
         B.h += PITCH_BLANK
+    if q.get('jogeon'):
+        jx, jh = jogeon_box(q['jogeon_items'])
+        B.paras.append(jx)
+        B.h += jh + 600
+        B.paras.append(blank())
+        B.h += PITCH_BLANK
+        if q.get('text2'):
+            text2_paras, text2_h = flow_paras(q['text2'], width=LINE_W)
+            B.paras += text2_paras
+            B.h += text2_h
+            B.paras.append(blank())
+            B.h += PITCH_BLANK
     if q['kind'] == 'mc':
         cx, ch, w = choices_xml(q)
         B.warns += [f'Q{q["id"]}: {x}' for x in w]
@@ -533,6 +653,7 @@ def build_block(q, num, imgmap):
 
 # ------------------------------------------------------------------ 단 배치
 COL_USABLE = 80000
+MAX_PER = 3             # 한 단 최대 문항 수(고등부는 2)
 FIRST_OFFSET = 11100
 MIN_GAP = 2
 
@@ -546,7 +667,7 @@ def layout(blocks):
         cap = COL_USABLE - (FIRST_OFFSET if first else 0) - PITCH_BLANK  # 맨위 빈 줄 1
         n = 0
         tot = 0
-        for k in range(3):
+        for k in range(MAX_PER):
             if i + k >= len(blocks):
                 break
             need = tot + blocks[i + k].h + (MIN_GAP * PITCH_BLANK if k else 0)
