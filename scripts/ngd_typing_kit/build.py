@@ -536,7 +536,7 @@ def bogi_box(items):
     a = xml.index(marker_start)
     m3 = xml.index('<hp:t>ㄷ. </hp:t>')
     b = xml.index('</hp:p>', m3) + len('</hp:p>')
-    labels = ['ㄱ. ', 'ㄴ. ', 'ㄷ. ']
+    labels = ['ㄱ. ', 'ㄴ. ', 'ㄷ. ', 'ㄹ. ', 'ㅁ. ']
     ps = []
     total_h = 0
     for lab, s in zip(labels, items):
@@ -590,6 +590,52 @@ def jogeon_box(items, width=29437):
     return p, height
 
 
+def empty_box(spec, figname, imgid, width=29437):
+    """빈박스(hp:rect, 조건틀 clone·라벨 없음): 지문 문단들 + 그림(가운데) + 출처(우측정렬)를 담는다.
+    spec = dict(paras=[...], source='...'). 높이는 문단 피치 합 + 그림 + 여백으로 직접 계산."""
+    W = width - 3200
+    ps = []
+    inner = 0
+    for i, t in enumerate(spec['paras']):
+        pp, ph = flow_paras(parse_mix(t), width=W, first_indent=(1300 if (i and spec.get('indent', True)) else 0))
+        ps += pp
+        inner += ph
+    if figname:
+        pic_p, pic_h = pic_para(figname, imgid)
+        ps.append(blank())
+        inner += PITCH_BLANK
+        ps.append(pic_p)
+        inner += pic_h + 600
+        ps.append(blank())
+        inner += PITCH_BLANK
+    if spec.get('source'):
+        its = parse_mix(spec['source'])
+        h = item_h(its)
+        ps.append(para(runs_xml(its), pr='2', vertsize=h, horz=width - 1700))
+        inner += pitch(h)
+    height = inner + 1700 + 1418
+    rid = IDS.picid()
+    iid = IDS.instid()
+    zid = IDS.zo()
+    head = JOGEON_HEAD.replace('id="1159475994"', f'id="{rid}"', 1)
+    head = head.replace('zOrder="1" numberingType', f'zOrder="{zid}" numberingType', 1)
+    head = head.replace('instid="85734171"', f'instid="{iid}"', 1)
+    head = head.replace('<hp:orgSz width="28644" height="12587"/>', f'<hp:orgSz width="{width}" height="{height}"/>')
+    head = head.replace('<hp:curSz width="29437" height="11450"/>', f'<hp:curSz width="{width}" height="{height}"/>')
+    head = head.replace('<hc:scaMatrix e1="1.027685" e2="0" e3="0" e4="0" e5="0.909669" e6="0"/>',
+                         '<hc:scaMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/>')
+    head = head.replace('vertAlign="CENTER"', 'vertAlign="TOP"', 1)
+    tail = JOGEON_TAIL.replace(
+        '<hc:pt1 x="28644" y="0"/><hc:pt2 x="28644" y="12587"/><hc:pt3 x="0" y="12587"/>',
+        f'<hc:pt1 x="{width}" y="0"/><hc:pt2 x="{width}" y="{height}"/><hc:pt3 x="0" y="{height}"/>')
+    tail = tail.replace('<hp:sz width="29437" widthRelTo="ABSOLUTE" height="6468" heightRelTo="ABSOLUTE" protect="0"/>',
+                         f'<hp:sz width="{width}" widthRelTo="ABSOLUTE" height="{height}" heightRelTo="ABSOLUTE" protect="0"/>')
+    box_xml = head + ''.join(ps) + tail
+    p = (f'<hp:p id="2147483648" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">'
+         f'<hp:run charPrIDRef="1">{box_xml}<hp:t/></hp:run>{lineseg(0, height)}</hp:p>')
+    return p, height
+
+
 # ------------------------------------------------------------------ 문항 블록
 class Block:
     def __init__(self):
@@ -607,15 +653,26 @@ def build_block(q, num, imgmap):
     # 문제 본문
     en, w = endnote_xml(q, num)
     B.warns += [f'Q{q["id"]}: {x}' for x in w]
-    items = parse_mix(q['text'])
+    texts = q['text'] if isinstance(q['text'], list) else [q['text']]   # 리스트면 원소마다 별도 문단(소문항 줄 등)
+    items = parse_mix(texts[0])
     prefix_run = f'<hp:run charPrIDRef="1">{en}</hp:run>'
     body_paras, body_h = flow_paras(items, width=LINE_W, first_indent=1300, prefix_run=prefix_run)
+    for extra in texts[1:]:
+        ep, eh = flow_paras(parse_mix(extra), width=LINE_W)
+        body_paras += ep
+        body_h += eh
     B.paras += body_paras
     B.h += body_h
     B.h_lines = len(body_paras)
     B.paras.append(blank())
     B.h += PITCH_BLANK
-    if q.get('fig'):
+    if q.get('emptybox'):
+        bx, bh = empty_box(q['emptybox'], q.get('fig'), imgmap.get(q.get('fig')))
+        B.paras.append(bx)
+        B.h += bh + 1926 + 1100
+        B.paras.append(blank())
+        B.h += PITCH_BLANK
+    elif q.get('fig'):
         pp, h = pic_para(q['fig'], imgmap[q['fig']])
         B.paras.append(pp)
         B.h += h + 600
@@ -633,21 +690,23 @@ def build_block(q, num, imgmap):
         B.h += jh + 600
         B.paras.append(blank())
         B.h += PITCH_BLANK
-        if q.get('text2'):
-            text2_paras, text2_h = flow_paras(q['text2'], width=LINE_W)
+    if q.get('text2'):   # 박스·그림 뒤에 오는 문장(소문항 줄 등). 문자열 또는 문자열 리스트
+        for t2 in (q['text2'] if isinstance(q['text2'], list) else [q['text2']]):
+            text2_paras, text2_h = flow_paras(t2, width=LINE_W)
             B.paras += text2_paras
             B.h += text2_h
-            B.paras.append(blank())
-            B.h += PITCH_BLANK
+        B.paras.append(blank())
+        B.h += PITCH_BLANK
     if q['kind'] == 'mc':
         cx, ch, w = choices_xml(q)
         B.warns += [f'Q{q["id"]}: {x}' for x in w]
         B.paras += cx
         B.h += sum(pitch(x) for x in ch)
-    # 단원/난이도
-    B.paras.append(para(runs_xml([('t', f'[중단원] {q["ch"]}')], '2')))
-    B.paras.append(para(runs_xml([('t', f'[난이도] {q["lv"]}')], '2')))
-    B.h += 2 * PITCH_BLANK
+    # 단원/난이도 (프린트류처럼 라벨이 필요 없으면 q에 ch를 주지 않는다)
+    if q.get('ch'):
+        B.paras.append(para(runs_xml([('t', f'[중단원] {q["ch"]}')], '2')))
+        B.paras.append(para(runs_xml([('t', f'[난이도] {q["lv"]}')], '2')))
+        B.h += 2 * PITCH_BLANK
     return B
 
 
@@ -769,7 +828,7 @@ def build():
     hpf = re.sub(r'<opf:manifest>.*?</opf:manifest>', '<opf:manifest>' + ''.join(items) + '</opf:manifest>', hpf, flags=re.S)
     # 미리보기 텍스트
     prv = ' 「콘텐츠산업 진흥법 시행령」 제33조에 의한 표시 (1) 제작연월일 : ' + PROD_DATE + '\r\n\r\n' + \
-          re.sub(r'\$', '', Q[0]['text']) + '\r\n'
+          re.sub(r'\$', '', (Q[0]['text'][0] if isinstance(Q[0]['text'], list) else Q[0]['text'])) + '\r\n'
     settings = zin.read('settings.xml').decode('utf8').replace('paraIDRef="241"', 'paraIDRef="0"')
     # 미리보기 이미지(간단)
     from PIL import Image, ImageDraw, ImageFont
