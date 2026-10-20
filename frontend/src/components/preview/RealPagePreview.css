@@ -2,7 +2,7 @@
   position: sticky;
   top: 16px;
   z-index: 2;
-  background: #fff;
+  background: var(--surface);
   margin-bottom: 16px;
   padding-bottom: 14px;
   border-bottom: 1px solid var(--line);
@@ -24,8 +24,8 @@
   width: 100%;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
+  border-radius: var(--radius-md);
+  background: var(--surface);
   position: relative;
 }
 
@@ -33,5 +33,5 @@
   border: none;
   display: block;
   transform-origin: top left;
-  background: #fff;
+  background: var(--surface);
 }

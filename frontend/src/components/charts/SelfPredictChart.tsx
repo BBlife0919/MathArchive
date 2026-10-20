@@ -14,7 +14,7 @@ export default function SelfPredictChart({ data }: { data: SelfPredictChartPoint
         <Tooltip />
         <Legend />
         <Line type="monotone" dataKey="predicted" name="예측" stroke="#2b6fff" connectNulls />
-        <Line type="monotone" dataKey="actual" name="실제" stroke="#ef4444" connectNulls />
+        <Line type="monotone" dataKey="actual" name="실제" stroke="#9c3d0a" strokeDasharray="5 3" connectNulls />
       </LineChart>
     </ResponsiveContainer>
   );

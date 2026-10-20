@@ -32,7 +32,7 @@
   width: 100%;
   padding: 7px 10px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 13px;
   box-sizing: border-box;
   margin-bottom: 6px;
@@ -55,11 +55,11 @@
 .btn-primary {
   flex: 1;
   background: var(--blue);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .btn-secondary {
-  background: #fff;
+  background: var(--surface);
   border-color: var(--line);
   color: var(--text);
 }
@@ -88,7 +88,7 @@
   width: 100%;
   padding: 7px 10px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 13px;
   box-sizing: border-box;
 }

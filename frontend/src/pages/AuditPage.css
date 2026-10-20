@@ -48,7 +48,7 @@
   border-left: 4px solid var(--blue);
   border-radius: 10px;
   padding: 12px 16px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .audit-banner b {
@@ -75,8 +75,8 @@
 /* ── 카드 ─────────────────────────────────────────── */
 .audit-card {
   border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
   padding: 20px 22px;
   box-shadow: 0 1px 2px rgba(10, 16, 32, 0.03);
 }
@@ -152,7 +152,7 @@
 .btn-primary, .btn-secondary, .btn-ghost {
   font-size: 13px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 8px 14px;
   cursor: pointer;
   white-space: nowrap;
@@ -165,12 +165,12 @@
 
 .btn-primary {
   background: var(--blue);
-  color: #fff;
+  color: var(--on-accent);
   border: 1px solid var(--blue);
 }
 
 .btn-secondary {
-  background: #fff;
+  background: var(--surface);
   color: var(--text);
   border: 1px solid var(--line);
 }
@@ -233,7 +233,7 @@
   min-width: 120px;
   padding: 5px 8px;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 12px;
 }
 
@@ -254,7 +254,7 @@
   white-space: pre-wrap;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 8px 10px;
   font-size: 12px;
   font-family: inherit;

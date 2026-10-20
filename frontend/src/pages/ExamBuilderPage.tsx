@@ -9,6 +9,7 @@ import FilterSidebar, {
   EMPTY_FILTER_STATE, EXCLUDE_RECENT_DAYS, type FilterState,
 } from "../components/filters/FilterSidebar";
 import QuestionList from "../components/questions/QuestionList";
+import { QuestionGridSkeleton } from "../components/questions/QuestionCardSkeleton";
 import Pagination from "../components/questions/Pagination";
 import MiniTestPanel from "../components/questions/MiniTestPanel";
 import EvenDistributePanel from "../components/questions/EvenDistributePanel";
@@ -51,7 +52,9 @@ export default function ExamBuilderPage() {
 
   const [items, setItems] = useState<QuestionCard[]>([]);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  // true 로 시작해야 첫 렌더에서 "결과 없음" 문구가 스켈레톤보다 먼저
+  // 반짝 노출되는 걸 막을 수 있다 (검색 useEffect 는 첫 페인트 이후 실행됨).
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [bulkAdding, setBulkAdding] = useState(false);
 
@@ -163,7 +166,13 @@ export default function ExamBuilderPage() {
             {!loading && total === 0 && (
               <p className="empty-state">필터 조건에 맞는 문제가 없습니다. 사이드바에서 조건을 조정해주세요.</p>
             )}
-            <QuestionList items={items} selectedIds={selectedIds} onToggleSelect={toggle} />
+            {loading && items.length === 0 ? (
+              <QuestionGridSkeleton count={PAGE_SIZE} />
+            ) : (
+              <div className={loading ? "question-list-refreshing" : undefined}>
+                <QuestionList items={items} selectedIds={selectedIds} onToggleSelect={toggle} />
+              </div>
+            )}
             <Pagination page={page} pageSize={PAGE_SIZE} total={total} onPageChange={setPage} />
             <div className="wizard-next-bar">
               <button

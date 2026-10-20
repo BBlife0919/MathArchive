@@ -31,6 +31,8 @@ function Segment({ segment }: { segment: ContentSegment }) {
           src={resolveImageUrl(segment.url)}
           className="content-image"
           alt={segment.ref ?? "문제 이미지"}
+          loading="lazy"
+          decoding="async"
         />
       );
     }

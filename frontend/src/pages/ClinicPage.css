@@ -34,14 +34,14 @@
   flex: 1;
   padding: 7px 10px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 13px;
 }
 
 .clinic-search-results {
   margin: 10px 0;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 8px 10px;
   max-height: 220px;
   overflow-y: auto;
@@ -59,7 +59,7 @@
 
 .clinic-preview-box {
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 10px 12px;
 }
 
@@ -70,7 +70,7 @@
 }
 
 .clinic-error-text {
-  color: #ef4444;
+  color: var(--danger);
   font-size: 13px;
   margin-top: 8px;
 }

@@ -5,7 +5,7 @@
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--surface);
   position: sticky;
   top: 16px;
 }
@@ -23,11 +23,11 @@
 .pdf-field select {
   padding: 7px 10px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 400;
   color: var(--text);
-  background: #fff;
+  background: var(--surface);
 }
 
 .pdf-toggle {
@@ -42,7 +42,7 @@
 .pdf-subtitle-input {
   padding: 7px 10px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 13px;
 }
 

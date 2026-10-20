@@ -3,6 +3,14 @@
   align-items: flex-start;
 }
 
+/* 필터 변경으로 재검색 중일 때 기존 결과를 유지한 채 흐리게 표시
+   (리스트를 비웠다가 다시 채우는 것보다 덜 깜빡이고 체감속도가 빠름). */
+.question-list-refreshing {
+  opacity: 0.45;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
 .exam-builder-main {
   flex: 1;
   padding: 20px 24px;
@@ -61,7 +69,7 @@
 }
 
 .exam-builder-error {
-  color: #ef4444;
+  color: var(--danger);
   font-size: 13px;
 }
 
@@ -102,7 +110,7 @@
 .wizard-step.active .wizard-step-num {
   border-color: var(--blue);
   background: var(--blue);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .wizard-step-arrow {

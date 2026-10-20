@@ -21,7 +21,7 @@
 
 .question-content .content-box {
   border: 1px solid var(--line, #e3e9f7);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 10px 12px;
   margin: 0.5em 0;
 }

@@ -1,7 +1,7 @@
 .expander {
   margin-top: 6px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .expander-summary {

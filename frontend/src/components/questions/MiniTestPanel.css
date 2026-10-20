@@ -27,5 +27,5 @@
 }
 
 .mini-test-message.error {
-  color: #ef4444;
+  color: var(--danger);
 }

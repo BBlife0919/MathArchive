@@ -27,7 +27,7 @@
   padding: 5px 10px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #fff;
+  background: var(--surface);
   color: var(--text);
   font-size: 12px;
   font-weight: 700;
@@ -37,7 +37,7 @@
 .even-dist-preset.active {
   background: var(--blue);
   border-color: var(--blue);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .even-dist-count-input {
@@ -81,5 +81,5 @@
 }
 
 .even-dist-message.error {
-  color: #ef4444;
+  color: var(--danger);
 }

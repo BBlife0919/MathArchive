@@ -12,7 +12,7 @@
   padding: 7px 0;
   border: 1px solid var(--line);
   border-radius: 7px;
-  background: #fff;
+  background: var(--surface);
   color: var(--text);
   font-size: 13px;
   font-weight: 700;
@@ -23,5 +23,5 @@
   background: var(--blue);
   border-color: var(--blue);
   border-width: 2px;
-  color: #fff;
+  color: var(--on-accent);
 }

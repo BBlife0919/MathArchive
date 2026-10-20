@@ -1,0 +1,56 @@
+.question-card-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  background: var(--surface);
+  min-height: 92px;
+}
+
+.skeleton-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skeleton-bar {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    100deg,
+    var(--line) 30%,
+    #eef3fc 50%,
+    var(--line) 70%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton-badge {
+  width: 64px;
+  height: 14px;
+  border-radius: var(--radius-pill);
+}
+
+.skeleton-select {
+  width: 40px;
+  height: 18px;
+}
+
+.skeleton-line {
+  height: 11px;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-bar {
+    animation: none;
+    background: var(--line);
+  }
+}
