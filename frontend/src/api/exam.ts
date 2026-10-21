@@ -1,5 +1,7 @@
 import { apiFetchBlob, apiFetchText } from "./client";
 
+export type ExamPaperSize = "A4" | "A3";
+
 export interface ExamPdfRequest {
   question_ids: number[];
   title: string;
@@ -7,6 +9,9 @@ export interface ExamPdfRequest {
   include_source: boolean;
   include_logo: boolean;
   preserve_order?: boolean;
+  show_points?: boolean;
+  show_difficulty?: boolean;
+  paper_size?: ExamPaperSize;
 }
 
 export function downloadExamPdf(req: ExamPdfRequest): Promise<Blob> {

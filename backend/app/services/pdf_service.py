@@ -45,7 +45,10 @@ def build_exam_pdf(question_ids: list[int], title: str = "수학 시험지",
                    subtitle: str | None = None,
                    include_logo: bool = False,
                    overrides: dict | None = None,
-                   preserve_order: bool = False) -> bytes:
+                   preserve_order: bool = False,
+                   show_points: bool = False,
+                   show_difficulty: bool = False,
+                   paper_size: str = "A4") -> bytes:
     rows = db_service.fetch_questions_for_preview(question_ids, preserve_order)
     # main.py:1663 과 동일하게 dict 로 변환 후 전달
     # (raw Row 객체는 pdf_engine 내부의 `.get()` 호출과 호환 안 됨).
@@ -57,6 +60,9 @@ def build_exam_pdf(question_ids: list[int], title: str = "수학 시험지",
         overrides=overrides or {},
         subtitle=subtitle,
         logo_path=_resolve_logo(include_logo),
+        show_points=show_points,
+        show_difficulty=show_difficulty,
+        paper_size=paper_size,
     )
 
 
@@ -65,7 +71,10 @@ def build_exam_html_preview(question_ids: list[int], title: str = "수학 시험
                             subtitle: str | None = None,
                             include_logo: bool = False,
                             overrides: dict | None = None,
-                            preserve_order: bool = False) -> str:
+                            preserve_order: bool = False,
+                            show_points: bool = False,
+                            show_difficulty: bool = False,
+                            paper_size: str = "A4") -> str:
     """실물 미리보기용 — Playwright 렌더링(html_to_pdf_bytes) 없이 build_exam_html()
     이 만드는 HTML 문자열 그대로를 반환한다. app/pdf_engine.py 의 CSS 는
     @media print 전용 규칙이 없는 일반 CSS라(조사로 확인됨) 브라우저가 이
@@ -79,6 +88,9 @@ def build_exam_html_preview(question_ids: list[int], title: str = "수학 시험
         overrides=overrides or {},
         subtitle=subtitle,
         logo_path=_resolve_logo(include_logo),
+        show_points=show_points,
+        show_difficulty=show_difficulty,
+        paper_size=paper_size,
     )
 
 

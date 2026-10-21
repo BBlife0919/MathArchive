@@ -13,6 +13,9 @@ class ExamPdfRequest(BaseModel):
     include_logo: bool = False
     overrides: dict[int, str] = {}
     preserve_order: bool = False
+    show_points: bool = False
+    show_difficulty: bool = False
+    paper_size: Literal["A4", "A3"] = "A4"
 
 
 class BookPdfRequest(BaseModel):

@@ -4,13 +4,16 @@
   align-items: flex-start;
 }
 
-.exam-preview-list {
+.exam-preview-main {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .exam-preview-sidebar {
-  width: 280px;
+  width: 300px;
   flex-shrink: 0;
 }
 

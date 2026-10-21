@@ -25,6 +25,9 @@ def exam_pdf(req: ExamPdfRequest, user: dict = Depends(require_approved)):
         include_logo=req.include_logo,
         overrides=req.overrides,
         preserve_order=req.preserve_order,
+        show_points=req.show_points,
+        show_difficulty=req.show_difficulty,
+        paper_size=req.paper_size,
     )
     db_service.log_exam_generation(req.question_ids, "exam_pdf", user["user_id"])
     return Response(
@@ -47,6 +50,9 @@ def exam_html_preview(req: ExamPdfRequest):
         include_logo=req.include_logo,
         overrides=req.overrides,
         preserve_order=req.preserve_order,
+        show_points=req.show_points,
+        show_difficulty=req.show_difficulty,
+        paper_size=req.paper_size,
     )
     return HTMLResponse(content=html)
 

@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   downloadBookPdf, fetchBookHtmlPreview, type BookPdfRequest, type CoverStyle,
 } from "../../api/exam";
 import { triggerDownload } from "../../utils/download";
-import RealPagePreview from "./RealPagePreview";
 import { TEMPLATE_OPTIONS, type TemplateId } from "./templates";
 import "./PdfOptionsForm.css";
 
 interface Props {
   questionIds: number[];
+  // PdfOptionsForm과 동일한 패턴 — 실물 미리보기는 부모(STEP2 왼쪽)가 그린다.
+  onPreviewChange: (fetchHtml: (() => Promise<string>) | null, depsKey: string) => void;
 }
 
 function orNull(s: string): string | null {
@@ -26,7 +27,7 @@ const LAYOUT_LABELS: Record<BookLayoutMode, string> = {
   flat_full: "일반모드 (2단 2분할)",
 };
 
-export default function BookOptionsForm({ questionIds }: Props) {
+export default function BookOptionsForm({ questionIds, onPreviewChange }: Props) {
   const [template, setTemplate] = useState<TemplateId>("default");
   const [layoutMode, setLayoutMode] = useState<BookLayoutMode>("chapter");
   const [title, setTitle] = useState("수학 교재");
@@ -79,6 +80,15 @@ export default function BookOptionsForm({ questionIds }: Props) {
     book_mode: layoutMode === "chapter" ? "chapter" : "flat",
     flat_layout: layoutMode === "flat_full" ? "full" : "half",
   };
+  const depsKey = JSON.stringify(request);
+
+  useEffect(() => {
+    onPreviewChange(
+      questionIds.length > 0 ? () => fetchBookHtmlPreview(request) : null,
+      depsKey,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [depsKey]);
 
   async function handleDownload() {
     setGenerating(true);
@@ -95,11 +105,6 @@ export default function BookOptionsForm({ questionIds }: Props) {
 
   return (
     <div className="pdf-options">
-      <RealPagePreview
-        fetchHtml={questionIds.length > 0 ? () => fetchBookHtmlPreview(request) : null}
-        depsKey={JSON.stringify(request)}
-      />
-
       <label className="pdf-field">
         <span>학습지 템플릿</span>
         <select value={template} onChange={(e) => setTemplate(e.target.value as TemplateId)}>

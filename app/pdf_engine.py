@@ -24,22 +24,32 @@ EXAM_TYPE_KO = {"a": "중간", "b": "기말"}
 
 
 # ── 출처 포맷 ───────────────────────────────────────────────
-def format_source(q: dict, include_difficulty: bool = False) -> str:
+def format_source(q: dict, include_difficulty: bool = False,
+                   show_points: bool = False, show_source: bool = True) -> str:
     """출처 메타 문자열.
 
     include_difficulty=True → 교재 모드. `[상] [가림고] 2025년 1학기 중간 1번`
-    False → 시험지 모드. 난이도 prefix 없음.
+    False → 시험지 모드. 난이도 prefix 없음(단, show_points/show_source는
+    시험지 모드에서 독립적으로 켤 수 있는 별도 토글 — 2026-10-22 추가).
+    show_points: 배점을 맨 앞에 "N점"으로 표시.
+    show_source: False면 학교·연도·원본 번호 등 출처 정보 자체를 뺀다
+    (배점/난이도만 켜져있으면 그것만 남는다).
     """
     exam = EXAM_TYPE_KO.get(q.get("exam_type"), q.get("exam_type") or "")
     parts: list[str] = []
+    if show_points and q.get("points") is not None:
+        pts = q["points"]
+        pts_str = f"{pts:g}" if isinstance(pts, float) else str(pts)
+        parts.append(f"{pts_str}점")
     if include_difficulty and q.get("difficulty"):
         parts.append(f"[{q['difficulty']}]")
-    parts.append(f"[{q.get('school', '?')}]")
-    if q.get("year") and q.get("semester"):
-        parts.append(f"{q['year']}년 {q['semester']}학기")
-    if exam:
-        parts.append(exam)
-    parts.append(f"{q.get('question_number', '')}번")
+    if show_source:
+        parts.append(f"[{q.get('school', '?')}]")
+        if q.get("year") and q.get("semester"):
+            parts.append(f"{q['year']}년 {q['semester']}학기")
+        if exam:
+            parts.append(exam)
+        parts.append(f"{q.get('question_number', '')}번")
     return " ".join(parts)
 
 
@@ -669,6 +679,23 @@ def paginate(questions: list[dict], overrides: dict[int, str] | None = None) -> 
 
 
 # ── HTML 템플릿 ─────────────────────────────────────────────
+_PAPER_PAGE_MIN_HEIGHT = {"A4": "275mm", "A3": "395mm"}
+
+
+def _css_for_paper(paper_size: str = "A4") -> str:
+    """용지 크기별 CSS — @page 규격과 .page 최소높이만 교체.
+    2026-10-22 추가. 나머지 레이아웃은 전부 flex/상대단위라 그대로 반응함
+    (확인됨: 교재 표지 전용 CSS 외엔 210mm/297mm 하드코딩 없음)."""
+    min_h = _PAPER_PAGE_MIN_HEIGHT.get(paper_size, _PAPER_PAGE_MIN_HEIGHT["A4"])
+    return (
+        _CSS
+        .replace("@page { size: A4; margin: 10mm 10mm; }",
+                 f"@page {{ size: {paper_size}; margin: 10mm 10mm; }}")
+        .replace(".page {\n    min-height: 275mm;",
+                 f".page {{\n    min-height: {min_h};")
+    )
+
+
 _CSS = r"""
 @page { size: A4; margin: 10mm 10mm; }
 * { box-sizing: border-box; }
@@ -1933,13 +1960,17 @@ def _build_chapter_sections(
 
 def _render_slot(i: int, q: dict, layout: str, include_source: bool,
                   include_difficulty: bool = False,
-                  letter: str = "") -> str:
+                  letter: str = "",
+                  show_points: bool = False,
+                  show_difficulty: bool = False) -> str:
     """문항 슬롯 HTML.
 
     - 시험지 모드: `N번 [출처]` 한 줄 헤더
     - 교재 모드(include_difficulty=True): `A·01` 번호 + 1차/2차/3차/OX
       체크박스 + 출처 한 줄 + 본문 + 선지 + 하단 KEY POINT / MEMO
     letter: 소단원 인덱스 알파벳 (A,B,C). 슬롯 번호 prefix.
+    show_points/show_difficulty: 시험지 모드 전용 독립 토글(배점표시·
+    난이도표시) — include_difficulty(교재모드 스위치)와는 무관.
     """
     body_html = render_question_body(q.get("question_text") or "", q.get("images"))
     if q.get("img_check"):
@@ -1997,10 +2028,12 @@ def _render_slot(i: int, q: dict, layout: str, include_source: bool,
             '</div>'
         )
 
-    # 시험지 모드 (기존 그대로)
+    # 시험지 모드 (기존 그대로 + 배점/난이도 독립 토글)
     meta = (
-        f'<span class="q-meta">{format_source(q, include_difficulty)}</span>'
-        if include_source else ""
+        f'<span class="q-meta">'
+        f'{format_source(q, show_difficulty, show_points, include_source)}'
+        f'</span>'
+        if (include_source or show_points or show_difficulty) else ""
     )
     slot_header_label = q.get("display_label") or f"{i}번"
     return (
@@ -2074,7 +2107,9 @@ def _problem_pages_html(questions: list[dict], include_source: bool,
                          start_slot: int = 1,
                          page_class: str = "",
                          side_html: str = "",
-                         slot_letter: str = "") -> str:
+                         slot_letter: str = "",
+                         show_points: bool = False,
+                         show_difficulty: bool = False) -> str:
     """문제 섹션(2단 레이아웃)의 HTML.
 
     start_slot: 슬롯 번호 시작값 (책 전체 누적 번호 유지용).
@@ -2108,6 +2143,7 @@ def _problem_pages_html(questions: list[dict], include_source: bool,
                 parts.append(_render_slot(
                     slot_num, q, layout, include_source, include_difficulty,
                     letter=slot_letter,
+                    show_points=show_points, show_difficulty=show_difficulty,
                 ))
                 slot_num += 1
             parts.append('</div>')
@@ -2129,14 +2165,18 @@ def build_exam_html(questions: list[dict], title: str, include_source: bool,
                      overrides: dict | None = None,
                      subtitle: str | None = None,
                      logo_path: str | Path | None = None,
-                     include_difficulty: bool = False) -> str:
+                     include_difficulty: bool = False,
+                     show_points: bool = False,
+                     show_difficulty: bool = False,
+                     paper_size: str = "A4") -> str:
     logo_uri = _logo_data_uri(logo_path)
     header = _render_header(title, subtitle, logo_uri)
     body, _ = _problem_pages_html(
-        questions, include_source, overrides, header, include_difficulty
+        questions, include_source, overrides, header, include_difficulty,
+        show_points=show_points, show_difficulty=show_difficulty,
     )
     return _HTML_WRAP.format(
-        title=_html.escape(title), css=_CSS, body=body,
+        title=_html.escape(title), css=_css_for_paper(paper_size), body=body,
         body_class="", postprocess_script=_PREVIEW_POSTPROCESS_JS,
     )
 
@@ -2747,12 +2787,20 @@ def generate_exam_pdf(questions: list[dict], title: str = "수학 시험지",
                       overrides: dict | None = None,
                       subtitle: str | None = None,
                       logo_path: str | Path | None = None,
-                      include_difficulty: bool = False) -> bytes:
+                      include_difficulty: bool = False,
+                      show_points: bool = False,
+                      show_difficulty: bool = False,
+                      paper_size: str = "A4") -> bytes:
     html = build_exam_html(
         questions, title, include_source, overrides=overrides,
         subtitle=subtitle, logo_path=logo_path,
         include_difficulty=include_difficulty,
+        show_points=show_points, show_difficulty=show_difficulty,
+        paper_size=paper_size,
     )
+    # html_to_pdf_bytes 내부 page.pdf(prefer_css_page_size=True) 가 HTML의
+    # @page 규격(_css_for_paper 가 주입)을 우선하므로 format 인자 없이도
+    # A3 가 반영된다 — 아래 execution 테스트로 실측 확인함.
     return html_to_pdf_bytes(html)
 
 

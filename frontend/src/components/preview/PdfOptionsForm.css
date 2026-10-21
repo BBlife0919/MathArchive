@@ -46,9 +46,45 @@
   font-size: 13px;
 }
 
-.pdf-download-btn {
+.pdf-paper-size {
+  display: flex;
+  gap: 6px;
+}
+
+.pdf-paper-btn {
+  flex: 1;
+  padding: 7px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pdf-paper-btn.active {
+  border: 2px solid var(--blue);
+  background: var(--blue-soft);
+  color: var(--blue);
+  padding: 6px 0;
+}
+
+.pdf-save-buttons {
+  display: flex;
+  gap: 8px;
   margin-top: 6px;
+}
+
+.pdf-hwpx-btn,
+.pdf-download-btn {
+  flex: 1;
   padding: 11px 0;
+}
+
+.pdf-hwpx-btn {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .pdf-error {

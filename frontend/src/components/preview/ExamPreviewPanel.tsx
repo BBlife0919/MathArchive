@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchQuestionsByIds, type QuestionCard as QuestionCardData } from "../../api/questions";
 import { useSelection } from "../../context/SelectionContext";
 import QuestionList from "../questions/QuestionList";
+import Expander from "../questions/Expander";
+import RealPagePreview from "./RealPagePreview";
 import PdfOptionsForm from "./PdfOptionsForm";
 import BookOptionsForm from "./BookOptionsForm";
 import "./ExamPreviewPanel.css";
@@ -24,6 +26,22 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
   // 챕터별로 묶어 표지/디바이더를 만들기 때문에 임의 순서를 반영하지 않는다.
   const [manualOrder, setManualOrder] = useState(false);
   const preserveOrder = manualOrder && pdfMode === "exam";
+
+  // 실물 미리보기는 이제 이 패널 왼쪽(큰 화면)에서 그린다 — PdfOptionsForm/
+  // BookOptionsForm은 자기 설정이 바뀔 때마다 이 콜백으로 "다시 그려줘"만
+  // 보고하고, 실제 fetch+렌더는 여기서 한다.
+  const [previewFetch, setPreviewFetch] = useState<(() => Promise<string>) | null>(null);
+  const [previewDepsKey, setPreviewDepsKey] = useState("");
+  function handlePreviewChange(fetchHtml: (() => Promise<string>) | null, depsKey: string) {
+    setPreviewFetch(() => fetchHtml);
+    setPreviewDepsKey(depsKey);
+  }
+  // 시험지↔교재 탭 전환 시 이전 모드의 미리보기가 한 렌더 동안 잔상으로
+  // 남지 않도록 즉시 비운다 — 새로 마운트되는 폼의 effect가 곧 다시 채운다.
+  useEffect(() => {
+    setPreviewFetch(null);
+    setPreviewDepsKey("");
+  }, [pdfMode]);
 
   const ids = preserveOrder ? order : Array.from(selectedIds);
 
@@ -71,19 +89,22 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
 
   return (
     <div className="exam-preview">
-      <div className="exam-preview-list">
+      <div className="exam-preview-main">
         <p className="result-caption">
           {loading ? "불러오는 중..." : `${items.length}문항 선택됨${totalPoints ? ` · 총 배점: ${totalPoints.toFixed(1)}점` : ""}`}
           {pdfMode === "exam" && (manualOrder ? " · 직접 순서" : " · 자동 정렬(드래그로 순서 변경 가능)")}
         </p>
         {error && <p className="exam-builder-error">{error}</p>}
-        {!loading && !error && (
-          <QuestionList
-            items={items} selectedIds={selectedIds} onToggleSelect={toggle}
-            sortable={pdfMode === "exam"} onReorder={handleReorder}
-            layout="list"
-          />
-        )}
+        <Expander summary={`문항 목록 (${items.length}문항 · 보기 · 순서 변경 · 제거)`}>
+          {!loading && !error && (
+            <QuestionList
+              items={items} selectedIds={selectedIds} onToggleSelect={toggle}
+              sortable={pdfMode === "exam"} onReorder={handleReorder}
+              layout="list"
+            />
+          )}
+        </Expander>
+        <RealPagePreview fetchHtml={previewFetch} depsKey={previewDepsKey} />
       </div>
       <div className="exam-preview-sidebar">
         <div className="pdf-mode-toggle">
@@ -101,9 +122,9 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
           </button>
         </div>
         {pdfMode === "exam" ? (
-          <PdfOptionsForm questionIds={ids} preserveOrder={preserveOrder} />
+          <PdfOptionsForm questionIds={ids} preserveOrder={preserveOrder} onPreviewChange={handlePreviewChange} />
         ) : (
-          <BookOptionsForm questionIds={ids} />
+          <BookOptionsForm questionIds={ids} onPreviewChange={handlePreviewChange} />
         )}
       </div>
     </div>
