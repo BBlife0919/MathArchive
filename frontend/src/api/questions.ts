@@ -81,6 +81,7 @@ export type EvenDistributeGranularity = "major" | "minor";
 export interface EvenDistributeRequest extends SearchRequest {
   count: number;
   granularity: EvenDistributeGranularity;
+  exclude_ids?: number[];
 }
 
 export interface EvenDistributeResult {

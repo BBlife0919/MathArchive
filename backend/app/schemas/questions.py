@@ -82,6 +82,9 @@ class MiniTestResponse(BaseModel):
 class EvenDistributeRequest(SearchRequest):
     count: int = Field(default=20, ge=1, le=150)
     granularity: Literal["major", "minor"] = "major"
+    # "직접 고르기" 모드에서 이미 수동으로 담은 문항 id. 자동배분 풀에서
+    # 제외하고, count 에서도 그만큼 뺀 "모자란 개수"만 채운다.
+    exclude_ids: list[int] = []
 
 
 class EvenDistributeResult(BaseModel):

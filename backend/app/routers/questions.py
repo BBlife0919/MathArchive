@@ -152,8 +152,12 @@ def even_distribute(req: EvenDistributeRequest):
     curr.CURRICULUM 정본 기준으로만 정의한다(원본 chapter 값을 그대로 쓰지
     않음 — _chapter_to_major_map() 참고).
     """
-    all_meta = _resolve_matching_meta(req)
-    if not all_meta:
+    exclude_ids = set(req.exclude_ids)
+    all_meta = [r for r in _resolve_matching_meta(req) if r["question_id"] not in exclude_ids]
+    # exclude_ids(이미 수동으로 담은 문항) 개수만큼 목표치에서 빼고, 모자란
+    # 만큼만 자동배분으로 채운다. 이미 목표를 채웠으면 더 뽑을 게 없다.
+    remaining_count = max(0, req.count - len(exclude_ids))
+    if not all_meta or remaining_count == 0:
         return EvenDistributeResponse(question_ids=[], results=[])
 
     if req.granularity == "major":
@@ -175,7 +179,7 @@ def even_distribute(req: EvenDistributeRequest):
 
     ordered_names = sorted(groups.keys())
     n = len(ordered_names)
-    base, remainder = divmod(req.count, n)
+    base, remainder = divmod(remaining_count, n)
     # 나머지 몫(+1)을 매번 가나다순 앞쪽 그룹이 고정으로 가져가면 같은 조건으로
     # 반복 생성할 때마다 항상 같은 단원만 1문항씩 더 나오는 편향이 생긴다.
     # 표시 순서(ordered_names)는 그대로 유지하되 보너스 수령 그룹만 매 호출

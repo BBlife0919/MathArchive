@@ -42,7 +42,7 @@ function buildSearchRequest(state: FilterState, page: number): SearchRequest {
 }
 
 export default function ExamBuilderPage() {
-  const { selectedIds, count, toggle, bulkAdd, replaceAll, clear } = useSelection();
+  const { selectedIds, order, count, toggle, bulkAdd, replaceAll, clear } = useSelection();
 
   const [step, setStep] = useState<WizardStep>(1);
   const [pdfMode, setPdfMode] = useState<PdfMode>("exam");
@@ -174,7 +174,12 @@ export default function ExamBuilderPage() {
         {!error && step === 1 && (
           <>
             <MiniTestPanel filterState={searchDeps} onGenerated={handleMiniTestGenerated} />
-            <EvenDistributePanel filterState={searchDeps} onGenerated={handleEvenDistributeGenerated} />
+            <EvenDistributePanel
+              filterState={searchDeps}
+              selectedIds={order}
+              onGenerated={handleEvenDistributeGenerated}
+              onFillRemaining={bulkAdd}
+            />
             <div className="result-bar">
               <p className="result-caption">
                 {loading ? "검색 중..." : `검색 결과: ${total}문항 · ${start}–${end}번 표시`}
