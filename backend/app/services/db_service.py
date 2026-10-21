@@ -103,11 +103,14 @@ def load_filter_options() -> dict:
     rows = query(sql)
     school_set, region_set = set(), set()
     year_set, grade_set, semester_set, exam_set = set(), set(), set(), set()
+    region_schools: dict[str, set[str]] = {}
     for r in rows:
         if r["school"]:
             school_set.add(r["school"])
         if r["region"]:
             region_set.add(r["region"])
+            if r["school"]:
+                region_schools.setdefault(r["region"], set()).add(r["school"])
         if r["year"]:
             year_set.add(int(r["year"]))
         if r["grade"]:
@@ -120,6 +123,7 @@ def load_filter_options() -> dict:
     result = {
         "schools": sorted(school_set),
         "regions": sorted(region_set),
+        "region_schools": {region: sorted(schools) for region, schools in region_schools.items()},
         "years": sorted(year_set, reverse=True),
         "grades": sorted(grade_set),
         "semesters": sorted(semester_set),

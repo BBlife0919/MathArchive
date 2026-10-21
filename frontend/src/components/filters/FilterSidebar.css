@@ -21,6 +21,10 @@
   margin: 14px 0;
 }
 
+.quick-search {
+  margin-bottom: 14px;
+}
+
 .filter-section-label {
   font-size: 12px;
   font-weight: 700;
@@ -101,6 +105,29 @@
   color: var(--text);
   cursor: pointer;
   margin-bottom: 4px;
+}
+
+.filter-apply-btn {
+  position: sticky;
+  bottom: 8px;
+  z-index: 5;
+  width: 100%;
+  margin: 14px 0 0;
+  padding: 11px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-apply-btn.pending {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--on-accent);
 }
 
 .cart-summary {

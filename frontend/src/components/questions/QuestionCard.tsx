@@ -1,6 +1,7 @@
 import type { QuestionCard as QuestionCardData } from "../../api/questions";
 import QuestionContent from "../content/QuestionContent";
 import Expander from "./Expander";
+import DifficultyBar from "./DifficultyBar";
 import "./QuestionCard.css";
 
 // 적녹색약 접근성 규칙: 색만으로 구분 금지, 남색↔주황 2색만 사용 (텍스트 라벨이 1차 구분자)
@@ -26,16 +27,16 @@ export default function QuestionCard({ question: q, isSelected, onToggleSelect }
     <div className="question-card">
       <div className="question-card-header">
         <div className="question-card-meta">
-          <b>{q.meta_short}</b> ·{" "}
+          <span className="meta-title">{q.meta_short}</span>
           <span
             className="diff-badge"
             style={{ background: `${diffColor}1a`, color: diffColor }}
           >
             {q.difficulty ?? "?"}
-          </span>{" "}
-          · <span className="meta-muted">{shortChapter(q.chapter)}</span>
-          {" · "}
-          <span className="meta-muted">{q.points ? `${q.points}점` : ""}</span>
+          </span>
+          <DifficultyBar difficulty={q.difficulty} />
+          {q.chapter && <span className="meta-chip">{shortChapter(q.chapter)}</span>}
+          {q.points != null && <span className="meta-chip">{q.points}점</span>}
           {q.is_subjective && <span className="badge-subjective">서술형</span>}
           {q.error_note && <span className="badge-error">오류</span>}
         </div>

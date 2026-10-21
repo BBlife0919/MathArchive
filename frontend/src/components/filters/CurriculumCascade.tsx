@@ -50,7 +50,6 @@ export default function CurriculumCascade({
 
   return (
     <div>
-      <div className="filter-section-label">단원</div>
       <MultiSelectField
         label="과목"
         options={subjectOptions}

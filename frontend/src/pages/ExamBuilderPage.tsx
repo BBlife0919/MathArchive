@@ -47,7 +47,12 @@ export default function ExamBuilderPage() {
   const [step, setStep] = useState<WizardStep>(1);
   const [pdfMode, setPdfMode] = useState<PdfMode>("exam");
   const [filters, setFilters] = useState<FiltersResponse | null>(null);
+  // filterState = 사이드바에서 편집 중인 draft. "적용" 버튼을 눌러야
+  // appliedFilterState 로 반영되고 그때 비로소 검색이 실행된다 (빠른검색
+  // 입력창·키워드 검색은 각자 이미 자체적인 "확정" 동작이 있어 예외로
+  // 즉시 반영).
   const [filterState, setFilterState] = useState<FilterState>(EMPTY_FILTER_STATE);
+  const [appliedFilterState, setAppliedFilterState] = useState<FilterState>(EMPTY_FILTER_STATE);
   const [page, setPage] = useState(0);
 
   const [items, setItems] = useState<QuestionCard[]>([]);
@@ -64,18 +69,34 @@ export default function ExamBuilderPage() {
     fetchFilters().then(setFilters).catch(() => setFilters(null));
   }, []);
 
-  // 키워드는 디바운스된 값을 기준으로 검색 파라미터를 구성한다.
+  // 검색에는 "적용"된 필터(appliedFilterState)를 쓰되, 빠른검색/키워드는
+  // 각자의 확정 동작(빠른검색 적용 버튼·키워드 디바운스)이 있으니 draft 값을
+  // 그대로 즉시 반영한다.
   const searchDeps = useMemo(
-    () => ({ ...filterState, keyword: debouncedKeyword }),
+    () => ({ ...appliedFilterState, quickSearch: filterState.quickSearch, keyword: debouncedKeyword }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      filterState.quickSearch, filterState.regions, filterState.schools,
-      filterState.grades, filterState.years, filterState.semesters,
-      filterState.examTypes, filterState.subjects, filterState.majors,
-      filterState.minors, filterState.difficulties, filterState.questionType,
-      filterState.excludeRecentDays, debouncedKeyword,
+      appliedFilterState.regions, appliedFilterState.schools,
+      appliedFilterState.grades, appliedFilterState.years, appliedFilterState.semesters,
+      appliedFilterState.examTypes, appliedFilterState.subjects, appliedFilterState.majors,
+      appliedFilterState.minors, appliedFilterState.difficulties, appliedFilterState.questionType,
+      appliedFilterState.excludeRecentDays, filterState.quickSearch, debouncedKeyword,
     ],
   );
+
+  // 사이드바 draft가 적용된 필터와 달라졌는지 ("적용" 버튼 강조용).
+  // quickSearch/keyword는 각자 즉시 반영되니 비교 대상에서 뺀다.
+  const hasPendingFilterChanges = useMemo(() => {
+    const keys: (keyof FilterState)[] = [
+      "regions", "schools", "grades", "years", "semesters", "examTypes",
+      "subjects", "majors", "minors", "difficulties", "questionType", "excludeRecentDays",
+    ];
+    return keys.some((k) => JSON.stringify(filterState[k]) !== JSON.stringify(appliedFilterState[k]));
+  }, [filterState, appliedFilterState]);
+
+  function handleApplyFilters() {
+    setAppliedFilterState(filterState);
+  }
 
   // 필터/검색 조건이 바뀌면 첫 페이지로 리셋.
   useEffect(() => {
@@ -129,6 +150,8 @@ export default function ExamBuilderPage() {
         onChange={setFilterState}
         selectedCount={count}
         onResetSelection={clear}
+        onApply={handleApplyFilters}
+        hasPendingChanges={hasPendingFilterChanges}
       />
 
       <main className="exam-builder-main">

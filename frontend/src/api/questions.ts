@@ -21,6 +21,7 @@ export interface QuestionCard {
 export interface FiltersResponse {
   schools: string[];
   regions: string[];
+  region_schools: Record<string, string[]>;
   years: number[];
   grades: number[];
   semesters: number[];

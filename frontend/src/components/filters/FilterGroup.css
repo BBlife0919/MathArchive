@@ -1,0 +1,60 @@
+.filter-group {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.filter-group-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 10px;
+  background: var(--paper);
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.filter-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-group-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--blue);
+  color: var(--on-accent);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.filter-group-caret {
+  color: var(--muted);
+  font-size: 10px;
+  transition: transform 0.15s ease;
+}
+
+.filter-group-caret.open {
+  transform: rotate(180deg);
+}
+
+.filter-group-body {
+  padding: 10px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.filter-group-body .ms-field:last-child {
+  margin-bottom: 0;
+}

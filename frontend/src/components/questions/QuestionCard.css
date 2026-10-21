@@ -1,9 +1,15 @@
 .question-card {
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 10px 12px;
-  box-shadow: 0 1px 2px rgba(10, 16, 32, 0.04);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
   background: var(--surface);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.question-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--blue-soft);
 }
 
 .question-card-header {
@@ -15,15 +21,29 @@
 }
 
 .question-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
   font-size: 10.5px;
   line-height: 1.4;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.meta-title {
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--text);
 }
 
 .meta-muted {
   color: var(--muted);
+}
+
+.meta-chip {
+  color: var(--muted);
+  background: var(--paper);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
 }
 
 .diff-badge {
@@ -37,15 +57,14 @@
 
 .badge-subjective, .badge-error {
   font-size: 10.5px;
-  margin-left: 4px;
-  padding: 0 4px;
-  border-radius: 4px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
   background: var(--paper);
   color: var(--muted);
 }
 
 .badge-error {
-  color: #9c3d0a;
+  color: var(--danger);
 }
 
 .select-btn {
