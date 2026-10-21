@@ -48,31 +48,42 @@ def _qmark_to_pyformat(sql: str) -> str:
 
 
 class _PgConnection:
-    """psycopg2 wrapper로 sqlite3.Connection.execute() 시그니처 모방."""
+    """psycopg2 wrapper로 sqlite3.Connection.execute() 시그니처 모방.
+
+    FastAPI 라우트는 동기 함수라 요청마다 별도 스레드에서 실행되는데,
+    이 커넥션은 프로세스 전체에서 하나만 공유된다(db_service.py의 전역
+    _conn). psycopg2/libpq는 커넥션 하나를 여러 스레드가 동시에 execute()
+    하는 걸 보장하지 않아 프로토콜이 꼬여 영구 응답불가 상태(교착)에
+    빠질 수 있다(2026-10-21 /api/filters 무한로딩으로 실제 발생 확인).
+    execute() 전체를 락으로 감싸 한 번에 한 스레드만 쓰도록 강제한다.
+    """
 
     def __init__(self, dsn: str):
+        import threading
         self._dsn = dsn
+        self._lock = threading.Lock()
         self._open()
 
     def _open(self):
         import psycopg2
         from psycopg2.extras import DictCursor
-        self._conn = psycopg2.connect(self._dsn, cursor_factory=DictCursor)
+        self._conn = psycopg2.connect(self._dsn, cursor_factory=DictCursor, connect_timeout=10)
         self._conn.autocommit = True
 
     def execute(self, sql: str, params=()):
         sql_pg = _qmark_to_pyformat(sql)
-        try:
-            cur = self._conn.cursor()
-            cur.execute(sql_pg, params)
-        except Exception:
+        with self._lock:
             try:
-                self._conn.close()
+                cur = self._conn.cursor()
+                cur.execute(sql_pg, params)
             except Exception:
-                pass
-            self._open()
-            cur = self._conn.cursor()
-            cur.execute(sql_pg, params)
+                try:
+                    self._conn.close()
+                except Exception:
+                    pass
+                self._open()
+                cur = self._conn.cursor()
+                cur.execute(sql_pg, params)
         return cur
 
 
