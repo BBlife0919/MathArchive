@@ -1,9 +1,8 @@
 import { useState } from "react";
 import type { FiltersResponse } from "../../api/questions";
 import SchoolPickerModal from "../filters/SchoolPickerModal";
+import TermConditionFilters from "../filters/TermConditionFilters";
 import "./SchoolTermPicker.css";
-
-const EXAM_TYPE_LABEL: Record<string, string> = { a: "중간", b: "기말" };
 
 export interface SchoolTermValue {
   subjects: string[];
@@ -33,77 +32,6 @@ function toggleIn<T>(list: T[], v: T): T[] {
 export default function SchoolTermPicker({ filters, value, onChange, onSearch, searching }: Props) {
   const [schoolModalOpen, setSchoolModalOpen] = useState(false);
   const subjects = Object.keys(filters.curriculum);
-
-  // 학교를 고르는 김에 년도/학기/중간·기말/학년까지 모달 안에서 한 번에
-  // 끝내도록 — "밖에 따로 필터 두지 말아달라"는 피드백(2026-10-22)으로
-  // SchoolPickerModal의 extraFilters 슬롯에 넣어서 같이 띄운다.
-  const schoolExtraFilters = (
-    <div className="term-modal-extra">
-      <div className="term-picker-row">
-        <div className="term-picker-field">
-          <span className="term-picker-label">학년</span>
-          <div className="term-picker-pills">
-            {filters.grades.map((g) => (
-              <button
-                key={g} type="button"
-                className={value.grades.includes(g) ? "term-pill active" : "term-pill"}
-                onClick={() => onChange({ ...value, grades: toggleIn(value.grades, g) })}
-              >
-                고{g}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="term-picker-field">
-          <span className="term-picker-label">년도</span>
-          <div className="term-picker-pills">
-            {filters.years.map((y) => (
-              <button
-                key={y} type="button"
-                className={value.years.includes(y) ? "term-pill active" : "term-pill"}
-                onClick={() => onChange({ ...value, years: toggleIn(value.years, y) })}
-              >
-                {y}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="term-picker-row">
-        <div className="term-picker-field">
-          <span className="term-picker-label">학기</span>
-          <div className="term-picker-pills">
-            {filters.semesters.map((s) => (
-              <button
-                key={s} type="button"
-                className={value.semesters.includes(s) ? "term-pill active" : "term-pill"}
-                onClick={() => onChange({ ...value, semesters: toggleIn(value.semesters, s) })}
-              >
-                {s}학기
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="term-picker-field">
-          <span className="term-picker-label">중간 · 기말</span>
-          <div className="term-picker-pills">
-            {filters.exam_types.map((e) => (
-              <button
-                key={e} type="button"
-                className={value.examTypes.includes(e) ? "term-pill active" : "term-pill"}
-                onClick={() => onChange({ ...value, examTypes: toggleIn(value.examTypes, e) })}
-              >
-                {EXAM_TYPE_LABEL[e] ?? e}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   const conditionCount = value.grades.length + value.years.length
     + value.semesters.length + value.examTypes.length;
@@ -142,7 +70,16 @@ export default function SchoolTermPicker({ filters, value, onChange, onSearch, s
           regionSchools={filters.region_schools}
           allSchools={filters.schools}
           selected={value.schools}
-          extraFilters={schoolExtraFilters}
+          extraFilters={
+            <TermConditionFilters
+              filters={filters}
+              value={{
+                grades: value.grades, years: value.years,
+                semesters: value.semesters, examTypes: value.examTypes,
+              }}
+              onChange={(next) => onChange({ ...value, ...next })}
+            />
+          }
           onApply={(schools) => {
             onChange({ ...value, schools });
             setSchoolModalOpen(false);

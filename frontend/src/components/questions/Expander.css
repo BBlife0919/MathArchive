@@ -17,15 +17,30 @@
     0 1px 2px rgba(9, 13, 28, .04),
     0 10px 30px -12px rgba(42, 86, 232, .22);
   overflow: hidden;
-  transition: border-radius .35s var(--ease), box-shadow .25s var(--ease),
-    border-color .25s var(--ease), background-color .25s var(--ease);
+  /* border-radius/width는 일부러 transition에서 뺐다 — 999px(필)에서
+     풀 너비 카드의 반경으로 "서서히" 줄이면 타원이 찌그러지며 직사각형이
+     되는 것처럼 보여서(사용자 피드백 2026-10-22) 부자연스러웠다. 모양은
+     토글처럼 즉시 바뀌고, 그림자·배경·테두리색만 부드럽게 겹쳐 칠해지며
+     펼쳐진 내용(.expander-body)이 아래에서 떠오르는 걸로 "전환감"을 낸다. */
+  transition: box-shadow .2s var(--ease), border-color .2s var(--ease),
+    background-color .2s var(--ease);
 }
 
-.expander:hover {
+.expander:not(.open) {
+  transition: box-shadow .2s var(--ease), border-color .2s var(--ease),
+    background-color .2s var(--ease), transform .15s var(--ease);
+}
+
+.expander:not(.open):hover {
+  transform: translateY(-1px);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, .9) inset,
     0 2px 4px rgba(9, 13, 28, .05),
     0 18px 40px -14px rgba(42, 86, 232, .32);
+}
+
+.expander-summary:active {
+  transform: scale(0.98);
 }
 
 .expander.open {
@@ -51,7 +66,7 @@
   color: var(--text);
   text-align: left;
   cursor: pointer;
-  transition: background-color .2s var(--ease);
+  transition: background-color .2s var(--ease), transform .1s var(--ease);
 }
 
 .expander.open .expander-summary {
@@ -137,9 +152,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .expander, .expander-body, .expander-caret {
+  .expander, .expander-body, .expander-caret, .expander-summary {
     animation: none !important;
     transition: none !important;
+  }
+  .expander:not(.open):hover, .expander-summary:active {
+    transform: none;
   }
 }
 

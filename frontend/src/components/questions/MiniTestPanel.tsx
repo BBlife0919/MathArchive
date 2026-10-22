@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { generateMiniTest } from "../../api/questions";
 import { EXCLUDE_RECENT_DAYS, type FilterState } from "../filters/FilterSidebar";
 import Expander from "./Expander";
@@ -69,6 +69,7 @@ export default function MiniTestPanel({ filterState, onGenerated }: Props) {
           <input
             type="range" min={6} max={8} step={1} value={count}
             onChange={(e) => setCount(Number(e.target.value))}
+            style={{ "--range-fill": `${((count - 6) / (8 - 6)) * 100}%` } as CSSProperties}
           />
         </label>
         <label className="mini-test-slider">
@@ -76,6 +77,7 @@ export default function MiniTestPanel({ filterState, onGenerated }: Props) {
           <input
             type="range" min={0} max={100} step={10} value={easyPct}
             onChange={(e) => setEasyPct(Number(e.target.value))}
+            style={{ "--range-fill": `${easyPct}%` } as CSSProperties}
           />
         </label>
       </div>

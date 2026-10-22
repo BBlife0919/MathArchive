@@ -1,10 +1,10 @@
 import { useState } from "react";
-import MultiSelectField from "./MultiSelectField";
 import DifficultyButtonGroup from "./DifficultyButtonGroup";
 import CurriculumCascade from "./CurriculumCascade";
 import QuickSearchBox from "./QuickSearchBox";
 import FilterGroup from "./FilterGroup";
 import SchoolPickerModal from "./SchoolPickerModal";
+import TermConditionFilters from "./TermConditionFilters";
 import type { FiltersResponse, QuestionType } from "../../api/questions";
 import "./FilterSidebar.css";
 
@@ -47,8 +47,6 @@ export const EMPTY_FILTER_STATE: FilterState = {
 // 결과에서 제외한다.
 export const EXCLUDE_RECENT_DAYS = 30;
 
-const EXAM_TYPE_LABEL: Record<string, string> = { a: "중간", b: "기말" };
-
 interface Props {
   filters: FiltersResponse | null;
   state: FilterState;
@@ -86,13 +84,17 @@ export default function FilterSidebar({
         }
       >
         <div className="ms-field">
-          <label className="ms-label">지역 · 학교</label>
+          <label className="ms-label">지역 · 학교 · 학년 · 년도 · 학기</label>
           <button
             type="button"
             className="ms-trigger school-trigger"
             onClick={() => setSchoolModalOpen(true)}
           >
-            <span>{state.schools.length === 0 ? "전체" : `${state.schools.length}개 학교 선택됨`}</span>
+            <span>
+              {state.schools.length === 0 ? "전체" : `${state.schools.length}개 학교 선택됨`}
+              {state.grades.length + state.years.length + state.semesters.length + state.examTypes.length > 0
+                && ` · 조건 ${state.grades.length + state.years.length + state.semesters.length + state.examTypes.length}개`}
+            </span>
             <span className="ms-caret">▾</span>
           </button>
         </div>
@@ -104,34 +106,20 @@ export default function FilterSidebar({
           regionSchools={filters.region_schools}
           allSchools={filters.schools}
           selected={state.schools}
+          extraFilters={
+            <TermConditionFilters
+              filters={filters}
+              value={{
+                grades: state.grades, years: state.years,
+                semesters: state.semesters, examTypes: state.examTypes,
+              }}
+              onChange={(next) => onChange({ ...state, ...next })}
+            />
+          }
           onApply={(schools) => {
             onChange({ ...state, schools });
             setSchoolModalOpen(false);
           }}
-        />
-        <MultiSelectField
-          label="학년"
-          options={filters.grades.map((g) => ({ value: g, label: `고${g}` }))}
-          selected={state.grades}
-          onChange={(v) => onChange({ ...state, grades: v })}
-        />
-        <MultiSelectField
-          label="년도"
-          options={filters.years.map((y) => ({ value: y, label: `${y}년` }))}
-          selected={state.years}
-          onChange={(v) => onChange({ ...state, years: v })}
-        />
-        <MultiSelectField
-          label="학기"
-          options={filters.semesters.map((s) => ({ value: s, label: `${s}학기` }))}
-          selected={state.semesters}
-          onChange={(v) => onChange({ ...state, semesters: v })}
-        />
-        <MultiSelectField
-          label="중간/기말"
-          options={filters.exam_types.map((e) => ({ value: e, label: EXAM_TYPE_LABEL[e] ?? e }))}
-          selected={state.examTypes}
-          onChange={(v) => onChange({ ...state, examTypes: v })}
         />
       </FilterGroup>
 
