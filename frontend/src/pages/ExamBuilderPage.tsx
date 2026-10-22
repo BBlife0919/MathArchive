@@ -189,7 +189,7 @@ export default function ExamBuilderPage() {
         regions: [],
         schools: termValue.schools,
         grades: termValue.grades,
-        years: [],
+        years: termValue.years,
         semesters: termValue.semesters,
         exam_types: termValue.examTypes,
         subjects: termValue.subjects,

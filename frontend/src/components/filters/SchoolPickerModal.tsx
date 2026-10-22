@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import "./SchoolPickerModal.css";
 
 interface Props {
@@ -10,6 +10,10 @@ interface Props {
   allSchools: string[];
   selected: string[];
   onApply: (schools: string[]) => void;
+  // 학교 선택과 같이 고르면 좋은 추가 조건(학년/년도/학기/중간기말 등)을
+  // 모달 안에 같이 넣고 싶을 때 쓰는 슬롯 — "학교학기별출제"에서 사용.
+  // 지정 안 하면 기존처럼 학교 선택만 하는 모달.
+  extraFilters?: ReactNode;
 }
 
 // 지역 접두어를 뗀 district 표시용 라벨. "경기가평군"→"가평군",
@@ -25,6 +29,7 @@ function districtLabel(province: string, district: string): string {
 
 export default function SchoolPickerModal({
   open, onClose, provinces, provinceDistricts, regionSchools, allSchools, selected, onApply,
+  extraFilters,
 }: Props) {
   const [draft, setDraft] = useState<string[]>(selected);
   const [activeProvince, setActiveProvince] = useState<string | null>(null);
@@ -86,6 +91,7 @@ export default function SchoolPickerModal({
         />
 
         <div className="school-modal-body">
+          {extraFilters && <div className="school-modal-extra">{extraFilters}</div>}
           {searching ? (
             <>
               <div className="school-modal-pool-header">

@@ -97,6 +97,12 @@
   gap: 4px;
 }
 
+.school-modal-extra {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1.5px dashed var(--line-soft);
+}
+
 .school-modal-province-tabs {
   display: flex;
   flex-wrap: wrap;

@@ -82,8 +82,11 @@
   transition: transform 0.12s var(--ease), box-shadow 0.15s var(--ease), background 0.15s var(--ease);
 }
 
-.btn-primary {
+.quick-search-buttons .btn-primary {
   flex: 1;
+}
+
+.btn-primary {
   background: linear-gradient(135deg, var(--blue) 0%, var(--navy-600) 100%);
   color: var(--on-accent);
   box-shadow: var(--shadow-blue);

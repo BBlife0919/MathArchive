@@ -9,12 +9,13 @@ export interface SchoolTermValue {
   subjects: string[];
   schools: string[];
   grades: number[];
+  years: number[];
   semesters: number[];
   examTypes: string[];
 }
 
 export const EMPTY_SCHOOL_TERM: SchoolTermValue = {
-  subjects: [], schools: [], grades: [], semesters: [], examTypes: [],
+  subjects: [], schools: [], grades: [], years: [], semesters: [], examTypes: [],
 };
 
 interface Props {
@@ -33,44 +34,11 @@ export default function SchoolTermPicker({ filters, value, onChange, onSearch, s
   const [schoolModalOpen, setSchoolModalOpen] = useState(false);
   const subjects = Object.keys(filters.curriculum);
 
-  return (
-    <div className="term-picker">
-      <div className="term-picker-field">
-        <span className="term-picker-label">과목</span>
-        <div className="term-picker-pills">
-          {subjects.map((s) => (
-            <button
-              key={s} type="button"
-              className={value.subjects.includes(s) ? "term-pill active" : "term-pill"}
-              onClick={() => onChange({ ...value, subjects: toggleIn(value.subjects, s) })}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="term-picker-field">
-        <span className="term-picker-label">지역 · 학교</span>
-        <button type="button" className="term-school-trigger" onClick={() => setSchoolModalOpen(true)}>
-          <span>{value.schools.length === 0 ? "전체 학교" : `${value.schools.length}개 학교 선택됨`}</span>
-          <span className="term-school-caret">▾</span>
-        </button>
-        <SchoolPickerModal
-          open={schoolModalOpen}
-          onClose={() => setSchoolModalOpen(false)}
-          provinces={filters.provinces}
-          provinceDistricts={filters.province_districts}
-          regionSchools={filters.region_schools}
-          allSchools={filters.schools}
-          selected={value.schools}
-          onApply={(schools) => {
-            onChange({ ...value, schools });
-            setSchoolModalOpen(false);
-          }}
-        />
-      </div>
-
+  // 학교를 고르는 김에 년도/학기/중간·기말/학년까지 모달 안에서 한 번에
+  // 끝내도록 — "밖에 따로 필터 두지 말아달라"는 피드백(2026-10-22)으로
+  // SchoolPickerModal의 extraFilters 슬롯에 넣어서 같이 띄운다.
+  const schoolExtraFilters = (
+    <div className="term-modal-extra">
       <div className="term-picker-row">
         <div className="term-picker-field">
           <span className="term-picker-label">학년</span>
@@ -87,6 +55,23 @@ export default function SchoolTermPicker({ filters, value, onChange, onSearch, s
           </div>
         </div>
 
+        <div className="term-picker-field">
+          <span className="term-picker-label">년도</span>
+          <div className="term-picker-pills">
+            {filters.years.map((y) => (
+              <button
+                key={y} type="button"
+                className={value.years.includes(y) ? "term-pill active" : "term-pill"}
+                onClick={() => onChange({ ...value, years: toggleIn(value.years, y) })}
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="term-picker-row">
         <div className="term-picker-field">
           <span className="term-picker-label">학기</span>
           <div className="term-picker-pills">
@@ -116,6 +101,53 @@ export default function SchoolTermPicker({ filters, value, onChange, onSearch, s
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+
+  const conditionCount = value.grades.length + value.years.length
+    + value.semesters.length + value.examTypes.length;
+
+  return (
+    <div className="term-picker">
+      <div className="term-picker-field">
+        <span className="term-picker-label">과목</span>
+        <div className="term-picker-pills">
+          {subjects.map((s) => (
+            <button
+              key={s} type="button"
+              className={value.subjects.includes(s) ? "term-pill active" : "term-pill"}
+              onClick={() => onChange({ ...value, subjects: toggleIn(value.subjects, s) })}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="term-picker-field">
+        <span className="term-picker-label">지역 · 학교 · 학년 · 년도 · 학기</span>
+        <button type="button" className="term-school-trigger" onClick={() => setSchoolModalOpen(true)}>
+          <span>
+            {value.schools.length === 0 ? "전체 학교" : `${value.schools.length}개 학교 선택됨`}
+            {conditionCount > 0 && ` · 조건 ${conditionCount}개`}
+          </span>
+          <span className="term-school-caret">▾</span>
+        </button>
+        <SchoolPickerModal
+          open={schoolModalOpen}
+          onClose={() => setSchoolModalOpen(false)}
+          provinces={filters.provinces}
+          provinceDistricts={filters.province_districts}
+          regionSchools={filters.region_schools}
+          allSchools={filters.schools}
+          selected={value.schools}
+          extraFilters={schoolExtraFilters}
+          onApply={(schools) => {
+            onChange({ ...value, schools });
+            setSchoolModalOpen(false);
+          }}
+        />
       </div>
 
       <button
