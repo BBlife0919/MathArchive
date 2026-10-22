@@ -75,6 +75,27 @@ export default function FilterSidebar({
     return Array.from(set).sort();
   }, [filters, state.regions]);
 
+  // 학교 선택 모달도 "지역" 필터가 이미 좁혀져 있으면 그 범위로만 시/도·
+  // 구/시/군·학교를 보여준다 — 안 그러면 지역 필터와 모달에서 고른 학교가
+  // 서로 다른 지역을 가리켜 검색이 조용히 0건이 되는 문제가 생긴다(AND
+  // 결합 WHERE 절).
+  const modalProvinceDistricts = useMemo(() => {
+    if (!filters) return {};
+    if (state.regions.length === 0) return filters.province_districts;
+    const allowed = new Set(state.regions);
+    const out: Record<string, string[]> = {};
+    for (const [province, districts] of Object.entries(filters.province_districts)) {
+      const kept = districts.filter((d) => allowed.has(d));
+      if (kept.length > 0) out[province] = kept;
+    }
+    return out;
+  }, [filters, state.regions]);
+
+  const modalProvinces = useMemo(
+    () => (filters?.provinces ?? []).filter((p) => p in modalProvinceDistricts),
+    [filters, modalProvinceDistricts],
+  );
+
   // 지역 변경으로 후보에서 빠진 학교는 자동으로 선택 해제.
   useEffect(() => {
     const validSchools = state.schools.filter((s) => schoolPool.includes(s));
@@ -125,7 +146,8 @@ export default function FilterSidebar({
         <SchoolPickerModal
           open={schoolModalOpen}
           onClose={() => setSchoolModalOpen(false)}
-          regions={state.regions.length > 0 ? state.regions : filters.regions}
+          provinces={modalProvinces}
+          provinceDistricts={modalProvinceDistricts}
           regionSchools={filters.region_schools}
           allSchools={schoolPool}
           selected={state.schools}

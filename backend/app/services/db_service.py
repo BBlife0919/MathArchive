@@ -13,6 +13,8 @@ import db as legacy_db  # type: ignore
 import curriculum as curr  # type: ignore
 import main as legacy_main  # type: ignore  (순수 함수만 사용: format_choices 등)
 
+from . import region_taxonomy
+
 _conn = None
 
 
@@ -104,13 +106,16 @@ def load_filter_options() -> dict:
     school_set, region_set = set(), set()
     year_set, grade_set, semester_set, exam_set = set(), set(), set(), set()
     region_schools: dict[str, set[str]] = {}
+    raw_regions: set[str] = set()
     for r in rows:
         if r["school"]:
             school_set.add(r["school"])
         if r["region"]:
-            region_set.add(r["region"])
+            raw_regions.add(r["region"])
+            canon = region_taxonomy.canonicalize(r["region"])
+            region_set.add(canon)
             if r["school"]:
-                region_schools.setdefault(r["region"], set()).add(r["school"])
+                region_schools.setdefault(canon, set()).add(r["school"])
         if r["year"]:
             year_set.add(int(r["year"]))
         if r["grade"]:
@@ -120,10 +125,14 @@ def load_filter_options() -> dict:
         if r["exam_type"]:
             exam_set.add(r["exam_type"])
 
+    taxonomy = region_taxonomy.build_taxonomy(raw_regions)
     result = {
         "schools": sorted(school_set),
         "regions": sorted(region_set),
         "region_schools": {region: sorted(schools) for region, schools in region_schools.items()},
+        "provinces": taxonomy["provinces"],
+        "province_districts": taxonomy["province_districts"],
+        "region_canonical_to_raw": taxonomy["canonical_to_raw"],
         "years": sorted(year_set, reverse=True),
         "grades": sorted(grade_set),
         "semesters": sorted(semester_set),
@@ -170,8 +179,18 @@ def search_question_ids(schools, chapters, difficulties, regions,
         if cached and now - cached[0] < _SEARCH_IDS_TTL:
             return cached[1]
 
+    # regions 는 프론트가 "표준 표기"(예: 경기가평군)로 보내지만, DB의 region
+    # 컬럼은 원본 그대로(경기가평/경기가평군/경기가평시 등 중복 표기)라서
+    # exact-match IN() 검색 전에 원본 값 전부로 풀어줘야 한다. regions가
+    # 비어있으면(필터 안 걸림) load_filter_options() 호출 자체를 생략해
+    # 캐시 만료 시마다 불필요한 전체 스캔이 섞여드는 걸 막는다.
+    expanded_regions = list(regions)
+    if regions:
+        canonical_to_raw = load_filter_options().get("region_canonical_to_raw", {})
+        expanded_regions = region_taxonomy.expand_canonical_regions(list(regions), canonical_to_raw)
+
     where, params = legacy_main._build_search_where(
-        list(schools), list(chapters), list(difficulties), list(regions),
+        list(schools), list(chapters), list(difficulties), expanded_regions,
         years=list(years), grades=list(grades),
         semesters=list(semesters), exam_types=list(exam_types),
         is_subjective=is_subjective, keyword=keyword,

@@ -69,6 +69,23 @@ export default function ExamBuilderPage() {
     fetchFilters().then(setFilters).catch(() => setFilters(null));
   }, []);
 
+  // 아무 조건도 없이 페이지에 들어오자마자 17만 문항 전체를 무필터로
+  // 검색하면 로딩이 걸리고(진짜 체감 느려짐) 결과도 무의미하다. 필터를
+  // 하나라도 적용했거나 빠른검색/키워드를 썼을 때만 검색을 실행한다.
+  const hasAnyCondition = useMemo(() => {
+    const keys: (keyof FilterState)[] = [
+      "regions", "schools", "grades", "years", "semesters", "examTypes",
+      "subjects", "majors", "minors", "difficulties",
+    ];
+    return (
+      keys.some((k) => (appliedFilterState[k] as unknown[]).length > 0)
+      || appliedFilterState.questionType !== "all"
+      || appliedFilterState.excludeRecentDays
+      || filterState.quickSearch.trim() !== ""
+      || debouncedKeyword.trim() !== ""
+    );
+  }, [appliedFilterState, filterState.quickSearch, debouncedKeyword]);
+
   // 검색에는 "적용"된 필터(appliedFilterState)를 쓰되, 빠른검색/키워드는
   // 각자의 확정 동작(빠른검색 적용 버튼·키워드 디바운스)이 있으니 draft 값을
   // 그대로 즉시 반영한다.
@@ -105,6 +122,13 @@ export default function ExamBuilderPage() {
   }, [searchDeps]);
 
   useEffect(() => {
+    if (!hasAnyCondition) {
+      setItems([]);
+      setTotal(0);
+      setLoading(false);
+      setError(null);
+      return;
+    }
     setLoading(true);
     setError(null);
     searchQuestions(buildSearchRequest(searchDeps, page))
@@ -114,7 +138,8 @@ export default function ExamBuilderPage() {
       })
       .catch(() => setError("검색 중 오류가 발생했습니다."))
       .finally(() => setLoading(false));
-  }, [searchDeps, page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchDeps, page, hasAnyCondition]);
 
   async function handleBulkAdd() {
     setBulkAdding(true);
@@ -180,28 +205,37 @@ export default function ExamBuilderPage() {
               onGenerated={handleEvenDistributeGenerated}
               onFillRemaining={bulkAdd}
             />
-            <div className="result-bar">
-              <p className="result-caption">
-                {loading ? "검색 중..." : `검색 결과: ${total}문항 · ${start}–${end}번 표시`}
-              </p>
-              {total > 0 && (
-                <button type="button" className="btn-secondary" disabled={bulkAdding} onClick={handleBulkAdd}>
-                  {bulkAdding ? "담는 중..." : `전체(${total}) → 시험지`}
-                </button>
-              )}
-            </div>
-            <Pagination page={page} pageSize={PAGE_SIZE} total={total} onPageChange={setPage} />
-            {!loading && total === 0 && (
-              <p className="empty-state">필터 조건에 맞는 문제가 없습니다. 사이드바에서 조건을 조정해주세요.</p>
-            )}
-            {loading && items.length === 0 ? (
-              <QuestionGridSkeleton count={PAGE_SIZE} />
-            ) : (
-              <div className={loading ? "question-list-refreshing" : undefined}>
-                <QuestionList items={items} selectedIds={selectedIds} onToggleSelect={toggle} />
+            {hasAnyCondition && (
+              <div className="result-bar">
+                <p className="result-caption">
+                  {loading ? "검색 중..." : `검색 결과: ${total}문항 · ${start}–${end}번 표시`}
+                </p>
+                {total > 0 && (
+                  <button type="button" className="btn-secondary" disabled={bulkAdding} onClick={handleBulkAdd}>
+                    {bulkAdding ? "담는 중..." : `전체(${total}) → 시험지`}
+                  </button>
+                )}
               </div>
             )}
-            <Pagination page={page} pageSize={PAGE_SIZE} total={total} onPageChange={setPage} />
+            {!hasAnyCondition && (
+              <p className="empty-state">왼쪽에서 조건을 선택하고 "적용"을 눌러주세요. 빠른검색·키워드로 바로 찾을 수도 있습니다.</p>
+            )}
+            {hasAnyCondition && (
+              <>
+                <Pagination page={page} pageSize={PAGE_SIZE} total={total} onPageChange={setPage} />
+                {!loading && total === 0 && (
+                  <p className="empty-state">필터 조건에 맞는 문제가 없습니다. 사이드바에서 조건을 조정해주세요.</p>
+                )}
+                {loading && items.length === 0 ? (
+                  <QuestionGridSkeleton count={PAGE_SIZE} />
+                ) : (
+                  <div className={loading ? "question-list-refreshing" : undefined}>
+                    <QuestionList items={items} selectedIds={selectedIds} onToggleSelect={toggle} />
+                  </div>
+                )}
+                <Pagination page={page} pageSize={PAGE_SIZE} total={total} onPageChange={setPage} />
+              </>
+            )}
             <div className="wizard-next-bar">
               <button
                 type="button" className="btn-primary" disabled={count === 0}

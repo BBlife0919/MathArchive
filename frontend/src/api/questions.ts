@@ -22,6 +22,8 @@ export interface FiltersResponse {
   schools: string[];
   regions: string[];
   region_schools: Record<string, string[]>;
+  provinces: string[];
+  province_districts: Record<string, string[]>;
   years: number[];
   grades: number[];
   semesters: number[];
