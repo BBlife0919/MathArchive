@@ -139,3 +139,52 @@ export function evenDistribute(req: EvenDistributeRequest): Promise<EvenDistribu
     body: JSON.stringify(req),
   });
 }
+
+export interface ExamPaperRequest {
+  regions: string[];
+  schools: string[];
+  grades: number[];
+  years: number[];
+  semesters: number[];
+  exam_types: string[];
+  subjects: string[];
+}
+
+export interface ExamPaper {
+  school: string;
+  grade: number;
+  year: number;
+  semester: number;
+  exam_type: string;
+  subject: string | null;
+  chapter_range: string | null;
+  question_count: number;
+}
+
+export interface ExamPaperListResponse {
+  papers: ExamPaper[];
+}
+
+export function fetchExamPapers(req: ExamPaperRequest): Promise<ExamPaperListResponse> {
+  return apiFetch<ExamPaperListResponse>("/api/questions/exam-papers", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+
+export interface ExamPaperIdsRequest {
+  school: string;
+  grade: number;
+  year: number;
+  semester: number;
+  exam_type: string;
+  subject: string | null;
+  chapter_range: string | null;
+}
+
+export function fetchExamPaperIds(req: ExamPaperIdsRequest): Promise<SearchIdsResponse> {
+  return apiFetch<SearchIdsResponse>("/api/questions/exam-paper-ids", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}

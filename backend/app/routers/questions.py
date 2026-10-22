@@ -8,6 +8,7 @@ from .. import legacy_bridge  # noqa: F401
 from ..deps import require_approved
 from ..schemas.questions import (
     ByIdsRequest, ByIdsResponse, EvenDistributeRequest, EvenDistributeResponse,
+    ExamPaper, ExamPaperIdsRequest, ExamPaperListResponse, ExamPaperRequest,
     MiniTestRequest, MiniTestResponse, SearchIdsResponse, SearchRequest,
     SearchResponse,
 )
@@ -196,6 +197,34 @@ def even_distribute(req: EvenDistributeRequest):
         results.append({"group": name, "target": target, "picked": take, "pool": len(pool)})
 
     return EvenDistributeResponse(question_ids=picks, results=results)
+
+
+@router.post("/exam-papers", response_model=ExamPaperListResponse)
+def list_exam_papers(req: ExamPaperRequest):
+    """"학교학기별출제" 모드용 — 조건에 맞는 실제 시험(학교·학년·연도·학기·
+    중간기말) 단위 목록. 문항 하나하나가 아니라 "시험지 카드"로 묶어
+    보여줄 때 쓴다."""
+    rows = db_service.list_exam_papers(
+        schools=tuple(req.schools), regions=tuple(req.regions),
+        grades=tuple(req.grades), years=tuple(req.years),
+        semesters=tuple(req.semesters), exam_types=tuple(req.exam_types),
+        subjects=tuple(req.subjects),
+    )
+    return ExamPaperListResponse(papers=[ExamPaper(**r) for r in rows])
+
+
+@router.post("/exam-paper-ids", response_model=SearchIdsResponse)
+def exam_paper_ids(req: ExamPaperIdsRequest):
+    """시험지 카드 하나(school/grade/year/semester/exam_type/subject/
+    chapter_range)에 정확히 속한 문항 id. list_exam_papers()의 GROUP BY
+    키와 1:1 대응 — search-ids(chapter_range 필터 없음)를 쓰면 같은
+    school/grade/year/semester/exam_type 안에서 chapter_range가 다른
+    별개 시험이 섞일 수 있어 분리했다."""
+    ids = db_service.exam_paper_question_ids(
+        req.school, req.grade, req.year, req.semester, req.exam_type,
+        req.subject, req.chapter_range,
+    )
+    return SearchIdsResponse(question_ids=ids)
 
 
 @router.post("/by-ids", response_model=ByIdsResponse)

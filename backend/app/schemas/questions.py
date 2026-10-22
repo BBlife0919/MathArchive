@@ -97,3 +97,38 @@ class EvenDistributeResult(BaseModel):
 class EvenDistributeResponse(BaseModel):
     question_ids: list[int]
     results: list[EvenDistributeResult]
+
+
+class ExamPaperRequest(BaseModel):
+    regions: list[str] = []
+    schools: list[str] = []
+    grades: list[int] = []
+    years: list[int] = []
+    semesters: list[int] = []
+    exam_types: list[str] = []
+    subjects: list[str] = []
+
+
+class ExamPaper(BaseModel):
+    school: str
+    grade: int
+    year: int
+    semester: int
+    exam_type: str
+    subject: Optional[str] = None
+    chapter_range: Optional[str] = None
+    question_count: int
+
+
+class ExamPaperListResponse(BaseModel):
+    papers: list[ExamPaper]
+
+
+class ExamPaperIdsRequest(BaseModel):
+    school: str
+    grade: int
+    year: int
+    semester: int
+    exam_type: str
+    subject: Optional[str] = None
+    chapter_range: Optional[str] = None

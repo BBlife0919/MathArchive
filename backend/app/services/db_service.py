@@ -221,6 +221,71 @@ def search_question_ids(schools, chapters, difficulties, regions,
     return result
 
 
+# ── 학교·학기별 "시험지" 목록 (chapter_range 집계) ─────────────────
+def list_exam_papers(schools=(), regions=(), grades=(), years=(),
+                      semesters=(), exam_types=(), subjects=()) -> list[dict]:
+    """questions 를 (학교·학년·연도·학기·중간기말·과목) 단위로 묶어 "시험지"
+    카드 목록을 만든다. 같은 실제 시험을 구성하는 문항들은 chapter_range가
+    전부 동일하므로 그대로 대표값으로 쓴다(검증: 2026-10-22 실측 — 같은
+    그룹 안에서 값이 갈리면 그룹이 더 쪼개질 뿐이라 안전).
+    """
+    expanded_regions = list(regions)
+    if regions:
+        canonical_to_raw = load_filter_options().get("region_canonical_to_raw", {})
+        expanded_regions = region_taxonomy.expand_canonical_regions(list(regions), canonical_to_raw)
+
+    where, params = legacy_main._build_search_where(
+        list(schools), [], [], expanded_regions,
+        years=list(years), grades=list(grades),
+        semesters=list(semesters), exam_types=list(exam_types),
+    )
+    params = list(params)
+    extra_sql = ""
+    if subjects:
+        placeholders = ",".join("?" * len(subjects))
+        extra_sql = f" AND q.subject IN ({placeholders})"
+        params += list(subjects)
+
+    sql = f"""
+        SELECT q.school, q.grade, q.year, q.semester, q.exam_type, q.subject,
+               q.chapter_range, COUNT(*) as question_count
+        FROM questions q
+        WHERE {where}{extra_sql}
+        GROUP BY q.school, q.grade, q.year, q.semester, q.exam_type,
+                 q.subject, q.chapter_range
+        ORDER BY q.year DESC, q.school, q.grade, q.semester, q.exam_type
+    """
+    return [dict(r) for r in query(sql, params)]
+
+
+def exam_paper_question_ids(school: str, grade: int, year: int, semester: int,
+                             exam_type: str, subject: str | None,
+                             chapter_range: str | None) -> list[int]:
+    """list_exam_papers() 가 만든 "시험지" 카드 하나를 정확히 되찾는다.
+
+    list_exam_papers()는 chapter_range까지 GROUP BY 하므로, school/grade/
+    year/semester/exam_type/subject가 전부 같아도 chapter_range가 다르면
+    별개 카드일 수 있다(2026-10-22 검수에서 발견 — chapter_range를 빼고
+    재검색하면 서로 다른 시험 문항이 하나로 합쳐짐). 그래서 기존
+    search_question_ids()(chapter_range 필터 없음)를 재사용하지 않고,
+    카드와 1:1 대응하는 전용 조회를 둔다.
+    """
+    conditions = ["school = ?", "grade = ?", "year = ?", "semester = ?", "exam_type = ?"]
+    params: list = [school, grade, year, semester, exam_type]
+    if subject is None:
+        conditions.append("subject IS NULL")
+    else:
+        conditions.append("subject = ?")
+        params.append(subject)
+    if chapter_range is None:
+        conditions.append("chapter_range IS NULL")
+    else:
+        conditions.append("chapter_range = ?")
+        params.append(chapter_range)
+    sql = f"SELECT question_id FROM questions WHERE {' AND '.join(conditions)} ORDER BY question_number"
+    return [r["question_id"] for r in query(sql, params)]
+
+
 def fetch_questions_page(question_ids: list[int]) -> list:
     if not question_ids:
         return []
