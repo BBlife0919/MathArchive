@@ -67,7 +67,17 @@ class _PgConnection:
     def _open(self):
         import psycopg2
         from psycopg2.extras import DictCursor
-        self._conn = psycopg2.connect(self._dsn, cursor_factory=DictCursor, connect_timeout=10)
+        # keepalives: 장시간 유휴 상태면 Supabase pooler/NAT 쪽에서 소켓을
+        # 조용히 끊어버릴 수 있는데, TCP keepalive가 없으면 다음 execute()가
+        # 죽은 소켓의 recv()에서 영원히 블록된다(2026-10-22 /api/filters
+        # 무한로딩 재발로 확인 — 새 커넥션은 즉시 응답하는데 기존 공유
+        # 커넥션만 멈춤). statement_timeout 옵션은 이 pooler(Supavisor)가
+        # startup 파라미터를 무시하고 자체 기본값(2분)을 강제해서 넣지 않음
+        # (직접 SHOW statement_timeout으로 확인, 넣어도 효과 없음).
+        self._conn = psycopg2.connect(
+            self._dsn, cursor_factory=DictCursor, connect_timeout=10,
+            keepalives=1, keepalives_idle=30, keepalives_interval=10, keepalives_count=3,
+        )
         self._conn.autocommit = True
 
     def execute(self, sql: str, params=()):
