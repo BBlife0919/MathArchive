@@ -1,8 +1,15 @@
 .filter-group {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  margin-bottom: 10px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  margin-bottom: 12px;
   overflow: hidden;
+  background: var(--surface);
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+
+.filter-group:has(.filter-group-caret.open) {
+  border-color: var(--blue-soft);
+  box-shadow: var(--shadow-sm);
 }
 
 .filter-group-header {
@@ -10,49 +17,50 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 9px 10px;
-  background: var(--paper);
+  padding: 12px 14px;
+  background: var(--surface);
   border: none;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
   color: var(--text);
 }
 
 .filter-group-title {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 
 .filter-group-count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
   border-radius: var(--radius-pill);
-  background: var(--blue);
+  background: linear-gradient(135deg, var(--blue), var(--navy-600));
   color: var(--on-accent);
   font-size: 10.5px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .filter-group-caret {
-  color: var(--muted);
-  font-size: 10px;
-  transition: transform 0.15s ease;
+  color: var(--muted-soft);
+  font-size: 11px;
+  transition: transform 0.2s var(--ease);
 }
 
 .filter-group-caret.open {
   transform: rotate(180deg);
+  color: var(--blue);
 }
 
 .filter-group-body {
-  padding: 10px;
-  border-top: 1px solid var(--line);
-  background: var(--surface);
+  padding: 4px 14px 14px;
+  border-top: 1px solid var(--line-soft);
+  background: var(--paper);
 }
 
 .filter-group-body .ms-field:last-child {

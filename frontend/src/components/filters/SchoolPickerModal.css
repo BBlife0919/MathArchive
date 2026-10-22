@@ -1,63 +1,97 @@
 .school-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(9, 13, 28, 0.55);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 24px;
+  animation: modal-fade-in 0.18s var(--ease);
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .school-modal {
   background: var(--surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  width: min(760px, 100%);
-  max-height: min(720px, 90vh);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  width: min(800px, 100%);
+  max-height: min(740px, 90vh);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: modal-pop-in 0.22s var(--ease);
+}
+
+@keyframes modal-pop-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .school-modal-backdrop, .school-modal { animation: none; }
 }
 
 .school-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px 12px;
-  border-bottom: 1px solid var(--line);
+  padding: 22px 26px 14px;
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .school-modal-header h2 {
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
   color: var(--ink);
   margin: 0;
 }
 
 .school-modal-close {
   border: none;
-  background: transparent;
-  font-size: 20px;
+  background: var(--paper);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 18px;
   line-height: 1;
   cursor: pointer;
   color: var(--muted);
-  padding: 4px;
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.school-modal-close:hover {
+  background: var(--accent-soft);
+  color: var(--accent-hover);
 }
 
 .school-modal-search {
-  margin: 16px 24px 0;
-  padding: 9px 12px;
-  border: 1px solid var(--line);
+  margin: 16px 26px 0;
+  padding: 11px 14px;
+  border: 1.5px solid var(--line);
   border-radius: var(--radius-md);
   font-size: 14px;
   box-sizing: border-box;
+  background: var(--paper);
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.school-modal-search:focus {
+  outline: none;
+  border-color: var(--blue);
+  background: var(--surface);
 }
 
 .school-modal-body {
   flex: 1;
   overflow-y: auto;
-  padding: 14px 24px 16px;
+  padding: 16px 26px 20px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -66,47 +100,56 @@
 .school-modal-province-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 7px;
 }
 
 .province-tab {
-  padding: 6px 14px;
+  padding: 7px 15px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--line);
-  background: var(--surface);
+  border: 1.5px solid var(--line);
+  background: var(--paper);
   color: var(--text);
   font-size: 12.5px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.15s var(--ease);
+}
+
+.province-tab:hover {
+  border-color: var(--blue-soft);
+  background: var(--surface);
 }
 
 .province-tab.active {
-  border: 2px solid var(--blue);
-  background: var(--blue);
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--navy-600) 100%);
   color: var(--on-accent);
   font-weight: 800;
-  padding: 5px 13px;
+  box-shadow: var(--shadow-blue);
 }
 
 .school-modal-hint {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   font-size: 13px;
   color: var(--muted);
+  font-weight: 600;
 }
 
 .school-modal-district-box {
-  margin-top: 12px;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--radius-lg);
   background: var(--paper);
 }
 
 .school-modal-district-title {
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 800;
-  color: var(--ink);
-  margin-bottom: 8px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--muted-soft);
+  margin-bottom: 10px;
 }
 
 .school-modal-district-tabs {
@@ -116,49 +159,57 @@
 }
 
 .district-tab {
-  padding: 6px 12px;
+  padding: 6px 13px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--line);
   background: var(--surface);
   color: var(--text);
   font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.15s var(--ease);
+}
+
+.district-tab:hover {
+  border-color: var(--accent-soft);
 }
 
 .district-tab.active {
-  border: 2px solid var(--blue);
-  background: var(--blue);
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
   color: var(--on-accent);
   font-weight: 800;
-  padding: 5px 11px;
+  box-shadow: var(--shadow-accent);
 }
 
 .school-modal-pool-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 0 8px;
+  padding: 16px 0 10px;
   font-size: 12.5px;
-  font-weight: 700;
-  color: var(--muted);
+  font-weight: 800;
+  color: var(--text);
 }
 
 .school-modal-pool-selected {
   color: var(--blue);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--blue-tint);
 }
 
 .school-modal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 8px;
+  gap: 9px;
   align-content: start;
 }
 
 .school-chip {
-  padding: 9px 10px;
+  padding: 10px 11px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--line);
   background: var(--surface);
   color: var(--text);
   font-size: 13px;
@@ -168,13 +219,26 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: all 0.12s var(--ease);
+}
+
+.school-chip:hover {
+  border-color: var(--blue-soft);
+  transform: translateY(-1px);
 }
 
 .school-chip.selected {
-  border-color: var(--blue);
-  background: var(--blue-soft);
-  color: var(--blue);
+  border: 2px solid var(--blue);
+  background: linear-gradient(135deg, var(--blue-tint), var(--blue-soft));
+  color: var(--navy-600);
   font-weight: 800;
+  box-shadow: var(--shadow-sm);
+  padding: 9px 10px;
+}
+
+.school-chip.selected::before {
+  content: "✓ ";
+  color: var(--blue);
 }
 
 .school-modal-empty {
@@ -182,17 +246,18 @@
   text-align: center;
   color: var(--muted);
   font-size: 13px;
-  padding: 24px 0;
+  padding: 28px 0;
 }
 
 .school-modal-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 24px;
-  border-top: 1px solid var(--line);
+  padding: 16px 26px;
+  border-top: 1px solid var(--line-soft);
   font-size: 13px;
   color: var(--text);
+  background: var(--paper);
 }
 
 .school-modal-reset {

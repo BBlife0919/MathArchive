@@ -10,7 +10,7 @@ export default function Expander({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="expander">
+    <div className={open ? "expander open" : "expander"}>
       <button type="button" className="expander-summary" onClick={() => setOpen((v) => !v)}>
         <span className="expander-caret">{open ? "▾" : "▸"}</span>
         {summary}

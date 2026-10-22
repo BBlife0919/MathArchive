@@ -1,27 +1,33 @@
 .diff-btn-field {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .diff-btn-group {
   display: flex;
-  gap: 6px;
+  gap: 7px;
 }
 
 .diff-btn {
   flex: 1;
-  padding: 7px 0;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  background: var(--surface);
+  padding: 8px 0;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
   color: var(--text);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.15s var(--ease);
+}
+
+.diff-btn:hover {
+  border-color: var(--blue-soft);
+  background: var(--surface);
 }
 
 .diff-btn.active {
-  background: var(--blue);
-  border-color: var(--blue);
-  border-width: 2px;
+  background: linear-gradient(135deg, var(--blue), var(--navy-600));
+  border-color: transparent;
   color: var(--on-accent);
+  box-shadow: var(--shadow-blue);
 }

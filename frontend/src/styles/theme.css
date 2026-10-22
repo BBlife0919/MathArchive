@@ -6,25 +6,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 
 :root {
-  --ink: #0a1020;
-  --blue: #2b6fff;
-  --blue-soft: #9ec1ff;
-  --paper: #f5f8ff;
-  --text: #13203c;
-  --muted: #5f6c87;
-  --line: #e3e9f7;
-  --surface: #ffffff;
-  --on-accent: #ffffff;
-  /* 적녹색약 규칙: 에러·경고도 빨강 대신 주황 계열(킬러 난이도와 동일 톤) 사용 */
+  /* 남색 축 — 메인 브랜드 컬러. 단일 톤이 아니라 완전한 스케일로 둬서
+     깊이감(명암 단계)을 만든다. */
+  --ink: #090d1c;
+  --ink-900: #0a1230;
+  --navy-700: #16244f;
+  --navy-600: #1d3270;
+  --blue: #2a56e8;
+  --blue-hover: #1e45cc;
+  --blue-soft: #c3d4ff;
+  --blue-tint: #eef2ff;
+
+  /* 주황 축 — 적녹색약 규칙에 따른 유일한 보조 색(남색↔주황 2종).
+     기존 --danger(에러 전용, 어두운 톤)와는 별도로, 디자인 강조용
+     --accent 를 더 또렷한 톤으로 둔다. */
+  --accent: #ff7a1f;
+  --accent-hover: #e8660d;
+  --accent-soft: #ffe2c7;
+  --accent-tint: #fff4ea;
   --danger: #9c3d0a;
 
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
+  --paper: #f3f5fb;
+  --paper-deep: #eceff9;
+  --text: #141b33;
+  --muted: #646f8c;
+  --muted-soft: #94a0bf;
+  --line: #e2e6f3;
+  --line-soft: #edf0f9;
+  --surface: #ffffff;
+  --on-accent: #ffffff;
+
+  --radius-sm: 7px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
   --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(10, 16, 32, 0.04);
-  --shadow-md: 0 4px 16px rgba(10, 16, 32, 0.08);
+  --shadow-xs: 0 1px 2px rgba(9, 13, 28, 0.05);
+  --shadow-sm: 0 2px 8px rgba(9, 13, 28, 0.06);
+  --shadow-md: 0 8px 24px rgba(9, 13, 28, 0.10);
+  --shadow-lg: 0 20px 48px rgba(9, 13, 28, 0.16);
+  --shadow-accent: 0 10px 24px rgba(255, 122, 31, 0.22);
+  --shadow-blue: 0 10px 24px rgba(42, 86, 232, 0.22);
+
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 
 html, body, #root {
@@ -33,10 +58,19 @@ html, body, #root {
 
 body {
   margin: 0;
-  background: var(--paper);
+  background:
+    radial-gradient(1100px 520px at 100% -10%, var(--blue-tint) 0%, transparent 60%),
+    radial-gradient(900px 480px at -10% 0%, var(--accent-tint) 0%, transparent 55%),
+    var(--paper);
   color: var(--text);
   font-family: 'Pretendard Variable', 'Pretendard', -apple-system,
     'Apple SD Gothic Neo', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--blue-soft);
+  color: var(--ink);
 }
 
 /* KaTeX 는 자체 폰트 유지 — 전역 폰트 규칙에서 배제 (폰트 불가침 규칙) */
