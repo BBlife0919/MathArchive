@@ -6,8 +6,9 @@ import {
   type ExamPaper, type FiltersResponse, type QuestionCard, type SearchRequest,
 } from "../api/questions";
 import FilterSidebar, {
-  EMPTY_FILTER_STATE, EXCLUDE_RECENT_DAYS, type FilterState,
+  EMPTY_FILTER_STATE, type FilterState,
 } from "../components/filters/FilterSidebar";
+import { EXCLUDE_RECENT_DAYS } from "../constants";
 import QuestionList from "../components/questions/QuestionList";
 import { QuestionGridSkeleton } from "../components/questions/QuestionCardSkeleton";
 import Pagination from "../components/questions/Pagination";

@@ -1,10 +1,8 @@
 import { useState } from "react";
-import DifficultyButtonGroup from "./DifficultyButtonGroup";
-import CurriculumCascade from "./CurriculumCascade";
 import QuickSearchBox from "./QuickSearchBox";
-import FilterGroup from "./FilterGroup";
 import SchoolPickerModal from "./SchoolPickerModal";
 import TermConditionFilters from "./TermConditionFilters";
+import ConditionPickerModal from "./ConditionPickerModal";
 import type { FiltersResponse, QuestionType } from "../../api/questions";
 import "./FilterSidebar.css";
 
@@ -42,11 +40,6 @@ export const EMPTY_FILTER_STATE: FilterState = {
   excludeRecentDays: false,
 };
 
-// 백엔드 exclude_recent_days 파라미터에 실어 보낼 고정 기간(일). 최근 이
-// 기간 안에 실제로 출제(PDF 다운로드)된 문항을 검색/미니테스트/균등배분
-// 결과에서 제외한다.
-export const EXCLUDE_RECENT_DAYS = 30;
-
 interface Props {
   filters: FiltersResponse | null;
   state: FilterState;
@@ -61,6 +54,7 @@ export default function FilterSidebar({
   filters, state, onChange, selectedCount, onResetSelection, onApply, hasPendingChanges,
 }: Props) {
   const [schoolModalOpen, setSchoolModalOpen] = useState(false);
+  const [conditionModalOpen, setConditionModalOpen] = useState(false);
 
   if (!filters) {
     return <aside className="filter-sidebar">필터 불러오는 중...</aside>;
@@ -76,119 +70,80 @@ export default function FilterSidebar({
         onClear={() => onChange({ ...state, quickSearch: "" })}
       />
 
-      <FilterGroup
-        title="출처"
-        activeCount={
-          state.schools.length + state.grades.length
-          + state.years.length + state.semesters.length + state.examTypes.length
-        }
-      >
-        <div className="ms-field">
-          <label className="ms-label">지역 · 학교 · 학년 · 년도 · 학기</label>
-          <button
-            type="button"
-            className="ms-trigger school-trigger"
-            onClick={() => setSchoolModalOpen(true)}
-          >
-            <span>
-              {state.schools.length === 0 ? "전체" : `${state.schools.length}개 학교 선택됨`}
-              {state.grades.length + state.years.length + state.semesters.length + state.examTypes.length > 0
-                && ` · 조건 ${state.grades.length + state.years.length + state.semesters.length + state.examTypes.length}개`}
-            </span>
-            <span className="ms-caret">▾</span>
-          </button>
-        </div>
-        <SchoolPickerModal
-          open={schoolModalOpen}
-          onClose={() => setSchoolModalOpen(false)}
-          provinces={filters.provinces}
-          provinceDistricts={filters.province_districts}
-          regionSchools={filters.region_schools}
-          allSchools={filters.schools}
-          selected={state.schools}
-          extraFilters={
-            <TermConditionFilters
-              filters={filters}
-              value={{
-                grades: state.grades, years: state.years,
-                semesters: state.semesters, examTypes: state.examTypes,
-              }}
-              onChange={(next) => onChange({ ...state, ...next })}
-            />
-          }
-          onApply={(schools) => {
-            onChange({ ...state, schools });
-            setSchoolModalOpen(false);
-          }}
-        />
-      </FilterGroup>
-
-      <FilterGroup
-        title="단원 · 난이도"
-        activeCount={
-          state.subjects.length + state.majors.length + state.minors.length
-          + state.difficulties.length
-        }
-      >
-        <CurriculumCascade
-          tree={filters.curriculum}
-          subjects={state.subjects}
-          majors={state.majors}
-          minors={state.minors}
-          onChange={({ subjects, majors, minors }) =>
-            onChange({ ...state, subjects, majors, minors })}
-        />
-        <DifficultyButtonGroup
-          options={filters.difficulties}
-          selected={state.difficulties}
-          onChange={(v) => onChange({ ...state, difficulties: v })}
-        />
-      </FilterGroup>
-
-      <FilterGroup
-        title="세부 조건"
-        activeCount={
-          (state.questionType !== "all" ? 1 : 0)
-          + (state.keyword ? 1 : 0)
-          + (state.excludeRecentDays ? 1 : 0)
-        }
-      >
-        <div className="filter-section-label">문제 유형</div>
-        <div className="question-type-radio">
-          {([
-            ["all", "전체"], ["choice", "선택형"], ["subjective", "서답형"],
-          ] as [QuestionType, string][]).map(([value, label]) => (
-            <label key={value}>
-              <input
-                type="radio"
-                name="question-type"
-                checked={state.questionType === value}
-                onChange={() => onChange({ ...state, questionType: value })}
-              />
-              {label}
-            </label>
-          ))}
-        </div>
-
-        <div className="filter-section-label">키워드 검색</div>
-        <input
-          type="text"
-          className="keyword-input"
-          placeholder="문제 텍스트 검색..."
-          value={state.keyword}
-          onChange={(e) => onChange({ ...state, keyword: e.target.value })}
-        />
-
-        <div className="filter-section-label">추가 옵션</div>
-        <label className="exclude-recent-checkbox">
-          <input
-            type="checkbox"
-            checked={state.excludeRecentDays}
-            onChange={(e) => onChange({ ...state, excludeRecentDays: e.target.checked })}
+      <div className="ms-field">
+        <label className="ms-label">지역 · 학교 · 학년 · 년도 · 학기</label>
+        <button
+          type="button"
+          className="ms-trigger school-trigger"
+          onClick={() => setSchoolModalOpen(true)}
+        >
+          <span>
+            {state.schools.length === 0 ? "전체" : `${state.schools.length}개 학교 선택됨`}
+            {state.grades.length + state.years.length + state.semesters.length + state.examTypes.length > 0
+              && ` · 조건 ${state.grades.length + state.years.length + state.semesters.length + state.examTypes.length}개`}
+          </span>
+          <span className="ms-caret">▾</span>
+        </button>
+      </div>
+      <SchoolPickerModal
+        open={schoolModalOpen}
+        onClose={() => setSchoolModalOpen(false)}
+        provinces={filters.provinces}
+        provinceDistricts={filters.province_districts}
+        regionSchools={filters.region_schools}
+        allSchools={filters.schools}
+        selected={state.schools}
+        extraFilters={
+          <TermConditionFilters
+            filters={filters}
+            value={{
+              grades: state.grades, years: state.years,
+              semesters: state.semesters, examTypes: state.examTypes,
+            }}
+            onChange={(next) => onChange({ ...state, ...next })}
           />
-          기존 출제 문제 제외 (최근 {EXCLUDE_RECENT_DAYS}일)
-        </label>
-      </FilterGroup>
+        }
+        onApply={(schools) => {
+          onChange({ ...state, schools });
+          setSchoolModalOpen(false);
+        }}
+      />
+
+      <div className="ms-field">
+        <label className="ms-label">단원 · 난이도 · 세부 조건</label>
+        <button
+          type="button"
+          className="ms-trigger"
+          onClick={() => setConditionModalOpen(true)}
+        >
+          <span>
+            {state.subjects.length === 0 && state.majors.length === 0
+              && state.minors.length === 0 && state.difficulties.length === 0
+              && state.questionType === "all" && !state.keyword && !state.excludeRecentDays
+              ? "조건 선택하기"
+              : `조건 ${
+                state.subjects.length + state.majors.length + state.minors.length
+                + state.difficulties.length + (state.questionType !== "all" ? 1 : 0)
+                + (state.keyword ? 1 : 0) + (state.excludeRecentDays ? 1 : 0)
+              }개 선택됨`}
+          </span>
+          <span className="ms-caret">▾</span>
+        </button>
+      </div>
+      <ConditionPickerModal
+        open={conditionModalOpen}
+        onClose={() => setConditionModalOpen(false)}
+        filters={filters}
+        value={{
+          subjects: state.subjects, majors: state.majors, minors: state.minors,
+          difficulties: state.difficulties, questionType: state.questionType,
+          keyword: state.keyword, excludeRecentDays: state.excludeRecentDays,
+        }}
+        onApply={(next) => {
+          onChange({ ...state, ...next });
+          setConditionModalOpen(false);
+        }}
+      />
 
       <button
         type="button"

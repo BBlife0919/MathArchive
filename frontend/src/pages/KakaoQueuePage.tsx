@@ -131,8 +131,6 @@ export default function KakaoQueuePage() {
         )}
       </section>
 
-      <hr className="filter-divider" />
-
       <section className="sc-section">
         <h2 className="sc-section-title">2. 승인 대기 (draft) — 강사 1문장 필수</h2>
         {drafts.length === 0 ? (
@@ -141,8 +139,6 @@ export default function KakaoQueuePage() {
           drafts.map((d) => <DraftCard key={d.queue_id} draft={d} onChanged={loadAll} />)
         )}
       </section>
-
-      <hr className="filter-divider" />
 
       <section className="sc-section">
         <h2 className="sc-section-title">3. 승인됨 (approved) — 발송 대기</h2>
@@ -169,8 +165,6 @@ export default function KakaoQueuePage() {
           </>
         )}
       </section>
-
-      <hr className="filter-divider" />
 
       <section className="sc-section">
         <h2 className="sc-section-title">4. 발송 결과 (최근 20건)</h2>

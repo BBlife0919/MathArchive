@@ -19,7 +19,7 @@ export default function PrismRadarChart({ score }: { score: PrismScore }) {
         <PolarGrid />
         <PolarAngleAxis dataKey="axis" tick={{ fontSize: 11 }} />
         <PolarRadiusAxis domain={[0, 5]} tickCount={6} tick={{ fontSize: 10 }} />
-        <Radar dataKey="value" stroke="#4F46E5" fill="#4F46E5" fillOpacity={0.25} />
+        <Radar dataKey="value" stroke="#2a56e8" fill="#2a56e8" fillOpacity={0.25} />
       </RadarChart>
     </ResponsiveContainer>
   );

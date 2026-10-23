@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from "react";
 import { generateMiniTest } from "../../api/questions";
-import { EXCLUDE_RECENT_DAYS, type FilterState } from "../filters/FilterSidebar";
+import type { FilterState } from "../filters/FilterSidebar";
+import { EXCLUDE_RECENT_DAYS } from "../../constants";
 import Expander from "./Expander";
 import "./MiniTestPanel.css";
 

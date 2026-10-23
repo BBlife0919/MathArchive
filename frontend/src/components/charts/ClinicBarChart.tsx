@@ -11,7 +11,7 @@ export default function ClinicBarChart({ data }: { data: ClinicErrorCount[] }) {
         <XAxis dataKey="label" tick={{ fontSize: 10 }} />
         <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
         <Tooltip />
-        <Bar dataKey="count" fill="#2b6fff" />
+        <Bar dataKey="count" fill="#2a56e8" radius={[6, 6, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

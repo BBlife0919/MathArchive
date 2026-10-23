@@ -14,6 +14,7 @@ import curriculum as curr  # type: ignore
 import main as legacy_main  # type: ignore  (순수 함수만 사용: format_choices 등)
 
 from . import region_taxonomy
+from . import school_taxonomy
 
 _conn = None
 
@@ -107,15 +108,19 @@ def load_filter_options() -> dict:
     year_set, grade_set, semester_set, exam_set = set(), set(), set(), set()
     region_schools: dict[str, set[str]] = {}
     raw_regions: set[str] = set()
+    raw_schools: set[str] = set()
     for r in rows:
+        school_canon = None
         if r["school"]:
-            school_set.add(r["school"])
+            raw_schools.add(r["school"])
+            school_canon = school_taxonomy.canonicalize(r["school"])
+            school_set.add(school_canon)
         if r["region"]:
             raw_regions.add(r["region"])
             canon = region_taxonomy.canonicalize(r["region"])
             region_set.add(canon)
-            if r["school"]:
-                region_schools.setdefault(canon, set()).add(r["school"])
+            if school_canon:
+                region_schools.setdefault(canon, set()).add(school_canon)
         if r["year"]:
             year_set.add(int(r["year"]))
         if r["grade"]:
@@ -128,6 +133,7 @@ def load_filter_options() -> dict:
     taxonomy = region_taxonomy.build_taxonomy(raw_regions)
     result = {
         "schools": sorted(school_set),
+        "school_canonical_to_raw": school_taxonomy.build_canonical_to_raw(raw_schools),
         "regions": sorted(region_set),
         "region_schools": {region: sorted(schools) for region, schools in region_schools.items()},
         "provinces": taxonomy["provinces"],
@@ -185,12 +191,18 @@ def search_question_ids(schools, chapters, difficulties, regions,
     # 비어있으면(필터 안 걸림) load_filter_options() 호출 자체를 생략해
     # 캐시 만료 시마다 불필요한 전체 스캔이 섞여드는 걸 막는다.
     expanded_regions = list(regions)
-    if regions:
-        canonical_to_raw = load_filter_options().get("region_canonical_to_raw", {})
-        expanded_regions = region_taxonomy.expand_canonical_regions(list(regions), canonical_to_raw)
+    expanded_schools = list(schools)
+    if regions or schools:
+        opts = load_filter_options()
+        if regions:
+            expanded_regions = region_taxonomy.expand_canonical_regions(
+                list(regions), opts.get("region_canonical_to_raw", {}))
+        if schools:
+            expanded_schools = school_taxonomy.expand_canonical_schools(
+                list(schools), opts.get("school_canonical_to_raw", {}))
 
     where, params = legacy_main._build_search_where(
-        list(schools), list(chapters), list(difficulties), expanded_regions,
+        expanded_schools, list(chapters), list(difficulties), expanded_regions,
         years=list(years), grades=list(grades),
         semesters=list(semesters), exam_types=list(exam_types),
         is_subjective=is_subjective, keyword=keyword,
@@ -229,13 +241,18 @@ def list_exam_papers(schools=(), regions=(), grades=(), years=(),
     전부 동일하므로 그대로 대표값으로 쓴다(검증: 2026-10-22 실측 — 같은
     그룹 안에서 값이 갈리면 그룹이 더 쪼개질 뿐이라 안전).
     """
+    opts = load_filter_options()
     expanded_regions = list(regions)
     if regions:
-        canonical_to_raw = load_filter_options().get("region_canonical_to_raw", {})
-        expanded_regions = region_taxonomy.expand_canonical_regions(list(regions), canonical_to_raw)
+        expanded_regions = region_taxonomy.expand_canonical_regions(
+            list(regions), opts.get("region_canonical_to_raw", {}))
+    expanded_schools = list(schools)
+    if schools:
+        expanded_schools = school_taxonomy.expand_canonical_schools(
+            list(schools), opts.get("school_canonical_to_raw", {}))
 
     where, params = legacy_main._build_search_where(
-        list(schools), [], [], expanded_regions,
+        expanded_schools, [], [], expanded_regions,
         years=list(years), grades=list(grades),
         semesters=list(semesters), exam_types=list(exam_types),
     )
@@ -255,7 +272,25 @@ def list_exam_papers(schools=(), regions=(), grades=(), years=(),
                  q.subject, q.chapter_range
         ORDER BY q.year DESC, q.school, q.grade, q.semester, q.exam_type
     """
-    return [dict(r) for r in query(sql, params)]
+    rows = [dict(r) for r in query(sql, params)]
+
+    # school 은 표준 표기(예: 광명북고)로 바꿔 보여준다. 서로 다른 raw
+    # school("광북고"/"광북북고")이 같은 표준 표기로 합쳐지면서 나머지
+    # 필드(학년·연도·학기·중간기말·과목·chapter_range)까지 전부 같은 카드가
+    # 생길 수 있으니 그 경우만 question_count를 합쳐 한 장의 카드로 만든다.
+    merged: dict[tuple, dict] = {}
+    for r in rows:
+        r["school"] = school_taxonomy.canonicalize(r["school"])
+        key = (r["school"], r["grade"], r["year"], r["semester"], r["exam_type"],
+               r["subject"], r["chapter_range"])
+        if key in merged:
+            merged[key]["question_count"] += r["question_count"]
+        else:
+            merged[key] = r
+    return sorted(
+        merged.values(),
+        key=lambda r: (-r["year"], r["school"], r["grade"], r["semester"], r["exam_type"]),
+    )
 
 
 def exam_paper_question_ids(school: str, grade: int, year: int, semester: int,
@@ -270,8 +305,14 @@ def exam_paper_question_ids(school: str, grade: int, year: int, semester: int,
     search_question_ids()(chapter_range 필터 없음)를 재사용하지 않고,
     카드와 1:1 대응하는 전용 조회를 둔다.
     """
-    conditions = ["school = ?", "grade = ?", "year = ?", "semester = ?", "exam_type = ?"]
-    params: list = [school, grade, year, semester, exam_type]
+    # school 은 카드에 표시된 표준 표기(예: 광명북고)로 들어온다. 실제 DB에는
+    # 그 표준 표기로 합쳐지는 raw 표기("광북고"/"광북북고" 등)가 여러 개일 수
+    # 있어 IN()으로 전부 풀어서 찾는다(school_taxonomy 참고).
+    canonical_to_raw = load_filter_options().get("school_canonical_to_raw", {})
+    raw_schools = school_taxonomy.expand_canonical_schools([school], canonical_to_raw)
+    school_placeholders = ",".join("?" * len(raw_schools))
+    conditions = [f"school IN ({school_placeholders})", "grade = ?", "year = ?", "semester = ?", "exam_type = ?"]
+    params: list = [*raw_schools, grade, year, semester, exam_type]
     if subject is None:
         conditions.append("subject IS NULL")
     else:

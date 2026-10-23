@@ -1,28 +1,35 @@
-.sc-section {
-  padding: 20px 0;
-  border-bottom: 1px solid var(--line);
-}
+/* 학생카드·클리닉·관리자·카톡승인큐 등 "다른 탭"이 공유하는 기반 스타일.
+   시험지 생성기 쪽 리프레시(글래스·그라디언트·필 토큰)와 같은 언어를 쓰도록
+   맞춘다 — "문제은행/시험지 탭만 바뀌고 나머지는 그대로"라는 피드백
+   (2026-10-24)으로 전면 교체. 섹션 하나 = 카드 하나로 통일해, 각 페이지가
+   제각각 구분선/여백을 쓰던 걸 한 패턴으로 모은다. */
 
-.sc-section:last-child {
-  border-bottom: none;
+.sc-section {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
+  padding: 20px 22px;
 }
 
 .sc-section-title {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 800;
   color: var(--ink);
   margin: 0 0 6px;
+  letter-spacing: -0.01em;
 }
 
 .sc-caption {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--muted);
   margin: 0 0 10px;
+  line-height: 1.5;
 }
 
 .sc-metric-row {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   flex-wrap: wrap;
   margin: 10px 0;
 }
@@ -30,17 +37,23 @@
 .sc-metric {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 90px;
+  gap: 3px;
+  min-width: 100px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  border: 1px solid var(--line-soft);
 }
 
 .sc-metric span {
   font-size: 11px;
-  color: var(--muted);
+  font-weight: 700;
+  color: var(--muted-soft);
 }
 
 .sc-metric b {
   font-size: 16px;
+  font-weight: 800;
   color: var(--ink);
 }
 
@@ -52,13 +65,13 @@
 .sc-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .sc-form label {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   font-size: 12px;
   font-weight: 700;
   color: var(--muted);
@@ -67,28 +80,41 @@
 .sc-form input,
 .sc-form select,
 .sc-form textarea {
-  padding: 7px 10px;
-  border: 1px solid var(--line);
+  padding: 9px 11px;
+  border: 1.5px solid var(--line);
   border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 400;
   color: var(--text);
   font-family: inherit;
+  background: var(--paper);
+  box-sizing: border-box;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.sc-form input:focus,
+.sc-form select:focus,
+.sc-form textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  background: var(--surface);
 }
 
 .sc-form-row {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .sc-form-row label {
   flex: 1;
+  min-width: 140px;
 }
 
 .sc-slider-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 .sc-slider span {
@@ -103,12 +129,13 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 400;
+  flex-wrap: wrap;
 }
 
 .sc-radio-row label {
   flex-direction: row;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   font-weight: 400;
 }
 
@@ -132,32 +159,52 @@
 
 .sc-table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12.5px;
   margin-top: 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .sc-table th, .sc-table td {
   text-align: left;
-  padding: 6px 8px;
-  border-bottom: 1px solid var(--line);
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .sc-table th {
   color: var(--muted);
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  background: var(--paper);
+}
+
+.sc-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sc-table tbody tr:hover {
+  background: var(--blue-tint);
 }
 
 .sc-empty {
   color: var(--muted);
   font-size: 13px;
   margin: 10px 0;
+  padding: 14px 16px;
+  text-align: center;
+  background: var(--paper);
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-md);
 }
 
 .sc-guide {
   font-size: 13px;
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .sc-guide ul {
@@ -166,15 +213,21 @@
 }
 
 .sc-assessment-latest {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line-soft);
+}
+
+.sc-section-divider {
+  border-top: 1px dashed var(--line-soft);
+  margin: 16px 0;
 }
 
 .sc-log-card {
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--line-soft);
   border-radius: var(--radius-md);
-  padding: 10px 12px;
+  background: var(--paper);
+  padding: 11px 14px;
   margin-top: 8px;
   font-size: 13px;
 }

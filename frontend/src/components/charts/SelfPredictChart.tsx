@@ -13,7 +13,7 @@ export default function SelfPredictChart({ data }: { data: SelfPredictChartPoint
         <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="predicted" name="예측" stroke="#2b6fff" connectNulls />
+        <Line type="monotone" dataKey="predicted" name="예측" stroke="#2a56e8" connectNulls />
         <Line type="monotone" dataKey="actual" name="실제" stroke="#9c3d0a" strokeDasharray="5 3" connectNulls />
       </LineChart>
     </ResponsiveContainer>

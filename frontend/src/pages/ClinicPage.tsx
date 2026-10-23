@@ -175,7 +175,7 @@ export default function ClinicPage() {
         {students.length === 0 ? (
           <p className="sc-empty">좌측 사이드바에서 학생을 등록/선택하세요.</p>
         ) : (
-          <>
+          <section className="sc-section">
             <h2 className="sc-section-title">오답 입력 → 처방전 생성</h2>
 
             <div className="sc-radio-row">
@@ -278,7 +278,7 @@ export default function ClinicPage() {
               </div>
             )}
 
-            <hr className="filter-divider" />
+            <div className="sc-section-divider" />
 
             <button
               type="button" className="btn-primary clinic-submit-btn"
@@ -315,21 +315,22 @@ export default function ClinicPage() {
                 </p>
               </div>
             )}
-          </>
+          </section>
         )}
 
-        <hr className="filter-divider" />
-        <h2 className="sc-section-title">오늘 도래한 재도전 (학생 전체)</h2>
-        {pendings.length === 0 ? (
-          <p className="sc-empty">도래한 재도전이 없습니다.</p>
-        ) : (
-          pendings.map((p) => (
-            <p key={p.entry_id} className="sc-caption">
-              · {p.student_name} · 오답 {p.wrong_question_id ? `q=${p.wrong_question_id}` : `외부 · ${p.external_label ?? "-"}`}
-              {" "}({p.wrong_date}) · 오류 {p.error_code} · 미완료: {p.due_flags.join(", ")}
-            </p>
-          ))
-        )}
+        <section className="sc-section">
+          <h2 className="sc-section-title">오늘 도래한 재도전 (학생 전체)</h2>
+          {pendings.length === 0 ? (
+            <p className="sc-empty">도래한 재도전이 없습니다.</p>
+          ) : (
+            pendings.map((p) => (
+              <p key={p.entry_id} className="sc-caption">
+                · {p.student_name} · 오답 {p.wrong_question_id ? `q=${p.wrong_question_id}` : `외부 · ${p.external_label ?? "-"}`}
+                {" "}({p.wrong_date}) · 오류 {p.error_code} · 미완료: {p.due_flags.join(", ")}
+              </p>
+            ))
+          )}
+        </section>
       </main>
     </div>
   );

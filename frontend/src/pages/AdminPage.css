@@ -1,21 +1,31 @@
 .admin-page {
-  padding: 20px 24px;
+  padding: 22px 26px 40px;
   max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .admin-card {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  background: var(--paper);
   padding: 12px 16px;
   margin-top: 10px;
+  transition: border-color 0.12s var(--ease);
+}
+
+.admin-card:hover {
+  border-color: var(--blue-soft);
 }
 
 .admin-username {
   color: var(--muted);
   font-size: 12px;
+  font-weight: 600;
 }
 
 .admin-card-actions {

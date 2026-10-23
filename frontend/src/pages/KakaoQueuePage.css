@@ -1,31 +1,36 @@
 .kakao-page {
-  padding: 20px 24px;
+  padding: 22px 26px 40px;
   max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .kakao-error-text {
-  color: #c0392b;
+  color: var(--danger);
   font-size: 13px;
+  font-weight: 700;
   margin: 4px 0 10px;
 }
 
 .kakao-draft-card {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px 16px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  padding: 14px 16px;
   margin-top: 10px;
 }
 
 .kakao-draft-card-summary {
-  font-weight: 700;
+  font-weight: 800;
   color: var(--ink);
   margin: 0 0 8px;
 }
 
 .kakao-draft-body {
   white-space: pre-wrap;
-  background: var(--panel, #f7f7f8);
-  border: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
   border-radius: var(--radius-md);
   padding: 10px 12px;
   font-size: 13px;
@@ -43,8 +48,8 @@
 .kakao-confirm-del {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   font-size: 12px;
   color: var(--muted);
-  font-weight: 400;
+  font-weight: 600;
 }

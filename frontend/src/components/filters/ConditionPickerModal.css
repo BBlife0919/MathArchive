@@ -1,0 +1,134 @@
+.cond-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 13, 28, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  animation: modal-fade-in 0.18s var(--ease);
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cond-modal {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  width: min(560px, 100%);
+  max-height: min(760px, 90vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modal-pop-in 0.22s var(--ease);
+}
+
+@keyframes modal-pop-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cond-modal-backdrop, .cond-modal { animation: none; }
+}
+
+.cond-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 26px 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.cond-modal-header h2 {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.cond-modal-close {
+  border: none;
+  background: var(--paper);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--muted);
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.cond-modal-close:hover {
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+}
+
+.cond-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 26px 20px;
+}
+
+.cond-modal-section-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--muted-soft);
+  margin-bottom: 12px;
+}
+
+.cond-modal-divider {
+  border-top: 1.5px dashed var(--line-soft);
+  margin: 20px 0;
+}
+
+.cond-modal-field {
+  margin-top: 14px;
+}
+
+.cond-modal-field:first-of-type {
+  margin-top: 4px;
+}
+
+.cond-modal-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+
+.cond-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 26px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--paper);
+}
+
+.cond-modal-reset {
+  border: none;
+  background: transparent;
+  color: var(--blue);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+}
+
+.cond-modal-actions {
+  display: flex;
+  gap: 8px;
+}

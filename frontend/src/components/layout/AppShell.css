@@ -8,39 +8,56 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
+  padding: 12px 22px;
+  border-bottom: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  box-shadow: var(--shadow-xs);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .app-shell-nav {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .app-shell-brand {
   font-size: 15px;
-  font-weight: 800;
-  color: var(--ink);
-  margin-right: 14px;
-  letter-spacing: -0.02em;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  margin-right: 18px;
+  background: linear-gradient(135deg, var(--navy-600), var(--blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .app-shell-nav-btn {
-  padding: 7px 12px;
-  border: none;
-  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-pill);
   background: none;
   color: var(--muted);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.15s var(--ease);
+}
+
+.app-shell-nav-btn:hover {
+  background: var(--paper);
+  color: var(--text);
 }
 
 .app-shell-nav-btn.active {
-  background: var(--paper);
-  color: var(--blue);
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--navy-600) 100%);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-blue);
 }
 
 .app-shell-user {
@@ -48,17 +65,38 @@
   align-items: center;
   gap: 12px;
   font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .app-shell-user button {
-  padding: 5px 10px;
-  border: 1px solid var(--line);
-  border-radius: 7px;
+  padding: 6px 13px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-pill);
   background: var(--surface);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 12.5px;
   cursor: pointer;
+  transition: all 0.15s var(--ease);
+}
+
+.app-shell-user button:hover {
+  border-color: var(--accent-soft);
+  background: var(--accent-tint);
+  color: var(--accent-hover);
 }
 
 .app-shell-body {
   flex: 1;
+}
+
+@media (max-width: 860px) {
+  .app-shell-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .app-shell-nav {
+    flex-wrap: wrap;
+  }
 }

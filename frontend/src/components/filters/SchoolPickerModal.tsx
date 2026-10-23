@@ -74,6 +74,16 @@ export default function SchoolPickerModal({
       prev.includes(school) ? prev.filter((s) => s !== school) : [...prev, school]);
   }
 
+  // 현재 보이는 목록(검색 결과 또는 선택한 구/시/군) 기준 전체선택/해제.
+  // 이미 전부 선택돼 있으면 "선택" 대신 "해제"로 토글해 다시 누르면 빠지게 한다.
+  function selectAll(list: string[]) {
+    const allSelected = list.length > 0 && list.every((s) => draft.includes(s));
+    setDraft((prev) =>
+      allSelected
+        ? prev.filter((s) => !list.includes(s))
+        : [...prev, ...list.filter((s) => !prev.includes(s))]);
+  }
+
   return (
     <div className="school-modal-backdrop" onMouseDown={onClose}>
       <div className="school-modal" onMouseDown={(e) => e.stopPropagation()}>
@@ -96,7 +106,14 @@ export default function SchoolPickerModal({
             <>
               <div className="school-modal-pool-header">
                 <span>검색 결과 {searchResults.length}개</span>
-                <span className="school-modal-pool-selected">{draft.length}개 선택됨</span>
+                <span className="school-modal-pool-actions">
+                  {searchResults.length > 0 && (
+                    <button type="button" className="school-modal-select-all" onClick={() => selectAll(searchResults)}>
+                      {searchResults.every((s) => draft.includes(s)) ? "전체 해제" : "전체 선택"}
+                    </button>
+                  )}
+                  <span className="school-modal-pool-selected">{draft.length}개 선택됨</span>
+                </span>
               </div>
               <div className="school-modal-grid">
                 {searchResults.map((school) => (
@@ -159,7 +176,14 @@ export default function SchoolPickerModal({
                 <>
                   <div className="school-modal-pool-header">
                     <span>{districtLabel(activeProvince!, activeDistrict)} 학교 {districtSchools.length}개</span>
-                    <span className="school-modal-pool-selected">{draft.length}개 선택됨</span>
+                    <span className="school-modal-pool-actions">
+                      {districtSchools.length > 0 && (
+                        <button type="button" className="school-modal-select-all" onClick={() => selectAll(districtSchools)}>
+                          {districtSchools.every((s) => draft.includes(s)) ? "전체 해제" : "전체 선택"}
+                        </button>
+                      )}
+                      <span className="school-modal-pool-selected">{draft.length}개 선택됨</span>
+                    </span>
                   </div>
                   <div className="school-modal-grid">
                     {districtSchools.map((school) => (
