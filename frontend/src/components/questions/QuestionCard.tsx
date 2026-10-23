@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { QuestionCard as QuestionCardData } from "../../api/questions";
 import { useBookmark } from "../../context/BookmarkContext";
 import QuestionContent from "../content/QuestionContent";
@@ -21,7 +22,7 @@ interface Props {
   onToggleSelect?: () => void;
 }
 
-export default function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
+function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
   const diffColor = DIFF_COLOR[q.difficulty ?? ""] ?? "#94a3b8";
   const { bookmarkedIds, toggle: toggleBookmark } = useBookmark();
   const isBookmarked = bookmarkedIds.has(q.question_id);
@@ -93,3 +94,8 @@ export default function QuestionCard({ question: q, isSelected, onToggleSelect }
     </div>
   );
 }
+
+// STEP2 문항 목록(188문항 등 대량)을 드래그로 재정렬할 때, 실제로 위치가
+// 바뀐 카드만 다시 그리도록 React.memo로 감싼다 — 안 그러면 드래그 중
+// 모든 카드가 매 포인터 이동마다 통째로 재평가돼 버벅인다(2026-10-24 피드백).
+export default memo(QuestionCard);

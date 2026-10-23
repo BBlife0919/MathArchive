@@ -1,6 +1,6 @@
 import {
   DndContext, closestCenter, PointerSensor, useSensor, useSensors,
-  type DragEndEvent,
+  type DragEndEvent, type Modifier,
 } from "@dnd-kit/core";
 import {
   SortableContext, rectSortingStrategy, verticalListSortingStrategy,
@@ -24,6 +24,10 @@ interface Props {
   // 추가(2026-09-19).
   layout?: "grid" | "list";
 }
+
+// 세로 목록(list)에서는 위아래로만 움직이면 충분하고, 가로 흔들림을 없애면
+// 드래그 중 체감 반응도 더 또렷해진다(2026-10-24 "버벅인다" 피드백 대응).
+const restrictToVerticalAxis: Modifier = ({ transform }) => ({ ...transform, x: 0 });
 
 export default function QuestionList({
   items, selectedIds, onToggleSelect, sortable, onReorder, layout = "grid",
@@ -55,7 +59,24 @@ export default function QuestionList({
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      modifiers={layout === "list" ? [restrictToVerticalAxis] : undefined}
+      // measuring 전략은 dnd-kit 기본값(WhileDragging)을 그대로 둔다 —
+      // 문제 카드에는 그림(has_image, loading="lazy")이 섞여 있어, 드래그 중
+      // 자동스크롤로 화면에 처음 들어오는 카드는 그제서야 이미지가 로드되며
+      // 높이가 바뀐다. "드래그 시작 시 1회만 측정"으로 바꿨다가 그 높이 변화를
+      // 못 따라가 엉뚱한 자리에 꽂히는 문제를 검수에서 발견해 되돌렸다
+      // (2026-10-24). 렉은 다른 조치(React.memo·전체카드 드래그·autoScroll
+      // 가속)로 줄인다.
+      // 기본 acceleration(10)로는 리스트 끝까지 드래그로 끌고가는 스크롤이
+      // "웹페이지를 손가락으로 아주 천천히 내리는" 속도처럼 느껴진다는
+      // 피드백(2026-10-24) — 가속도를 올리고, 가장자리 반응 영역(threshold)도
+      // 넓혀 더 일찍·더 빠르게 스크롤되게 한다.
+      autoScroll={{ acceleration: 40, threshold: { x: 0.2, y: 0.3 } }}
+    >
       <SortableContext
         items={items.map((q) => q.question_id)}
         strategy={layout === "list" ? verticalListSortingStrategy : rectSortingStrategy}
@@ -78,18 +99,22 @@ function SortableCard({ id, children }: { id: number; children: ReactNode }) {
   } = useSortable({ id });
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
+    // 드래그 중인 카드 자신은 트랜지션을 꺼서 포인터를 그대로 따라가게 하고
+    // (렉처럼 느껴지던 지연의 큰 부분), 자리를 비켜주는 다른 카드들만 부드럽게
+    // 움직인다.
+    transition: isDragging ? undefined : transition,
+    opacity: isDragging ? 0.6 : 1,
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="sortable-card">
-      <button
-        type="button" className="drag-handle-bar" aria-label="드래그로 순서 변경"
-        {...attributes} {...listeners}
-      >
-        ⠿ 드래그로 순서 변경
-      </button>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={isDragging ? "sortable-card dragging" : "sortable-card"}
+      {...attributes}
+      {...listeners}
+    >
+      <div className="drag-handle-bar" aria-hidden="true">⠿ 문제 박스를 어디든 눌러서 드래그</div>
       {children}
     </div>
   );

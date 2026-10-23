@@ -13,6 +13,21 @@
   gap: 14px;
 }
 
+.sortable-card {
+  cursor: grab;
+  /* 터치 기기에서 카드 아무 곳이나 눌러 드래그할 수 있어야 하므로, 브라우저
+     기본 스크롤 제스처를 카드 영역 전체에서 꺼둔다(2026-10-24 피드백 —
+     예전엔 맨 위 손잡이 줄에만 있어서 거기만 잡아야 했음). */
+  touch-action: none;
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.15s var(--ease);
+}
+
+.sortable-card.dragging {
+  box-shadow: var(--shadow-lg);
+  z-index: 5;
+}
+
 .sortable-card .question-card {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -33,10 +48,13 @@
   color: var(--muted);
   font-size: 10.5px;
   line-height: 1;
-  cursor: grab;
-  touch-action: none;
 }
 
-.drag-handle-bar:active {
+.sortable-card.dragging .drag-handle-bar {
+  color: var(--navy-600);
+  background: var(--blue-tint);
+}
+
+.sortable-card:active {
   cursor: grabbing;
 }
