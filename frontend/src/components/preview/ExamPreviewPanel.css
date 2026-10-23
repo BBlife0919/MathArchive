@@ -17,6 +17,12 @@
   flex-shrink: 0;
 }
 
+.question-list-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
 .pdf-mode-toggle {
   display: flex;
   gap: 4px;

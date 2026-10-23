@@ -1,4 +1,5 @@
 import type { QuestionCard as QuestionCardData } from "../../api/questions";
+import { useBookmark } from "../../context/BookmarkContext";
 import QuestionContent from "../content/QuestionContent";
 import Expander from "./Expander";
 import DifficultyBar from "./DifficultyBar";
@@ -22,6 +23,8 @@ interface Props {
 
 export default function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
   const diffColor = DIFF_COLOR[q.difficulty ?? ""] ?? "#94a3b8";
+  const { bookmarkedIds, toggle: toggleBookmark } = useBookmark();
+  const isBookmarked = bookmarkedIds.has(q.question_id);
 
   return (
     <div className="question-card">
@@ -40,15 +43,34 @@ export default function QuestionCard({ question: q, isSelected, onToggleSelect }
           {q.is_subjective && <span className="badge-subjective">서술형</span>}
           {q.error_note && <span className="badge-error">오류</span>}
         </div>
-        {onToggleSelect && (
+        <div className="question-card-actions">
           <button
             type="button"
-            className={isSelected ? "select-btn selected" : "select-btn"}
-            onClick={onToggleSelect}
+            className="icon-btn"
+            title="유사 문제 추천 (준비중)"
+            onClick={() => {}}
           >
-            {isSelected ? "제거" : "담기"}
+            유사
           </button>
-        )}
+          <button
+            type="button"
+            className={isBookmarked ? "icon-btn bookmarked" : "icon-btn"}
+            title={isBookmarked ? "책갈피 해제" : "책갈피에 담기"}
+            aria-pressed={isBookmarked}
+            onClick={() => toggleBookmark(q.question_id)}
+          >
+            {isBookmarked ? "★ 책갈피" : "☆ 책갈피"}
+          </button>
+          {onToggleSelect && (
+            <button
+              type="button"
+              className={isSelected ? "select-btn selected" : "select-btn"}
+              onClick={onToggleSelect}
+            >
+              {isSelected ? "제거" : "담기"}
+            </button>
+          )}
+        </div>
       </div>
 
       <QuestionContent segments={q.content_segments} />

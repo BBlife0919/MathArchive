@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { SelectionProvider } from "./context/SelectionContext";
+import { BookmarkProvider } from "./context/BookmarkContext";
 import AuthPage from "./pages/AuthPage";
 import PendingApprovalPage from "./pages/PendingApprovalPage";
 import ExamBuilderPage from "./pages/ExamBuilderPage";
@@ -31,7 +32,9 @@ function Gate() {
   if (page === "exam") {
     body = (
       <SelectionProvider>
-        <ExamBuilderPage />
+        <BookmarkProvider>
+          <ExamBuilderPage />
+        </BookmarkProvider>
       </SelectionProvider>
     );
   } else if (page === "student-card") {

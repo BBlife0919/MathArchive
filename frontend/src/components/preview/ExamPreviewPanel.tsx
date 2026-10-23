@@ -6,6 +6,7 @@ import Expander from "../questions/Expander";
 import RealPagePreview from "./RealPagePreview";
 import PdfOptionsForm from "./PdfOptionsForm";
 import BookOptionsForm from "./BookOptionsForm";
+import SortMenu, { sortQuestionIds, type SortCriterion } from "./SortMenu";
 import "./ExamPreviewPanel.css";
 
 export type PdfMode = "exam" | "book";
@@ -26,6 +27,7 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
   // 챕터별로 묶어 표지/디바이더를 만들기 때문에 임의 순서를 반영하지 않는다.
   const [manualOrder, setManualOrder] = useState(false);
   const preserveOrder = manualOrder && pdfMode === "exam";
+  const [sortCriterion, setSortCriterion] = useState<SortCriterion | null>(null);
 
   // 실물 미리보기는 이제 이 패널 왼쪽(큰 화면)에서 그린다 — PdfOptionsForm/
   // BookOptionsForm은 자기 설정이 바뀔 때마다 이 콜백으로 "다시 그려줘"만
@@ -81,6 +83,11 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
     reorder([...newOrder, ...missing]);
   }
 
+  function handleSort(criterion: SortCriterion) {
+    setSortCriterion(criterion);
+    handleReorder(sortQuestionIds(items, criterion));
+  }
+
   if (selectedIds.size === 0) {
     return <p className="empty-state">문제 목록에서 버튼으로 문제를 추가해주세요.</p>;
   }
@@ -97,11 +104,18 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
         {error && <p className="exam-builder-error">{error}</p>}
         <Expander summary={`문항 목록 (${items.length}문항 · 보기 · 순서 변경 · 제거)`}>
           {!loading && !error && (
-            <QuestionList
-              items={items} selectedIds={selectedIds} onToggleSelect={toggle}
-              sortable={pdfMode === "exam"} onReorder={handleReorder}
-              layout="list"
-            />
+            <>
+              {pdfMode === "exam" && items.length > 1 && (
+                <div className="question-list-toolbar">
+                  <SortMenu value={sortCriterion} onSelect={handleSort} />
+                </div>
+              )}
+              <QuestionList
+                items={items} selectedIds={selectedIds} onToggleSelect={toggle}
+                sortable={pdfMode === "exam"} onReorder={handleReorder}
+                layout="list"
+              />
+            </>
           )}
         </Expander>
         <RealPagePreview fetchHtml={previewFetch} depsKey={previewDepsKey} />

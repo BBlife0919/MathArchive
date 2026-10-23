@@ -219,3 +219,51 @@
 .school-trigger {
   font-weight: 600;
 }
+
+/* 모달/칩 방식으로 넘어간 뒤에도 "트리거 버튼" 자체의 생김새는 공유한다
+   (출처·단원 조건 트리거, 빠른검색 라벨, 난이도 라벨 등). */
+.ms-field {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.ms-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--muted-soft);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.ms-trigger {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.ms-trigger:hover:not(:disabled) {
+  border-color: var(--blue-soft);
+  background: var(--surface);
+}
+
+.ms-trigger:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ms-caret {
+  color: var(--muted-soft);
+  font-size: 10px;
+}

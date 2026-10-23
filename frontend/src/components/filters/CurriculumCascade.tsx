@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from "react";
-import MultiSelectField from "./MultiSelectField";
 import {
   allMinorChaptersInSubjects, majorChapters, minorChapters,
   type CurriculumTree,
 } from "../../utils/curriculum";
+import "./CurriculumCascade.css";
 
 interface Props {
   tree: CurriculumTree;
@@ -13,13 +13,49 @@ interface Props {
   onChange: (next: { subjects: string[]; majors: string[]; minors: string[] }) => void;
 }
 
+function toggleIn(list: string[], v: string): string[] {
+  return list.includes(v) ? list.filter((x) => x !== v) : [...list, v];
+}
+
+interface ChipGroupProps {
+  label: string;
+  options: string[];
+  selected: string[];
+  onToggle: (v: string) => void;
+  emptyHint?: string;
+}
+
+function ChipGroup({ label, options, selected, onToggle, emptyHint }: ChipGroupProps) {
+  return (
+    <div className="curr-field">
+      <span className="curr-label">{label}</span>
+      {options.length === 0 ? (
+        <p className="curr-empty-hint">{emptyHint}</p>
+      ) : (
+        <div className="curr-chip-grid">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              className={selected.includes(opt) ? "curr-chip selected" : "curr-chip"}
+              onClick={() => onToggle(opt)}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// 학교선택 모달처럼 "칩을 직접 눌러 고르는" 방식으로 통일한다 — 드롭다운
+// 안에서 체크박스를 찾아야 하던 기존 방식이 "여기도 저기처럼 해달라"는
+// 피드백(2026-10-24)으로 바뀌었다.
 export default function CurriculumCascade({
   tree, subjects, majors, minors, onChange,
 }: Props) {
-  const subjectOptions = useMemo(
-    () => Object.keys(tree).map((s) => ({ value: s, label: s })),
-    [tree],
-  );
+  const subjectOptions = useMemo(() => Object.keys(tree), [tree]);
   const majorsPool = useMemo(
     () => (subjects.length ? majorChapters(tree, subjects) : []),
     [tree, subjects],
@@ -49,26 +85,26 @@ export default function CurriculumCascade({
   }, [minorsPool]);
 
   return (
-    <div>
-      <MultiSelectField
+    <div className="curr-cascade">
+      <ChipGroup
         label="과목"
         options={subjectOptions}
         selected={subjects}
-        onChange={(next) => onChange({ subjects: next, majors, minors })}
+        onToggle={(v) => onChange({ subjects: toggleIn(subjects, v), majors, minors })}
       />
-      <MultiSelectField
+      <ChipGroup
         label="대단원"
-        options={majorsPool.map((m) => ({ value: m, label: m }))}
+        options={majorsPool}
         selected={majors}
-        onChange={(next) => onChange({ subjects, majors: next, minors })}
-        disabled={!subjects.length}
+        onToggle={(v) => onChange({ subjects, majors: toggleIn(majors, v), minors })}
+        emptyHint="먼저 과목을 선택해주세요."
       />
-      <MultiSelectField
+      <ChipGroup
         label="중단원"
-        options={minorsPool.map((m) => ({ value: m, label: m }))}
+        options={minorsPool}
         selected={minors}
-        onChange={(next) => onChange({ subjects, majors, minors: next })}
-        disabled={!minorsPool.length}
+        onToggle={(v) => onChange({ subjects, majors, minors: toggleIn(minors, v) })}
+        emptyHint="먼저 과목을 선택해주세요."
       />
     </div>
   );
