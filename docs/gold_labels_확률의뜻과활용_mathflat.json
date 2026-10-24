@@ -1,0 +1,34 @@
+{
+  "note": "확률의 뜻과 활용 매쓰플랫22개정 기준 정답지 — 사람이 문항 본문을 직접 읽고 배정(1차). Opus 정확도 재검증용. 애매한 항목은 인접 유형과 경계가 흐릿할 수 있음을 전제.",
+  "chapter": "확률의 뜻과 활용",
+  "labeled_at": "2026-10-24",
+  "type_source": "docs/problem_types.json (mathflat22-draft-2026-10-24)",
+  "labels": [
+    {
+      "qid": 213534,
+      "difficulty": "하",
+      "code": "MF__19489"
+    },
+    {
+      "qid": 51550,
+      "difficulty": "중",
+      "code": "MF__19494"
+    },
+    {
+      "qid": 178698,
+      "difficulty": "상",
+      "code": "MF__19495"
+    },
+    {
+      "qid": 82229,
+      "difficulty": "중",
+      "code": "MF__19492"
+    },
+    {
+      "qid": 163463,
+      "difficulty": "중",
+      "code": "MF__19492"
+    }
+  ],
+  "moved_out": []
+}

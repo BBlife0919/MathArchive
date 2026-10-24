@@ -1,0 +1,39 @@
+{
+  "note": "등차수열 매쓰플랫22개정 기준 정답지 — 사람이 문항 본문을 직접 읽고 배정(1차). Opus 정확도 재검증용. 애매한 항목은 인접 유형과 경계가 흐릿할 수 있음을 전제.",
+  "chapter": "등차수열",
+  "labeled_at": "2026-10-24",
+  "type_source": "docs/problem_types.json (mathflat22-draft-2026-10-24)",
+  "labels": [
+    {
+      "qid": 111079,
+      "difficulty": "하",
+      "code": "MF__18386"
+    },
+    {
+      "qid": 70460,
+      "difficulty": "상",
+      "code": "MF__18402"
+    },
+    {
+      "qid": 125987,
+      "difficulty": "하",
+      "code": "MF__18381"
+    },
+    {
+      "qid": 147342,
+      "difficulty": "중",
+      "code": "MF__18406"
+    },
+    {
+      "qid": 71532,
+      "difficulty": "중",
+      "code": "MF__18404"
+    },
+    {
+      "qid": 163830,
+      "difficulty": "중",
+      "code": "MF__18404"
+    }
+  ],
+  "moved_out": []
+}

@@ -1,0 +1,1177 @@
+{
+ "MF__16271": {
+  "name": "공통부분이 있는 함수의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/812050/2d0c4583/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812072/8344294b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812074/a0068cee/problem.png"
+  ]
+ },
+ "MF__16274": {
+  "name": "꼭짓점의 x좌표가 미지수일 때, 이차함수의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/812181/bfd6964b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812184/a4fb17b3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811903/1b9baad5/problem.png"
+  ]
+ },
+ "MF__16273": {
+  "name": "완전제곱식을 이용한 이차식의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/812177/b652cdf5/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812170/5938a17c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812169/a7047954/problem.png"
+  ]
+ },
+ "MF__16276": {
+  "name": "이차함수 최대·최소의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/812215/eb96b68f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812212/c493c98b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812218/cc43e646/problem.png"
+  ]
+ },
+ "MF__16260": {
+  "name": "이차함수와 이차방정식의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/811240/9df2f5db/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811238/df464e02/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/859534/ae7f3981/problem.png"
+  ]
+ },
+ "MF__17212": {
+  "name": "이차함수의 그래프",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/877926/ea82de79/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/877940/81f854fe/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/877938/1d67e188/problem.png"
+  ]
+ },
+ "MF__16257": {
+  "name": "이차함수의 그래프와 x축의 교점",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/811129/d6e85773/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811157/ba1ab638/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811145/1b00d700/problem.png"
+  ]
+ },
+ "MF__16256": {
+  "name": "이차함수의 그래프와 x축의 위치 관계",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/864439/ad2b7e58/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/810993/294b22e8/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811053/80677af9/problem.png"
+  ]
+ },
+ "MF__16265": {
+  "name": "이차함수의 그래프와 이차방정식의 해",
+  "images": []
+ },
+ "MF__16262": {
+  "name": "이차함수의 그래프와 직선의 교점",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/811443/a3db6737/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811446/552814f3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851030/09e77ae3/problem.png"
+  ]
+ },
+ "MF__16261": {
+  "name": "이차함수의 그래프와 직선의 위치 관계",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/864473/a2baf3e6/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811264/087d73ae/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811249/0b54c080/problem.png"
+  ]
+ },
+ "MF__16267": {
+  "name": "이차함수의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/811653/a46f742f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811657/0afde362/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811713/fe0e3b4a/problem.png"
+  ]
+ },
+ "MF__17210": {
+  "name": "일차함수의 그래프",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/877901/9e9e5c51/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/877900/f009b197/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/877907/7d67851f/problem.png"
+  ]
+ },
+ "MF__16266": {
+  "name": "절댓값 기호를 포함한 방정식의 실근의 개수와 함수의 그래프",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/811626/f21cca5a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811640/f27123b2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851066/6c23f82b/problem.png"
+  ]
+ },
+ "MF__16275": {
+  "name": "절댓값 기호를 포함한 이차함수의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/812194/391d4372/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812195/6ff45f5d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812201/83409315/problem.png"
+  ]
+ },
+ "MF__16268": {
+  "name": "제한된 범위에서의 이차함수의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/863921/6a50c59e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/859486/ce8873aa/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/859866/4bf495c3/problem.png"
+  ]
+ },
+ "MF__16272": {
+  "name": "조건을 만족시키는 이차식의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/812118/c42c191c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812114/936bb4f7/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812105/cc2c808f/problem.png"
+  ]
+ },
+ "MF__16269": {
+  "name": "최댓값 또는 최솟값이 주어졌을 때 미정계수 구하기",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/859847/8ad07675/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/859550/386d5acb/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/811868/0e20c1af/problem.png"
+  ]
+ },
+ "MF__16270": {
+  "name": "최댓값의 최솟값 또는 최솟값의 최댓값 구하기",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/812037/1b42d58b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/863108/03459752/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/812035/15e54ad4/problem.png"
+  ]
+ },
+ "MF__16314": {
+  "name": "A < B < C 꼴의 부등식의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/814835/1f4e4925/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/814833/6bdd95fc/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851307/4987c5ee/problem.png"
+  ]
+ },
+ "MF__16326": {
+  "name": "|ax+b|<c, |ax+b|>c 꼴의 부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/815775/9fe858c9/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815778/16f8fb0c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815784/8a254aa2/problem.png"
+  ]
+ },
+ "MF__16327": {
+  "name": "|ax+b|<cx+d 꼴의 부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/815877/ee680c73/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815867/c2ae299e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815871/1540c099/problem.png"
+  ]
+ },
+ "MF__16356": {
+  "name": "가우스 기호를 포함한 연립이차부등식의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/851432/135ecdc2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817398/1c78df5a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817399/d688ecb8/problem.png"
+  ]
+ },
+ "MF__16339": {
+  "name": "가우스 기호를 포함한 이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816595/bb55b356/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816594/95961c27/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816601/b0e314f7/problem.png"
+  ]
+ },
+ "MF__16332": {
+  "name": "그래프를 이용한 이차부등식의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/864591/061a4db5/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816134/cf876192/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816128/187b6314/problem.png"
+  ]
+ },
+ "MF__16309": {
+  "name": "부등식 ax>b의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/814408/e919497c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/814414/4610d5ff/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851296/d5e3c64f/problem.png"
+  ]
+ },
+ "MF__16345": {
+  "name": "부등식 f(x)<0과 부등식 f(ax+b)<0의 관계",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816913/9132d376/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816906/33e39419/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816912/eedc3db1/problem.png"
+  ]
+ },
+ "MF__16306": {
+  "name": "부등식의 기본성질",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/814362/7a59d655/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/814359/b91a0f2c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/814363/426e8484/problem.png"
+  ]
+ },
+ "MF__16331": {
+  "name": "여러 가지 부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816087/c4424909/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816083/db9a2d96/problem.png"
+  ]
+ },
+ "MF__16354": {
+  "name": "연립이차부등식의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/859512/f6da2369/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851410/7a18adc5/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851418/214ac324/problem.png"
+  ]
+ },
+ "MF__16360": {
+  "name": "연립이차부등식의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/851456/2f24dc16/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817650/fde2550c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/864503/102637dd/problem.png"
+  ]
+ },
+ "MF__16311": {
+  "name": "연립일차부등식의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/814518/4f070f5d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/814502/65101012/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/814522/e8fcaf06/problem.png"
+  ]
+ },
+ "MF__16319": {
+  "name": "연립일차부등식의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/815409/81e8a483/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851314/3dee0a96/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815395/fca7b797/problem.png"
+  ]
+ },
+ "MF__16359": {
+  "name": "이차방정식의 근의 판별과 이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/817535/d9c5c1e8/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817552/f31a7a8b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817556/3580932b/problem.png"
+  ]
+ },
+ "MF__16362": {
+  "name": "이차방정식의 실근의 부호",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/817720/77dab18c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/850975/749339db/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817749/1e5fd1c9/problem.png"
+  ]
+ },
+ "MF__16364": {
+  "name": "이차방정식의 실근의 위치",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/817812/bba5c691/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817819/9560139c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817821/785168b5/problem.png"
+  ]
+ },
+ "MF__16347": {
+  "name": "이차부등식과 두 그래프의 위치 관계(1) 만나는 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816936/cfd4429d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816938/4d3f7099/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816929/4e86b983/problem.png"
+  ]
+ },
+ "MF__16348": {
+  "name": "이차부등식과 두 그래프의 위치 관계(2) 만나지 않는 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816991/317114b8/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816939/8e82a540/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817038/c3e60954/problem.png"
+  ]
+ },
+ "MF__16333": {
+  "name": "이차부등식의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816273/be85a0c9/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/859864/9e5cb98f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816296/d782b668/problem.png"
+  ]
+ },
+ "MF__16353": {
+  "name": "이차부등식의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/817217/825d2f65/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/865314/77489215/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817208/b8240de0/problem.png"
+  ]
+ },
+ "MF__16343": {
+  "name": "이차부등식이 항상 성립할 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816711/1e49775f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851387/57d02e77/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816726/48917312/problem.png"
+  ]
+ },
+ "MF__16342": {
+  "name": "이차부등식이 해를 가질 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816671/0951f660/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816664/8d0312c6/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816652/1b520980/problem.png"
+  ]
+ },
+ "MF__16344": {
+  "name": "이차부등식이 해를 갖지 않을 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816848/2196982d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/859457/b16b17c7/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816843/a0eea92a/problem.png"
+  ]
+ },
+ "MF__16341": {
+  "name": "이차부등식이 해를 한 개만 가질 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816618/d11bc4c5/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816623/035431ed/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816637/62360ee3/problem.png"
+  ]
+ },
+ "MF__16337": {
+  "name": "이차항이 미정계수일 때 이차부등식의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816517/d686050a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816525/c2eb1a69/problem.png"
+  ]
+ },
+ "MF__16328": {
+  "name": "절댓값 기호가 두 개인 부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/815923/9d6eb84a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815940/144e227e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/863206/397f8472/problem.png"
+  ]
+ },
+ "MF__16329": {
+  "name": "절댓값 기호를 포함한 부등식의 해의 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816008/ba3245f6/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816006/6a6db451/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816014/cd6b8012/problem.png"
+  ]
+ },
+ "MF__16355": {
+  "name": "절댓값 기호를 포함한 연립이차부등식의 풀이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/851427/063d3306/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817372/8025606b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/859539/458fcea0/problem.png"
+  ]
+ },
+ "MF__16338": {
+  "name": "절댓값 기호를 포함한 이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816559/88da23a9/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816564/be25208d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816547/c06a2854/problem.png"
+  ]
+ },
+ "MF__16318": {
+  "name": "정수인 해의 개수가 주어진 연립일차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/815374/f254ea66/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815317/bd588a35/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815315/f1d73970/problem.png"
+  ]
+ },
+ "MF__16340": {
+  "name": "정수인 해의 조건이 주어진 이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816607/46234469/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816609/41d75089/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/859676/e84cf81f/problem.png"
+  ]
+ },
+ "MF__16349": {
+  "name": "제한된 범위에서 항상 성립하는 이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/864483/4664664d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851400/fbd40314/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817071/1ebb0d40/problem.png"
+  ]
+ },
+ "MF__16352": {
+  "name": "최대·최소와 이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/865305/791b61b6/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817184/5446ab78/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817185/39278c92/problem.png"
+  ]
+ },
+ "MF__16315": {
+  "name": "특수한 해를 갖는 연립일차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/815017/2f98860e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815045/f75d9d89/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815048/69ea58d6/problem.png"
+  ]
+ },
+ "MF__16350": {
+  "name": "포함관계를 만족하도록 미정계수 구하기",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/817101/06327afc/problem.png"
+  ]
+ },
+ "MF__16357": {
+  "name": "해가 주어진 연립이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/865010/250e1d55/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/863469/c05309a4/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/863606/3670a855/problem.png"
+  ]
+ },
+ "MF__16316": {
+  "name": "해가 주어진 연립일차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/815118/95cb2fb5/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815116/4d94f026/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851308/9e38f469/problem.png"
+  ]
+ },
+ "MF__16334": {
+  "name": "해가 주어진 이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/816377/3e10d6cc/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816384/cfbaa814/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/816379/b256deb7/problem.png"
+  ]
+ },
+ "MF__16317": {
+  "name": "해를 갖거나 갖지 않는 연립일차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/864587/3ed60875/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815277/56605d7f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/815297/ebfa4438/problem.png"
+  ]
+ },
+ "MF__16358": {
+  "name": "해의 조건이 주어진 연립이차부등식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/866090/6d9137d3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/851440/ffef3e1f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/817511/5ba1362f/problem.png"
+  ]
+ },
+ "MF__18565": {
+  "name": "곡선 밖의 한 점에서 곡선에 그은 접선의 방정식의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977153/748c4220/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976906/fdc4570e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976904/89f1ff51/problem.png"
+  ]
+ },
+ "MF__18563": {
+  "name": "곡선 위의 점과 직선 사이의 거리",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976695/fcbd105a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976703/75de95fa/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/856410/91f3f747/problem.png"
+  ]
+ },
+ "MF__18569": {
+  "name": "곡선과 원의 접선",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977103/0d1b2b69/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977095/9ed20e41/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977098/73faebd0/problem.png"
+  ]
+ },
+ "MF__18561": {
+  "name": "곡선과 직선이 접할 때 미정계수의 결정",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976574/a0b3b53b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976628/8133f7c0/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976615/9f93f4ee/problem.png"
+  ]
+ },
+ "MF__18567": {
+  "name": "공통인 접선",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976999/5a949532/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976962/c9e484d2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976990/d52225fa/problem.png"
+  ]
+ },
+ "MF__18562": {
+  "name": "기울기가 주어진 접선의 방정식의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976551/cc9cf3c5/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976552/49afc729/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976665/d153ff02/problem.png"
+  ]
+ },
+ "MF__18586": {
+  "name": "도함수의 그래프와 함수의 극대·극소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978317/3135b2c0/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978296/0b7e2c25/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978316/56896e80/problem.png"
+  ]
+ },
+ "MF__18588": {
+  "name": "도함수의 그래프의 해석",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978426/092f9af0/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978467/1d19dd14/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978487/e7a182b1/problem.png"
+  ]
+ },
+ "MF__9819": {
+  "name": "두 곡선의 교점에서의 접선",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977131/8fca0876/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977132/1764237c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977144/46ea8a2e/problem.png"
+  ]
+ },
+ "MF__18607": {
+  "name": "두 그래프의 교점의 개수",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979786/bbd4af2d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979779/94029b2e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979790/b3743bed/problem.png"
+  ]
+ },
+ "MF__18571": {
+  "name": "롤의 정리",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977187/6dffd3d2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977217/0110c6ec/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977210/2c5e663b/problem.png"
+  ]
+ },
+ "MF__18609": {
+  "name": "모든 실수에서 부등식이 항상 성립할 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979889/1d3b5d3b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979887/31f7dd70/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/855777/879c53a7/problem.png"
+  ]
+ },
+ "MF__18602": {
+  "name": "방정식 f(x)=k의 실근의 개수",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979273/2a7aee90/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979279/bbd3e831/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979298/abfabf1a/problem.png"
+  ]
+ },
+ "MF__18604": {
+  "name": "방정식 f(x)=k의 실근의 부호",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979506/d78b935e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979508/f4ac1bfb/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979603/fac91449/problem.png"
+  ]
+ },
+ "MF__18614": {
+  "name": "부등식 f(x)>g(x)가 항상 성립할 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/856307/1817da4a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980020/4748043f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980029/8f284c45/problem.png"
+  ]
+ },
+ "MF__18593": {
+  "name": "사차함수가 극값을 가질 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978655/c4c69aa2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978647/1f29066c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978654/ce5ccec8/problem.png"
+  ]
+ },
+ "MF__18594": {
+  "name": "사차함수가 극값을 갖지 않을 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978688/874b4dbe/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978687/e952afed/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978691/f4bb9622/problem.png"
+  ]
+ },
+ "MF__18605": {
+  "name": "삼차방정식의 근의 판별",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979671/4dce0ff5/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979655/c9ac1f1b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979675/60df73c0/problem.png"
+  ]
+ },
+ "MF__18589": {
+  "name": "삼차함수가 극값을 가질 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978519/6b3fb9f7/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978514/ac75ddcb/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978521/062d3cde/problem.png"
+  ]
+ },
+ "MF__18590": {
+  "name": "삼차함수가 극값을 갖지 않을 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978546/dffd2cd0/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978557/15c82bbb/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978561/bb2c35f3/problem.png"
+  ]
+ },
+ "MF__18591": {
+  "name": "삼차함수가 주어진 구간에서 극값을 가질 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978620/a1695fbb/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978604/d57bf12a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978623/046fde66/problem.png"
+  ]
+ },
+ "MF__18618": {
+  "name": "속도·가속도와 운동 방향",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980283/221f3220/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980276/a299cc0e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980296/577e5992/problem.png"
+  ]
+ },
+ "MF__18615": {
+  "name": "속도와 가속도",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980086/2543f137/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/855809/8444731a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980105/cb6b8337/problem.png"
+  ]
+ },
+ "MF__18621": {
+  "name": "속도의 그래프의 해석",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980466/152db4d1/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980465/2cb6f07b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980488/e0f0476b/problem.png"
+  ]
+ },
+ "MF__18623": {
+  "name": "시각에 대한 길이의 변화율",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980543/1591fdce/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980539/d5c33456/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980571/828a4b66/problem.png"
+  ]
+ },
+ "MF__18624": {
+  "name": "시각에 대한 넓이의 변화율",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980606/86616a8f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980603/3050ea3b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980611/c9633349/problem.png"
+  ]
+ },
+ "MF__18625": {
+  "name": "시각에 대한 부피의 변화율",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980670/34891df0/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980675/0b874a2f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980699/ce93f8d1/problem.png"
+  ]
+ },
+ "MF__18577": {
+  "name": "실수 전체의 집합에서 삼차함수가 증가 또는 감소하기 위한 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977522/d194a7ca/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977521/dac70d95/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977499/bd0eca8f/problem.png"
+  ]
+ },
+ "MF__18620": {
+  "name": "위로 던진 물체의 위치와 속도",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980411/7e0ffb5e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980405/6ca37e9b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980414/d911394d/problem.png"
+  ]
+ },
+ "MF__18622": {
+  "name": "위치의 그래프의 해석",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980489/5205ae80/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980500/89ce5995/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980499/38c821a7/problem.png"
+  ]
+ },
+ "MF__18557": {
+  "name": "접선과 수직인 직선의 방정식",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976233/1575be64/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976228/6d13aaef/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976231/28a4f5d3/problem.png"
+  ]
+ },
+ "MF__18568": {
+  "name": "접선과 좌표축으로 둘러싸인 도형의 넓이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977136/66583fb9/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977034/094a87a7/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977030/1f8e5ae5/problem.png"
+  ]
+ },
+ "MF__18608": {
+  "name": "접선의 개수",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979848/52b99bb3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979849/feca89f3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979847/e2c3e6a8/problem.png"
+  ]
+ },
+ "MF__18553": {
+  "name": "접선의 기울기",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/975240/cfedfe24/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/975909/1ef27414/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/975912/7e339b89/problem.png"
+  ]
+ },
+ "MF__18554": {
+  "name": "접선의 기울기의 최댓값 또는 최솟값",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/975955/bbeba850/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/975954/32f858f7/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/975956/c417e652/problem.png"
+  ]
+ },
+ "MF__18555": {
+  "name": "접선의 방정식(1) 접점의 좌표가 주어진 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976030/f687b5c6/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976082/e2f13de6/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976027/4cd9f0b7/problem.png"
+  ]
+ },
+ "MF__18559": {
+  "name": "접선의 방정식(2) 기울기가 주어진 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976584/5025bdfa/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976581/967482c3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976609/0a34ff7f/problem.png"
+  ]
+ },
+ "MF__18564": {
+  "name": "접선의 방정식(3) 곡선 밖의 한 점이 주어진 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976789/a969e7ad/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976788/261bf4a5/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976790/cb1fd4c3/problem.png"
+  ]
+ },
+ "MF__18570": {
+  "name": "접선의 방정식의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977152/5737e55a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/855820/1985bb0e/problem.png"
+  ]
+ },
+ "MF__18558": {
+  "name": "접선이 곡선과 다시 만나는 점",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/976290/4c9234af/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976315/9f272775/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/976313/8e85f839/problem.png"
+  ]
+ },
+ "MF__18619": {
+  "name": "정지하는 물체의 속도와 움직인 거리",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980387/b896fc22/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980389/8235de1e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980391/b6bd9468/problem.png"
+  ]
+ },
+ "MF__18611": {
+  "name": "주어진 구간에서 부등식이 항상 성립할 조건(1) 증가·감소의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979970/06efffd4/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979974/135130fd/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979971/c0ca0a43/problem.png"
+  ]
+ },
+ "MF__18612": {
+  "name": "주어진 구간에서 부등식이 항상 성립할 조건(2) 최대·최소의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/980028/5248327f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980024/1736f4b9/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/980026/3fe08a6d/problem.png"
+  ]
+ },
+ "MF__18578": {
+  "name": "주어진 구간에서 삼차함수가 증가 또는 감소하기 위한 조건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977636/fd835966/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977629/3fd7b544/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977619/d37b205f/problem.png"
+  ]
+ },
+ "MF__18597": {
+  "name": "최대·최소의 활용(1) 길이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978973/ebd60dba/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978976/43c7059e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978985/2c6dbe00/problem.png"
+  ]
+ },
+ "MF__18598": {
+  "name": "최대·최소의 활용(2) 넓이",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979005/6f59046e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979060/119bdc54/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979049/82c29e77/problem.png"
+  ]
+ },
+ "MF__18599": {
+  "name": "최대·최소의 활용(3) 부피",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979145/c42f4bc2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979155/68a7c502/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979135/bf2b2f03/problem.png"
+  ]
+ },
+ "MF__18600": {
+  "name": "최대·최소의 활용(4)",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/979220/e40ce8d3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979239/afaf2a7f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/979242/a809a796/problem.png"
+  ]
+ },
+ "MF__18572": {
+  "name": "평균값 정리(1)",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977263/adcf51da/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977292/d9c263a2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977303/08f3a3bf/problem.png"
+  ]
+ },
+ "MF__18575": {
+  "name": "평균값 정리(2) 그래프가 주어진 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977388/181fa2e3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977382/91019bba/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977393/12a2a02e/problem.png"
+  ]
+ },
+ "MF__18587": {
+  "name": "함수의 그래프",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978362/0efbfcc3/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978333/199a8459/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978339/73cfb3cf/problem.png"
+  ]
+ },
+ "MF__18579": {
+  "name": "함수의 그래프와 증가·감소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977677/a86d6c80/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977676/fd9b622a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977681/9f14b2fa/problem.png"
+  ]
+ },
+ "MF__18581": {
+  "name": "함수의 극대·극소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977812/92e47066/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977813/4bfea2b6/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977762/6df33614/problem.png"
+  ]
+ },
+ "MF__18582": {
+  "name": "함수의 극대·극소를 이용한 미정계수의 결정",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977926/95e6a198/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977933/717124ef/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/965321/88c4be1c/problem.png"
+  ]
+ },
+ "MF__18584": {
+  "name": "함수의 극대·극소를 이용한 삼차함수의 계수의 부호 결정",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978237/c2e03035/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978242/653c88d9/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978240/29b3c98c/problem.png"
+  ]
+ },
+ "MF__18583": {
+  "name": "함수의 극대·극소의 활용",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978136/76de2638/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978143/6547b5cf/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978144/a197997d/problem.png"
+  ]
+ },
+ "MF__18576": {
+  "name": "함수의 증가와 감소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/977405/619eef9e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977448/f7a6aabc/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/977440/023cc3d6/problem.png"
+  ]
+ },
+ "MF__18595": {
+  "name": "함수의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978752/5995e72d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978778/71439955/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978744/f0982c90/problem.png"
+  ]
+ },
+ "MF__18596": {
+  "name": "함수의 최대·최소를 이용한 미정계수의 결정",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/978910/06835291/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978905/beb38c34/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/978922/2587c908/problem.png"
+  ]
+ },
+ "MF__19493": {
+  "name": "같은 것이 있는 순열을 이용하는 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1065370/844019c7/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065387/4220f5f2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065422/278f2b5f/problem.png"
+  ]
+ },
+ "MF__19497": {
+  "name": "기하적 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1065914/ac07b3dc/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065934/a6196de4/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065955/76b24108/problem.png"
+  ]
+ },
+ "MF__19489": {
+  "name": "수학적 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1064890/1b32e87f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1064867/6ac4bb2a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1064907/989ab74b/problem.png"
+  ]
+ },
+ "MF__19490": {
+  "name": "순열을 이용하는 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1065047/87217210/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065045/c89ebfaf/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065051/152f4659/problem.png"
+  ]
+ },
+ "MF__19486": {
+  "name": "시행과 사건",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1064611/5bed7469/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1064613/c1465fd2/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1064621/e7bf07c7/problem.png"
+  ]
+ },
+ "MF__19502": {
+  "name": "여사건의 확률(1) '적어도'의 조건이 있는 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1066597/b0593b8b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1066687/10511d4b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1066627/b5cbc8a3/problem.png"
+  ]
+ },
+ "MF__19503": {
+  "name": "여사건의 확률(2) '이상', '이하', '아닌'의 조건이 있는 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1066738/59d9e53a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1066796/50b7b431/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1066828/69706b40/problem.png"
+  ]
+ },
+ "MF__19494": {
+  "name": "조합을 이용하는 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1065503/df95ca3e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065513/05abd1b7/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065494/c0ff73af/problem.png"
+  ]
+ },
+ "MF__19492": {
+  "name": "중복순열을 이용하는 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1065300/00b9a66f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065291/42e52c3c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065308/81d36cf0/problem.png"
+  ]
+ },
+ "MF__19495": {
+  "name": "중복조합을 이용하는 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1065780/24ea9e01/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065770/b177e8c4/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065791/910b7b70/problem.png"
+  ]
+ },
+ "MF__19496": {
+  "name": "통계적 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1065825/75e64639/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065831/5466c927/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065836/8b7740da/problem.png"
+  ]
+ },
+ "MF__19498": {
+  "name": "확률의 기본 성질",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1066004/e68232ad/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065983/ce106581/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1065997/da999de7/problem.png"
+  ]
+ },
+ "MF__19500": {
+  "name": "확률의 덧셈정리(1) 배반사건이 아닌 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1066230/e50485aa/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/856844/e9c830fd/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1066217/a7c44268/problem.png"
+  ]
+ },
+ "MF__19501": {
+  "name": "확률의 덧셈정리(2) 배반사건인 경우",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1066414/de0ebe2a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1066413/cc2e454a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/964722/50c4911f/problem.png"
+  ]
+ },
+ "MF__19499": {
+  "name": "확률의 덧셈정리와 여사건의 확률",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/1066082/8e1db645/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1066104/55c92443/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/1066105/97e9e229/problem.png"
+  ]
+ },
+ "MF__18392": {
+  "name": "두 수 사이에 수를 넣어서 만든 등차수열",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/952081/c254687c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952078/2b69d273/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952104/c43630ee/problem.png"
+  ]
+ },
+ "MF__18394": {
+  "name": "등차수열을 이루는 수",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/952285/5dd4a8aa/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952283/172b8d84/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952292/d6127fde/problem.png"
+  ]
+ },
+ "MF__18381": {
+  "name": "등차수열의 일반항",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/951560/d286530b/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/951565/21ca747a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/951568/093f11c6/problem.png"
+  ]
+ },
+ "MF__18395": {
+  "name": "등차수열의 합(1)",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/952439/3db19c66/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952443/2368d751/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952446/bcfdfa2d/problem.png"
+  ]
+ },
+ "MF__18400": {
+  "name": "등차수열의 합(2) 두 수 사이에 수를 넣어서 만든 등차수열의 합",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/952680/8b62bd31/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952685/ba8a8a8f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952714/f425ae28/problem.png"
+  ]
+ },
+ "MF__18401": {
+  "name": "등차수열의 합(3) 부분의 합이 주어진 등차수열의 합",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/952751/aa56ae3e/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952756/67f33c2c/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952791/020d5607/problem.png"
+  ]
+ },
+ "MF__18406": {
+  "name": "등차수열의 합과 일반항 사이의 관계",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/953176/f3de1eb0/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/953158/20e4abbe/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/953179/09984ac1/problem.png"
+  ]
+ },
+ "MF__18402": {
+  "name": "등차수열의 합의 활용(1) 등차수열의 합의 최대·최소",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/952872/b499325f/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952874/acc9bd72/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952871/d9278af5/problem.png"
+  ]
+ },
+ "MF__18404": {
+  "name": "등차수열의 합의 활용(2) 나머지가 같은 자연수의 합",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/953001/e6833121/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/953018/a6cbb2db/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952998/2779b9e8/problem.png"
+  ]
+ },
+ "MF__18405": {
+  "name": "등차수열의 합의 활용(3)",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/953046/3ec57b9d/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/953051/40d285d9/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/953052/128b51a9/problem.png"
+  ]
+ },
+ "MF__18393": {
+  "name": "등차중항",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/952152/303fb6a0/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952149/0fcedaec/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/952138/3407d1c9/problem.png"
+  ]
+ },
+ "MF__18379": {
+  "name": "수열의 일반항",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/951392/e9bcf987/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/951397/9d9c55de/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/951417/92fa46b1/problem.png"
+  ]
+ },
+ "MF__18388": {
+  "name": "조건을 만족시키는 등차수열의 항 구하기",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/951950/bf04f6e9/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/951949/3a0dd786/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/951946/3a31ef1d/problem.png"
+  ]
+ },
+ "MF__18386": {
+  "name": "항 사이의 관계가 주어진 등차수열",
+  "images": [
+   "https://freewheelin-contents.mathflat.com/problem/951625/35b7f725/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/951627/b4ac3d6a/problem.png",
+   "https://freewheelin-contents.mathflat.com/problem/951821/ebb2f73a/problem.png"
+  ]
+ }
+}

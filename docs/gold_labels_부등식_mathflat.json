@@ -1,0 +1,39 @@
+{
+  "note": "부등식 매쓰플랫22개정 기준 정답지 — 사람이 문항 본문을 직접 읽고 배정(1차). Opus 정확도 재검증용. 애매한 항목은 인접 유형과 경계가 흐릿할 수 있음을 전제.",
+  "chapter": "부등식",
+  "labeled_at": "2026-10-24",
+  "type_source": "docs/problem_types.json (mathflat22-draft-2026-10-24)",
+  "labels": [
+    {
+      "qid": 131614,
+      "difficulty": "하",
+      "code": "MF__16360"
+    },
+    {
+      "qid": 5116,
+      "difficulty": "하",
+      "code": "MF__16343"
+    },
+    {
+      "qid": 125160,
+      "difficulty": "하",
+      "code": "MF__16311"
+    },
+    {
+      "qid": 131682,
+      "difficulty": "상",
+      "code": "MF__16358"
+    },
+    {
+      "qid": 154822,
+      "difficulty": "하",
+      "code": "MF__16326"
+    },
+    {
+      "qid": 21661,
+      "difficulty": "중",
+      "code": "MF__16343"
+    }
+  ],
+  "moved_out": []
+}

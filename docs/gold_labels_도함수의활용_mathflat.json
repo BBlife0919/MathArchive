@@ -1,0 +1,51 @@
+{
+  "note": "도함수의 활용 매쓰플랫22개정 기준 정답지 — 사람이 문항 본문을 직접 읽고 배정(1차). Opus 정확도 재검증용. 애매한 항목은 인접 유형과 경계가 흐릿할 수 있음을 전제.",
+  "chapter": "도함수의 활용",
+  "labeled_at": "2026-10-24",
+  "type_source": "docs/problem_types.json (mathflat22-draft-2026-10-24)",
+  "labels": [
+    {
+      "qid": 156012,
+      "difficulty": "중",
+      "code": "MF__18583"
+    },
+    {
+      "qid": 217516,
+      "difficulty": "하",
+      "code": "MF__18572"
+    },
+    {
+      "qid": 179042,
+      "difficulty": "상",
+      "code": "MF__18588"
+    },
+    {
+      "qid": 73072,
+      "difficulty": "하",
+      "code": "MF__18595"
+    },
+    {
+      "qid": 220386,
+      "difficulty": "상",
+      "code": "MF__18571"
+    },
+    {
+      "qid": 156021,
+      "difficulty": "상",
+      "code": "MF__18570"
+    },
+    {
+      "qid": 156025,
+      "difficulty": "중",
+      "code": "MF__18595"
+    }
+  ],
+  "moved_out": [
+    {
+      "qid": 92818,
+      "difficulty": "상",
+      "chapter": "도함수의 활용",
+      "note": "e^{-f(x)} 미분·극한 — 미적분2 영역(지수함수 도함수). 미적분2 트리 미수집이라 대응 유형 자체가 없음. null/wrong_chapter 기대"
+    }
+  ]
+}
