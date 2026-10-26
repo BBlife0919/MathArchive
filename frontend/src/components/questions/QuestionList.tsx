@@ -23,6 +23,12 @@ interface Props {
   // 카드 폭이 좁으면 박스/선지 줄바꿈이 잦아져 가독성이 떨어진다는 피드백으로
   // 추가(2026-09-19).
   layout?: "grid" | "list";
+  // 넘겨주면 "유사" 버튼이 카드 안에서 펼치는 대신 이 콜백으로 question_id를
+  // 보고한다 — 부모가 화면 한쪽에 스크롤 가능한 전용 유사문항 패널(드로어)을
+  // 띄울 때 씀(2026-10-26, 문항이 많은 미리보기 화면에서 요청됨).
+  onOpenSimilarDrawer?: (id: number) => void;
+  // 드로어 모드에서, 지금 드로어가 보여주고 있는 문항 id — 버튼 활성 표시용.
+  similarDrawerOpenId?: number | null;
 }
 
 // 세로 목록(list)에서는 위아래로만 움직이면 충분하고, 가로 흔들림을 없애면
@@ -31,6 +37,7 @@ const restrictToVerticalAxis: Modifier = ({ transform }) => ({ ...transform, x: 
 
 export default function QuestionList({
   items, selectedIds, onToggleSelect, sortable, onReorder, layout = "grid",
+  onOpenSimilarDrawer, similarDrawerOpenId,
 }: Props) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
   const containerClass = layout === "list" ? "question-list-single" : "question-grid";
@@ -51,6 +58,8 @@ export default function QuestionList({
       question={q}
       isSelected={selectedIds?.has(q.question_id)}
       onToggleSelect={onToggleSelect ? () => onToggleSelect(q.question_id) : undefined}
+      onOpenSimilarDrawer={onOpenSimilarDrawer ? () => onOpenSimilarDrawer(q.question_id) : undefined}
+      isSimilarDrawerOpen={similarDrawerOpenId === q.question_id}
     />
   ));
 

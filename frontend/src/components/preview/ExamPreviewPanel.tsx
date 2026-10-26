@@ -6,6 +6,7 @@ import Expander from "../questions/Expander";
 import RealPagePreview from "./RealPagePreview";
 import PdfOptionsForm from "./PdfOptionsForm";
 import BookOptionsForm from "./BookOptionsForm";
+import SimilarDrawer from "./SimilarDrawer";
 import SortMenu, { sortQuestionIds, type SortCriterion } from "./SortMenu";
 import "./ExamPreviewPanel.css";
 
@@ -28,6 +29,10 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
   const [manualOrder, setManualOrder] = useState(false);
   const preserveOrder = manualOrder && pdfMode === "exam";
   const [sortCriterion, setSortCriterion] = useState<SortCriterion | null>(null);
+  // 유사문항 전용 드로어(화면 왼쪽 고정) — 문항이 많은 이 화면에서는 카드
+  // 안에 펼치는 대신 따로 스크롤할 수 있는 패널로 보여달라는 요청
+  // (2026-10-26). SimilarDrawer.tsx 참고.
+  const [similarDrawerFor, setSimilarDrawerFor] = useState<number | null>(null);
 
   // 실물 미리보기는 이제 이 패널 왼쪽(큰 화면)에서 그린다 — PdfOptionsForm/
   // BookOptionsForm은 자기 설정이 바뀔 때마다 이 콜백으로 "다시 그려줘"만
@@ -96,6 +101,10 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
 
   return (
     <div className="exam-preview">
+      <SimilarDrawer
+        questionId={similarDrawerFor}
+        onClose={() => setSimilarDrawerFor(null)}
+      />
       <div className="exam-preview-main">
         <p className="result-caption">
           {loading ? "불러오는 중..." : `${items.length}문항 선택됨${totalPoints ? ` · 총 배점: ${totalPoints.toFixed(1)}점` : ""}`}
@@ -114,6 +123,8 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
                 items={items} selectedIds={selectedIds} onToggleSelect={toggle}
                 sortable={pdfMode === "exam"} onReorder={handleReorder}
                 layout="list"
+                onOpenSimilarDrawer={setSimilarDrawerFor}
+                similarDrawerOpenId={similarDrawerFor}
               />
             </>
           )}

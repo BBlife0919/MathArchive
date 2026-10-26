@@ -254,21 +254,24 @@ def similar_questions(question_id: int, limit: int = Query(5, ge=1, le=20)):
     if not cands:
         return ByIdsResponse(items=[])
 
-    id_map = db_service.question_ids_by_natural_keys(
-        [(fs, qn) for fs, qn, _ in cands])
-    ordered_ids: list[int] = []
+    # 자연키로 바로 카드 데이터까지 가져온다(운영 DB 왕복 1회로 축소 —
+    # 예전엔 id만 먼저 찾고 그 id로 다시 조회해 왕복 2회였다).
+    rows = db_service.fetch_questions_by_natural_keys(
+        [(fs, qn) for fs, qn, _ in cands], preserve_order=True)
     seen: set[int] = set()
-    for fs, qn, _ in cands:
-        cid = id_map.get((fs, qn))
-        # 로컬 인덱스에 (file_source, question_number) 중복 행이 있으면(기존
-        # 데이터 품질 이슈) 같은 question_id 가 후보에 두 번 뽑힐 수 있다 —
-        # 점수 높은 순으로 이미 들어간 것만 남긴다.
-        if cid is None or cid == question_id or cid in seen:
+    out_rows = []
+    for r in rows:
+        cid = r["question_id"]
+        # 로컬 인덱스에 (file_source, question_number) 중복 행이 458건 있다
+        # (기존 데이터 품질 이슈, 실측 확인됨) — similarity_service 의 자기자신
+        # 제외(cand_idx != qi)는 "인덱스 행" 기준이라, 기준 문항과 자연키가
+        # 같은 다른 중복 행이 후보에 섞여 들어올 수 있다. "불필요한 중복
+        # 체크"로 보여도 지우면 유사문항에 자기 자신이 다시 뜬다 — 지우지 말 것.
+        if cid == question_id or cid in seen:
             continue
         seen.add(cid)
-        ordered_ids.append(cid)
-    if not ordered_ids:
+        out_rows.append(r)
+    if not out_rows:
         return ByIdsResponse(items=[])
 
-    rows = db_service.fetch_questions_for_preview(ordered_ids, preserve_order=True)
-    return ByIdsResponse(items=question_builder.build_question_cards(rows))
+    return ByIdsResponse(items=question_builder.build_question_cards(out_rows))

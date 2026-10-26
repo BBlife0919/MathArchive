@@ -24,9 +24,15 @@ interface Props {
   question: QuestionCardData;
   isSelected?: boolean;
   onToggleSelect?: () => void;
+  // 넘겨주면 "유사" 버튼이 카드 안에서 펼치는 대신 이 콜백만 호출한다 —
+  // 부모(예: ExamPreviewPanel)가 화면에 스크롤 가능한 전용 드로어를 띄운다.
+  onOpenSimilarDrawer?: () => void;
+  isSimilarDrawerOpen?: boolean;
 }
 
-function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
+function QuestionCard({
+  question: q, isSelected, onToggleSelect, onOpenSimilarDrawer, isSimilarDrawerOpen,
+}: Props) {
   const diffColor = DIFF_COLOR[q.difficulty ?? ""] ?? "#94a3b8";
   const { bookmarkedIds, toggle: toggleBookmark } = useBookmark();
   const isBookmarked = bookmarkedIds.has(q.question_id);
@@ -41,6 +47,10 @@ function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
   const [similarError, setSimilarError] = useState(false);
 
   async function handleToggleSimilar() {
+    if (onOpenSimilarDrawer) {
+      onOpenSimilarDrawer();
+      return;
+    }
     const opening = !similarOpen;
     setSimilarOpen(opening);
     if (opening && similarItems === null && !similarLoading) {
@@ -77,9 +87,9 @@ function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
         <div className="question-card-actions">
           <button
             type="button"
-            className={similarOpen ? "icon-btn active" : "icon-btn"}
+            className={(onOpenSimilarDrawer ? isSimilarDrawerOpen : similarOpen) ? "icon-btn active" : "icon-btn"}
             title="유사 문제 추천"
-            aria-pressed={similarOpen}
+            aria-pressed={onOpenSimilarDrawer ? !!isSimilarDrawerOpen : similarOpen}
             onClick={handleToggleSimilar}
           >
             유사

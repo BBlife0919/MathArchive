@@ -404,13 +404,29 @@ def image_maps_for(question_ids: list[int]) -> dict[int, dict]:
 
 # ── 자연키 조회 (유사문항 인덱스가 로컬 sqlite 기준이라 운영 question_id 와
 #    안 맞음 — label_types.py write_store() 와 같은 이유) ──────────────
-def question_ids_by_natural_keys(pairs: list[tuple[str, int]]) -> dict[tuple, int]:
+def fetch_questions_by_natural_keys(pairs: list[tuple[str, int]],
+                                    preserve_order: bool = False) -> list:
+    """(file_source, question_number) 로 문항 카드 데이터를 한 번에 가져온다.
+
+    fetch_questions_for_preview() 와 같은 SELECT 목록 — id 를 먼저 찾고
+    다시 id 로 조회하는 2단계(운영 Postgres 왕복 2회)를 1회로 줄인다
+    (2026-10-26 "유사문항 뜨는 속도가 느리다" 피드백, 라운드트립 축소).
+    """
     if not pairs:
-        return {}
-    conditions = " OR ".join(["(file_source=? AND question_number=?)"] * len(pairs))
+        return []
+    conditions = " OR ".join(["(q.file_source=? AND q.question_number=?)"] * len(pairs))
     params = [v for p in pairs for v in p]
-    rows = query(
-        f"SELECT question_id, file_source, question_number FROM questions "
-        f"WHERE {conditions}", params,
-    )
-    return {(r["file_source"], r["question_number"]): r["question_id"] for r in rows}
+    rows = query(f"""
+        SELECT q.question_id, q.file_source, q.school, q.question_number,
+               q.year, q.semester, q.exam_type,
+               q.question_text, q.choices, q.answer, q.answer_type,
+               q.points, q.chapter, q.difficulty, q.is_subjective,
+               s.solution_text
+        FROM questions q
+        LEFT JOIN solutions s ON q.question_id = s.question_id
+        WHERE {conditions}
+    """, params)
+    if preserve_order:
+        by_key = {(r["file_source"], r["question_number"]): r for r in rows}
+        return [by_key[p] for p in pairs if p in by_key]
+    return rows

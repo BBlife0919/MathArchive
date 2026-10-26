@@ -12,8 +12,17 @@ from fastapi.staticfiles import StaticFiles
 import main as legacy_main  # type: ignore  (IMAGE_DIR 재사용 — 로컬 이미지 폴백용)
 
 from .routers import admin, audit, auth, clinic, exam, kakao, meta, questions, students
+from .services import similarity_service
 
 app = FastAPI(title="MathDB API")
+
+
+@app.on_event("startup")
+def _warm_similarity_index() -> None:
+    # 유사문항 인덱스(256MB)를 백그라운드로 미리 로드 — 첫 클릭이 느려지는
+    # 문제를 서버 기동 중에 끝내둔다(backend/app/services/similarity_service.py
+    # warm_async() 참고).
+    similarity_service.warm_async()
 
 app.add_middleware(
     CORSMiddleware,
