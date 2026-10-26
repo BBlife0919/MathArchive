@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import random
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from .. import legacy_bridge  # noqa: F401
 from ..deps import require_approved
@@ -12,7 +12,7 @@ from ..schemas.questions import (
     MiniTestRequest, MiniTestResponse, SearchIdsResponse, SearchRequest,
     SearchResponse,
 )
-from ..services import db_service, question_builder
+from ..services import db_service, question_builder, similarity_service
 
 import curriculum as curr  # type: ignore
 
@@ -232,3 +232,43 @@ def questions_by_ids(req: ByIdsRequest):
     rows = db_service.fetch_questions_for_preview(req.question_ids, req.preserve_order)
     items = question_builder.build_question_cards(rows)
     return ByIdsResponse(items=items)
+
+
+@router.get("/{question_id}/similar", response_model=ByIdsResponse)
+def similar_questions(question_id: int, limit: int = Query(5, ge=1, le=20)):
+    """로컬 임베딩 기반 유사문항 추천(비용 $0) — scripts/build_similarity_index.py
+    인덱스를 읽기만 한다. 같은 단원 안에서 벡터·난이도·기법태그 하이브리드
+    점수로 랭킹. 인덱스가 아직 없거나 기준 문항을 못 찾으면 빈 목록."""
+    if not similarity_service.available():
+        return ByIdsResponse(items=[])
+
+    base = db_service.fetch_questions_page([question_id])
+    if not base:
+        return ByIdsResponse(items=[])
+    b = base[0]
+
+    cands = similarity_service.similar_natural_keys(
+        b["file_source"], b["question_number"], b["chapter"], b["difficulty"],
+        b["question_text"], limit=limit,
+    )
+    if not cands:
+        return ByIdsResponse(items=[])
+
+    id_map = db_service.question_ids_by_natural_keys(
+        [(fs, qn) for fs, qn, _ in cands])
+    ordered_ids: list[int] = []
+    seen: set[int] = set()
+    for fs, qn, _ in cands:
+        cid = id_map.get((fs, qn))
+        # 로컬 인덱스에 (file_source, question_number) 중복 행이 있으면(기존
+        # 데이터 품질 이슈) 같은 question_id 가 후보에 두 번 뽑힐 수 있다 —
+        # 점수 높은 순으로 이미 들어간 것만 남긴다.
+        if cid is None or cid == question_id or cid in seen:
+            continue
+        seen.add(cid)
+        ordered_ids.append(cid)
+    if not ordered_ids:
+        return ByIdsResponse(items=[])
+
+    rows = db_service.fetch_questions_for_preview(ordered_ids, preserve_order=True)
+    return ByIdsResponse(items=question_builder.build_question_cards(rows))

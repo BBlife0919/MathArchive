@@ -1,9 +1,13 @@
-import { memo } from "react";
-import type { QuestionCard as QuestionCardData } from "../../api/questions";
+import { memo, useState } from "react";
+import {
+  fetchSimilarQuestions,
+  type QuestionCard as QuestionCardData,
+} from "../../api/questions";
 import { useBookmark } from "../../context/BookmarkContext";
 import QuestionContent from "../content/QuestionContent";
 import Expander from "./Expander";
 import DifficultyBar from "./DifficultyBar";
+import SimilarQuestionsPanel from "./SimilarQuestionsPanel";
 import "./QuestionCard.css";
 
 // 적녹색약 접근성 규칙: 색만으로 구분 금지, 남색↔주황 2색만 사용 (텍스트 라벨이 1차 구분자)
@@ -27,6 +31,32 @@ function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
   const { bookmarkedIds, toggle: toggleBookmark } = useBookmark();
   const isBookmarked = bookmarkedIds.has(q.question_id);
 
+  // 유사문항 추천 — 로컬 임베딩 기반(output/similarity_index/), 비용 $0.
+  // 클릭 시 1회만 불러오고 이후엔 캐시된 결과를 토글만 한다. 선택 상태
+  // 구독(useSelection())은 SimilarQuestionsPanel 쪽에서만 한다 — 열려있을
+  // 때만 마운트되므로, 여기서 구독하면 생기는 "전체 카드 리렌더" 를 피한다.
+  const [similarOpen, setSimilarOpen] = useState(false);
+  const [similarItems, setSimilarItems] = useState<QuestionCardData[] | null>(null);
+  const [similarLoading, setSimilarLoading] = useState(false);
+  const [similarError, setSimilarError] = useState(false);
+
+  async function handleToggleSimilar() {
+    const opening = !similarOpen;
+    setSimilarOpen(opening);
+    if (opening && similarItems === null && !similarLoading) {
+      setSimilarLoading(true);
+      setSimilarError(false);
+      try {
+        const res = await fetchSimilarQuestions(q.question_id);
+        setSimilarItems(res.items);
+      } catch {
+        setSimilarError(true);
+      } finally {
+        setSimilarLoading(false);
+      }
+    }
+  }
+
   return (
     <div className="question-card">
       <div className="question-card-header">
@@ -47,9 +77,10 @@ function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
         <div className="question-card-actions">
           <button
             type="button"
-            className="icon-btn"
-            title="유사 문제 추천 (준비중)"
-            onClick={() => {}}
+            className={similarOpen ? "icon-btn active" : "icon-btn"}
+            title="유사 문제 추천"
+            aria-pressed={similarOpen}
+            onClick={handleToggleSimilar}
           >
             유사
           </button>
@@ -73,6 +104,14 @@ function QuestionCard({ question: q, isSelected, onToggleSelect }: Props) {
           )}
         </div>
       </div>
+
+      {similarOpen && (
+        <SimilarQuestionsPanel
+          loading={similarLoading}
+          error={similarError}
+          items={similarItems}
+        />
+      )}
 
       <QuestionContent segments={q.content_segments} />
 

@@ -188,3 +188,12 @@ export function fetchExamPaperIds(req: ExamPaperIdsRequest): Promise<SearchIdsRe
     body: JSON.stringify(req),
   });
 }
+
+export function fetchSimilarQuestions(
+  questionId: number,
+  limit = 5,
+): Promise<ByIdsResponse> {
+  return apiFetch<ByIdsResponse>(
+    `/api/questions/${questionId}/similar?limit=${limit}`,
+  );
+}

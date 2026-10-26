@@ -400,3 +400,17 @@ def image_maps_for(question_ids: list[int]) -> dict[int, dict]:
         if r["image_ref"]:
             grouped[r["question_id"]][r["image_ref"]] = r["image_path"]
     return grouped
+
+
+# ── 자연키 조회 (유사문항 인덱스가 로컬 sqlite 기준이라 운영 question_id 와
+#    안 맞음 — label_types.py write_store() 와 같은 이유) ──────────────
+def question_ids_by_natural_keys(pairs: list[tuple[str, int]]) -> dict[tuple, int]:
+    if not pairs:
+        return {}
+    conditions = " OR ".join(["(file_source=? AND question_number=?)"] * len(pairs))
+    params = [v for p in pairs for v in p]
+    rows = query(
+        f"SELECT question_id, file_source, question_number FROM questions "
+        f"WHERE {conditions}", params,
+    )
+    return {(r["file_source"], r["question_number"]): r["question_id"] for r in rows}
