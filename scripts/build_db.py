@@ -378,6 +378,24 @@ def main():
     except Exception as e:
         print(f"  (스캔 실행 실패: {e})", file=sys.stderr)
 
+    # 유사문항 벡터 인덱스 증분 갱신 (새로 추가된 문항만, 비용 $0·보통 수초~
+    # 수분) — "배치 적재는 항상 후속 작업까지" 원칙. 기본 DB(db/mathdb.sqlite)
+    # 가 아닌 다른 DB(테스트용 등)로 돌렸을 땐 건드리지 않는다.
+    _main_db = os.path.join(os.path.dirname(__file__), "..", "db", "mathdb.sqlite")
+    if processed > 0 and os.path.abspath(args.db) == os.path.abspath(_main_db):
+        print("\n" + "=" * 60, file=sys.stderr)
+        print("  유사문항 인덱스 증분 갱신", file=sys.stderr)
+        print("=" * 60, file=sys.stderr)
+        try:
+            import subprocess
+            subprocess.run(
+                [sys.executable,
+                 os.path.join(os.path.dirname(__file__), "update_similarity_index.py")],
+                check=False,
+            )
+        except Exception as e:
+            print(f"  (인덱스 갱신 실패: {e})", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
