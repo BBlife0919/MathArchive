@@ -6,7 +6,6 @@ import AuthPage from "./pages/AuthPage";
 import PendingApprovalPage from "./pages/PendingApprovalPage";
 import ExamBuilderPage from "./pages/ExamBuilderPage";
 import StudentCardPage from "./pages/StudentCardPage";
-import ClinicPage from "./pages/ClinicPage";
 import AdminPage from "./pages/AdminPage";
 import KakaoQueuePage from "./pages/KakaoQueuePage";
 import AuditPage from "./pages/AuditPage";
@@ -30,17 +29,12 @@ function Gate() {
 
   let body;
   if (page === "exam") {
-    body = (
-      <SelectionProvider>
-        <BookmarkProvider>
-          <ExamBuilderPage />
-        </BookmarkProvider>
-      </SelectionProvider>
-    );
+    body = <ExamBuilderPage />;
   } else if (page === "student-card") {
+    // TEST 관리의 "오답학습지 만들기"가 useSelection() 으로 시험지
+    // 생성기와 같은 선택 상태를 공유해야 해서, SelectionProvider 를 이
+    // 페이지에서도 쓸 수 있어야 한다(아래에서 Gate 전체를 감싸는 걸로 통합).
     body = <StudentCardPage />;
-  } else if (page === "clinic") {
-    body = <ClinicPage />;
   } else if (page === "admin" && user.is_admin) {
     // 관리자가 아니면 탭 자체가 안 보이지만, 방어적으로 한 번 더 체크
     // (app/pages/9_관리자.py 의 auth.is_admin() 체크와 동일한 취지).
@@ -56,9 +50,13 @@ function Gate() {
   }
 
   return (
-    <AppShell activePage={page} onNavigate={setPage}>
-      {body}
-    </AppShell>
+    <SelectionProvider>
+      <BookmarkProvider>
+        <AppShell activePage={page} onNavigate={setPage}>
+          {body}
+        </AppShell>
+      </BookmarkProvider>
+    </SelectionProvider>
   );
 }
 
