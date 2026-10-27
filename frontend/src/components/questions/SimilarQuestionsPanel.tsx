@@ -12,14 +12,16 @@ interface Props {
   loading: boolean;
   error: boolean;
   items: QuestionCardData[] | null;
+  // "교체" 버튼이 대신할 기준 문항(지금 "유사" 를 누른 그 카드) id.
+  baseQuestionId: number;
 }
 
 // useSelection() 을 QuestionCard 본체가 아니라 이 패널(열려있을 때만 마운트)에서만
 // 구독한다 — QuestionCard 전체가 구독하면 어디서든 "담기"를 누를 때마다 화면에 떠
 // 있는 모든 카드(대량 리스트)가 다시 렌더링돼, 드래그 버벅임 수정(2026-10-24,
 // React.memo 도입)이 선택 액션 경로로 재발한다.
-function SimilarQuestionsPanel({ loading, error, items }: Props) {
-  const { selectedIds, toggle } = useSelection();
+function SimilarQuestionsPanel({ loading, error, items, baseQuestionId }: Props) {
+  const { selectedIds, toggle, replaceOne } = useSelection();
 
   if (loading) {
     return (
@@ -62,13 +64,23 @@ function SimilarQuestionsPanel({ loading, error, items }: Props) {
             <div className="similar-item-content">
               <QuestionContent segments={s.content_segments} />
             </div>
-            <button
-              type="button"
-              className={added ? "select-btn selected" : "select-btn"}
-              onClick={() => toggle(s.question_id)}
-            >
-              {added ? "제거" : "담기"}
-            </button>
+            <div className="similar-item-actions">
+              <button
+                type="button"
+                className={added ? "select-btn selected" : "select-btn"}
+                onClick={() => toggle(s.question_id)}
+              >
+                {added ? "제거" : "추가"}
+              </button>
+              <button
+                type="button"
+                className="select-btn replace-btn"
+                title="지금 문항 자리에 이걸로 바꿔 담기"
+                onClick={() => replaceOne(baseQuestionId, s.question_id)}
+              >
+                교체
+              </button>
+            </div>
           </div>
         );
       })}

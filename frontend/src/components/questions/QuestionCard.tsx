@@ -120,6 +120,7 @@ function QuestionCard({
           loading={similarLoading}
           error={similarError}
           items={similarItems}
+          baseQuestionId={q.question_id}
         />
       )}
 

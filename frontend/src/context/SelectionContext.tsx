@@ -12,6 +12,7 @@ interface SelectionContextValue {
   toggle: (id: number) => void;
   bulkAdd: (ids: number[]) => void;
   replaceAll: (ids: number[]) => void;
+  replaceOne: (oldId: number, newId: number) => void;
   reorder: (newOrder: number[]) => void;
   clear: () => void;
 }
@@ -65,6 +66,23 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     setOrder(dedupePreserveOrder(ids));
   }, []);
 
+  // 유사문항 "교체" 버튼용 — oldId 자리에 newId 를 끼워넣는다(목록 안
+  // 위치 보존, 끝으로 밀려나지 않게).
+  const replaceOne = useCallback((oldId: number, newId: number) => {
+    setOrder((prev) => {
+      // newId 를 이미 다른 경로("추가")로 담아둔 상태면 자기 자리를 이미
+      // 가지고 있으니 그대로 두고 oldId 만 뺀다 — map+dedupe 로 처리하면
+      // "둘 중 먼저 나오는 위치가 이긴다"는 예측하기 어려운 결과가 된다.
+      if (prev.includes(newId)) {
+        return prev.filter((x) => x !== oldId);
+      }
+      if (!prev.includes(oldId)) {
+        return [...prev, newId];
+      }
+      return prev.map((x) => (x === oldId ? newId : x));
+    });
+  }, []);
+
   // 시험지 미리보기에서 드래그로 순서를 바꿀 때 씀.
   const reorder = useCallback((newOrder: number[]) => {
     setOrder(dedupePreserveOrder(newOrder));
@@ -75,9 +93,9 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       selectedIds, order, count: order.length,
-      toggle, bulkAdd, replaceAll, reorder, clear,
+      toggle, bulkAdd, replaceAll, replaceOne, reorder, clear,
     }),
-    [selectedIds, order, toggle, bulkAdd, replaceAll, reorder, clear],
+    [selectedIds, order, toggle, bulkAdd, replaceAll, replaceOne, reorder, clear],
   );
 
   return (

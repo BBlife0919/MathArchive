@@ -154,6 +154,13 @@
   font-size: 11px;
 }
 
+.similar-item-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .select-btn {
   flex-shrink: 0;
   padding: 4px 12px;
@@ -176,6 +183,23 @@
   color: var(--on-accent);
   border-color: transparent;
   box-shadow: var(--shadow-accent);
+}
+
+/* 남색↔주황 2색 규칙 — "추가"(선택됨)는 주황(.select-btn.selected)을 이미
+   쓰므로, "교체"는 남색 축으로 구분한다(적녹색약 규칙: 색만으로 구분 금지 +
+   라벨 텍스트 자체가 1차 구분자이긴 하나, 색도 서로 다른 축으로 둔다).
+   specificity 는 .select-btn 과 동일(클래스 1개)이라 소스 순서로 이긴다 —
+   .select-btn 기본 규칙보다 반드시 뒤에 와야 background 가 안 덮어써진다. */
+.replace-btn {
+  background: linear-gradient(135deg, var(--navy-600), var(--blue));
+  color: var(--on-accent);
+  border-color: transparent;
+  box-shadow: var(--shadow-blue);
+}
+
+.replace-btn:hover {
+  border-color: transparent;
+  filter: brightness(1.08);
 }
 
 .choices-caption {

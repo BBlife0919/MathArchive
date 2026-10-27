@@ -72,6 +72,11 @@
   font-size: 10.5px;
 }
 
+.similar-drawer-item .similar-item-actions {
+  flex-direction: row;
+  flex-shrink: 0;
+}
+
 .similar-drawer-item .question-content {
   font-size: 10.5pt;
 }

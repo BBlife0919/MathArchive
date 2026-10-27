@@ -23,7 +23,7 @@ interface Props {
 // 컴포넌트 하나만 마운트돼 있어 useSelection() 구독이 전체 리스트를
 // 리렌더시키지 않는다(SimilarQuestionsPanel.tsx 와 같은 이유).
 export default function SimilarDrawer({ questionId, onClose }: Props) {
-  const { selectedIds, toggle } = useSelection();
+  const { selectedIds, toggle, replaceOne } = useSelection();
   const [items, setItems] = useState<QuestionCardData[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -68,13 +68,23 @@ export default function SimilarDrawer({ questionId, onClose }: Props) {
                   {s.difficulty ?? "?"}
                 </span>
                 <span className="meta-muted">{s.meta_short}</span>
-                <button
-                  type="button"
-                  className={added ? "select-btn selected" : "select-btn"}
-                  onClick={() => toggle(s.question_id)}
-                >
-                  {added ? "제거" : "담기"}
-                </button>
+                <div className="similar-item-actions">
+                  <button
+                    type="button"
+                    className={added ? "select-btn selected" : "select-btn"}
+                    onClick={() => toggle(s.question_id)}
+                  >
+                    {added ? "제거" : "추가"}
+                  </button>
+                  <button
+                    type="button"
+                    className="select-btn replace-btn"
+                    title="지금 문항 자리에 이걸로 바꿔 담기"
+                    onClick={() => replaceOne(questionId, s.question_id)}
+                  >
+                    교체
+                  </button>
+                </div>
               </div>
               <QuestionContent segments={s.content_segments} />
             </div>
