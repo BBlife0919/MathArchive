@@ -69,8 +69,9 @@ class SearchIdsResponse(BaseModel):
 
 
 class MiniTestRequest(SearchRequest):
-    # main.py:931-937 슬라이더 범위(문항 수 6~8, 쉬운문제 비중 0~100 10% 단위) 그대로.
-    mini_count: int = Field(default=7, ge=6, le=8)
+    # 쉬운문제 비중은 main.py:931-937 슬라이더(0~100, 10% 단위) 그대로.
+    # 문항 수는 원래 6~8(15분 컷)이었으나 2026-10-27 요청으로 30까지 확장.
+    mini_count: int = Field(default=7, ge=6, le=30)
     mini_easy_pct: int = Field(default=40, ge=0, le=100)
 
 

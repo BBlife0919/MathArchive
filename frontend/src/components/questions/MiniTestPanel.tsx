@@ -59,7 +59,7 @@ export default function MiniTestPanel({ filterState, onGenerated }: Props) {
   }
 
   return (
-    <Expander summary="미니테스트 자동 생성 (15분 컷, 6~8문항)">
+    <Expander summary="미니테스트 자동 생성 (6~30문항)">
       <p className="mini-test-caption">
         현재 필터(단원/난이도/학교 등) 안에서 난이도 비중에 맞춰 랜덤 추출합니다.
         워밍업 인출 퀴즈·총복습 미니 모의에 활용.
@@ -68,9 +68,9 @@ export default function MiniTestPanel({ filterState, onGenerated }: Props) {
         <label className="mini-test-slider">
           <span>문항 수: {count}</span>
           <input
-            type="range" min={6} max={8} step={1} value={count}
+            type="range" min={6} max={30} step={1} value={count}
             onChange={(e) => setCount(Number(e.target.value))}
-            style={{ "--range-fill": `${((count - 6) / (8 - 6)) * 100}%` } as CSSProperties}
+            style={{ "--range-fill": `${((count - 6) / (30 - 6)) * 100}%` } as CSSProperties}
           />
         </label>
         <label className="mini-test-slider">
