@@ -38,15 +38,37 @@ export interface GradeTestResult {
   prescribed_question_ids: number[];
 }
 
+export interface TestListItem {
+  test_id: number;
+  title: string;
+  chapter_label: string | null;
+  question_count: number;
+  created_at: string | null;
+  assigned_count: number;
+}
+
 export function createTest(body: {
   title: string;
-  class_id: number | null;
   question_ids: number[];
   chapter_label?: string | null;
 }): Promise<TestBasic> {
   return apiFetch<TestBasic>("/api/tests", {
     method: "POST",
-    body: JSON.stringify(body),
+    body: JSON.stringify({ class_id: null, ...body }),
+  });
+}
+
+export function fetchAllTests(): Promise<{ tests: TestListItem[] }> {
+  return apiFetch<{ tests: TestListItem[] }>("/api/tests");
+}
+
+export function assignTest(
+  testId: number,
+  studentIds: number[],
+): Promise<{ ok: boolean; assigned_count: number }> {
+  return apiFetch<{ ok: boolean; assigned_count: number }>(`/api/tests/${testId}/assign`, {
+    method: "POST",
+    body: JSON.stringify({ student_ids: studentIds }),
   });
 }
 

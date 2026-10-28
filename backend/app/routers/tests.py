@@ -6,8 +6,9 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from ..deps import require_approved
 from ..schemas.tests import (
-    CreateTestRequest, GradeTestRequest, GradeTestResponse, StudentTestItem,
-    StudentTestListResponse, TestBasic, TestDetailResponse,
+    AssignTestRequest, AssignTestResponse, CreateTestRequest, GradeTestRequest,
+    GradeTestResponse, StudentTestItem, StudentTestListResponse, TestBasic,
+    TestDetailResponse, TestListItem, TestListResponse,
 )
 from ..services import test_service
 
@@ -25,6 +26,18 @@ def create_test(req: CreateTestRequest):
     return TestBasic(
         test_id=test_id, title=req.title.strip(), class_id=req.class_id,
         chapter_label=req.chapter_label, question_count=len(req.question_ids))
+
+
+@router.get("", response_model=TestListResponse)
+def list_tests():
+    return TestListResponse(
+        tests=[TestListItem(**row) for row in test_service.list_all_tests()])
+
+
+@router.post("/{test_id}/assign", response_model=AssignTestResponse)
+def assign_test(test_id: int, req: AssignTestRequest):
+    n = test_service.assign_test(test_id, req.student_ids)
+    return AssignTestResponse(ok=True, assigned_count=n)
 
 
 @router.get("/student/{student_id}", response_model=StudentTestListResponse)

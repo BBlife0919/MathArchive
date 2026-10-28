@@ -19,7 +19,6 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL as string;
 
 export default function StudentCardPage() {
   const [sid, setSid] = useState<number | null>(null);
-  const [classId, setClassId] = useState<number | null>(null);
   const [dashboard, setDashboard] = useState<StudentDashboard | null>(null);
   const [templates, setTemplates] = useState<StudentTemplateItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -41,10 +40,7 @@ export default function StudentCardPage() {
 
   return (
     <div className="student-card-page">
-      <ClassTreeSidebar
-        selectedId={sid}
-        onSelect={(id, cls) => { setSid(id); setClassId(cls); }}
-      />
+      <ClassTreeSidebar selectedId={sid} onSelect={setSid} />
 
       <main className="student-card-main">
         <div className="student-card-main-header">
@@ -82,7 +78,7 @@ export default function StudentCardPage() {
               <BasicInfoSection sid={sid} dashboard={dashboard} onUpdate={setDashboard} />
             </AccordionSection>
             <AccordionSection title="2. TEST 관리 — 채점 · 오답 유사문항">
-              <TestManagementSection sid={sid} classId={classId} studentName={dashboard.student.name} />
+              <TestManagementSection sid={sid} studentName={dashboard.student.name} />
             </AccordionSection>
             <AccordionSection title="3. PRISM — 강사 임상 평가">
               <PrismSection sid={sid} dashboard={dashboard} onUpdate={setDashboard} />

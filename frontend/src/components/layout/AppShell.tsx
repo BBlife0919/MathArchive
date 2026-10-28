@@ -2,10 +2,11 @@ import type { ReactNode } from "react";
 import { useAuth } from "../../context/AuthContext";
 import "./AppShell.css";
 
-export type AppPage = "exam" | "student-card" | "admin" | "kakao" | "audit";
+export type AppPage = "exam" | "worksheets" | "student-card" | "admin" | "kakao" | "audit";
 
 const NAV_ITEMS: { page: AppPage; label: string; adminOnly?: boolean }[] = [
   { page: "exam", label: "문제은행 · 시험지" },
+  { page: "worksheets", label: "내 학습지" },
   { page: "student-card", label: "학생관리" },
   { page: "kakao", label: "카톡 승인 큐", adminOnly: true },
   { page: "audit", label: "검수", adminOnly: true },

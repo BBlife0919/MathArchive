@@ -74,12 +74,45 @@
   font-weight: 600;
 }
 
+.class-tree-add-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .class-tree-students {
   display: flex;
   flex-direction: column;
   gap: 1px;
   padding-left: 22px;
   margin-bottom: 4px;
+}
+
+.class-tree-student-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.class-tree-student-row .class-tree-student {
+  flex: 1;
+  min-width: 0;
+}
+
+.class-tree-move-select {
+  flex-shrink: 0;
+  max-width: 64px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 10px;
+  cursor: pointer;
+  opacity: 0.55;
+}
+
+.class-tree-move-select:hover,
+.class-tree-move-select:focus {
+  opacity: 1;
 }
 
 .class-tree-student {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchQuestionsByIds, type QuestionCard as QuestionCardData } from "../../api/questions";
 import { useSelection } from "../../context/SelectionContext";
+import { createTest } from "../../api/tests";
 import QuestionList from "../questions/QuestionList";
 import Expander from "../questions/Expander";
 import RealPagePreview from "./RealPagePreview";
@@ -33,6 +34,13 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
   // 안에 펼치는 대신 따로 스크롤할 수 있는 패널로 보여달라는 요청
   // (2026-10-26). SimilarDrawer.tsx 참고.
   const [similarDrawerFor, setSimilarDrawerFor] = useState<number | null>(null);
+
+  // 학습지로 저장(출제용) — "내 학습지" 목록에 쌓인 뒤, 거기서 반/학생을
+  // 골라 출제한다(2026-10-28, 학생관리 안에서 즉석 출제하던 흐름을
+  // 사용자 피드백으로 뒤집음).
+  const [worksheetTitle, setWorksheetTitle] = useState("");
+  const [savingWorksheet, setSavingWorksheet] = useState(false);
+  const [worksheetSaved, setWorksheetSaved] = useState(false);
 
   // 실물 미리보기는 이제 이 패널 왼쪽(큰 화면)에서 그린다 — PdfOptionsForm/
   // BookOptionsForm은 자기 설정이 바뀔 때마다 이 콜백으로 "다시 그려줘"만
@@ -93,6 +101,18 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
     handleReorder(sortQuestionIds(items, criterion));
   }
 
+  async function handleSaveWorksheet() {
+    if (!worksheetTitle.trim() || ids.length === 0) return;
+    setSavingWorksheet(true);
+    try {
+      await createTest({ title: worksheetTitle.trim(), question_ids: ids });
+      setWorksheetSaved(true);
+      setWorksheetTitle("");
+    } finally {
+      setSavingWorksheet(false);
+    }
+  }
+
   if (selectedIds.size === 0) {
     return <p className="empty-state">문제 목록에서 버튼으로 문제를 추가해주세요.</p>;
   }
@@ -132,6 +152,32 @@ export default function ExamPreviewPanel({ pdfMode, onPdfModeChange }: Props) {
         <RealPagePreview fetchHtml={previewFetch} depsKey={previewDepsKey} />
       </div>
       <div className="exam-preview-sidebar">
+        <Expander summary="+ 학습지로 저장 (출제용)">
+          <p className="sc-caption">
+            여기 담긴 {items.length}문항을 "내 학습지"에 저장합니다.
+            저장 후 "내 학습지" 탭에서 반/학생을 골라 출제하세요.
+          </p>
+          {worksheetSaved ? (
+            <p className="exam-worksheet-save-success">
+              저장 완료! 상단 "내 학습지" 탭에서 출제하세요.
+            </p>
+          ) : (
+            <div className="sc-form">
+              <input
+                value={worksheetTitle}
+                onChange={(e) => setWorksheetTitle(e.target.value)}
+                placeholder="예: HALF TEST_1(이차함수)"
+              />
+              <button
+                type="button" className="btn-primary"
+                disabled={savingWorksheet || !worksheetTitle.trim()}
+                onClick={handleSaveWorksheet}
+              >
+                {savingWorksheet ? "저장 중..." : "학습지로 저장"}
+              </button>
+            </div>
+          )}
+        </Expander>
         <div className="pdf-mode-toggle">
           <button
             type="button" className={pdfMode === "exam" ? "tab-btn active" : "tab-btn"}

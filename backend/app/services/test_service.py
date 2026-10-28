@@ -42,16 +42,30 @@ def create_test(title: str, class_id: int | None, question_ids: list[int],
     return test_id
 
 
+def _normalize_timestamps(d: dict, keys: tuple[str, ...]) -> None:
+    # Postgres는 TIMESTAMP 컬럼을 datetime 객체로 돌려주고(SQLite는 TEXT라
+    # 이미 문자열) — 스키마(Optional[str])와 안 맞아 pydantic 검증에서 500이
+    # 났다(2026-10-27 실사용 중 발견). 둘 다 문자열로 통일.
+    for key in keys:
+        if d.get(key) is not None and not isinstance(d[key], str):
+            d[key] = d[key].isoformat()
+
+
 def list_tests_for_student(student_id: int) -> list[dict]:
-    """이 학생의 반에 배정된 테스트 전체 + 본인 채점 상태(LEFT JOIN)."""
+    """이 학생에게 배정된(test_assignments) 테스트 전체 + 본인 채점 상태.
+
+    예전엔 tests.class_id 로 "반 전체"에만 묶였는데, "시험지 생성기에서
+    학습지를 만들어두고 내 학습지 목록에서 반/학생을 골라 출제"하는 흐름으로
+    바뀌면서(2026-10-28) 학생 단위 다대다 배정(test_assignments)으로
+    바뀌었다."""
     rows = db_service.query(
         "SELECT t.test_id, t.title, t.chapter_label, t.question_ids, "
         "t.created_at, r.result_id, r.score, r.total, r.graded_at "
-        "FROM tests t "
-        "JOIN students s ON s.class_id = t.class_id "
+        "FROM test_assignments ta "
+        "JOIN tests t ON t.test_id = ta.test_id "
         "LEFT JOIN test_results r "
-        "  ON r.test_id = t.test_id AND r.student_id = s.student_id "
-        "WHERE s.student_id = ? "
+        "  ON r.test_id = t.test_id AND r.student_id = ta.student_id "
+        "WHERE ta.student_id = ? "
         "ORDER BY t.created_at DESC",
         (student_id,),
     )
@@ -59,15 +73,42 @@ def list_tests_for_student(student_id: int) -> list[dict]:
     for r in rows:
         d = dict(r)
         d["question_count"] = len(json.loads(d.pop("question_ids")))
-        # Postgres는 TIMESTAMP 컬럼을 datetime 객체로 돌려주고(SQLite는
-        # TEXT라 이미 문자열) — 스키마(Optional[str])와 안 맞아 pydantic
-        # 검증에서 500이 났다(2026-10-27 실사용 중 발견). 둘 다 문자열로
-        # 통일.
-        for key in ("created_at", "graded_at"):
-            if d.get(key) is not None and not isinstance(d[key], str):
-                d[key] = d[key].isoformat()
+        _normalize_timestamps(d, ("created_at", "graded_at"))
         out.append(d)
     return out
+
+
+def list_all_tests() -> list[dict]:
+    """"내 학습지" 목록 — 시험지 생성기에서 저장한 전체 학습지(배정 대상과
+    무관), 각 줄에 현재 배정된 학생 수를 같이 보여준다."""
+    rows = db_service.query(
+        "SELECT t.test_id, t.title, t.chapter_label, t.question_ids, "
+        "t.created_at, "
+        "(SELECT COUNT(*) FROM test_assignments ta WHERE ta.test_id = t.test_id) "
+        "AS assigned_count "
+        "FROM tests t ORDER BY t.created_at DESC"
+    )
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["question_count"] = len(json.loads(d.pop("question_ids")))
+        _normalize_timestamps(d, ("created_at",))
+        out.append(d)
+    return out
+
+
+def assign_test(test_id: int, student_ids: list[int]) -> int:
+    """학습지를 특정 학생들에게 출제(배정) — 이미 배정된 학생은 건드리지
+    않는다(멱등). 반환값은 이번 호출로 '새로' 배정된 학생 수."""
+    existing = db_service.query(
+        "SELECT student_id FROM test_assignments WHERE test_id=?", (test_id,))
+    already = {r["student_id"] for r in existing}
+    new_ids = [sid for sid in student_ids if sid not in already]
+    for sid in new_ids:
+        db_service.execute_write(
+            "INSERT INTO test_assignments (test_id, student_id) VALUES (?, ?)",
+            (test_id, sid))
+    return len(new_ids)
 
 
 def get_test_detail(test_id: int, student_id: int | None = None) -> dict | None:

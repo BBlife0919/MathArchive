@@ -5,6 +5,7 @@ import { BookmarkProvider } from "./context/BookmarkContext";
 import AuthPage from "./pages/AuthPage";
 import PendingApprovalPage from "./pages/PendingApprovalPage";
 import ExamBuilderPage from "./pages/ExamBuilderPage";
+import WorksheetsPage from "./pages/WorksheetsPage";
 import StudentCardPage from "./pages/StudentCardPage";
 import AdminPage from "./pages/AdminPage";
 import KakaoQueuePage from "./pages/KakaoQueuePage";
@@ -30,6 +31,8 @@ function Gate() {
   let body;
   if (page === "exam") {
     body = <ExamBuilderPage />;
+  } else if (page === "worksheets") {
+    body = <WorksheetsPage />;
   } else if (page === "student-card") {
     // TEST 관리의 "오답학습지 만들기"가 useSelection() 으로 시험지
     // 생성기와 같은 선택 상태를 공유해야 해서, SelectionProvider 를 이

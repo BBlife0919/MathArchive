@@ -23,6 +23,29 @@ class TestBasic(BaseModel):
     created_at: Optional[str] = None
 
 
+class TestListItem(BaseModel):
+    """"내 학습지" 목록 한 줄 — 배정 대상과 무관하게 전체 학습지."""
+    test_id: int
+    title: str
+    chapter_label: Optional[str] = None
+    question_count: int
+    created_at: Optional[str] = None
+    assigned_count: int
+
+
+class TestListResponse(BaseModel):
+    tests: list[TestListItem]
+
+
+class AssignTestRequest(BaseModel):
+    student_ids: list[int]
+
+
+class AssignTestResponse(BaseModel):
+    ok: bool
+    assigned_count: int
+
+
 class StudentTestItem(BaseModel):
     test_id: int
     title: str
