@@ -126,7 +126,7 @@ add(id='q08', kind='mc', no=8, score=5.0, layout='1x5', box=True,
     ch='함수의 최대·최소', lv='중')
 
 add(id='q09', kind='mc', no=9, score=5.0, layout='3+2', emptybox={'paras': [
-        '$f(x)=cases{{x^{2}+ax-6} over{x-2}~~(x ne2)#b~~(x=2)}$',
+        '$f(x)=cases{{x^{2}+ax-6} over{x-2}~~(x NEQ 2)#b~~(x=2)}$',
     ]},
     text='위 함수 $f(x)$가 모든 실수에서 연속일 때, $a+b$의 값은? (단, $a,~b$는 실수이다.)',
     choices=['$3$', '$4$', '$5$', '$6$', '$7$'],
@@ -246,7 +246,7 @@ add(id='q15', kind='mc', no=15, score=5.3, layout='3+2', emptybox={'paras': [
         '(가) $f(c)=0$인 $c$가 ${a+2} over{2}$와 $a+2$ 사이에 적어도 하나 존재한다.',
         '(나) $(0,~0)$, $(2,~0)$, $LEFT({a+2} over{2},~f LEFT({a+2} over{2} RIGHT) RIGHT)$를 꼭짓점으로 하는 삼각형의 넓이는 ${1} over{4}$이다.',
     ]},
-    text='$2$가 아닌 양수 $a$에 대하여 함수 $f(x)=cases{(x-a)(x-2)~~(x<a)#(x-a)^{2}~~(x GEQa)}$가 다음 조건을 만족시킬 때, $f(2)+f(2a)$의 값은?',
+    text='$2$가 아닌 양수 $a$에 대하여 함수 $f(x)=cases{(x-a)(x-2)~~(x<a)#(x-a)^{2}~~(x GEQ a)}$가 다음 조건을 만족시킬 때, $f(2)+f(2a)$의 값은?',
     choices=['$1$', '$2$', '$4$', '$9$', '$10$'],
     ans='④',
     sol=[
@@ -284,7 +284,7 @@ add(id='q16', kind='mc', no=16, score=5.4, layout='1x5', box=True, emptybox={'pa
         '$x=a$에서: 둘째 식 극한은 $it- {a^{2}} over{2a}+a= {a} over{2}$, 셋째 식 극한은 $it-a+ {3a} over{2}= {a} over{2}$, 함숫값(넷째 식) $f(a)= {a} over{2}$로 모두 일치해 연속이다.',
         '$x=it-a$에서: 함숫값 $f(it-a)=it- {a} over{2}$인데 양쪽 극한이 모두 $it- infty$이므로 함숫값과 다르다. 불연속은 $x=it-a$ 한 곳뿐이므로 ㄴ은 거짓이다.',
         '둘째 식은 $x in(it-a,~a)$에서 $it- infty$부터 ${a} over{2}$까지 증가, 셋째 식은 $x in(a,~ infty)$에서 ${a} over{2}$부터 $it- infty$까지 감소, 첫째 식은 $x in(it- infty,~{it-a})$에서 $it- infty$부터 $it-a$까지 감소(전부 단사).',
-        '$k> {a} over{2}$: 해 없음. $k= {a} over{2}$: $x=a$ 하나뿐(유일하게 $1$개). $it-a<k< {a} over{2}$ ($k ne it- {a} over{2}$): 둘째·셋째 식에서 하나씩, $2$개. $k=it-a$: 둘째·셋째에서 하나씩, $2$개(첫째 식은 개구간이라 $it-a$ 자체는 포함 안 됨).',
+        '$k> {a} over{2}$: 해 없음. $k= {a} over{2}$: $x=a$ 하나뿐(유일하게 $1$개). $it-a<k< {a} over{2}$ ($k NEQ it- {a} over{2}$): 둘째·셋째 식에서 하나씩, $2$개. $k=it-a$: 둘째·셋째에서 하나씩, $2$개(첫째 식은 개구간이라 $it-a$ 자체는 포함 안 됨).',
         '$k=it- {a} over{2}$: 둘째·셋째에서 하나씩 $+$ 고립점 $x=it-a$ 자체(함숫값 $it- {a} over{2}$)까지 더해 $3$개. $k<it-a$: 첫째·둘째·셋째 모두에서 하나씩, $3$개.',
         '따라서 실근이 정확히 $1$개가 되는 $k$는 $k= {a} over{2}$ 하나뿐이므로 ㄷ은 참이다.',
         '$a=2$일 때 실근이 $3$개인 $k$의 범위는 $LEFT{k=it-1 RIGHT} cup(it- infty,~{it-2})$로, $it-2<k<it-1$이라는 ㄹ의 서술과 다르므로(그 구간은 실제로 실근이 $2$개) ㄹ은 거짓이다.',
