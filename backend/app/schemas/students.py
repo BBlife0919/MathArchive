@@ -100,6 +100,7 @@ class StudentDashboard(BaseModel):
 
 
 class UpdateStudentBasicRequest(BaseModel):
+    name: str = Field(min_length=1)
     school: Optional[str] = None
     grade: int = Field(ge=1, le=6)
     class_name: Optional[str] = None

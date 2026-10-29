@@ -187,6 +187,7 @@ export default function AuditPage() {
   const end = Math.min(start + TOKENS_PER_PAGE, totalTokens);
   const pageTokens = bareWords.slice(start, end);
   const unknownTokens = bareWords.filter((b) => b.recommend_action === null && !b.is_geometry_label);
+  const structIssues = struct.box_mismatch + struct.code_block;
 
   return (
     <div className="audit-page">
@@ -196,6 +197,15 @@ export default function AuditPage() {
           누락 토큰 · 구조 오류 · 신고함을 한 화면에서 자동 진단하고 클릭 한 번으로 일괄 처리합니다.
         </p>
       </header>
+
+      {/* "뭐부터 해야 하는지" 시각적 우선순위가 없다는 지적(2026-10-30)으로
+          추가 — 카드 4개를 다 훑지 않아도 전체 상태가 한 줄에 보이게 한다. */}
+      <div className="audit-todo-bar">
+        <TodoChip label="구조 오류" count={structIssues} />
+        <TodoChip label="남은 미상 토큰" count={unknownTokens.length} />
+        <TodoChip label="신규 등장 토큰" count={scan.new_count} />
+        <TodoChip label="미해결 신고" count={flagged.length} />
+      </div>
 
       {banner && (
         <div className={`audit-banner audit-banner-${banner.kind}`}>
@@ -370,6 +380,16 @@ export default function AuditPage() {
           </>
         )}
       </section>
+    </div>
+  );
+}
+
+function TodoChip({ label, count }: { label: string; count: number }) {
+  const done = count === 0;
+  return (
+    <div className={done ? "audit-todo-chip done" : "audit-todo-chip pending"}>
+      <span className="audit-todo-chip-label">{label}</span>
+      <span className="audit-todo-chip-value">{done ? "완료" : `${count}건`}</span>
     </div>
   );
 }

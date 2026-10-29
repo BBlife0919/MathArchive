@@ -60,6 +60,89 @@
   background: var(--paper);
 }
 
+/* 반 이름 옆 수정/삭제 — 평소엔 숨겨두고 행에 호버했을 때만 노출해서
+   "있는지도 모르고 지나가기 쉽다" 문제를 줄인다(2026-10-30 조사). */
+.class-tree-class-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.class-tree-class-row .class-tree-class-btn {
+  flex: 1;
+  min-width: 0;
+}
+
+.class-tree-class-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.12s var(--ease);
+}
+
+.class-tree-class-row:hover .class-tree-class-actions {
+  opacity: 1;
+}
+
+.class-tree-icon-btn {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.12s var(--ease);
+}
+
+.class-tree-icon-btn:hover {
+  border-color: var(--blue-soft);
+  color: var(--navy-600);
+  background: var(--blue-tint);
+}
+
+.class-tree-icon-btn.danger:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  background: var(--accent-tint);
+}
+
+.class-tree-icon-btn.save {
+  border-color: var(--navy-600);
+  color: var(--navy-600);
+  font-weight: 800;
+}
+
+.class-tree-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.class-tree-class-edit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+}
+
+.class-tree-class-edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1.5px solid var(--blue);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  background: var(--surface);
+  box-sizing: border-box;
+}
+
+.class-tree-class-edit-input:focus {
+  outline: none;
+}
+
 .class-tree-caret {
   color: var(--muted);
   font-size: 10px;

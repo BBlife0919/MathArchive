@@ -67,8 +67,17 @@ def get_dashboard(sid: int):
 
 @router.put("/{sid}", response_model=StudentDashboard)
 def update_student(sid: int, req: UpdateStudentBasicRequest):
-    student_service.update_student_basic(sid, req.school, req.grade, req.class_name, req.note)
+    _get_dashboard_or_404(sid)  # 삭제된 학생을 조용히 수정하지 않도록 먼저 가드
+    student_service.update_student_basic(
+        sid, req.name.strip(), req.school, req.grade, req.class_name, req.note)
     return _get_dashboard_or_404(sid)
+
+
+@router.delete("/{sid}")
+def delete_student(sid: int):
+    _get_dashboard_or_404(sid)  # 404 먼저 확인(이미 삭제됐거나 없는 학생)
+    student_service.delete_student(sid)
+    return {"ok": True}
 
 
 @router.post("/{sid}/prism", response_model=StudentDashboard)

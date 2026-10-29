@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  assignStudentsToClass, createClass, fetchClasses, fetchClassStudents,
-  fetchUnassignedStudents, type ClassBasic, type ClassStudent,
+  assignStudentsToClass, createClass, deleteClass, fetchClasses, fetchClassStudents,
+  fetchUnassignedStudents, updateClass, type ClassBasic, type ClassStudent,
 } from "../../api/classes";
 import { createStudent } from "../../api/students";
 import Expander from "../questions/Expander";
@@ -10,12 +10,15 @@ import "./ClassTreeSidebar.css";
 interface Props {
   selectedId: number | null;
   onSelect: (id: number) => void;
+  // 바뀔 때마다 트리를 다시 불러온다(학생 삭제 등 사이드바 바깥에서 일어난
+  // 변경을 반영).
+  refreshKey?: number;
 }
 
 // 왼쪽 반→학생 트리 — "학생카드"가 "학생관리"로 리뉴얼되며 추가(2026-10-27).
 // 기존엔 전체 학생 flat <select> 였는데, 반 단위로 접고 펼 수 있게 바꾸고,
 // 클리닉 페이지에 있던 "신규 학생 등록" 도 여기로 옮겨왔다.
-export default function ClassTreeSidebar({ selectedId, onSelect }: Props) {
+export default function ClassTreeSidebar({ selectedId, onSelect, refreshKey }: Props) {
   const [classes, setClasses] = useState<ClassBasic[] | null>(null);
   const [studentsByClass, setStudentsByClass] = useState<Record<number, ClassStudent[]>>({});
   const [unassigned, setUnassigned] = useState<ClassStudent[]>([]);
@@ -32,6 +35,11 @@ export default function ClassTreeSidebar({ selectedId, onSelect }: Props) {
   const [creatingClass, setCreatingClass] = useState(false);
   const [movingId, setMovingId] = useState<number | null>(null);
 
+  const [editingClassId, setEditingClassId] = useState<number | null>(null);
+  const [editClassName, setEditClassName] = useState("");
+  const [savingClassId, setSavingClassId] = useState<number | null>(null);
+  const [deletingClassId, setDeletingClassId] = useState<number | null>(null);
+
   function reload() {
     fetchClasses().then((res) => {
       setClasses(res.classes);
@@ -45,7 +53,8 @@ export default function ClassTreeSidebar({ selectedId, onSelect }: Props) {
     fetchUnassignedStudents().then((r) => setUnassigned(r.students)).catch(() => setUnassigned([]));
   }
 
-  useEffect(reload, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(reload, [refreshKey]);
 
   function toggle(classId: number) {
     setExpanded((prev) => {
@@ -90,6 +99,38 @@ export default function ClassTreeSidebar({ selectedId, onSelect }: Props) {
       reload();
     } finally {
       setMovingId(null);
+    }
+  }
+
+  function startEditClass(c: ClassBasic) {
+    setEditingClassId(c.class_id);
+    setEditClassName(c.name);
+  }
+
+  async function handleRenameClass(classId: number) {
+    const name = editClassName.trim();
+    if (!name) return;
+    setSavingClassId(classId);
+    try {
+      await updateClass(classId, { name });
+      setEditingClassId(null);
+      reload();
+    } finally {
+      setSavingClassId(null);
+    }
+  }
+
+  async function handleDeleteClass(c: ClassBasic) {
+    const ok = window.confirm(
+      `"${c.name}" 반을 삭제할까요? 소속 학생 ${c.student_count}명은 삭제되지 않고 미배정으로 이동합니다.`,
+    );
+    if (!ok) return;
+    setDeletingClassId(c.class_id);
+    try {
+      await deleteClass(c.class_id);
+      reload();
+    } finally {
+      setDeletingClassId(null);
     }
   }
 
@@ -192,14 +233,56 @@ export default function ClassTreeSidebar({ selectedId, onSelect }: Props) {
           <>
             {classes.map((c) => (
               <div key={c.class_id} className="class-tree-group">
-                <button
-                  type="button" className="class-tree-class-btn"
-                  onClick={() => toggle(c.class_id)}
-                >
-                  <span className="class-tree-caret">{expanded.has(c.class_id) ? "▾" : "▸"}</span>
-                  {c.name}
-                  <span className="class-tree-count">{c.student_count}명</span>
-                </button>
+                {editingClassId === c.class_id ? (
+                  <div className="class-tree-class-edit">
+                    <input
+                      className="class-tree-class-edit-input"
+                      value={editClassName}
+                      autoFocus
+                      onChange={(e) => setEditClassName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleRenameClass(c.class_id);
+                        if (e.key === "Escape") setEditingClassId(null);
+                      }}
+                    />
+                    <button
+                      type="button" className="class-tree-icon-btn save"
+                      disabled={savingClassId === c.class_id || !editClassName.trim()}
+                      onClick={() => handleRenameClass(c.class_id)}
+                    >
+                      저장
+                    </button>
+                    <button type="button" className="class-tree-icon-btn" onClick={() => setEditingClassId(null)}>
+                      취소
+                    </button>
+                  </div>
+                ) : (
+                  <div className="class-tree-class-row">
+                    <button
+                      type="button" className="class-tree-class-btn"
+                      onClick={() => toggle(c.class_id)}
+                    >
+                      <span className="class-tree-caret">{expanded.has(c.class_id) ? "▾" : "▸"}</span>
+                      {c.name}
+                      <span className="class-tree-count">{c.student_count}명</span>
+                    </button>
+                    <div className="class-tree-class-actions">
+                      <button
+                        type="button" className="class-tree-icon-btn" title="반 이름 수정"
+                        onClick={() => startEditClass(c)}
+                      >
+                        ✎
+                      </button>
+                      <button
+                        type="button" className="class-tree-icon-btn danger" title="반 삭제"
+                        disabled={deletingClassId === c.class_id}
+                        onClick={() => handleDeleteClass(c)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                )}
                 {expanded.has(c.class_id) && (
                   <div className="class-tree-students">
                     {(studentsByClass[c.class_id] ?? []).map((s) => (

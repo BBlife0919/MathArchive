@@ -46,6 +46,11 @@
   flex-shrink: 0;
 }
 
+.sc-accordion-badge.empty {
+  color: var(--accent-hover);
+  background: var(--accent-tint);
+}
+
 .sc-accordion-body {
   padding: 18px 22px 22px;
 }

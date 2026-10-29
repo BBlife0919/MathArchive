@@ -2,8 +2,66 @@
    주의(폰트 불가침): KaTeX 수식·문제 본문·선지 폰트/크기 규칙은
    app/theme.py:385-410 값을 그대로 유지한다 — 임의 변경 금지. */
 
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+/* Paperlogy — UI 전역 폰트(문제 본문·선지·해설 제외, 폰트 불가침 규칙 참고).
+   무료 상업용 한글 산세리프, 로컬 TTF를 woff2로 변환해 직접 호스팅
+   (공개 CDN 없음). 9단계 weight 전부 있어 제목~본문을 단일 패밀리로
+   커버한다(2026-10-30). */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-1Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-2ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-3Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-4Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-5Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-6SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-7Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-8ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('/fonts/Paperlogy-9Black.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
 
 :root {
   /* 남색 축 — 메인 브랜드 컬러. 단일 톤이 아니라 완전한 스케일로 둬서
@@ -63,8 +121,8 @@ body {
     radial-gradient(900px 480px at -10% 0%, var(--accent-tint) 0%, transparent 55%),
     var(--paper);
   color: var(--text);
-  font-family: 'Pretendard Variable', 'Pretendard', -apple-system,
-    'Apple SD Gothic Neo', sans-serif;
+  font-family: 'Paperlogy', -apple-system, 'Apple SD Gothic Neo', sans-serif;
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
 }
 

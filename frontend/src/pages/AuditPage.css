@@ -39,6 +39,52 @@
   color: var(--muted);
 }
 
+/* ── 오늘 할 일 요약 바 ───────────────────────────── */
+.audit-todo-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.audit-todo-chip {
+  flex: 1 1 140px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+
+.audit-todo-chip-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.audit-todo-chip-value {
+  font-size: 12.5px;
+  font-weight: 800;
+  border-radius: var(--radius-pill);
+  padding: 2px 10px;
+}
+
+.audit-todo-chip.done .audit-todo-chip-value {
+  color: var(--navy-600);
+  background: var(--blue-tint);
+}
+
+.audit-todo-chip.pending {
+  border-color: var(--accent-soft);
+}
+
+.audit-todo-chip.pending .audit-todo-chip-value {
+  color: var(--accent-hover);
+  background: var(--accent-tint);
+}
+
 /* ── 배너 ─────────────────────────────────────────── */
 .audit-banner {
   display: flex;

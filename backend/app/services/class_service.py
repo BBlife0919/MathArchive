@@ -14,7 +14,8 @@ import db as legacy_db  # type: ignore
 def list_classes() -> list[dict]:
     rows = db_service.query(
         "SELECT c.class_id, c.name, c.teacher, "
-        "(SELECT COUNT(*) FROM students s WHERE s.class_id = c.class_id) "
+        "(SELECT COUNT(*) FROM students s "
+        " WHERE s.class_id = c.class_id AND s.is_active=1) "
         "AS student_count "
         "FROM classes c ORDER BY c.name"
     )
@@ -82,9 +83,9 @@ def list_students_in_class(class_id: int | None) -> list[dict]:
     if class_id is None:
         rows = db_service.query(
             "SELECT student_id, name, school, grade FROM students "
-            "WHERE class_id IS NULL ORDER BY name")
+            "WHERE class_id IS NULL AND is_active=1 ORDER BY name")
     else:
         rows = db_service.query(
             "SELECT student_id, name, school, grade FROM students "
-            "WHERE class_id=? ORDER BY name", (class_id,))
+            "WHERE class_id=? AND is_active=1 ORDER BY name", (class_id,))
     return [dict(r) for r in rows]

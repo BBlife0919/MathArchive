@@ -37,7 +37,7 @@ def _iso(v):
 def list_students() -> list:
     return db_service.query(
         "SELECT student_id, name, school, grade, class_name, note "
-        "FROM students ORDER BY school, grade, name"
+        "FROM students WHERE is_active=1 ORDER BY school, grade, name"
     )
 
 
@@ -71,7 +71,7 @@ def get_student(sid: int) -> dict | None:
 def _student_basic(sid: int) -> dict | None:
     rows = db_service.query(
         "SELECT student_id, name, school, grade, class_name, note "
-        "FROM students WHERE student_id = ?",
+        "FROM students WHERE student_id = ? AND is_active=1",
         (sid,),
     )
     return dict(rows[0]) if rows else None
@@ -289,13 +289,21 @@ def get_dashboard(sid: int) -> dict | None:
     }
 
 
-def update_student_basic(sid: int, school: str | None, grade: int,
+def update_student_basic(sid: int, name: str, school: str | None, grade: int,
                          class_name: str | None, note: str | None) -> None:
     db_service.execute_write(
-        "UPDATE students SET school=?, grade=?, class_name=?, note=? "
+        "UPDATE students SET name=?, school=?, grade=?, class_name=?, note=? "
         "WHERE student_id=?",
-        (school, grade, class_name, note, sid),
+        (name, school, grade, class_name, note, sid),
     )
+
+
+def delete_student(sid: int) -> None:
+    """하드 삭제하지 않는다 — clinic_entries/prism_assessment/student_progress/
+    student_assessment/student_log/test_results 등 여러 테이블이 FK로
+    참조 중이라, is_active=0 으로 숨기기만 한다(데이터는 보존)."""
+    db_service.execute_write(
+        "UPDATE students SET is_active=0 WHERE student_id=?", (sid,))
 
 
 def insert_prism_eval(sid: int, eval_date: str, score_p: int, score_r: int,

@@ -20,7 +20,7 @@ def _iso(v):
 
 def list_students_for_draft() -> list[dict]:
     return [dict(r) for r in db_service.query(
-        "SELECT student_id, name FROM students ORDER BY name"
+        "SELECT student_id, name FROM students WHERE is_active=1 ORDER BY name"
     )]
 
 

@@ -17,17 +17,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   padding: 14px 16px;
   border: 1px solid var(--line-soft);
   border-radius: var(--radius-md);
   background: var(--surface);
-  box-shadow: var(--shadow-xs);
-  transition: box-shadow 0.12s var(--ease), transform 0.12s var(--ease);
+  transition: box-shadow 0.12s var(--ease), transform 0.12s var(--ease), border-color 0.12s var(--ease);
 }
 
 .worksheet-row:hover {
   box-shadow: var(--shadow-sm, 0 4px 14px rgba(9, 13, 28, 0.08));
+  border-color: var(--blue-soft);
   transform: translateY(-1px);
 }
 

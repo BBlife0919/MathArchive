@@ -23,6 +23,13 @@ export default function StudentCardPage() {
   const [templates, setTemplates] = useState<StudentTemplateItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sidebarRefreshKey, setSidebarRefreshKey] = useState(0);
+
+  function handleStudentDeleted() {
+    setSid(null);
+    setDashboard(null);
+    setSidebarRefreshKey((k) => k + 1);
+  }
 
   useEffect(() => {
     fetchStudentTemplates().then((res) => setTemplates(res.items)).catch(() => setTemplates([]));
@@ -40,7 +47,7 @@ export default function StudentCardPage() {
 
   return (
     <div className="student-card-page">
-      <ClassTreeSidebar selectedId={sid} onSelect={setSid} />
+      <ClassTreeSidebar selectedId={sid} onSelect={setSid} refreshKey={sidebarRefreshKey} />
 
       <main className="student-card-main">
         <div className="student-card-main-header">
@@ -75,24 +82,51 @@ export default function StudentCardPage() {
         {dashboard && sid !== null && (
           <>
             <AccordionSection title="1. 기본정보" defaultOpen>
-              <BasicInfoSection sid={sid} dashboard={dashboard} onUpdate={setDashboard} />
+              <BasicInfoSection
+                sid={sid} dashboard={dashboard} onUpdate={setDashboard}
+                onDeleted={handleStudentDeleted}
+              />
             </AccordionSection>
-            <AccordionSection title="2. TEST 관리 — 채점 · 오답 유사문항">
+            <AccordionSection
+              title="2. TEST 관리 — 채점 · 오답 유사문항"
+              badge={dashboard.clinic_count > 0 ? `오답 누적 ${dashboard.clinic_count}건` : "오답 없음"}
+              badgeTone={dashboard.clinic_count > 0 ? "filled" : "empty"}
+            >
               <TestManagementSection sid={sid} studentName={dashboard.student.name} />
             </AccordionSection>
-            <AccordionSection title="3. PRISM — 강사 임상 평가">
+            <AccordionSection
+              title="3. PRISM — 강사 임상 평가"
+              badge={dashboard.latest_prism ? `최근 평가 ${dashboard.latest_prism.eval_date}` : "미입력"}
+              badgeTone={dashboard.latest_prism ? "filled" : "empty"}
+            >
               <PrismSection sid={sid} dashboard={dashboard} onUpdate={setDashboard} />
             </AccordionSection>
-            <AccordionSection title="4. 자가예측 격차 — 메타인지 추적">
+            <AccordionSection
+              title="4. 자가예측 격차 — 메타인지 추적"
+              badge={dashboard.self_predict_entries.length > 0 ? `${dashboard.self_predict_entries.length}건 기록` : "미입력"}
+              badgeTone={dashboard.self_predict_entries.length > 0 ? "filled" : "empty"}
+            >
               <SelfPredictSection sid={sid} dashboard={dashboard} onUpdate={setDashboard} />
             </AccordionSection>
-            <AccordionSection title="5. 학습 로그 — 진도·숙제·시험">
+            <AccordionSection
+              title="5. 학습 로그 — 진도·숙제·시험"
+              badge={dashboard.progress_entries.length > 0 ? `${dashboard.progress_entries.length}건 기록` : "미입력"}
+              badgeTone={dashboard.progress_entries.length > 0 ? "filled" : "empty"}
+            >
               <ProgressSection sid={sid} dashboard={dashboard} onUpdate={setDashboard} />
             </AccordionSection>
-            <AccordionSection title="6. 과제 정밀평가">
+            <AccordionSection
+              title="6. 과제 정밀평가"
+              badge={dashboard.latest_qualitative ? "최근 평가 있음" : "미입력"}
+              badgeTone={dashboard.latest_qualitative ? "filled" : "empty"}
+            >
               <AssessmentSection sid={sid} dashboard={dashboard} onUpdate={setDashboard} />
             </AccordionSection>
-            <AccordionSection title="7. 관리 로그 — 보호자·출결·메모">
+            <AccordionSection
+              title="7. 관리 로그 — 보호자·출결·메모"
+              badge={dashboard.logs.length > 0 ? `${dashboard.logs.length}건 기록` : "미입력"}
+              badgeTone={dashboard.logs.length > 0 ? "filled" : "empty"}
+            >
               <ManagementLogSection sid={sid} dashboard={dashboard} onUpdate={setDashboard} />
             </AccordionSection>
           </>

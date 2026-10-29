@@ -123,12 +123,19 @@ export function fetchStudentDashboard(sid: number): Promise<StudentDashboard> {
 
 export function updateStudentBasic(
   sid: number,
-  body: { school: string | null; grade: number; class_name: string | null; note: string | null },
+  body: {
+    name: string; school: string | null; grade: number;
+    class_name: string | null; note: string | null;
+  },
 ): Promise<StudentDashboard> {
   return apiFetch<StudentDashboard>(`/api/students/${sid}`, {
     method: "PUT",
     body: JSON.stringify(body),
   });
+}
+
+export function deleteStudent(sid: number): Promise<{ ok: boolean }> {
+  return apiFetch<{ ok: boolean }>(`/api/students/${sid}`, { method: "DELETE" });
 }
 
 export function addPrismEval(
