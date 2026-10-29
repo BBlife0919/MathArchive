@@ -14,6 +14,7 @@ v2 변경사항:
 """
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -63,7 +64,7 @@ SYMBOL_MAP = {
     "NE": r"\neq",
     "APPROX": r"\approx",
     "EQUIV": r"\equiv",
-    "SIM": r"\sim",
+    "SIM": r"\sim", "sim": r"\sim",
     "THEREFORE": r"\therefore", "therefore": r"\therefore",
     "BECAUSE": r"\because",
     "TRIANGLE": r"\triangle",
@@ -81,6 +82,8 @@ SYMBOL_MAP = {
     "IN": r"\in",
     "SUBSET": r"\subset",
     "SUPSET": r"\supset",
+    "NSUBSET": r"\not\subset", "nsubset": r"\not\subset",
+    "NSUPSET": r"\not\supset", "nsupset": r"\not\supset",
     "CUP": r"\cup", "cup": r"\cup",
     "CAP": r"\cap", "cap": r"\cap",
     "EMPTYSET": r"\emptyset", "emptyset": r"\emptyset",
@@ -93,6 +96,8 @@ SYMBOL_MAP = {
     # 집합 / 원소 / 합성함수 — 소문자 변형 추가
     "subset": r"\subset", "supset": r"\supset",
     "in": r"\in", "notin": r"\notin", "NOTIN": r"\notin",
+    # "nin" — 일부 강사가 notin 대신 쓰는 비표준 축약(실제 발견, 2026-10-12).
+    "nin": r"\notin",
     "circ": r"\circ", "CIRC": r"\circ",
     # 추가 누락 케이스
     "FORALL": r"\forall", "forall": r"\forall",
@@ -106,6 +111,7 @@ SYMBOL_MAP = {
     "DDOTS": r"\ddots", "ddots": r"\ddots",
     # HWP 특유 토큰 (작은/큰 연산자, brace)
     "SMALLINTER": r"\cap", "SMALLUNION": r"\cup",
+    "smallinter": r"\cap", "smallunion": r"\cup",
     "BIGCAP": r"\bigcap", "BIGCUP": r"\bigcup",
     "BIGINT": r"\int",
     "UNDERBRACE": r"\underbrace", "OVERBRACE": r"\overbrace",
@@ -291,6 +297,226 @@ def _convert_over_fractions(s: str) -> str:
     return "".join(out)
 
 
+def _split_plus_minus_terms(seg: str) -> list:
+    """`seg`를 최상위(괄호 밖) '+'/'-' 경계로 쪼갠 항 리스트로 반환한다.
+    각 항은 자신의 부호(+/-)를 포함한 채로 반환(맨 앞 항은 부호가 없으면
+    그대로). 괄호/중괄호로 싸인 그룹 내부, `^`/`_` 첨자 바로 뒤의 부호
+    (`x^-2`), `sqrt`/`root` 바로 뒤의 부호(`sqrt-3`)는 쪼개지 않는다."""
+    terms: list = []
+    cur: list = []
+    depth = 0
+    i, n = 0, len(seg)
+    while i < n:
+        ch = seg[i]
+        if ch in "({":
+            depth += 1
+            cur.append(ch)
+            i += 1
+        elif ch in ")}":
+            depth -= 1
+            cur.append(ch)
+            i += 1
+        elif depth == 0 and ch in "^_" and i + 1 < n and seg[i + 1] == "-":
+            # x^-2, a_-1 처럼 첨자의 음수부호는 항 경계가 아니다.
+            cur.append(ch)
+            cur.append("-")
+            i += 2
+            while i < n and seg[i].isalnum():
+                cur.append(seg[i])
+                i += 1
+        elif (depth == 0 and ch == "-"
+              and re.search(r"(?:sqrt|root)$", "".join(cur))):
+            # sqrt-3, root-3 처럼 근호 바로 뒤 음수부호도 항 경계가 아니다.
+            cur.append(ch)
+            i += 1
+        elif depth == 0 and ch in "+-" and "".join(cur).strip() != "":
+            terms.append("".join(cur))
+            cur = [ch]
+            i += 1
+        else:
+            cur.append(ch)
+            i += 1
+    if cur:
+        terms.append("".join(cur))
+    return terms
+
+
+_OVER_CHAIN_KW = re.compile(r"(?<![A-Za-z])over(?!line\b|right\b|left\b)(?![A-Za-z])")
+
+
+def _convert_over_chain_no_brace(s: str) -> str:
+    """중괄호 없는 `A over B` 연쇄를 분수로 바꾼다.
+
+    기존 방식(OPERAND 정규식, 한 토큰만 분자/분모로 인식)은 분자·분모가
+    `+`/`-`로 이어지는 다항식일 때 한 항만 먹고 나머지를 분수 밖으로
+    흘렸다 — `1 over x-2`가 `1/x - 2`로, `9 over x+1`이 `9/x + 1`로
+    깨지는 근본 버그(2026-10-29 발견, 분수 포함 문항 전반 — 실사용 예:
+    "-2x+1 over x-2" = -2x + 1/(x-2) 인데 뒤따르는 전개식(ax²-(2+a)x-2a+7=0)
+    으로 분모가 전체 (x-2) 여야 함을 직접 검증함).
+
+    분모는 체인 규칙으로 복구한다: 이 세그먼트(현재 over와 다음 over
+    사이) 뒤에 또 다른 over가 있으면 "첫 항만" 분모, 나머지는 다음 분수의
+    분자로 넘긴다. 마지막 세그먼트는 통째로 분모.
+    분자는 항상 "바로 앞 over 직전의 마지막 항 하나"만 사용한다 — 분자가
+    여러 항인 중괄호 없는 입력(예: 산술기하평균 `y+z over x + ...`처럼
+    분자 자체가 다항식인 경우)은 원본 텍스트만으로는 "이 항들이 분자에
+    속하는지, 분수 앞의 별개 항인지" 구분할 근거가 전혀 없어(동일한
+    "seg 안에 항이 여럿" 구조가 정반대 두 가지 의도를 모두 나타낼 수 있음을
+    확인함) 일반적으로 풀 수 없는 모호함이다 — 이 경우는 기존 동작과
+    동일하게 남는다(회귀 없음, 개선도 없음). 실제 코퍼스는 "다항식 분모"
+    패턴(유리함수 등)이 압도적으로 흔해 이쪽을 우선 고친다.
+
+    괄호/중괄호 그룹 안도 재귀적으로 먼저 처리해 중첩된 over 체인을 지원.
+    """
+    # 중괄호/소괄호 짝이 안 맞는 손상된 입력(HWP 수식 개정이력 찌꺼기 등,
+    # 2026-10-29 전체 코퍼스 회귀 검사에서 실제 발견 — 13중 미closed
+    # 중괄호 같은 극단적 케이스)은 괄호 깊이 추적 자체가 신뢰할 수 없으므로
+    # 아예 손대지 않는다(기존 동작 그대로 반환) — 억지로 닫다가 구조를 더
+    # 꼬이게 만드는 것보다 안전하다.
+    if s.count("{") != s.count("}") or s.count("(") != s.count(")"):
+        return s
+
+    # 괄호/중괄호 안쪽부터 재귀 처리 (바깥쪽 over 스캔 시 하나의 통짜
+    # 토큰으로 취급하기 위해 — 안은 이미 처리 완료 상태로 들어간다).
+    def _recurse_groups(text: str, open_ch: str, close_ch: str) -> str:
+        out = []
+        i, n = 0, len(text)
+        while i < n:
+            if text[i] == open_ch:
+                depth = 1
+                j = i + 1
+                while j < n and depth > 0:
+                    if text[j] == open_ch:
+                        depth += 1
+                    elif text[j] == close_ch:
+                        depth -= 1
+                    j += 1
+                inner = text[i + 1:j - 1] if depth == 0 else text[i + 1:j]
+                # close_ch==")" 이고 \left(...\right) 쌍이면, 짝 맞는 ")"는
+                # "\right)"의 것이라 inner 끝에 "\right" 텍스트까지 같이
+                # 잡힌다 — 그대로 재귀에 넘기면 "\right"가 분모 등 안쪽에
+                # 갇혀 구조가 깨진다(전체 코퍼스 회귀 검사에서 발견). inner
+                # 끝의 "\right"는 떼어내 닫는 괄호 쪽으로 넘긴다.
+                suffix = ""
+                if close_ch == ")":
+                    m = re.search(r"\\right\s*$", inner)
+                    if m:
+                        suffix = inner[m.start():]
+                        inner = inner[:m.start()]
+                out.append(open_ch + _convert_over_chain_no_brace(inner) + suffix + close_ch)
+                i = j
+            else:
+                out.append(text[i])
+                i += 1
+        return "".join(out)
+
+    s = _recurse_groups(s, "{", "}")
+    s = _recurse_groups(s, "(", ")")
+
+    # "=", "<", ">", ","는 전혀 다른 절의 경계 — 체인/분모가 그 너머까지
+    # 번져서 삼켜지면 안 된다(2026-10-29 발견: "...over x-2 =ax+a-4"에서
+    # 마지막 세그먼트 규칙이 "=ax+a-4"까지 통째로 분모로 흡수해버린 회귀).
+    # 구분자 기준으로 절을 나눠 각 절 안에서만 체인을 돈다 — 단, 반드시
+    # 괄호 깊이 0(괄호 밖)에 있는 구분자만 써야 한다. 전체 문자열에 그냥
+    # re.split 을 쓰면 "(x=0)"처럼 이미 재귀로 처리 완료된 괄호 그룹
+    # *내부*의 "="까지 또 쪼개버려서, cases{...} 안에 "(x!=0)" 같은 조건이
+    # 섞이면 그 조각이 괄호 불균형 상태로 재귀호출돼 "(x!)=0)"처럼 괄호가
+    # 통째로 망가지는 회귀가 있었다(전체 코퍼스 회귀 검사에서 발견).
+    def _split_at_depth0(text: str, seps: str) -> list:
+        parts, cur, depth = [], [], 0
+        for ch in text:
+            if ch in "({":
+                depth += 1
+                cur.append(ch)
+            elif ch in ")}":
+                depth -= 1
+                cur.append(ch)
+            elif (depth == 0 and ch == "=" and seps == "=<>,"
+                  and re.search(r"_[A-Za-z0-9]*$", "".join(cur))):
+                # "sum_n=1^5", "x_5=10" 처럼 `_`(첨자) 바로 뒤의 "="는
+                # sum/int 하한 변수 초기화이지 식의 경계가 아니다 — 여기서
+                # 쪼개면 "sum_n=1^5{...}" 의 나머지가 분모로 흡수돼
+                # 깨진다(전체 코퍼스 회귀 검사에서 발견). 쪼개지 않는다.
+                cur.append(ch)
+            elif depth == 0 and ch in seps:
+                parts.append("".join(cur))
+                parts.append(ch)
+                cur = []
+            else:
+                cur.append(ch)
+        parts.append("".join(cur))
+        return parts
+
+    rel_parts = _split_at_depth0(s, "=<>,")
+    if len(rel_parts) > 1:
+        return "".join(
+            part if part in ("=", "<", ">", ",")
+            else _convert_over_chain_no_brace(part)
+            for part in rel_parts
+        )
+
+    matches = list(_OVER_CHAIN_KW.finditer(s))
+    if not matches:
+        return s
+
+    segs = []
+    prev_end = 0
+    for m in matches:
+        segs.append(s[prev_end:m.start()])
+        prev_end = m.end()
+    segs.append(s[prev_end:])
+
+    def _split_sign(term: str):
+        t = term.strip()
+        if t.startswith("+"):
+            return "+", t[1:].strip()
+        if t.startswith("-"):
+            return "-", t[1:].strip()
+        return "", t
+
+    pieces = []
+    first_terms = _split_plus_minus_terms(segs[0])
+    if first_terms:
+        if len(first_terms) > 1:
+            pieces.append("".join(first_terms[:-1]))
+        pending_numerator = first_terms[-1]
+    else:
+        pending_numerator = ""
+
+    for idx in range(1, len(segs)):
+        seg = segs[idx]
+        is_last = (idx == len(segs) - 1)
+        terms = _split_plus_minus_terms(seg)
+        if not terms:
+            denom_terms, rest_terms = [], []
+        elif is_last:
+            denom_terms, rest_terms = terms, []
+        else:
+            denom_terms, rest_terms = terms[:1], terms[1:]
+
+        num_sign, num_body = _split_sign(pending_numerator)
+        denominator = _strip_outer_braces("".join(denom_terms).strip())
+        _, den_body = _split_sign(denominator)
+        numerator = _strip_outer_braces(num_body)
+        if numerator:
+            pieces.append(num_sign + r"\frac{" + numerator + "}{" + den_body + "}")
+        else:
+            # 분자를 못 찾은 비정상 입력(예: "a over b over c"처럼 over가
+            # 비정상적으로 연쇄된 경우) — 깨진 `\frac{}{...}`를 내느니
+            # 분모 텍스트만 그대로 둔다.
+            pieces.append(den_body)
+
+        if not is_last:
+            if rest_terms:
+                if len(rest_terms) > 1:
+                    pieces.append("".join(rest_terms[:-1]))
+                pending_numerator = rest_terms[-1]
+            else:
+                pending_numerator = ""
+
+    return "".join(pieces)
+
+
 def _balance_left_right(t: str) -> str:
     """\\left / \\right 짝 보정.
 
@@ -463,7 +689,7 @@ def hwp_eq_to_latex(script: str) -> str:
            "to", "TO", "DIVIDE", "divide",
            "LEFT", "RIGHT", "left", "right",
            "TIMES", "CDOT", "ANGLE", "PERP", "INFTY",
-           "subset", "supset", "in", "notin", "NOTIN",
+           "subset", "supset", "in", "notin", "NOTIN", "nin",
            "SUBSET", "SUPSET", "IN",
            "circ", "CIRC",
            "forall", "FORALL", "exists", "EXISTS",
@@ -684,39 +910,12 @@ def hwp_eq_to_latex(script: str) -> str:
         r"\\frac\1\2", s,
     )
 
-    # 3-b) 중괄호 없는 over: 확장된 OPERAND (sqrt/root 포함)
-    #      +/- 부호는 분수 밖 연산자이므로 OPERAND에 포함하지 않음
-    SQRT_TOK = r"(?:\\?(?:sqrt|root)\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})"
-    SQRT_BARE = r"(?:\\?(?:sqrt|root)-?[A-Za-z0-9]+)"  # root3, root-3 등
-    SUP_SUB = r"(?:[\^_](?:\{[^{}]*\}|[A-Za-z0-9]))*"  # ^2, ^{n+1}, _k 등
-    # over 기반 분수 분자/분모 후보 토큰. LaTeX 명령의 꼬리(line/right/left)를
-    # 제외해 `x overline{y}` 같은 입력에서 line이 분모로 잡히는 사고 방지.
-    # 함수적용 표기(g(2), f(x) 등) 뒤에 괄호가 바로 붙는 경우까지 한 토큰으로 —
-    # 안 그러면 "g(2)overf(2)"에서 "(2)"만 OPERAND로 잡혀 "g"/"(2)"가 분수
-    # 밖으로 떨어져 나가는 사고(2026-09-10 발견, "g(2) over f(2)" 패턴).
-    _FUNC_ARGS = r"(?:\([^()]*(?:\([^()]*\)[^()]*)*\))*"
-    SIMPLE_TOK = rf"(?:(?!(?:line|right|left)\b)[A-Za-z0-9]+{_FUNC_ARGS}{SUP_SUB})"
-    BRACE_TOK = r"(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})"
-    # 소괄호 그룹 (지수/첨자 후속 허용): (b+c), (b+c)^2 등
-    PAREN_TOK = rf"(?:\([^()]*(?:\([^()]*\)[^()]*)*\){SUP_SUB})"
-    OPERAND = rf"(?:{SQRT_TOK}|{SQRT_BARE}|{BRACE_TOK}|{PAREN_TOK}|{SIMPLE_TOK})"
-    over_no_brace = re.compile(rf"({OPERAND})\s*over\s*({OPERAND})")
-    def _over_no_brace_repl(m):
-        # 분자 쪽이 `{...}` 통째로 매칭됐는데 그 `{`가 첨자(_^)나 단항
-        # 명령(bar/sqrt/overline 등)의 필수 인자였다면 건드리지 않음 —
-        # 안 그러면 `bar{AB}_{n} over c` 의 `{n}`만 떨어져 나와
-        # `\overline{AB}_\frac{n}{c}` 로 깨짐(2026-09-10, DB 감사 중 발견).
-        g1 = m.group(1)
-        if g1.startswith("{") and _OWNED_BRACE_PRECEDING.search(s[:m.start(1)]):
-            return m.group(0)
-        return (r"\frac{" + _strip_outer_braces(g1.strip()) +
-                r"}{" + _strip_outer_braces(m.group(2).strip()) + r"}")
-
-    for _ in range(5):
-        new_s = over_no_brace.sub(_over_no_brace_repl, s)
-        if new_s == s:
-            break
-        s = new_s
+    # 3-b) 중괄호 없는 over: 체인 인식 기반 분수 변환(_convert_over_chain_no_brace).
+    #      과거엔 분자/분모를 "한 토큰"까지만 잡는 OPERAND 정규식을 썼는데,
+    #      분모가 `x-2`처럼 +/-로 이어진 다항식이면 한 항만 먹고 나머지가
+    #      분수 밖으로 흘러 `1/(x-2)`가 `1/x-2`로 깨졌다(2026-10-29 발견,
+    #      유리함수 분수 문항 전반 — 자세한 근거는 함수 docstring 참고).
+    s = _convert_over_chain_no_brace(s)
 
     # 4) root {n} of {x} → n제곱근 (\sqrt[n]{x}). 반드시 일반 root→sqrt 별칭 치환보다 먼저 처리
     #    (안 그러면 아래 별칭 규칙이 "root {n}"만 sqrt{n}으로 먹어버리고 "of {x}"가 떨어져나감)
@@ -830,6 +1029,17 @@ def hwp_eq_to_latex(script: str) -> str:
     s = re.sub(r"(?<![A-Za-z])it(?=[A-Za-z0-9])", "", s)
     s = re.sub(r"\bit\b", "", s)
 
+    # 11-a-2) ^/_ 뒤 "음수부호+숫자"(예: -5)는 바로 아래 11-b 규칙(영숫자만
+    #       매칭, 부호는 포함 안 됨)이 못 잡는다 — `_-5`가 그대로 남으면
+    #       LaTeX이 `-`만 첨자로 먹고 `5`는 밖으로 떨어져나가 적분/합 위끝
+    #       아래끝에 음수가 들어갈 때 렌더링이 깨진다(2026-10-29 발견, 정적분
+    #       아래끝이 음수인 문항 다수). 11-b보다 먼저 처리해 중괄호를 먼저
+    #       씌워두면 11-b는 이미 묶인 부분을 건드리지 않는다.
+    #       `_` 와 부호 사이에 공백이 낀 경우(`int _ -1 ^ x`)도 실제로
+    #       흔해서 \s* 로 같이 흡수한다.
+    s = re.sub(r"\^\s*(-[A-Za-z0-9]+)(?![A-Za-z0-9])", r"^{\1}", s)
+    s = re.sub(r"_\s*(-[A-Za-z0-9]+)(?![A-Za-z0-9])", r"_{\1}", s)
+
     # 11-b) ^/_ 뒤 연속 영숫자 2자 이상은 {..}로 묶어 KaTeX가 다자 지수/첨자로 인식
     #       (HWP 관례: z^97 = z의 97제곱. LaTeX는 z^9 7로 해석하므로 래핑 필요)
     s = re.sub(r"\^([A-Za-z0-9]{2,})(?![A-Za-z0-9])", r"^{\1}", s)
@@ -872,6 +1082,15 @@ def hwp_eq_to_latex(script: str) -> str:
     #      시각적으로 프라임 앞 얇은 공백은 없어도 무방하므로 그냥 제거.
     #      (2026-09-09 마플시너지 "미분계수와 도함수" 등에서 다량 발견)
     s = re.sub(r"\\,\s*'", "'", s)
+
+    # 14-c) `\,` 바로 뒤에 `^`/`_`(첨자)가 오는 경우 — 역방향(14-a는 `_` 뒤에
+    #      `\,`, 이건 `\,` 뒤에 `^`/`_`) 같은 KaTeX 버그 계열. `\,`가 첨자의
+    #      밑(base)으로 쓰이면 "Got group of unknown type: 'internal'" 에러.
+    #      한글에서 `A`_n`, `U`^C` 처럼 서로 다른 글자체(이탤릭/로만) 경계에
+    #      백틱을 찍은 게 원인 추정 — 시각적으로 그 공백 없어도 무방하므로
+    #      `\,`만 제거(첨자 자체는 유지).
+    #      (2026-10-12 마플시너지 "집합의 뜻/연산" 다수 문항에서 발견)
+    s = re.sub(r"(?:\\,\s*)+(?=[\^_])", "", s)
 
     # 15) & 제거, # → \\
     # matrix/cases/array 환경 내부의 `&`(열 구분자)는 보존해야 하므로
@@ -1029,6 +1248,45 @@ def _postprocess_latex(s: str) -> str:
 
     # tri \angle 결합 회수
     s = re.sub(r"\btri\s*\\angle", lambda m: r"\triangle", s)
+
+    # in/notin/subset/supset 잔여 — 위 KEYWORD_MAP 루프는 뒤에 알파벳이
+    # 오면(?![A-Za-z]) 매칭을 포기하는데, 바로 그 "집합이름 한 글자가
+    # 바로 붙는" 경우(예: "inA", "subsetA")가 실제로 가장 흔하다
+    # (2026-10-12 집합의 뜻/연산 추출 중 실제 발견). 뒤가 대문자 한 글자든
+    # 아니든 변환하고, 이미 "\in"처럼 변환된 뒤에 알파벳이 바로 붙어
+    # "\inA"(미정의 명령)가 되는 것도 함께 막는다.
+    s = re.sub(r"(?<![A-Za-z\\])notin(?=[A-Za-z]|$|[^A-Za-z])", r"\\notin ", s)
+    s = re.sub(r"(?<![A-Za-z\\])nin(?=[A-Za-z]|$|[^A-Za-z])", r"\\notin ", s)
+    s = re.sub(r"(?<![A-Za-z\\])NOTIN(?=[A-Za-z]|$|[^A-Za-z])", r"\\notin ", s)
+    s = re.sub(r"(?<![A-Za-z\\])subset(?=[A-Za-z]|$|[^A-Za-z])", r"\\subset ", s)
+    s = re.sub(r"(?<![A-Za-z\\])SUBSET(?=[A-Za-z]|$|[^A-Za-z])", r"\\subset ", s)
+    s = re.sub(r"(?<![A-Za-z\\])supset(?=[A-Za-z]|$|[^A-Za-z])", r"\\supset ", s)
+    s = re.sub(r"(?<![A-Za-z\\])SUPSET(?=[A-Za-z]|$|[^A-Za-z])", r"\\supset ", s)
+    s = re.sub(r"(?<![A-Za-z\\])IN(?=[A-Z])", r"\\in ", s)
+    s = re.sub(r"(?<![A-Za-z\\])in(?=[A-Z])", r"\\in ", s)
+    # SMALLINTER/SMALLUNION 도 같은 글루 문제 — "SMALLINTERB"처럼 뒤에
+    # 집합이름 알파벳이 바로 붙으면 메인 KEYWORD_MAP 바운더리 체크에서
+    # 누락된다(2026-10-12 발견). NSUBSET/NSUPSET 도 방어적으로 함께 처리.
+    s = re.sub(r"(?<![A-Za-z\\])SMALLINTER(?=[A-Za-z]|$|[^A-Za-z])", r"\\cap ", s)
+    s = re.sub(r"(?<![A-Za-z\\])SMALLUNION(?=[A-Za-z]|$|[^A-Za-z])", r"\\cup ", s)
+    # smallinter/smallunion 소문자형 + sim(부정 기호 ~) 도 같은 글루 문제 —
+    # "PsmallinterQ", "simq"처럼 집합/조건 이름이 바로 붙으면 메인
+    # KEYWORD_MAP 바운더리 체크(뒤에 알파벳 없어야 매칭)에서 누락된다
+    # (2026-10-15 발견, 명제 교재 "두 조건 p, q" 서술에서 실제 깨짐).
+    s = re.sub(r"(?<![A-Za-z\\])smallinter(?=[A-Za-z]|$|[^A-Za-z])", r"\\cap ", s)
+    s = re.sub(r"(?<![A-Za-z\\])smallunion(?=[A-Za-z]|$|[^A-Za-z])", r"\\cup ", s)
+    s = re.sub(r"(?<![A-Za-z\\])sim(?=[A-Za-z]|$|[^A-Za-z])", r"\\sim ", s)
+    s = re.sub(r"(?<![A-Za-z\\])SIM(?=[A-Za-z]|$|[^A-Za-z])", r"\\sim ", s)
+    s = re.sub(r"(?<![A-Za-z\\])NSUBSET(?=[A-Za-z]|$|[^A-Za-z])", r"\\not\\subset ", s)
+    s = re.sub(r"(?<![A-Za-z\\])NSUPSET(?=[A-Za-z]|$|[^A-Za-z])", r"\\not\\supset ", s)
+    # nsubset/nsupset 소문자형도 같은 글루 문제 ("nsubsetA" — KERNEL POINT
+    # 집합의 뜻 해설에서 실제 발견, 2026-10-12). NSUBSET만 방어하고 소문자를
+    # 빠뜨렸던 누락을 보완.
+    s = re.sub(r"(?<![A-Za-z\\])nsubset(?=[A-Za-z]|$|[^A-Za-z])", r"\\not\\subset ", s)
+    s = re.sub(r"(?<![A-Za-z\\])nsupset(?=[A-Za-z]|$|[^A-Za-z])", r"\\not\\supset ", s)
+    # 이미 "\in"/"\subset" 등으로 변환된 뒤에도 알파벳이 바로 붙어 있으면
+    # ("\inA") LaTeX이 하나의 미정의 명령으로 읽는다 — 공백으로 분리.
+    s = re.sub(r"\\(in(?!fty|t)|notin|subset|supset)(?=[A-Za-z])", r"\\\1 ", s)
 
     # over 잔여 — LaTeX 명령(\alpha)을 포함한 OPERAND
     NESTED = r"\{(?:[^{}]|\{[^{}]*\})*\}"
@@ -2197,6 +2455,53 @@ def get_masterpage_images(extract_dir: str) -> set:
     return refs
 
 
+# 코퍼스 전체(8227개 HWPX, 2026-10-29 스캔)를 돌며 "20개 이상의 서로 다른
+# 파일에서 완전히 동일한 바이트로 반복되는 이미지"를 뽑아 육안으로 전수
+# 확인한 결과 — 전부 저작권 안내 배너(초록 띠)·© 로고·"02054" 숫자 스탬프
+# 류 워터마크였다(실제 문제 그림이 여러 파일에서 바이트 단위로 완전히
+# 똑같을 가능성은 사실상 없음). masterpage 참조 방식은 "반복 배경 템플릿"
+# 만 잡아서, 본문 흐름 안에 낱개로 박힌 이런 반복 이미지는 전혀 못
+# 걸렀다 — 샘플 400개 중 397개(99%)에 최소 1개씩 들어있었다. 사용자가
+# 직접 지적한 "02054" 숫자뭉치 노출 사례가 이 중 하나(2138개 파일, 전체
+# 26%)였다.
+KNOWN_WATERMARK_IMAGE_HASHES = {
+    "44f1f1f19deb54b6ca2038d7c6bc665e",  # 저작권 안내 배너
+    "2296ae6ffc6554a136dd90989ecc75a2",  # © 로고
+    "0f3a5916f1f5203665c35083e040ff18",  # "02054" 숫자 스탬프
+    "2b0363cc8f20d6ca7db0ddeb6c7332ca",
+    "38f6f6a4e4ad06b05088c6dbb5db19cd",
+    "8cd2fb497dd4d5bc918c99f57f3cda86",
+    "917cad97b0448dd3a8fa3cdd7301e561",
+    "427177ceff7dfafca62daa8c6bfed1ba",
+    "4e79189740ec599f02c1538a328ddf3c",
+    "b5544540a98364949d9c76b27a251eeb",
+    "2a4fb423ffe0cae5b673c406cf925f83",
+    "0140d7201aad450393239481f7b399c2",
+    "c0b7dc06f9410f7a69b8dbe13362becd",
+    "f6c800363bc2ce0f7902fa5ef83f4d94",
+}
+
+
+def get_watermark_image_refs(extract_dir: str) -> set:
+    """BinData 폴더의 이미지 중 알려진 워터마크 해시(KNOWN_WATERMARK_IMAGE_HASHES)와
+    일치하는 것들의 ref ID(imageN, 확장자 제거) 집합을 반환한다."""
+    refs = set()
+    bindata_dir = os.path.join(extract_dir, "BinData")
+    if not os.path.isdir(bindata_dir):
+        return refs
+    for fname in os.listdir(bindata_dir):
+        stem = os.path.splitext(fname)[0]
+        fpath = os.path.join(bindata_dir, fname)
+        try:
+            with open(fpath, "rb") as f:
+                digest = hashlib.md5(f.read()).hexdigest()
+        except OSError:
+            continue
+        if digest in KNOWN_WATERMARK_IMAGE_HASHES:
+            refs.add(stem)
+    return refs
+
+
 # ── 메인 파싱 함수 ───────────────────────────────────────────
 def parse_hwpx(hwpx_path: str, image_output_dir: str = None,
                debug: bool = False) -> dict:
@@ -2212,6 +2517,7 @@ def parse_hwpx(hwpx_path: str, image_output_dir: str = None,
             zf.extractall(tmp_dir)
 
         watermark_images = get_masterpage_images(tmp_dir)
+        watermark_images |= get_watermark_image_refs(tmp_dir)
 
         section_path = os.path.join(tmp_dir, "Contents", "section0.xml")
         if not os.path.exists(section_path):
