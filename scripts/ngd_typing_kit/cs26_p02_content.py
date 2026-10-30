@@ -27,7 +27,7 @@ add(id='p02q03', kind='short', no=3, fig='cs26_p02_q03',
     ans_mix='(1) $4$, (2) $6 sqrt {3}$', sol=[])
 
 add(id='p02q04', kind='short', no=4, fig='cs26_p02_q04',
-    text='오른쪽 그림에서 원 $rm O$가 $triangle rm ABC$의 외접원이고 $bar {rm OL}=bar {rm OM}$$=bar {rm ON}$일 때, $angle {rm BAC}$의 크기를 구하시오.',
+    text='오른쪽 그림에서 원 $rm O$가 $triangle rm ABC$의 외접원이고 $bar {rm OL}=bar {rm OM}$$=bar {rm ON}$일 때, $∠ {rm BAC}$의 크기를 구하시오.',
     ans_eq='60 DEG', sol=[])
 
 add(id='p02q05', kind='short', no=5, fig='cs26_p02_q05',
@@ -56,7 +56,7 @@ add(id='p02q07', kind='short', no=7, fig='cs26_p02_q07',
     ans_mix='(1) $6$, (2) $2 sqrt {13}$', sol=[])
 
 add(id='p02q08', kind='short', no=8, fig='cs26_p02_q08',
-    text='오른쪽 그림에서 원 $rm O$는 $triangle rm ABC$의 외접원이고 $bar {rm OM} bot bar {rm AB}$, $bar {rm ON} bot bar {rm AC}$, $bar {rm OM}=bar {rm ON}$이다. $angle {rm B}=50 DEG$일 때, $angle {rm A}$의 크기를 구하시오.',
+    text='오른쪽 그림에서 원 $rm O$는 $triangle rm ABC$의 외접원이고 $bar {rm OM} bot bar {rm AB}$, $bar {rm ON} bot bar {rm AC}$, $bar {rm OM}=bar {rm ON}$이다. $∠ {rm B}=50 DEG$일 때, $∠ {rm A}$의 크기를 구하시오.',
     ans_eq='80 DEG', sol=[])
 
 add(id='p02q09', kind='short', no=9, fig='cs26_p02_q09',
@@ -64,7 +64,7 @@ add(id='p02q09', kind='short', no=9, fig='cs26_p02_q09',
     ans_eq='left( {pi} over {3} - {sqrt {3}} over {4} right) `rm m ^{2}', sol=[])
 
 add(id='p02q10', kind='short', no=10, fig='cs26_p02_q10',
-    text='오른쪽 그림에서 원 $rm O$는 $triangle rm ABC$의 외접원이고 $bar {rm OM} bot bar {rm AB}$, $bar {rm ON} bot bar {rm AC}$, $bar {rm OM}=bar {rm ON}$이다. $angle {rm B}=66 DEG$일 때, $angle {rm A}$의 크기를 구하시오.',
+    text='오른쪽 그림에서 원 $rm O$는 $triangle rm ABC$의 외접원이고 $bar {rm OM} bot bar {rm AB}$, $bar {rm ON} bot bar {rm AC}$, $bar {rm OM}=bar {rm ON}$이다. $∠ {rm B}=66 DEG$일 때, $∠ {rm A}$의 크기를 구하시오.',
     ans_eq='48 DEG', sol=[])
 
 add(id='p02q11', kind='short', no=11, fig='cs26_p02_q11',

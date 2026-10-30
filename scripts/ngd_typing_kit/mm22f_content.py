@@ -232,7 +232,7 @@ add(id='q16', kind='mc', no=16, score=4.2, layout='1x5',
     ch='수열의 합', lv='중')
 
 add(id='q17', kind='mc', no=17, score=4.8, layout='1x5', fig='mm22f_q17',
-    text='그림과 같이 $angle A=120 DEG,~bar{rmAB}=4,~bar{rmAC}=6$인 삼각형 $rm ABC$의 두 변 $rm AB,~AC$ 위에 삼각형 $rm ADE$의 넓이가 삼각형 $rm ABC$의 넓이의 ${1} over{3}$이 되도록 하는 두 점 $rm D,~E$를 각각 잡을 때, $bar{rmDE}$의 길이의 최솟값은?',
+    text='그림과 같이 $∠ A=120 DEG,~bar{rmAB}=4,~bar{rmAC}=6$인 삼각형 $rm ABC$의 두 변 $rm AB,~AC$ 위에 삼각형 $rm ADE$의 넓이가 삼각형 $rm ABC$의 넓이의 ${1} over{3}$이 되도록 하는 두 점 $rm D,~E$를 각각 잡을 때, $bar{rmDE}$의 길이의 최솟값은?',
     choices=['$2 sqrt{3}$', '$3 sqrt{2}$', '$2 sqrt{6}$', '$sqrt{30}$', '$6$'],
     ans='③',
     sol=[

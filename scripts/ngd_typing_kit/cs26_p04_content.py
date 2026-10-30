@@ -15,9 +15,9 @@ add(id='p04q01', kind='short', no=1,
     ans_mix='(1) $2$, (2) 같다', sol=[])
 
 add(id='p04q02', kind='short', no=2, fig='cs26_p04_q02',
-    text=['오른쪽 그림에서 두 점 $rm A$, $rm B$는 점 $rm P$에서 원 $rm O$에 그은 두 접선의 접점이다. $bar {rm PA}=6`rm cm$, $angle {rm APB}=50 DEG$일 때, 다음을 구하시오.',
+    text=['오른쪽 그림에서 두 점 $rm A$, $rm B$는 점 $rm P$에서 원 $rm O$에 그은 두 접선의 접점이다. $bar {rm PA}=6`rm cm$, $∠ {rm APB}=50 DEG$일 때, 다음을 구하시오.',
           '(1) $bar {rm PB}$의 길이',
-          '(2) $angle x$의 크기'],
+          '(2) $∠ x$의 크기'],
     ans_mix='(1) $6`rm cm$, (2) $65 DEG$', sol=[])
 
 add(id='p04q03', kind='short', no=3, fig='cs26_p04_q03',
@@ -33,7 +33,7 @@ add(id='p04q05', kind='short', no=5, fig='cs26_p04_q05',
     ans_eq='9`rm cm', sol=[])
 
 add(id='p04q06', kind='short', no=6, fig='cs26_p04_q06',
-    text='오른쪽 그림에서 두 점 $rm A$, $rm B$는 점 $rm P$에서 원 $rm O$에 그은 두 접선의 접점이다. $angle {rm APB}=60 DEG$이고 $bar {rm AP}=2 sqrt {3}`rm cm$일 때, 색칠한 부분의 넓이를 구하시오.',
+    text='오른쪽 그림에서 두 점 $rm A$, $rm B$는 점 $rm P$에서 원 $rm O$에 그은 두 접선의 접점이다. $∠ {rm APB}=60 DEG$이고 $bar {rm AP}=2 sqrt {3}`rm cm$일 때, 색칠한 부분의 넓이를 구하시오.',
     ans_eq='{4} over {3} pi `rm cm ^{2}', sol=[])
 
 add(id='p04q07', kind='short', no=7, fig='cs26_p04_q07',
@@ -53,7 +53,7 @@ add(id='p04q10', kind='short', no=10, fig='cs26_p04_q10',
     ans_eq='15`rm cm', sol=[])
 
 add(id='p04q11', kind='short', no=11, fig='cs26_p04_q11',
-    text='오른쪽 그림과 같이 $angle {rm B}=90 DEG$인 직각삼각형 $rm ABC$가 원 $rm O$에 외접하고, 세 점 $rm D$, $rm E$, $rm F$는 각각 원 $rm O$의 접점이다. $bar {rm AF}=2`rm cm$, $bar {rm CF}=3`rm cm$일 때, 원 $rm O$의 둘레의 길이를 구하시오.',
+    text='오른쪽 그림과 같이 $∠ {rm B}=90 DEG$인 직각삼각형 $rm ABC$가 원 $rm O$에 외접하고, 세 점 $rm D$, $rm E$, $rm F$는 각각 원 $rm O$의 접점이다. $bar {rm AF}=2`rm cm$, $bar {rm CF}=3`rm cm$일 때, 원 $rm O$의 둘레의 길이를 구하시오.',
     ans_eq='2 pi `rm cm', sol=[])
 
 add(id='p04q12', kind='short', no=12, fig='cs26_p04_q12',

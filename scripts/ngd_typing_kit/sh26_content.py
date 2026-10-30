@@ -347,7 +347,7 @@ add(id='q18', kind='mc', no=18, score=4.4, layout='3+2',
     ch='도형의 이동', lv='중')
 
 add(id='q19', kind='mc', no=19, score=4.5, layout='3+2', fig='sh26_q19',
-    text='그림과 같이 $angle {rm ABC}=90 DEG$이고 $bar{rm AB}=bar{rm BC}$$=12$인 직각이등변삼각형 $rm ABC$가 있다. 선분 $rm BC$를 $2:1$로 내분하는 점을 $rm D$, $1:3$으로 내분하는 점을 $rm E$라 하자. 점 $rm F$는 선분 $rm AC$ 위를 움직이고, 점 $rm G$는 선분 $rm AB$ 위를 움직일 때, $bar{rm DF}+bar{rm FG}+bar{rm GE}$의 최솟값은? [$4.5$점]',
+    text='그림과 같이 $∠ {rm ABC}=90 DEG$이고 $bar{rm AB}=bar{rm BC}$$=12$인 직각이등변삼각형 $rm ABC$가 있다. 선분 $rm BC$를 $2:1$로 내분하는 점을 $rm D$, $1:3$으로 내분하는 점을 $rm E$라 하자. 점 $rm F$는 선분 $rm AC$ 위를 움직이고, 점 $rm G$는 선분 $rm AB$ 위를 움직일 때, $bar{rm DF}+bar{rm FG}+bar{rm GE}$의 최솟값은? [$4.5$점]',
     choices=['$ sqrt{223}$', '$ sqrt{229}$', '$ sqrt{235}$', '$ sqrt{241}$', '$ sqrt{247}$'],
     ans='④',
     sol=[
@@ -426,7 +426,7 @@ add(id='q21', kind='mc', no=21, score=4.6, layout='3+2', fig='sh26_q21',
     sol=[
         '원 $C$의 반지름의 길이를 $r$이라 하면 접선은 접점을 지나는 반지름에 수직이므로 두 삼각형 $rm AP_{1}Q_{1}$, $rm AQ_{2}P_{2}$는 각각 $rm P_{1}$, $rm P_{2}$에서 직각인 직각삼각형이고',
         '$bar{rm AP_{1}}=bar{rm AP_{2}}$$=r$',
-        '직각삼각형 $rm OP_{1}Q_{1}$, $rm OP_{2}Q_{2}$는 $angle {rm P_{1}OQ_{1}}$이 공통이고 $rm P_{1}$, $rm P_{2}$에서 직각이므로 서로 닮음이다.',
+        '직각삼각형 $rm OP_{1}Q_{1}$, $rm OP_{2}Q_{2}$는 $∠ {rm P_{1}OQ_{1}}$이 공통이고 $rm P_{1}$, $rm P_{2}$에서 직각이므로 서로 닮음이다.',
         '$bar{rm P_{1}Q_{1}}`:`bar{rm P_{2}Q_{2}}=bar{rm OP_{1}}`:`bar{rm OP_{2}}$',
         '두 삼각형의 넓이는 각각',
         '$ {1} over {2} times r times bar{rm P_{1}Q_{1}}$, $ {1} over {2} times r times bar{rm P_{2}Q_{2}}$',

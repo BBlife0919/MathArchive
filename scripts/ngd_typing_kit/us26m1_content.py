@@ -209,7 +209,7 @@ add(id='q14', kind='mc', no=14, score=5.2, layout='1x5', emptybox={'paras': [
     ch='로그함수의 그래프와 점근선', lv='상')
 
 add(id='q15', kind='mc', no=15, score=5.3, layout='1x5', fig='us26m1_q15',
-    text='그림과 같이 $ angle A=90^{ circ}$인 직각삼각형 $ABC$에 대하여 꼭짓점 $A$에서 변 $BC$ 위에 내린 수선의 발이 $H$이고, $bar{AH}=27$, $bar{BH}=x$, $bar{CH}=y$이다. 두 양수 $x,~y$에 대하여 $ log_{ sqrt{x}}3 times log_{3}y=4$일 때, 변 $BC$의 길이는? (단, $bar{BH} NEQ 1$, $bar{BH}<bar{CH}$)',
+    text='그림과 같이 $ ∠ A=90^{ circ}$인 직각삼각형 $ABC$에 대하여 꼭짓점 $A$에서 변 $BC$ 위에 내린 수선의 발이 $H$이고, $bar{AH}=27$, $bar{BH}=x$, $bar{CH}=y$이다. 두 양수 $x,~y$에 대하여 $ log_{ sqrt{x}}3 times log_{3}y=4$일 때, 변 $BC$의 길이는? (단, $bar{BH} NEQ 1$, $bar{BH}<bar{CH}$)',
     choices=['$81$', '$84$', '$90$', '$108$', '$162$'],
     ans='③',
     sol=[

@@ -194,7 +194,7 @@ add(id='q11', kind='mc', no=11, score=5.1, layout='3+2',
     ch='원과 직선의 위치 관계', lv='중')
 
 add(id='q12', kind='mc', no=12, score=5.2, layout='3+2', fig='ch26m2_2_q12',
-    text='그림과 같이 점 $rmA(a,~b)$는 직선 $y={1} over{3}x$ 위의 점이고, 두 점 $rmB,~rmC$는 직선 $y=it-{1} over{2}x$ 위의 점이다. 선분 $rmAO$는 $ angle rmBAC$를 이등분하고, $bar{rmAB}:bar{rmAC}=3:1$이다. 삼각형 $rmABC$의 무게중심의 좌표가 $LEFT({1} over{3},~{7} over{3} RIGHT)$이고, 점 $rmB$가 제$2$사분면 위의 점일 때, $a+b$의 값은? (단, $rmO$는 원점이다.)',
+    text='그림과 같이 점 $rmA(a,~b)$는 직선 $y={1} over{3}x$ 위의 점이고, 두 점 $rmB,~rmC$는 직선 $y=it-{1} over{2}x$ 위의 점이다. 선분 $rmAO$는 $ ∠ rmBAC$를 이등분하고, $bar{rmAB}:bar{rmAC}=3:1$이다. 삼각형 $rmABC$의 무게중심의 좌표가 $LEFT({1} over{3},~{7} over{3} RIGHT)$이고, 점 $rmB$가 제$2$사분면 위의 점일 때, $a+b$의 값은? (단, $rmO$는 원점이다.)',
     choices=['$8$', '$10$', '$12$', '$14$', '$16$'],
     ans='③',
     sol=[
@@ -292,7 +292,7 @@ add(id='q17', kind='mc', no=17, score=5.9, layout='3+2',
     ans='①',
     sol=[
         '$rmP$를 지나고 $l$에 수직인 직선은 접선에 수직인 직선, 즉 반지름 $rmOP$를 포함하는 지름이므로 $rmQ$는 $rmP$의 대척점이다.',
-        '$bar{rmPQ}=2r$(지름)이고, 접선의 성질로 $ angle rmOPA=90^{circ}$이며 $rmQ$가 $rmOP$ 연장선 위에 있으므로 $ angle rmAPQ=90^{circ}$',
+        '$bar{rmPQ}=2r$(지름)이고, 접선의 성질로 $ ∠ rmOPA=90^{circ}$이며 $rmQ$가 $rmOP$ 연장선 위에 있으므로 $ ∠ rmAPQ=90^{circ}$',
         '직각삼각형 $rmAPQ$의 외접원은 빗변 $bar{rmAQ}$를 지름으로 하므로 외접원 반지름 $R={bar{rmAQ}} over{2}$',
         '$pi R^{2}=2 pi r^{2}$에서 $R^{2}=2r^{2}$, $bar{rmAQ}^{2}=4R^{2}=8r^{2}$',
         '한편 $bar{rmAP}^{2}=bar{rmOA}^{2}-r^{2}=20-r^{2}$ (접선의 길이), $bar{rmPQ}^{2}=4r^{2}$',

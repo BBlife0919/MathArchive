@@ -9,7 +9,7 @@ def add(**kw):
 
 
 add(id='p09q11', kind='short', no=11, fig='cs26_p09_q11',
-    text='오른쪽 그림에서 $rm arch AB=rm arch BC$이고 $angle {rm BRC}=35 DEG$일 때, $angle x$의 크기를 구하시오.',
+    text='오른쪽 그림에서 $rm arch AB=rm arch BC$이고 $∠ {rm BRC}=35 DEG$일 때, $∠ x$의 크기를 구하시오.',
     ans_eq='70 DEG', sol=[])
 
 add(id='p09q12', kind='short', no=12, fig='cs26_p09_q12',
@@ -17,15 +17,15 @@ add(id='p09q12', kind='short', no=12, fig='cs26_p09_q12',
     ans_eq='5`rm cm', sol=[])
 
 add(id='p09q13', kind='short', no=13, fig='cs26_p09_q13',
-    text='오른쪽 그림에서 $bar {rm AB}$는 원 $rm O$의 지름이고 $angle {rm ACB}=60 DEG$일 때, $angle x$의 크기를 구하시오.',
+    text='오른쪽 그림에서 $bar {rm AB}$는 원 $rm O$의 지름이고 $∠ {rm ACB}=60 DEG$일 때, $∠ x$의 크기를 구하시오.',
     ans_eq='60 DEG', sol=[])
 
 add(id='p09q14', kind='short', no=14, fig='cs26_p09_q14',
-    text='오른쪽 그림과 같이 $□ rm ABCD$는 원 $rm O$에 내접하고 직선 $rm EF$는 원 $rm O$의 접선이다. $angle {rm BAD}=102 DEG$, $angle {rm BDC}=42 DEG$일 때, $angle {rm DCF}$의 크기를 구하시오.',
+    text='오른쪽 그림과 같이 $□ rm ABCD$는 원 $rm O$에 내접하고 직선 $rm EF$는 원 $rm O$의 접선이다. $∠ {rm BAD}=102 DEG$, $∠ {rm BDC}=42 DEG$일 때, $∠ {rm DCF}$의 크기를 구하시오.',
     ans_eq='60 DEG', sol=[])
 
 add(id='p09q15', kind='short', no=15, fig='cs26_p09_q15',
-    text='오른쪽 그림과 같이 $□ rm ABCD$는 원 $rm O$에 내접하고 두 직선 $l$, $m$은 각각 두 점 $rm B$, $rm D$에서 원 $rm O$에 접한다. $angle {rm BCD}=110 DEG$일 때, $angle x+angle y$의 크기를 구하시오.',
+    text='오른쪽 그림과 같이 $□ rm ABCD$는 원 $rm O$에 내접하고 두 직선 $l$, $m$은 각각 두 점 $rm B$, $rm D$에서 원 $rm O$에 접한다. $∠ {rm BCD}=110 DEG$일 때, $∠ x+∠ y$의 크기를 구하시오.',
     ans_eq='70 DEG', sol=[])
 
 add(id='p09q16', kind='short', no=16, fig='cs26_p09_q16',

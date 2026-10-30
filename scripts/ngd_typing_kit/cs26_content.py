@@ -25,7 +25,7 @@ add(id='c103', kind='short', no=3, fig='cs26_c1_03',
     emptybox=dict(
         paras=['다음 그림과 같이 원의 중심 $rm O$에서 같은 거리에 있는 두 현 $bar {rm AB}$, $bar {rm CD}$에 내린 수선의 발을 각각 $rm M$, $rm N$이라고 하자.',
                '$triangle rm OAM$과 $triangle rm ODN$에서',
-               '$angle {rm OMA}=angle {rm OND}$$=$□, $bar {rm OA}=$□(반지름)',
+               '$∠ {rm OMA}=∠ {rm OND}$$=$□, $bar {rm OA}=$□(반지름)',
                '$bar {rm OM}=bar {rm ON}$이므로 $triangle rm OAM equiv triangle rm ODN$이다.',
                '따라서 $bar {rm AM}=$□이다.',
                '그런데 $bar {rm AB}=2 bar {rm AM}$, $bar {rm CD}=$□이므로 $bar {rm AB}=bar {rm CD}$이다.',
@@ -41,7 +41,7 @@ add(id='c105', kind='short', no=5, fig='cs26_c1_05',
     ans_eq='16 pi `rm m ^{2}', sol=[])
 
 add(id='c106', kind='short', no=6, fig='cs26_c1_06',
-    text='그림에서 $bar {rm OM}=bar {rm ON}$이고 $angle {rm B}=65 DEG$일 때, $angle {rm BAC}$의 크기를 구하시오.',
+    text='그림에서 $bar {rm OM}=bar {rm ON}$이고 $∠ {rm B}=65 DEG$일 때, $∠ {rm BAC}$의 크기를 구하시오.',
     ans_eq='50 DEG', sol=[])
 
 add(id='c107', kind='short', no=7, fig='cs26_c1_07',

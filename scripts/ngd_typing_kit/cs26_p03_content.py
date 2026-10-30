@@ -41,7 +41,7 @@ add(id='p03q06', kind='short', no=6, fig='cs26_p03_q06',
     ans_eq='10', sol=[])
 
 add(id='p03q07', kind='short', no=7, fig='cs26_p03_q07',
-    text='오른쪽 그림에서 두 점 $rm A$, $rm B$는 원 $rm O$의 외부의 한 점 $rm P$에서 원 $rm O$에 그은 두 접선의 접점이다. $angle {rm APB}=80 DEG$일 때, $angle {rm ABP}$의 크기를 구하시오.',
+    text='오른쪽 그림에서 두 점 $rm A$, $rm B$는 원 $rm O$의 외부의 한 점 $rm P$에서 원 $rm O$에 그은 두 접선의 접점이다. $∠ {rm APB}=80 DEG$일 때, $∠ {rm ABP}$의 크기를 구하시오.',
     ans_eq='50 DEG', sol=[])
 
 add(id='p03q08', kind='short', no=8, fig='cs26_p03_q08',

@@ -198,7 +198,7 @@ add(id='q13', kind='mc', no=13, score=5, layout='3+2', fig='shg23s_q13',
     sol=[
         '반지름이 $1$이므로 호 $rm BP$의 중심각은 $widehat{rm BP}=1 times theta={pi} over{3}$에서 $theta={pi} over{3}$',
         '원의 중심을 $rm O$라 하면 삼각형 $rm AOP$에서',
-        '$angle{rm AOP}=pi-{pi} over{3}={2} over{3}pi$',
+        '$∠{rm AOP}=pi-{pi} over{3}={2} over{3}pi$',
         '넓이 $={1} over{2} times1 times1 times sinLEFT({2} over{3}pi RIGHT)={1} over{2} times{ sqrt{3}} over{2}={ sqrt{3}} over{4}$',
         '부채꼴 $rm OBP$의 넓이 $={1} over{2} times1^{2} times{pi} over{3}={pi} over{6}$',
         '구하는 넓이는 삼각형 $rm AOP$의 넓이와 부채꼴 $rm OBP$의 넓이의 합이므로',
