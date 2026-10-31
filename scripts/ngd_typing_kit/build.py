@@ -697,7 +697,7 @@ def build_block(q, num, imgmap):
             B.h += text2_h
         B.paras.append(blank())
         B.h += PITCH_BLANK
-    if q['kind'] == 'mc':
+    if q['kind'] == 'mc' and not q.get('img_choices'):
         cx, ch, w = choices_xml(q)
         B.warns += [f'Q{q["id"]}: {x}' for x in w]
         B.paras += cx
