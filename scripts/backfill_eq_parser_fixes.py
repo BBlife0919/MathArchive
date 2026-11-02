@@ -171,13 +171,13 @@ def main() -> None:
         try:
             for q in result["questions"]:
                 row = conn.execute(
-                    "SELECT question_id, question_text, choices FROM questions "
+                    "SELECT question_id, question_text, choices, has_image FROM questions "
                     "WHERE file_source=? AND question_number=?",
                     (file_source, q["question_number"]),
                 ).fetchone()
                 if row is None:
                     continue
-                qid, old_text, old_choices = row[0], row[1], row[2]
+                qid, old_text, old_choices, old_has_image = row[0], row[1], row[2], row[3]
                 new_text = q["question_text"]
                 new_choices = json.dumps(q["choices"], ensure_ascii=False)
                 # choices 는 Postgres에서 jsonb 컬럼이라 psycopg2가 이미 Python
@@ -194,7 +194,14 @@ def main() -> None:
                 else:
                     old_choices_obj = old_choices
                 choices_changed = old_choices_obj != q["choices"]
-                if old_text != new_text or choices_changed:
+                # has_image 는 워터마크 필터링(#19)으로 바뀌는 경우가 있는데,
+                # 본문 텍스트·선지는 그대로인 문항(워터마크 외 진짜 그림이
+                # 없던 문항)은 UPDATE 조건에서 빠져 has_image=1이 그대로
+                # 남아있던 버그 — images 테이블 자체는 별도 로직으로 맞게
+                # 재동기화되지만 이 플래그만 따로 비교 안 해서 누락됐다
+                # (2026-11-02 검증 중 발견).
+                has_image_changed = bool(old_has_image) != bool(q["has_image"])
+                if old_text != new_text or choices_changed or has_image_changed:
                     n_q_updated += 1
                     if not args.dry_run:
                         conn.execute(
