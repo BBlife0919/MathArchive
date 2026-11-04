@@ -13,6 +13,7 @@ import threading
 import time
 import uuid
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 
@@ -252,17 +253,30 @@ _bare_words_cache: tuple[float, list] | None = None
 _struct_cache: tuple[float, dict] | None = None
 
 
-def _run_bare_word_detection(min_len: int = 3) -> list:
+def _fetch_question_rows() -> list:
+    """questions(question_id, question_text) 전체 조회 — bare-word 탐지와
+    구조 스캔 둘 다 이 데이터가 필요한데, 예전엔 각자 따로 조회해 같은
+    174,874행을 두 번 네트워크로 가져왔다(운영 Postgres에서 조회만
+    3.4초×2). 호출부에서 한 번만 가져와 공유한다(2026-11-04 발견 —
+    검수 페이지 "처리 실패/네트워크 오류" 배너의 원인, 전체 스캔이
+    36초나 걸려 타임아웃되고 있었다)."""
+    conn = db_service.get_dedicated_connection()
+    try:
+        return conn.execute("SELECT question_id, question_text FROM questions").fetchall()
+    finally:
+        db_service.close_dedicated_connection(conn)
+
+
+def _run_bare_word_detection(question_rows: list, min_len: int = 3) -> list:
     from detect_bare_math_words import extract_bare_words, KNOWN_TOKENS, COMMON_VARS
 
     conn = db_service.get_dedicated_connection()
     try:
-        qrows = conn.execute("SELECT question_text FROM questions").fetchall()
         srows = conn.execute("SELECT solution_text FROM solutions").fetchall()
 
         total = Counter()
-        for r in qrows:
-            total.update(extract_bare_words(r[0] or "", min_len))
+        for r in question_rows:
+            total.update(extract_bare_words(r[1] or "", min_len))
         for r in srows:
             total.update(extract_bare_words(r[0] or "", min_len))
 
@@ -286,16 +300,10 @@ def _run_bare_word_detection(min_len: int = 3) -> list:
     return total.most_common()
 
 
-def _run_structural_scan() -> dict:
-    conn = db_service.get_dedicated_connection()
-    try:
-        rows = conn.execute("SELECT question_id, question_text FROM questions").fetchall()
-    finally:
-        db_service.close_dedicated_connection(conn)
-
+def _run_structural_scan(question_rows: list) -> dict:
     box_mismatch_ids = []
     code_block_ids = []
-    for qid, txt in rows:
+    for qid, txt in question_rows:
         if not txt:
             continue
         if txt.count("<<BOX_START>>") != txt.count("<<BOX_END>>"):
@@ -307,18 +315,53 @@ def _run_structural_scan() -> dict:
     return {
         "box_mismatch": len(box_mismatch_ids),
         "code_block": len(code_block_ids),
-        "total_questions": len(rows),
+        "total_questions": len(question_rows),
     }
+
+
+def warm_async() -> None:
+    """서버 기동 시 백그라운드 스레드에서 미리 스캔해두고, 캐시 TTL(30분)
+    보다 짧은 주기로 계속 갱신한다 — 전체 스캔이 운영 Postgres 기준
+    20초 이상 걸려서, 캐시가 비어 있을 때 검수 페이지에 들어간 사용자가
+    그 20초를 fetch 타임아웃으로 체감하고 있었다("처리 실패 · 네트워크
+    오류" 배너, 2026-11-04). 사용자가 "다시 스캔"/"전체 자동 정리"로
+    force_rescan() 을 호출한 직후만 예외적으로 느릴 수 있다 — 그 외에는
+    거의 항상 이 백그라운드 루프가 채워둔 캐시를 즉시 돌려받는다."""
+    def _loop() -> None:
+        while True:
+            try:
+                get_scan(force=True)
+            except Exception:
+                pass
+            time.sleep(max(60, _SCAN_TTL - 300))
+
+    threading.Thread(target=_loop, daemon=True).start()
 
 
 def get_scan(force: bool = False) -> dict:
     global _bare_words_cache, _struct_cache
     now = time.time()
 
-    if force or _bare_words_cache is None or now - _bare_words_cache[0] >= _SCAN_TTL:
-        _bare_words_cache = (now, _run_bare_word_detection())
-    if force or _struct_cache is None or now - _struct_cache[0] >= _SCAN_TTL:
-        _struct_cache = (now, _run_structural_scan())
+    need_bare = force or _bare_words_cache is None or now - _bare_words_cache[0] >= _SCAN_TTL
+    need_struct = force or _struct_cache is None or now - _struct_cache[0] >= _SCAN_TTL
+
+    if need_bare or need_struct:
+        question_rows = _fetch_question_rows()
+        if need_bare and need_struct:
+            # bare-word 탐지(questions+solutions 전체 재조회+정규식, 운영
+            # Postgres 기준 ~20초)와 구조 스캔(순수 Python, ~1초)을 동시에
+            # 돌려 전체 스캔 시간을 "더 느린 쪽" 하나로 줄인다 — 순차
+            # 실행이면 두 시간의 합(36초)이라 검수 페이지 첫 진입/재스캔이
+            # 번번이 타임아웃되고 있었다.
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                bare_future = pool.submit(_run_bare_word_detection, question_rows)
+                struct_future = pool.submit(_run_structural_scan, question_rows)
+                _bare_words_cache = (now, bare_future.result())
+                _struct_cache = (now, struct_future.result())
+        elif need_bare:
+            _bare_words_cache = (now, _run_bare_word_detection(question_rows))
+        else:
+            _struct_cache = (now, _run_structural_scan(question_rows))
 
     bare_words = _bare_words_cache[1]
     struct = _struct_cache[1]

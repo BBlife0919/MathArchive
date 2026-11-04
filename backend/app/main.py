@@ -15,7 +15,7 @@ from .routers import (
     admin, audit, auth, classes, clinic, exam, kakao, meta, questions, students,
     tests,
 )
-from .services import similarity_service
+from .services import audit_service, similarity_service
 
 app = FastAPI(title="MathDB API")
 
@@ -26,6 +26,15 @@ def _warm_similarity_index() -> None:
     # 문제를 서버 기동 중에 끝내둔다(backend/app/services/similarity_service.py
     # warm_async() 참고).
     similarity_service.warm_async()
+
+
+@app.on_event("startup")
+def _warm_audit_scan() -> None:
+    # 검수 페이지 전체 스캔(운영 Postgres 기준 20초+)을 백그라운드로 미리
+    # 돌려두고 주기적으로 갱신 — 캐시가 비어있을 때 사용자가 그 20초를
+    # "처리 실패·네트워크 오류"로 체감하던 문제를 서버 기동 중에 끝내둔다
+    # (backend/app/services/audit_service.py warm_async() 참고).
+    audit_service.warm_async()
 
 app.add_middleware(
     CORSMiddleware,
